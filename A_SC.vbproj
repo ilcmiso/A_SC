@@ -1,0 +1,505 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{C68CCCF9-3475-43B8-AB4D-F90FFDF5D42D}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <StartupObject>A_SC.My.MyApplication</StartupObject>
+    <RootNamespace>A_SC</RootNamespace>
+    <AssemblyName>A_SC</AssemblyName>
+    <FileAlignment>512</FileAlignment>
+    <MyType>WindowsForms</MyType>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <TargetFrameworkProfile />
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>Full</DebugType>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <OutputPath>C:\A_SC\</OutputPath>
+    <DocumentationFile>A_SC.xml</DocumentationFile>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+    <Optimize>false</Optimize>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DocumentationFile>A_SC.xml</DocumentationFile>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionExplicit>On</OptionExplicit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionCompare>Binary</OptionCompare>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionStrict>Off</OptionStrict>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionInfer>On</OptionInfer>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <OutputPath>C:\A_FZ\</OutputPath>
+    <DocumentationFile>A_SC.xml</DocumentationFile>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <DefineTrace>true</DefineTrace>
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DocumentationFile>A_SC.xml</DocumentationFile>
+    <Optimize>true</Optimize>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>false</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <DelaySign>false</DelaySign>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Resource\SC.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>My Project\app.manifest</ApplicationManifest>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="ClosedXML, Version=0.95.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\ClosedXML.0.95.4\lib\net46\ClosedXML.dll</HintPath>
+    </Reference>
+    <Reference Include="DBReport.Core, Version=1.0.5270.1830, Culture=neutral, PublicKeyToken=4bd68b0bc5c61378, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\VB-Report8\Bin\DBReport.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="DocumentFormat.OpenXml, Version=2.7.2.0, Culture=neutral, PublicKeyToken=8fb06cb64d019a17, processorArchitecture=MSIL">
+      <HintPath>packages\DocumentFormat.OpenXml.2.7.2\lib\net46\DocumentFormat.OpenXml.dll</HintPath>
+    </Reference>
+    <Reference Include="ExcelCreator.Creator.v10, Version=10.0.5270.2017, Culture=neutral, PublicKeyToken=e70d0f98050da475, processorArchitecture=MSIL" />
+    <Reference Include="ExcelCreator.Document.v10, Version=10.0.5270.2017, Culture=neutral, PublicKeyToken=40e5e8c862e0994c" />
+    <Reference Include="ExcelCreator.Shared.v10, Version=10.0.5270.2017, Culture=neutral, PublicKeyToken=411a8845f4d5d1b9" />
+    <Reference Include="ExcelCreator.View.v10, Version=10.0.5270.2017, Culture=neutral, PublicKeyToken=ef668955e9772a61" />
+    <Reference Include="ExcelCreator.Xls.Core.v10, Version=10.0.5270.2017, Culture=neutral, PublicKeyToken=53fa96998d653c73" />
+    <Reference Include="ExcelCreator.Xlsx.Core.v10, Version=10.0.5270.2017, Culture=neutral, PublicKeyToken=afb069e70259a56a" />
+    <Reference Include="ExcelCreator.Xlsx.CreatorExpress.v10, Version=10.0.5270.2017, Culture=neutral, PublicKeyToken=9b83eaf7c36ffa11, processorArchitecture=MSIL" />
+    <Reference Include="ExcelNumberFormat, Version=1.0.10.0, Culture=neutral, PublicKeyToken=23c6f5d73be07eca, processorArchitecture=MSIL">
+      <HintPath>packages\ExcelNumberFormat.1.0.10\lib\net20\ExcelNumberFormat.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="SQLite.Designer">
+      <HintPath>C:\System.Data.SQLite\2015\bin\SQLite.Designer.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.SQLite, Version=1.0.105.2, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\System.Data.SQLite\2015\bin\System.Data.SQLite.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data.SQLite.EF6, Version=1.0.107.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\System.Data.SQLite\2015\bin\System.Data.SQLite.EF6.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data.SQLite.Linq, Version=1.0.107.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\System.Data.SQLite\2015\bin\System.Data.SQLite.Linq.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.IO.FileSystem.Primitives, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>packages\System.IO.FileSystem.Primitives.4.0.1\lib\net46\System.IO.FileSystem.Primitives.dll</HintPath>
+    </Reference>
+    <Reference Include="System.IO.Packaging, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>packages\System.IO.Packaging.4.0.0\lib\net46\System.IO.Packaging.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Windows.Forms.DataVisualization" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="UIAutomationProvider" />
+    <Reference Include="VBReport8.CellDesigner, Version=8.0.5270.1830, Culture=neutral, PublicKeyToken=5576ecf2941e8c0d, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\A_SC\VBReport8.CellDesigner.dll</HintPath>
+    </Reference>
+    <Reference Include="VBReport8.CellReport, Version=8.0.5270.1830, Culture=neutral, PublicKeyToken=a562bca15217617c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\A_SC\VBReport8.CellReport.dll</HintPath>
+    </Reference>
+    <Reference Include="VBReport8.Document, Version=8.0.5270.1830, Culture=neutral, PublicKeyToken=5fef747f5909e4c9, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\A_SC\VBReport8.Document.dll</HintPath>
+    </Reference>
+    <Reference Include="VBReport8.PDFWriter, Version=8.0.5270.1830, Culture=neutral, PublicKeyToken=a94844ece6622b92, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\A_SC\VBReport8.PDFWriter.dll</HintPath>
+    </Reference>
+    <Reference Include="VBReport8.Shared, Version=8.0.5270.1830, Culture=neutral, PublicKeyToken=eb874eae9ad54445, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\A_SC\VBReport8.Shared.dll</HintPath>
+    </Reference>
+    <Reference Include="VBReport8.View, Version=8.0.5270.1830, Culture=neutral, PublicKeyToken=32543f28cb28d673, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\A_SC\VBReport8.View.dll</HintPath>
+    </Reference>
+    <Reference Include="VBReport8.Viewer, Version=8.0.5270.1830, Culture=neutral, PublicKeyToken=8bb5989c23433875, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\A_SC\VBReport8.Viewer.dll</HintPath>
+    </Reference>
+    <Reference Include="VBReport8.Xls.Core, Version=8.0.5270.1830, Culture=neutral, PublicKeyToken=8b8fa29264754c4a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\A_SC\VBReport8.Xls.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="VBReport8.Xlsx.Core, Version=8.0.5270.1830, Culture=neutral, PublicKeyToken=d5c536c32e771da9, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\A_SC\VBReport8.Xlsx.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="WindowsFormsIntegration" />
+  </ItemGroup>
+  <ItemGroup>
+    <Import Include="Microsoft.VisualBasic" />
+    <Import Include="System" />
+    <Import Include="System.Collections" />
+    <Import Include="System.Collections.Generic" />
+    <Import Include="System.Data" />
+    <Import Include="System.Drawing" />
+    <Import Include="System.Diagnostics" />
+    <Import Include="System.Windows.Forms" />
+    <Import Include="System.Linq" />
+    <Import Include="System.Xml.Linq" />
+    <Import Include="System.Threading.Tasks" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="01_Form\13_Schedule\SCE_S2_INPUT.Designer.vb">
+      <DependentUpon>SCE_S2_INPUT.vb</DependentUpon>
+    </Compile>
+    <Compile Include="01_Form\13_Schedule\SCE_S2_INPUT.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="01_Form\13_Schedule\SCE_S1.designer.vb">
+      <DependentUpon>SCE_S1.vb</DependentUpon>
+    </Compile>
+    <Compile Include="01_Form\13_Schedule\SCE_S1.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="80_SCcommon\SCThread.vb" />
+    <Compile Include="90_common\ILCNetDrive.vb" />
+    <Compile Include="ApplicationEvents.vb" />
+    <Compile Include="01_Form\11_債権管理画面\SCA1_S5_ExcOut.designer.vb">
+      <DependentUpon>SCA1_S5_ExcOut.vb</DependentUpon>
+    </Compile>
+    <Compile Include="01_Form\11_債権管理画面\SCA1_S5_ExcOut.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="01_Form\11_債権管理画面\SCA1_S6_Calendar.designer.vb">
+      <DependentUpon>SCA1_S6_Calendar.vb</DependentUpon>
+    </Compile>
+    <Compile Include="01_Form\11_債権管理画面\SCA1_S6_Calendar.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="01_Form\11_債権管理画面\SCA1_S4_TEL.designer.vb">
+      <DependentUpon>SCA1_S4_TEL.vb</DependentUpon>
+    </Compile>
+    <Compile Include="01_Form\11_債権管理画面\SCA1_S4_TEL.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="01_Form\11_債権管理画面\SCA1_S3_Search.designer.vb">
+      <DependentUpon>SCA1_S3_Search.vb</DependentUpon>
+    </Compile>
+    <Compile Include="01_Form\11_債権管理画面\SCA1_S3_Search.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="01_Form\12_ToDo\SCA1_S3.designer.vb">
+      <DependentUpon>SCA1_S3.vb</DependentUpon>
+    </Compile>
+    <Compile Include="01_Form\12_ToDo\SCA1_S3.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="01_Form\22_交渉記録\SCD1.designer.vb">
+      <DependentUpon>SCD1.vb</DependentUpon>
+    </Compile>
+    <Compile Include="01_Form\22_交渉記録\SCD1.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="01_Form\81_設定\SCC1_S1_MNG.designer.vb">
+      <DependentUpon>SCC1_S1_MNG.vb</DependentUpon>
+    </Compile>
+    <Compile Include="01_Form\81_設定\SCC1_S1_MNG.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="01_Form\81_設定\SCC1.designer.vb">
+      <DependentUpon>SCC1.vb</DependentUpon>
+    </Compile>
+    <Compile Include="01_Form\81_設定\SCC1.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="01_Form\21_GB読み込み\SCB1.designer.vb">
+      <DependentUpon>SCB1.vb</DependentUpon>
+    </Compile>
+    <Compile Include="01_Form\21_GB読み込み\SCB1.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="01_Form\01_タイトル\SC.designer.vb">
+      <DependentUpon>SC.vb</DependentUpon>
+    </Compile>
+    <Compile Include="01_Form\01_タイトル\SC.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="01_Form\11_債権管理画面\SCA1_S1.designer.vb">
+      <DependentUpon>SCA1_S1.vb</DependentUpon>
+    </Compile>
+    <Compile Include="01_Form\11_債権管理画面\SCA1_S1.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="01_Form\11_債権管理画面\SCA1.designer.vb">
+      <DependentUpon>SCA1.vb</DependentUpon>
+    </Compile>
+    <Compile Include="01_Form\11_債権管理画面\SCA1.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="01_Form\11_債権管理画面\SCA1_S2.designer.vb">
+      <DependentUpon>SCA1_S2.vb</DependentUpon>
+    </Compile>
+    <Compile Include="01_Form\11_債権管理画面\SCA1_S2.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="My Project\AssemblyInfo.vb" />
+    <Compile Include="My Project\Application.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Application.myapp</DependentUpon>
+    </Compile>
+    <Compile Include="My Project\Resources.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="My Project\Settings.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <Compile Include="90_common\CExcel.vb" />
+    <Compile Include="90_common\Common.vb" />
+    <Compile Include="90_common\ExcelExp.vb" />
+    <Compile Include="90_common\Log.vb" />
+    <Compile Include="90_common\Mutex.vb" />
+    <Compile Include="90_common\Sqldb.vb" />
+    <Compile Include="90_common\Verup.vb" />
+    <Compile Include="90_common\XmlMng.vb" />
+    <Compile Include="Settings.vb" />
+    <Compile Include="VBReport_Form\VBR_PI.designer.vb">
+      <DependentUpon>VBR_PI.vb</DependentUpon>
+    </Compile>
+    <Compile Include="VBReport_Form\VBR_PI.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="VBReport_Form\VBR_Send.designer.vb">
+      <DependentUpon>VBR_Send.vb</DependentUpon>
+    </Compile>
+    <Compile Include="VBReport_Form\VBR_Send.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="VBReport_Form\VBR_Dun.designer.vb">
+      <DependentUpon>VBR_Dun.vb</DependentUpon>
+    </Compile>
+    <Compile Include="VBReport_Form\VBR_Dun.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="VBReport_Form\VBR_SCD1.designer.vb">
+      <DependentUpon>VBR_SCD1.vb</DependentUpon>
+    </Compile>
+    <Compile Include="VBReport_Form\VBR_SCD1.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="VBReport_Form\VBR_DGV2.designer.vb">
+      <DependentUpon>VBR_DGV2.vb</DependentUpon>
+    </Compile>
+    <Compile Include="VBReport_Form\VBR_DGV2.vb">
+      <SubType>Form</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="01_Form\13_Schedule\SCE_S1.resx">
+      <DependentUpon>SCE_S1.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="01_Form\11_債権管理画面\SCA1_S5_ExcOut.resx">
+      <DependentUpon>SCA1_S5_ExcOut.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="01_Form\11_債権管理画面\SCA1_S6_Calendar.resx">
+      <DependentUpon>SCA1_S6_Calendar.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="01_Form\11_債権管理画面\SCA1_S4_TEL.resx">
+      <DependentUpon>SCA1_S4_TEL.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="01_Form\11_債権管理画面\SCA1_S3_Search.resx">
+      <DependentUpon>SCA1_S3_Search.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="01_Form\12_ToDo\SCA1_S3.resx">
+      <DependentUpon>SCA1_S3.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="01_Form\13_Schedule\SCE_S2_INPUT.resx">
+      <DependentUpon>SCE_S2_INPUT.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="01_Form\22_交渉記録\SCD1.resx">
+      <DependentUpon>SCD1.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="01_Form\21_GB読み込み\SCB1.resx">
+      <DependentUpon>SCB1.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="01_Form\01_タイトル\SC.resx">
+      <DependentUpon>SC.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="01_Form\11_債権管理画面\SCA1_S1.resx">
+      <DependentUpon>SCA1_S1.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="01_Form\11_債権管理画面\SCA1.resx">
+      <DependentUpon>SCA1.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="01_Form\11_債権管理画面\SCA1_S2.resx">
+      <DependentUpon>SCA1_S2.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="01_Form\81_設定\SCC1_S1_MNG.resx">
+      <DependentUpon>SCC1_S1_MNG.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="01_Form\81_設定\SCC1.resx">
+      <DependentUpon>SCC1.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="My Project\Resources.resx">
+      <Generator>PublicVbMyResourcesResXFileCodeGenerator</Generator>
+      <CustomToolNamespace>My.Resources</CustomToolNamespace>
+      <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.vb</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="VBReport_Form\VBR_PI.resx">
+      <DependentUpon>VBR_PI.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="VBReport_Form\VBR_Send.resx">
+      <DependentUpon>VBR_Send.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="VBReport_Form\VBR_Dun.resx">
+      <DependentUpon>VBR_Dun.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="VBReport_Form\VBR_SCD1.resx">
+      <DependentUpon>VBR_SCD1.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="VBReport_Form\VBR_DGV2.resx">
+      <DependentUpon>VBR_DGV2.vb</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include=".editorconfig" />
+    <None Include="My Project\app.manifest" />
+    <None Include="My Project\Application.myapp">
+      <Generator>MyApplicationCodeGenerator</Generator>
+      <LastGenOutput>Application.Designer.vb</LastGenOutput>
+    </None>
+    <None Include="My Project\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <CustomToolNamespace>My</CustomToolNamespace>
+      <LastGenOutput>Settings.Designer.vb</LastGenOutput>
+    </None>
+    <None Include="App.config" />
+    <None Include="Resource\DB\EmptyDB.db3" />
+    <None Include="Resource\DB\FKSC_LOG.DB3" />
+    <None Include="Resource\DB\FKSC_TODO.db3" />
+    <None Include="Resource\DB\HISTORY.db3" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.6">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.6 %28x86 および x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+    <None Include="Resource\dandd.png" />
+    <Content Include="Resource\icon_text.png" />
+    <Content Include="Resource\SC.ico" />
+    <Content Include="データ構造\FKSC_TODOデータ構造.txt" />
+    <Content Include="データ構造\FKSCデータ構造.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
+  <ItemGroup>
+    <COMReference Include="Microsoft.Office.Core">
+      <Guid>{2DF8D04C-5BFA-101B-BDE5-00AA0044DE52}</Guid>
+      <VersionMajor>2</VersionMajor>
+      <VersionMinor>8</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+    <COMReference Include="VBIDE">
+      <Guid>{0002E157-0000-0000-C000-000000000046}</Guid>
+      <VersionMajor>5</VersionMajor>
+      <VersionMinor>3</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
+  <Import Project="packages\System.Data.SQLite.Core.1.0.111.0\build\net46\System.Data.SQLite.Core.targets" Condition="Exists('packages\System.Data.SQLite.Core.1.0.111.0\build\net46\System.Data.SQLite.Core.targets')" />
+  <PropertyGroup>
+    <PostBuildEvent>xcopy $(TargetDir)*.exe               V:\A_SC_顧客検索\最新Obj\ /D /C /I /H /Y
+xcopy $(TargetDir)Excel              V:\A_SC_顧客検索\最新Obj\ /D /C /I /H /Y
+xcopy $(TargetDir)*.db3              V:\A_SC_顧客検索\最新Obj\ /D /C /I /H /Y</PostBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  -->
+</Project>
