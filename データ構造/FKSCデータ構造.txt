@@ -1,0 +1,156 @@
+' FKSC はF35データを読み込んだままのデータで基本編集しない
+' 編集するとF35データの上書きで消えてしまうので、追加要素(例えば督促状通知日)は、FKSCREMに追加する。
+
+FKS.FKSC_R.FK01          ' 機構番号_ローン識別子 ユニーク		ex) 25XXXXXXXXXXXX_1
+FKS.FKSC_R.FK02          ' 機構番号
+FKS.FKSC_R.FK03          ' ローン識別子							1=F35, 2=アシスト
+FKS.FKSC_R.FK04          ' 金消契約日		2020/10 Add
+FKS.FKSC_R.FK05          ' 当月回収元金		2020/10 add
+FKS.FKSC_R.FK06          ' 次回償還金		2020/10 add
+FKS.FKSC_R.FK07          ' 次々回償還金		2020/10 add
+FKS.FKSC_R.FK08          ' 増額返済月		2020/04 add
+FKS.FKSC_R.FK09          ' 
+FKS.FKSC_R.FK10          ' 債務者 氏名
+FKS.FKSC_R.FK11          ' 債務者 ﾖﾐｶﾅ
+FKS.FKSC_R.FK12          ' 債務者 生年月日
+FKS.FKSC_R.FK13          ' 債務者 性別
+FKS.FKSC_R.FK14          ' 債務者 TEL1
+FKS.FKSC_R.FK15          ' 債務者 TEL2			(使ってない)
+FKS.FKSC_R.FK16          ' 債務者 郵便番号
+FKS.FKSC_R.FK17          ' 債務者 住所 
+FKS.FKSC_R.FK18          ' 債務者 勤務先 
+FKS.FKSC_R.FK19          ' 債務者 勤務先TEL1 
+FKS.FKSC_R.FK20          ' 債務者 勤務先TEL2	(使ってない)
+FKS.FKSC_R.FK21          ' 
+FKS.FKSC_R.FK22          ' 
+FKS.FKSC_R.FK23          ' 
+FKS.FKSC_R.FK24          ' 
+FKS.FKSC_R.FK25          ' 
+FKS.FKSC_R.FK26          ' 
+FKS.FKSC_R.FK27          ' 
+FKS.FKSC_R.FK28          ' 
+FKS.FKSC_R.FK29          ' 
+FKS.FKSC_R.FK30          ' 連帯債務者 氏名 
+FKS.FKSC_R.FK31          ' 連帯債務者 ﾖﾐｶﾅ 
+FKS.FKSC_R.FK32          ' 連帯債務者 生年月日 
+FKS.FKSC_R.FK33          ' 連帯債務者 性別 
+FKS.FKSC_R.FK34          ' 連帯債務者 TEL1 
+FKS.FKSC_R.FK35          ' 連帯債務者 TEL2 
+FKS.FKSC_R.FK36          ' 連帯債務者 郵便番号 
+FKS.FKSC_R.FK37          ' 連帯債務者 住所 
+FKS.FKSC_R.FK38          ' 連帯債務者 勤務先 
+FKS.FKSC_R.FK39          ' 連帯債務者 勤務先TEL1 
+FKS.FKSC_R.FK40          ' 連帯債務者 勤務先TEL2 
+FKS.FKSC_R.FK41          ' 
+FKS.FKSC_R.FK42          ' 
+FKS.FKSC_R.FK43          ' 
+FKS.FKSC_R.FK44          ' 
+FKS.FKSC_R.FK45          ' 
+FKS.FKSC_R.FK46          ' 
+FKS.FKSC_R.FK47          ' 
+FKS.FKSC_R.FK48          ' 更新日残高(ボーナス)
+FKS.FKSC_R.FK49          ' 返済額2(顧客番号05始まりの人用。返済額に加算される)
+FKS.FKSC_R.FK50          ' 返済額
+FKS.FKSC_R.FK51          ' 残高更新日
+FKS.FKSC_R.FK52          ' 延滞月数
+FKS.FKSC_R.FK53          ' 返済額(ボーナス)
+FKS.FKSC_R.FK54          ' 更新日残高
+FKS.FKSC_R.FK55          ' 延滞合計額
+FKS.FKSC_R.FK56          ' 貸付金額
+FKS.FKSC_R.FK57          ' 貸付金額ボーナス
+FKS.FKSC_R.FK58          ' 完済日(使ってない)
+FKS.FKSC_R.FK59          ' 償還残回数(使ってない) → アシスト 金消契約日 2022/07追加
+
+FKS.FKSC_R.FK60          ' アシスト 貸付金額
+FKS.FKSC_R.FK61          ' アシスト 延滞回数
+FKS.FKSC_R.FK62          ' アシスト 入金額
+FKS.FKSC_R.FK63          ' アシスト 貸付残高
+FKS.FKSC_R.FK64          ' 物件情報 住居サイン 2021/08追加
+FKS.FKSC_R.FK65          ' 物件情報 郵便番号   2021/08追加
+FKS.FKSC_R.FK66          ' 物件情報 漢字住所   2021/08追加
+FKS.FKSC_R.FK67          ' [後付] 追加電話番号(複数)
+FKS.FKSC_R.FK68          ' [後付] 追加電話番号
+FKS.FKSC_R.FK69          ' [後付] DataTableのIndex値
+FKS.FKSC_R.FK70          ' [後付] 最終督促日
+
+' アシスト
+TBL.C01					 ' 機構顧客番号
+TBL.C02					 ' 申込番号
+TBL.C03					 ' 申込人漢字氏名
+TBL.C04					 ' 申込人カナ氏名
+TBL.C05					 ' 申込人生年月日
+TBL.C06					 ' 申込人電話番号
+TBL.C07					 ' 申込人携帯電話番号
+TBL.C08					 ' 申込人郵便番号
+TBL.C09					 ' 申込人住所漢字
+TBL.C10					 ' 申込人勤務先名称カナ
+TBL.C11					 ' 申込人勤務先電話番号
+TBL.C12					 ' 証書番号
+TBL.C13					 ' 連債者氏名漢字
+TBL.C14					 ' 連債者氏名カナ
+TBL.C15					 ' 連債者生年月日
+TBL.C16					 ' 連債者自宅電話番号
+TBL.C17					 ' 連債者携帯電話番号
+TBL.C18					 ' 債者郵便番号
+TBL.C19					 ' 連債者住所漢字
+TBL.C20					 ' 連債者勤務先名称カナ
+TBL.C21					 ' 連債者勤務先電話番号
+TBL.C22					 ' -
+TBL.C23					 ' 延滞合計額
+TBL.C24					 ' 貸付金額
+TBL.C25					 ' 延滞回数
+TBL.C26					 ' 入金額
+TBL.C27					 ' 貸付残高
+TBL.C28					 ' 金消契約年月日
+
+
+
+
+' 交渉記録
+FKS.FKSCD_R.FKD01        ' 識別番号+millsecond ユニーク情報
+FKS.FKSCD_R.FKD02        ' 識別番号(FKSCとリンク)
+FKS.FKSCD_R.FKD03        ' 日時
+FKS.FKSCD_R.FKD04        ' 相手
+FKS.FKSCD_R.FKD05        ' 手法（手段）
+FKS.FKSCD_R.FKD06        ' 担当者
+FKS.FKSCD_R.FKD07        ' 内容
+FKS.FKSCD_R.FKD08        ' 督促状通知日
+FKS.FKSCD_R.FKD09        ' 債権者名			(記録一覧に表示用)
+FKS.FKSCD_R.FKD10        ' 債権者ヨミガナ	(記録一覧に表示用)
+FKS.FKSCD_R.FKD11        ' 概要
+FKS.FKSCD_R.FKD12        ' 対応者
+FKS.FKSCD_R.FKD13        ' 場所				' 2012A追加
+FKS.FKSCD_R.FKD14        ' 送付先郵便番号	' 2110A追加
+FKS.FKSCD_R.FKD15        ' 送付先住所		' 2110A追加
+FKS.FKSCD_R.FKD16        ' 操作機名前		' 2110A追加
+FKS.FKSCD_R.FKD17        ' 郵便発送種目		' 2202B追加
+
+
+' FKSCの追加要素。編集も可能
+FKS.FKSCREM_R.FKR01        ' 識別番号(FKSCとリンク)
+FKS.FKSCREM_R.FKR02        ' 最新の督促通知日
+FKS.FKSCREM_R.FKR03        ' フリーメモ内容
+FKS.FKSCREM_R.FKR04        ' 追加電話番号（１つだけ）
+FKS.FKSCREM_R.FKR05        ' 追加電話番号（複数版）
+FKS.FKSCREM_R.FKR06        ' 追加電話番号（複数版）ハイフン無し  ※電話番号の検索一致用
+
+' 物件情報
+' FKSC_PINFO.DB3
+TBL.C01				' 顧客番号
+TBL.C02				' 顧客名			2022/09/15 割り込み追加 
+TBL.C03				' 物件情報
+TBL.C04				' 任売情報 
+TBL.C05				' 競売情報1 
+TBL.C06				' 競売情報2 
+TBL.C07				' 個人再生・破産情報1
+TBL.C08				' 個人再生・破産情報2
+TBL.C09				' 個人再生・破産情報3
+TBL.C10				' 差押１ 
+TBL.C11				' 差押２
+TBL.C12				' 差押３
+
+ITEM.C01			' 項目概要種別 
+ITEM.C02			' 項目番号
+ITEM.C03			' 項目名
+ITEM.C04			' 項目種類
+ITEM.C05			' 初期値

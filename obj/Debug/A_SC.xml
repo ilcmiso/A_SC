@@ -1,0 +1,56 @@
+﻿<?xml version="1.0"?>
+<doc>
+<assembly>
+<name>
+A_SC
+</name>
+</assembly>
+<members>
+<member name="T:A_SC.My.Resources.Resources">
+<summary>
+  ローカライズされた文字列などを検索するための、厳密に型指定されたリソース クラスです。
+</summary>
+</member>
+<member name="P:A_SC.My.Resources.Resources.ResourceManager">
+<summary>
+  このクラスで使用されているキャッシュされた ResourceManager インスタンスを返します。
+</summary>
+</member>
+<member name="P:A_SC.My.Resources.Resources.Culture">
+<summary>
+  すべてについて、現在のスレッドの CurrentUICulture プロパティをオーバーライドします
+  現在のスレッドの CurrentUICulture プロパティをオーバーライドします。
+</summary>
+</member>
+<member name="P:A_SC.My.Resources.Resources.dandd">
+<summary>
+  型 System.Drawing.Bitmap のローカライズされたリソースを検索します。
+</summary>
+</member>
+<member name="P:A_SC.My.Resources.Resources.EmptyDB">
+<summary>
+  型 System.Byte[] のローカライズされたリソースを検索します。
+</summary>
+</member>
+<member name="P:A_SC.My.Resources.Resources.FKSC_LOG">
+<summary>
+  型 System.Byte[] のローカライズされたリソースを検索します。
+</summary>
+</member>
+<member name="P:A_SC.My.Resources.Resources.FKSC_TODO">
+<summary>
+  型 System.Byte[] のローカライズされたリソースを検索します。
+</summary>
+</member>
+<member name="P:A_SC.My.Resources.Resources.HISTORY">
+<summary>
+  型 System.Byte[] のローカライズされたリソースを検索します。
+</summary>
+</member>
+<member name="P:A_SC.My.Resources.Resources.icon_csv">
+<summary>
+  型 System.Drawing.Bitmap のローカライズされたリソースを検索します。
+</summary>
+</member>
+</members>
+</doc>

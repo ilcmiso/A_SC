@@ -1,0 +1,97 @@
+﻿Imports System.IO
+Imports System.Text
+
+Public Class Log
+    ' タグ
+    Private Const TagD As String = "D"
+    Private Const TagE As String = "E"
+    ' ログ・ファイル名
+    Private Const EXTENSION_LOG As String = ".log"      ' 拡張子
+    Public Const LOGNAME_DB As String = "A_SC_DB"
+    Private Const LOGNAME_ERR As String = "A_SC_Error"
+    Private Const LOGNAME_DBG As String = "A_SC_DBG"
+    Public Const LOGNAME_TASK As String = "A_SC_Task"
+    Public Const LOGNAME_MTX As String = "A_SC_Mutex"
+
+    ' ログ種別テーブル (ログファイル名, ログ識別子[D,E])
+    Private LogTable(,) = {
+        {LOGNAME_DB, TagD},
+        {LOGNAME_DBG, TagD},
+        {LOGNAME_ERR, TagE},
+        {LOGNAME_TASK, TagD},
+        {LOGNAME_MTX, TagD}
+    }
+    ' ログ種別テーブル 識別子
+    Public Const DB As Integer = 0
+    Public Const DBG As Integer = 1
+    Public Const ERR As Integer = 2
+    Public Const TASK As Integer = 3
+    Public Const MTX As Integer = 4
+
+    Private ReadOnly CurrentPath As String
+    Private sw(5) As StreamWriter
+
+    ' インストラクタ
+    Sub New()
+        Dim xml As New xmlMng
+        CurrentPath = xml.GetCPath()
+
+        Dim filePath As String
+        For n = 0 To LogTable.GetLength(0) - 1
+            filePath = CurrentPath & Common.DIR_LOG & LogTable(n, 0) & "_" & My.Computer.Name & EXTENSION_LOG       ' ファイルパス  \\xxx\Log\[File_Name]_[User_Name].log
+            sw(n) = New StreamWriter(filePath, True, Encoding.GetEncoding("shift_jis"))
+        Next
+    End Sub
+
+    ' デストラクタ
+    Protected Overrides Sub Finalize()
+        MyBase.Finalize()
+    End Sub
+
+    ' ログ 出力:DB用
+    Public Sub D(id As Integer, msg As String)
+        'PLog(LogTable(id, 0), msg, LogTable(id, 1))
+        PLog(id, msg, LogTable(id, 1))
+    End Sub
+    Public Sub D(id As Integer, msgList As List(Of String))
+        Dim msg As String = ""
+        For Each m In msgList
+            msg += m & vbCrLf
+        Next
+        msg = msg.TrimEnd(Chr(10)).TrimEnd(Chr(13))     ' 最後の改行(chr(10) CR chr(13) LF)を削除
+        'PLog(LogTable(id, 0), msg, LogTable(id, 1))
+        PLog(id, msg, LogTable(id, 1))
+    End Sub
+    Private Sub PLog(id As Integer, msg As String, Tag As String)
+        Try
+            If Not Directory.Exists(CurrentPath & Common.DIR_LOG) Then Directory.CreateDirectory(CurrentPath & Common.DIR_LOG)        ' ディレクトリ作成
+        Catch ex As Exception
+            MsgBox("パスが見つかりません。" & vbCrLf & CurrentPath & Common.DIR_LOG)
+            Exit Sub
+        End Try
+
+        'Dim filePath As String = CurrentPath & Common.DIR_LOG & File & "_" & My.Computer.Name & EXTENSION_LOG       ' ファイルパス  \\xxx\Log\[File_Name]_[User_Name].log
+        'Dim sw As New StreamWriter(filePath, True, Encoding.GetEncoding("shift_jis"))
+        Dim sf As New StackFrame(2)
+        sw(id).WriteLine(DateTime.Now.ToString("[" & Tag & "] yyyy/MM/dd HH:mm:ss:fff # ") & My.Computer.Name.PadRight(15) & " ## " & SC.SCVersion & " [" & sf.GetMethod.Name & "] " & msg)
+        If Tag = TagE Then sw(id).WriteLine("# TRACE #" & vbCrLf & Environment.StackTrace)                                  ' ERR時はバックトレース出力
+        'sw.Close()
+    End Sub
+
+    ' デバッグログ(Console)
+    Public Sub DBGLOG(msg As String)
+        Dim tim As String = Date.Now.ToString("yyyy/MM/dd/HH:mm:ss.fff")
+        Console.WriteLine(tim & " # " & msg)
+    End Sub
+
+    ' 時間測定
+    Private STtime As Date
+    Public Sub timerST()
+        STtime = Date.Now
+    End Sub
+    Public Sub timerED(str As String)
+        Dim EDtime As Date = Date.Now
+        DBGLOG("ED #" & (EDtime - STtime).ToString("ss\.fff") & "#" & str)
+    End Sub
+
+End Class
