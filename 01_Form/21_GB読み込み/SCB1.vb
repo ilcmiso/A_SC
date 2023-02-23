@@ -153,8 +153,10 @@ Public Class SCB1
         Cursor.Current = Cursors.WaitCursor             ' マウスカーソルを砂時計に
         ReadAssistData(fileName(0))
 
-        CopyCDBtoServer(Sqldb.DB_FKSCASSIST)            ' DBファイルをローカルからサーバーにコピー
-        Close()
+        ' CopyCDBtoServer(Sqldb.DB_FKSCASSIST)            ' DBファイルをローカルからサーバーにコピー
+        ' Close()
+        MsgBox("アシストファイルの読み込みが完了しました。" & vbCrLf &
+               "4ファイル全て読み込みが完了したら、下のボタンを押してください。")
         ShowLastUpdateTimes()
     End Sub
 
@@ -344,8 +346,12 @@ Public Class SCB1
                         For idx As Integer = 0 To idxList.Count - 1
                             If idx = 0 Then Continue For                    ' C01でDBの主キーだから更新しない
                             If idxList(idx) = NOT_FOUND Then Continue For   ' 読み込みデータに存在しない項目は更新できない
+                            ' アポストロフィが含まれていた場合SQL構文エラーになるので削除する
+                            If costomInfo(n)(idxList(idx)).IndexOf("'") >= 0 Then costomInfo(n)(idxList(idx)) = cmn.RegReplace(costomInfo(n)(idxList(idx)), "'", "")
+
                             cmd += "C" & (idx + 1).ToString("D2") & "='" & costomInfo(n)(idxList(idx)).Trim & "',"
                         Next
+
                         cmd = cmd.TrimEnd(CType(",", Char))     ' 余分なカンマを削除
                         cmd += " Where C01 ='" & cId & "'"
                     Else
@@ -356,6 +362,9 @@ Public Class SCB1
                                 cmd += "'',"
                                 Continue For
                             End If
+                            ' アポストロフィが含まれていた場合SQL構文エラーになるので削除する
+                            If costomInfo(n)(idx).IndexOf("'") >= 0 Then costomInfo(n)(idx) = cmn.RegReplace(costomInfo(n)(idx), "'", "")
+
                             cmd += "'" & costomInfo(n)(idx).Trim & "',"
                         Next
                         cmd = cmd.TrimEnd(CType(",", Char))     ' 余分なカンマを削除
@@ -363,7 +372,7 @@ Public Class SCB1
                     End If
                     AssistCmdList.Add(cmd)   ' アシストレコードデータを設定
                 Next
-                log.timerED("CreateCmd")
+                log.TimerED("CreateCmd")
             End Using
             ' DB書き込み
             WriteAssist(AssistCmdList)
@@ -531,4 +540,8 @@ Public Class SCB1
         End Select
     End Sub
 
+    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
+        db.ExeSQL(Sqldb.TID.SCAS, "Delete From TBL Where C02 = ''")
+        CopyCDBtoServer(Sqldb.DB_FKSCASSIST)            ' DBファイルをローカルからサーバーにコピー
+    End Sub
 End Class

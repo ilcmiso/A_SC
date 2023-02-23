@@ -515,7 +515,7 @@ Partial Class SCE_S1
         Me.Name = "SCE_S1"
         Me.ShowIcon = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
-        Me.Text = "対応記録の登録"
+        Me.Text = "3"
         CType(Me.DGV1, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.DGV2, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)

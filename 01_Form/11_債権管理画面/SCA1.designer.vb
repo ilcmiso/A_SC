@@ -1983,7 +1983,7 @@ Partial Class SCA1
         Me.TB_ADDRESS2.Multiline = True
         Me.TB_ADDRESS2.Name = "TB_ADDRESS2"
         Me.TB_ADDRESS2.ReadOnly = True
-        Me.TB_ADDRESS2.Size = New System.Drawing.Size(305, 22)
+        Me.TB_ADDRESS2.Size = New System.Drawing.Size(313, 22)
         Me.TB_ADDRESS2.TabIndex = 6
         Me.TB_ADDRESS2.WordWrap = False
         '
@@ -1998,7 +1998,7 @@ Partial Class SCA1
         Me.TB_ADDRESS1.Multiline = True
         Me.TB_ADDRESS1.Name = "TB_ADDRESS1"
         Me.TB_ADDRESS1.ReadOnly = True
-        Me.TB_ADDRESS1.Size = New System.Drawing.Size(305, 22)
+        Me.TB_ADDRESS1.Size = New System.Drawing.Size(313, 22)
         Me.TB_ADDRESS1.TabIndex = 7
         Me.TB_ADDRESS1.WordWrap = False
         '
@@ -2059,7 +2059,7 @@ Partial Class SCA1
         Me.DataGridViewTextBoxColumn20.MinimumWidth = 6
         Me.DataGridViewTextBoxColumn20.Name = "DataGridViewTextBoxColumn20"
         Me.DataGridViewTextBoxColumn20.ReadOnly = True
-        Me.DataGridViewTextBoxColumn20.Width = 125
+        Me.DataGridViewTextBoxColumn20.Width = 130
         '
         'DataGridViewTextBoxColumn21
         '
@@ -2084,7 +2084,7 @@ Partial Class SCA1
         Me.DataGridViewTextBoxColumn22.MinimumWidth = 6
         Me.DataGridViewTextBoxColumn22.Name = "DataGridViewTextBoxColumn22"
         Me.DataGridViewTextBoxColumn22.ReadOnly = True
-        Me.DataGridViewTextBoxColumn22.Width = 110
+        Me.DataGridViewTextBoxColumn22.Width = 113
         '
         'Column39
         '
@@ -2123,6 +2123,7 @@ Partial Class SCA1
         Me.TB_B11.Name = "TB_B11"
         Me.TB_B11.Size = New System.Drawing.Size(118, 22)
         Me.TB_B11.TabIndex = 691
+        Me.TB_B11.Visible = False
         '
         'CB_AUTOUPD
         '
@@ -2914,7 +2915,7 @@ Partial Class SCA1
         Me.MaximizeBox = False
         Me.Name = "SCA1"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
-        Me.Text = "債権管理"
+        Me.Text = "d"
         Me.CMenu_DGV3.ResumeLayout(False)
         Me.Tab_4Dun.ResumeLayout(False)
         Me.Tab_4Dun.PerformLayout()
@@ -3139,6 +3140,11 @@ Partial Class SCA1
     Friend WithEvents Label52 As Label
     Friend WithEvents Button17 As Button
     Friend WithEvents DGV9 As DataGridView
+    Friend WithEvents L_JUNIN2 As Label
+    Friend WithEvents L_JUNIN1 As Label
+    Friend WithEvents TB_ADDRESS2 As TextBox
+    Friend WithEvents TB_ADDRESS1 As TextBox
+    Friend WithEvents TB_B11 As TextBox
     Friend WithEvents DataGridViewTextBoxColumn19 As DataGridViewTextBoxColumn
     Friend WithEvents DataGridViewTextBoxColumn20 As DataGridViewTextBoxColumn
     Friend WithEvents DataGridViewTextBoxColumn21 As DataGridViewTextBoxColumn
@@ -3146,9 +3152,4 @@ Partial Class SCA1
     Friend WithEvents Column39 As DataGridViewTextBoxColumn
     Friend WithEvents Column40 As DataGridViewTextBoxColumn
     Friend WithEvents Column41 As DataGridViewTextBoxColumn
-    Friend WithEvents L_JUNIN2 As Label
-    Friend WithEvents L_JUNIN1 As Label
-    Friend WithEvents TB_ADDRESS2 As TextBox
-    Friend WithEvents TB_ADDRESS1 As TextBox
-    Friend WithEvents TB_B11 As TextBox
 End Class

@@ -34,6 +34,7 @@ Partial Class SCB1
         Me.L_UptimeCSV = New System.Windows.Forms.Label()
         Me.DGV1 = New System.Windows.Forms.DataGridView()
         Me.CB_A1 = New System.Windows.Forms.CheckBox()
+        Me.Button1 = New System.Windows.Forms.Button()
         CType(Me.PB_TXT, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.PB_CSV, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.DGV1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -162,11 +163,26 @@ Partial Class SCB1
         Me.CB_A1.Text = "解析"
         Me.CB_A1.UseVisualStyleBackColor = True
         '
+        'Button1
+        '
+        Me.Button1.BackColor = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(128, Byte), Integer))
+        Me.Button1.FlatAppearance.BorderColor = System.Drawing.Color.Black
+        Me.Button1.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.Button1.ForeColor = System.Drawing.Color.Black
+        Me.Button1.Location = New System.Drawing.Point(325, 336)
+        Me.Button1.Name = "Button1"
+        Me.Button1.Size = New System.Drawing.Size(129, 24)
+        Me.Button1.TabIndex = 1569
+        Me.Button1.TabStop = False
+        Me.Button1.Text = "アシスト4ファイル完了"
+        Me.Button1.UseVisualStyleBackColor = False
+        '
         'SCB1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 12.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(464, 365)
+        Me.Controls.Add(Me.Button1)
         Me.Controls.Add(Me.DGV1)
         Me.Controls.Add(Me.CB_A1)
         Me.Controls.Add(Me.L_UptimeCSV)
@@ -201,4 +217,5 @@ Partial Class SCB1
     Friend WithEvents L_UptimeCSV As Label
     Friend WithEvents DGV1 As DataGridView
     Friend WithEvents CB_A1 As CheckBox
+    Friend WithEvents Button1 As Button
 End Class

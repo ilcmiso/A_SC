@@ -48,7 +48,7 @@ Public Class Sqldb
         {DB_FKSCPI, TBL_ITEM, 5, "C", DBSV, True},
         {DB_FKSCTODO, TBL_TODO, 15, "C", DBSV, True},
         {DB_FKSCASSIST, TBL_STANDARD, 28, "C", DBLO, True},
-        {DB_FKSCCAL, TBL_STANDARD, 10, "C", DBLO, True},
+        {DB_FKSCCAL, TBL_STANDARD, 10, "C", DBSV, True},
         {DB_CALHOLI, TBL_STANDARD, 2, "C", DBSV, True},
         {DB_CALTAGS, TBL_STANDARD, 3, "C", DBSV, True}
     }
@@ -187,10 +187,22 @@ Public Class Sqldb
     '               SQLExe(Sqldb.DBSC)
     Public Function ExeSQL(TableID As Integer, SqlCmd As String) As Boolean
         AddSQL(SqlCmd)
-        Return CommonSQLExe(TableID, svCon(TableID), svCmd(TableID))
+        Dim ret As Boolean
+        If DBTbl(TableID, DBID.DBSTRG) = DBLO Then
+            ret = CommonSQLExe(TableID, loCon(TableID), loCmd(TableID))
+        Else
+            ret = CommonSQLExe(TableID, svCon(TableID), svCmd(TableID))
+        End If
+        Return ret
     End Function
     Public Function ExeSQL(TableID As Integer) As Boolean
-        Return CommonSQLExe(TableID, svCon(TableID), svCmd(TableID))
+        Dim ret As Boolean
+        If DBTbl(TableID, DBID.DBSTRG) = DBLO Then
+            ret = CommonSQLExe(TableID, loCon(TableID), loCmd(TableID))
+        Else
+            ret = CommonSQLExe(TableID, svCon(TableID), svCmd(TableID))
+        End If
+        Return ret
     End Function
     Private Function CommonSQLExe(TableID As Integer, con As SQLiteConnection, cmd As SQLiteCommand) As Boolean
         'mtx.Lock(Mutex.MTX_LOCK_W, TableID)
