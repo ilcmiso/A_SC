@@ -237,12 +237,13 @@ Public Class SCA1
         If BeforeFreeTxt = TB_FreeMemo.Text Then Exit Sub     ' 何も変更してないなら保存しない 
         Cursor.Current = Cursors.WaitCursor             ' マウスカーソルを砂時計に
         Dim id As String = DGV1.CurrentRow.Cells(0).Value
+
         ' REMに既にある場合はUPDATE、なければINSERT
         If db.IsExistREM(id) Then
             db.ExeSQL(Sqldb.TID.SCR, "Update FKSCREM Set FKR03 = '" & TB_FreeMemo.Text & "' Where FKR01 = '" & id & "'")
             ' 更新履歴の記録
         Else
-            db.ExeSQL(Sqldb.TID.SCR, "Insert Into FKSCREM Values('" & id & "','" & DGV1.CurrentRow.Cells(4).Value & "','" & TB_FreeMemo.Text & "','','')")     ' FKSCREM更新
+            db.ExeSQL(Sqldb.TID.SCR, "Insert Into FKSCREM Values('" & id & "','" & DGV1.CurrentRow.Cells(4).Value & "','" & TB_FreeMemo.Text & "','','','')")     ' FKSCREM更新
             ' 更新履歴の記録
         End If
         'db.WriteHistory(id, DGV1.CurrentRow.Cells(1).Value, "フリーメモ", "編集", TB_F1.Text)
@@ -632,6 +633,7 @@ Public Class SCA1
         log.TimerST()
 
         ' 検索ワードが追加電話番号でヒットした場合、その顧客番号は次の検索対象チェックで無条件ヒットにする
+        ' db.UpdateOrigDT(Sqldb.TID.SCR)
         Dim dr As DataRow() = db.OrgDataTable(Sqldb.TID.SCR).Select("FKR04 like '%" & FilterWord & "%' Or FKR05 like '%" & FilterWord & "%' Or FKR06 like '%" & FilterWord & "%'")
         log.cLog("検索ワード追加電話番号 cnt:" & dr.Length)
 
@@ -1825,7 +1827,7 @@ Public Class SCA1
                                                      DGV6.Rows(n).Cells(0).Value & "', '" &                     ' 顧客番号
                                                      DTP_DunA1.Value.ToString("yyyy/MM/dd 00:00") & "', '" &    ' 日時 (督促日で記録したいと要望があったので督促日の00:00)
                                                      "契約者（本人）" & "', '" &                                ' 相手
-                                                     "督促状送付" & "', '" &                                    ' 手法（手段）
+                                                     "ご通知送付" & "', '" &                                    ' 手法（手段）
                                                      TB_DunA4.Text & "', '" &                                   ' 担当者
                                                      TB_DunA5.Text & "', '" &                                   ' 内容
                                                      DTP_DunA1.Value.ToString("yyyy/MM/dd") & "', '" &          ' 督促状通知日
@@ -1850,7 +1852,7 @@ Public Class SCA1
                                                      DGV6.Rows(n).Cells(0).Value & "', '" &                     ' 顧客番号
                                                      DTP_DunA1.Value.ToString("yyyy/MM/dd 00:00") & "', '" &    ' 日時 (督促日で記録したいと要望があったので督促日の00:00)
                                                      "連帯債務者" & "', '" &                                    ' 相手
-                                                     "督促状送付" & "', '" &                                    ' 手法（手段）
+                                                     "ご通知送付" & "', '" &                                    ' 手法（手段）
                                                      TB_DunA4.Text & "', '" &                                   ' 担当者
                                                      TB_DunA5.Text & "', '" &                                   ' 内容
                                                      DTP_DunA1.Value.ToString("yyyy/MM/dd") & "', '" &          ' 督促状通知日
@@ -1944,6 +1946,7 @@ Public Class SCA1
     ' 確定ボタン（なくても良さそうなら削除）
     Private Sub Button9_Click(sender As Object, e As EventArgs) Handles BT_PI4FIX.Click
         DGV7.EndEdit()
+        DGV7.CurrentCell = DGV7(1, 0)
         UpdatePIDB()
         PIItemColoring()
         ShowAssignee()

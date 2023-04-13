@@ -1724,7 +1724,7 @@ Partial Class SCA1
         Me.CLB_RecB1.CheckOnClick = True
         Me.CLB_RecB1.Font = New System.Drawing.Font("メイリオ", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.CLB_RecB1.FormattingEnabled = True
-        Me.CLB_RecB1.Items.AddRange(New Object() {"架電", "架電×", "受電", "郵便発送", "郵便受領", "FAX", "メール", "訪問", "面談", "手渡", "督促状送付", "その他"})
+        Me.CLB_RecB1.Items.AddRange(New Object() {"架電", "架電×", "受電", "郵便発送", "郵便受領", "FAX", "メール", "訪問", "面談", "手渡", "ご通知送付", "その他"})
         Me.CLB_RecB1.Location = New System.Drawing.Point(891, 124)
         Me.CLB_RecB1.Name = "CLB_RecB1"
         Me.CLB_RecB1.Size = New System.Drawing.Size(113, 264)
