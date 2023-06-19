@@ -21,7 +21,7 @@ FKS.FKSC_R.FK17          ' 債務者 住所
 FKS.FKSC_R.FK18          ' 債務者 勤務先 
 FKS.FKSC_R.FK19          ' 債務者 勤務先TEL1 
 FKS.FKSC_R.FK20          ' 債務者 勤務先TEL2	(使ってない)
-FKS.FKSC_R.FK21          ' 
+FKS.FKSC_R.FK21          ' 債務者 団信加入サイン 2023/06 add
 FKS.FKSC_R.FK22          ' 
 FKS.FKSC_R.FK23          ' 
 FKS.FKSC_R.FK24          ' 
@@ -41,7 +41,7 @@ FKS.FKSC_R.FK37          ' 連帯債務者 住所
 FKS.FKSC_R.FK38          ' 連帯債務者 勤務先 
 FKS.FKSC_R.FK39          ' 連帯債務者 勤務先TEL1 
 FKS.FKSC_R.FK40          ' 連帯債務者 勤務先TEL2 
-FKS.FKSC_R.FK41          ' 
+FKS.FKSC_R.FK41          ' 連帯債務者 団信加入サイン 2023/06 add
 FKS.FKSC_R.FK42          ' 
 FKS.FKSC_R.FK43          ' 
 FKS.FKSC_R.FK44          ' 
