@@ -3,10 +3,17 @@
     Private ReadOnly db As New Sqldb
     Private ReadOnly cmn As New Common
     Private ReadOnly log As New Log
+    Private ReadOnly xml As New XmlMng
 
     Private Sub SCC1_S1_MNG_Load(sender As Object, e As EventArgs) Handles Me.Load
         ShowListbox1()
         InitCommandList()
+        xml.GetCPath()
+        CB_DebugMode.Checked = xml.GetDebugMode()
+    End Sub
+
+    Private Sub FLS_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
+        xml.SetDebugMode(CB_DebugMode.Checked)
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click

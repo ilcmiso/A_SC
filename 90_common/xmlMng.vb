@@ -37,6 +37,13 @@ Public Class XmlMng
         End Select
     End Function
 
+    Public Function GetDebugMode() As Boolean
+        Return xmlData.DebugMode
+    End Function
+    Public Sub SetDebugMode(sw As Boolean)
+        xmlData.DebugMode = sw
+        SetXml()
+    End Sub
 
     Private Sub InitStats()
         If xmlData.CPathSW = "" Then xmlData.CPathSW = 1
@@ -74,4 +81,5 @@ Public Class XmlList
 
     Public AutoUpdCB As Boolean  ' 自動更新フラグ
     Public NoticeTell As Boolean ' 受話通知表示のフラグ
+    Public DebugMode As Boolean  ' デバッグログ出力モード
 End Class

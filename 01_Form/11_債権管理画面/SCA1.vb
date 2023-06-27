@@ -14,6 +14,8 @@ Public Class SCA1
     Private ReadOnly exc As New CExcel
     Public ReadOnly db As New Sqldb
     Private thSC As SCThread
+    Private CallerFunc = ""
+
 
     ' 着信
     Private ReadOnly TEL_HEADLEN As Integer = 17                    ' 着信ファイルのヘッダ文字数     ※yyyy/MM/dd HH:mm-
@@ -43,6 +45,7 @@ Public Class SCA1
     Private PIItemList As String()                                   ' 物件情報の大項目
     ' スレッド
     Private ReadOnly Thread_Entry As Thread = Nothing
+
 #End Region
 
 #Region " OPEN CLOSE "
@@ -341,6 +344,12 @@ Public Class SCA1
         ShowDGVList(dgv, "")
     End Sub
     Private Sub ShowDGVList(dgv As DataGridView, FilterWord As String)
+        ' コーラー関数を保持
+        Dim st As New StackTrace()
+        Dim caller1 As Reflection.MethodBase = st.GetFrame(1).GetMethod()
+        Dim caller2 As Reflection.MethodBase = st.GetFrame(2).GetMethod()
+        CallerFunc = caller1.Name & " <- " & caller2.Name
+
         Dim idx As Integer = 0
         Dim dt As DataTable = Nothing
         Dim bindID As Integer
@@ -463,10 +472,10 @@ Public Class SCA1
                 Next
                 dgv.Sort(dgv.Columns(0), ComponentModel.ListSortDirection.Descending)
 
-                log.TimerED("dgv8")
+                log.TimerED("ShowDGVList End:" & dgv.Name & " - CallBack: " & CallerFunc)
                 Exit Sub
 
-            Case dgv Is DGV9
+            Case dgv Is DGV9    ' 顧客詳細情報表示
                 ' DGV生成
                 InitDGV9()
 
@@ -554,6 +563,7 @@ Public Class SCA1
                 End If
 
                 SearchColor(TB_SearchInput.Text)
+                log.TimerED("ShowDGVList End:" & dgv.Name & " - CallBack: " & CallerFunc)
                 Exit Sub
 
             Case Else
@@ -602,7 +612,7 @@ Public Class SCA1
             Case Else
         End Select
 
-        log.TimerED("ShowDGVList End:" & dgv.Name)
+        log.TimerED("ShowDGVList End:" & dgv.Name & " - CallBack: " & CallerFunc)
     End Sub
 
     ' Bind列の設定
@@ -1951,8 +1961,8 @@ Public Class SCA1
         DGV7.EndEdit()
         DGV7.CurrentCell = DGV7(1, 0)
         UpdatePIDB()
-        PIItemColoring()
-        ShowAssignee()
+        PIItemColoring()    ' 物件データの項目名カラーリング
+        ShowAssignee()      ' 受任マークの表示
         ShowDGVList(DGV7)
         MsgBox("編集を確定しました。")
     End Sub

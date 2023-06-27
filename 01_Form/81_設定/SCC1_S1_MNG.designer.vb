@@ -28,6 +28,7 @@ Partial Class SCC1_S1_MNG
         Me.Button2 = New System.Windows.Forms.Button()
         Me.ListBox2 = New System.Windows.Forms.ListBox()
         Me.Button3 = New System.Windows.Forms.Button()
+        Me.CB_DebugMode = New System.Windows.Forms.CheckBox()
         Me.SuspendLayout()
         '
         'ListBox1
@@ -75,11 +76,22 @@ Partial Class SCC1_S1_MNG
         Me.Button3.Text = "コマンド実行"
         Me.Button3.UseVisualStyleBackColor = True
         '
+        'CB_DebugMode
+        '
+        Me.CB_DebugMode.AutoSize = True
+        Me.CB_DebugMode.Location = New System.Drawing.Point(197, 81)
+        Me.CB_DebugMode.Name = "CB_DebugMode"
+        Me.CB_DebugMode.Size = New System.Drawing.Size(88, 16)
+        Me.CB_DebugMode.TabIndex = 33
+        Me.CB_DebugMode.Text = "デバッグモード"
+        Me.CB_DebugMode.UseVisualStyleBackColor = True
+        '
         'SCC1_S1_MNG
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 12.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(549, 328)
+        Me.Controls.Add(Me.CB_DebugMode)
         Me.Controls.Add(Me.Button3)
         Me.Controls.Add(Me.ListBox2)
         Me.Controls.Add(Me.Button2)
@@ -92,6 +104,7 @@ Partial Class SCC1_S1_MNG
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "管理"
         Me.ResumeLayout(False)
+        Me.PerformLayout()
 
     End Sub
 
@@ -100,4 +113,5 @@ Partial Class SCC1_S1_MNG
     Friend WithEvents Button2 As Button
     Friend WithEvents ListBox2 As ListBox
     Friend WithEvents Button3 As Button
+    Friend WithEvents CB_DebugMode As CheckBox
 End Class

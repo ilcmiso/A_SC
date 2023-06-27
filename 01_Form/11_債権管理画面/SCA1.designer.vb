@@ -2915,7 +2915,7 @@ Partial Class SCA1
         Me.MaximizeBox = False
         Me.Name = "SCA1"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
-        Me.Text = "d"
+        Me.Text = "顧客管理"
         Me.CMenu_DGV3.ResumeLayout(False)
         Me.Tab_4Dun.ResumeLayout(False)
         Me.Tab_4Dun.PerformLayout()

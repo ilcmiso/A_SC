@@ -1,5 +1,6 @@
 ﻿Imports System.IO
 Imports System.Text
+Imports System.Windows.Interop
 Imports DocumentFormat.OpenXml.Office2010.Excel
 
 Public Class Log
@@ -31,9 +32,10 @@ Public Class Log
     Public Const MTX As Integer = 4
 
     Private ReadOnly CurrentPath As String
+    Private ReadOnly xml As New XmlMng
+    Private DebugSr As StreamWriter = Nothing
 
     Sub New()
-        Dim xml As New XmlMng
         CurrentPath = xml.GetCPath()
     End Sub
 
@@ -69,7 +71,17 @@ Public Class Log
     ' デバッグログ(Console)
     Public Sub cLog(msg As String)
         Dim tim As String = Date.Now.ToString("yyyy/MM/dd/HH:mm:ss.fff")
-        Console.WriteLine(tim & " # " & msg)
+        If xml.GetDebugMode() Then
+            Using sr As StreamWriter = New StreamWriter(SC.CurrentAppPath & "DebugLog.log", True, Encoding.Default)
+                Try
+                    sr.WriteLine(tim & " # " & msg)
+                Catch ex As Exception
+                End Try
+            End Using
+        Else
+            Console.WriteLine(tim & " # " & msg)
+        End If
+
     End Sub
 
     Public Sub TestLog(msg As String)
