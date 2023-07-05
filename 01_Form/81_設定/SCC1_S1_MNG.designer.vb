@@ -28,7 +28,8 @@ Partial Class SCC1_S1_MNG
         Me.Button2 = New System.Windows.Forms.Button()
         Me.ListBox2 = New System.Windows.Forms.ListBox()
         Me.Button3 = New System.Windows.Forms.Button()
-        Me.CB_DebugMode = New System.Windows.Forms.CheckBox()
+        Me.CB_DebugLog = New System.Windows.Forms.CheckBox()
+        Me.CB_AplUpdateOff = New System.Windows.Forms.CheckBox()
         Me.SuspendLayout()
         '
         'ListBox1
@@ -76,22 +77,33 @@ Partial Class SCC1_S1_MNG
         Me.Button3.Text = "コマンド実行"
         Me.Button3.UseVisualStyleBackColor = True
         '
-        'CB_DebugMode
+        'CB_DebugLog
         '
-        Me.CB_DebugMode.AutoSize = True
-        Me.CB_DebugMode.Location = New System.Drawing.Point(197, 81)
-        Me.CB_DebugMode.Name = "CB_DebugMode"
-        Me.CB_DebugMode.Size = New System.Drawing.Size(88, 16)
-        Me.CB_DebugMode.TabIndex = 33
-        Me.CB_DebugMode.Text = "デバッグモード"
-        Me.CB_DebugMode.UseVisualStyleBackColor = True
+        Me.CB_DebugLog.AutoSize = True
+        Me.CB_DebugLog.Location = New System.Drawing.Point(197, 81)
+        Me.CB_DebugLog.Name = "CB_DebugLog"
+        Me.CB_DebugLog.Size = New System.Drawing.Size(78, 16)
+        Me.CB_DebugLog.TabIndex = 33
+        Me.CB_DebugLog.Text = "デバッグログ"
+        Me.CB_DebugLog.UseVisualStyleBackColor = True
+        '
+        'CB_AplUpdateOff
+        '
+        Me.CB_AplUpdateOff.AutoSize = True
+        Me.CB_AplUpdateOff.Location = New System.Drawing.Point(197, 103)
+        Me.CB_AplUpdateOff.Name = "CB_AplUpdateOff"
+        Me.CB_AplUpdateOff.Size = New System.Drawing.Size(107, 16)
+        Me.CB_AplUpdateOff.TabIndex = 34
+        Me.CB_AplUpdateOff.Text = "アプリ更新の停止"
+        Me.CB_AplUpdateOff.UseVisualStyleBackColor = True
         '
         'SCC1_S1_MNG
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 12.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(549, 328)
-        Me.Controls.Add(Me.CB_DebugMode)
+        Me.Controls.Add(Me.CB_AplUpdateOff)
+        Me.Controls.Add(Me.CB_DebugLog)
         Me.Controls.Add(Me.Button3)
         Me.Controls.Add(Me.ListBox2)
         Me.Controls.Add(Me.Button2)
@@ -113,5 +125,6 @@ Partial Class SCC1_S1_MNG
     Friend WithEvents Button2 As Button
     Friend WithEvents ListBox2 As ListBox
     Friend WithEvents Button3 As Button
-    Friend WithEvents CB_DebugMode As CheckBox
+    Friend WithEvents CB_DebugLog As CheckBox
+    Friend WithEvents CB_AplUpdateOff As CheckBox
 End Class

@@ -9,6 +9,11 @@
         Dim L_PATH = SC.CurrentAppPath
         Dim S_PATH = xml.GetCPath() & Common.DIR_UPD          ' 更新ファイル設置場所は固有設定から取得
 
+        If xml.GetAplUpdOff Then
+            log.D(Log.DBG, "アプリ更新停止中")
+            Return False
+        End If
+
         log.D(Log.DBG, "Update:ファイル: " & IO.File.Exists(S_PATH & Common.EXE_NAME) & ": " & S_PATH & Common.EXE_NAME)
         ' サーバーにバージョンアップファイルがない場合は更新不要
         If Not IO.File.Exists(S_PATH & Common.EXE_NAME) Then Return False

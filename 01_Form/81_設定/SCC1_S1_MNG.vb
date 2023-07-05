@@ -9,11 +9,13 @@
         ShowListbox1()
         InitCommandList()
         xml.GetCPath()
-        CB_DebugMode.Checked = xml.GetDebugMode()
+        CB_DebugLog.Checked = xml.GetDebugMode()
+        CB_AplUpdateOff.Checked = xml.GetAplUpdOff()
     End Sub
 
-    Private Sub FLS_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
-        xml.SetDebugMode(CB_DebugMode.Checked)
+    Private Sub SCC1_S1_MNG_FormClosed(sender As Object, e As FormClosedEventArgs) Handles Me.FormClosed
+        xml.SetDebugMode(CB_DebugLog.Checked)
+        xml.SetAplUpdOff(CB_AplUpdateOff.Checked)
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
@@ -51,7 +53,7 @@
     ' コマンド実行
     Private Sub Button3_Click(sender As Object, e As EventArgs) Handles Button3.Click
 
-                Dim r As Integer
+        Dim r As Integer
         r = MessageBox.Show(ListBox2.SelectedItem.ToString & " 実行しますか？",
                             "ご確認ください",
                             MessageBoxButtons.YesNo,

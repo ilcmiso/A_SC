@@ -1,7 +1,6 @@
 ﻿Imports System.IO
 Imports System.Text
 Imports System.Threading
-Imports DocumentFormat.OpenXml.Wordprocessing
 
 Public Class SCA1
 
@@ -1742,7 +1741,7 @@ Public Class SCA1
         CB_DunA6.SelectedIndex = 0
         CB_DunA7.SelectedIndex = 0
         NUD_DunA1.Value = Today.AddMonths(-1).ToString("MMM")
-        Dim xml As New xmlMng
+        Dim xml As New XmlMng
         If xml.xmlData.UserName <> "" Then TB_DunA4.Text = xml.xmlData.UserName2        ' 最後に書き込んだユーザー名(PC固有)を表示
 
     End Sub
@@ -1977,6 +1976,7 @@ Public Class SCA1
         For n = 0 To dgv.Rows.Count - 1
             regText += String.Format("{0}`", dgv(2, n).Value)
         Next
+        log.cLog("[UpdatePIDB] regText:" & regText)
 
         ' 該当顧客1名の物件情報データを検索or取得して、新規登録or更新
         Dim dt As DataTable = db.GetSelect(Sqldb.TID.PI, "Select * From " & db.DBTbl(Sqldb.TID.PI, Sqldb.DBID.TABLE) & " Where C01 = '" & ccid & "'")
@@ -1992,9 +1992,11 @@ Public Class SCA1
             Next
             cmd = RegularExpressions.Regex.Replace(cmd, ",$", "")  ' 末尾の , を削除
             cmd += ");"        ' 未使用のC09,C10分
+            log.cLog("[UpdatePIDB] 新規登録 cmd: " & cmd)
         End If
         ' (新規作成後に)更新
         cmd += String.Format("Update [TBL] Set {0} = '{1}' Where C01 = '{2}';", clmName, regText, ccid)
+        log.cLog("[UpdatePIDB] 更新 cmd: " & cmd)
         db.ExeSQL(Sqldb.TID.PI, cmd)
     End Sub
 
@@ -2011,10 +2013,11 @@ Public Class SCA1
                 ' ただしBindさせると入力値欄でnullを設定するとエラーが発生してしまうので、暫定でDGVに直書きしている。
                 'dt.Rows(n).Item(3) = words(n)          
                 DGV7.Rows(n).Cells(2).Value = words(n)      'DGV直書き (DGVソートが出来なくなる)
+                log.cLog(String.Format("[ReadPIDB]  words({0}): {1}", n, words(n)))
             Next
         End If
 
-        DGV7.Columns(2).DefaultCellStyle.BackColor = System.Drawing.Color.White                            ' 予め背景色を白に設定
+        DGV7.Columns(2).DefaultCellStyle.BackColor = Color.White                            ' 予め背景色を白に設定
         ' 各項目ごとの初期セッティング
         Select Case DGV_PIMENU.CurrentRow.Index
             Case 0
@@ -2030,17 +2033,17 @@ Public Class SCA1
                 DGV7(2, 0).ReadOnly = True
                 DGV7(2, 1).ReadOnly = True
                 DGV7(2, 2).ReadOnly = True
-                DGV7(2, 0).Style.BackColor = System.Drawing.Color.LightSalmon
-                DGV7(2, 1).Style.BackColor = System.Drawing.Color.LightSalmon
-                DGV7(2, 2).Style.BackColor = System.Drawing.Color.LightSalmon
+                DGV7(2, 0).Style.BackColor = Color.LightSalmon
+                DGV7(2, 1).Style.BackColor = Color.LightSalmon
+                DGV7(2, 2).Style.BackColor = Color.LightSalmon
 
             Case 4, 5, 6
                 ' 再生・破産のカラーリング
-                DGV7(1, 0).Style.BackColor = System.Drawing.Color.DeepSkyBlue
-                DGV7(1, 1).Style.BackColor = System.Drawing.Color.DeepSkyBlue
-                DGV7(1, 9).Style.BackColor = System.Drawing.Color.Pink
-                DGV7(1, 17).Style.BackColor = System.Drawing.Color.Pink
-                DGV7(1, 18).Style.BackColor = System.Drawing.Color.Pink
+                DGV7(1, 0).Style.BackColor = Color.DeepSkyBlue
+                DGV7(1, 1).Style.BackColor = Color.DeepSkyBlue
+                DGV7(1, 9).Style.BackColor = Color.Pink
+                DGV7(1, 17).Style.BackColor = Color.Pink
+                DGV7(1, 18).Style.BackColor = Color.Pink
         End Select
 
     End Sub

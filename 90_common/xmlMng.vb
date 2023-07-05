@@ -45,6 +45,14 @@ Public Class XmlMng
         SetXml()
     End Sub
 
+    Public Function GetAplUpdOff() As Boolean
+        Return xmlData.AplUpdOff
+    End Function
+    Public Sub SetAplUpdOff(sw As Boolean)
+        xmlData.AplUpdOff = sw
+        SetXml()
+    End Sub
+
     Private Sub InitStats()
         If xmlData.CPathSW = "" Then xmlData.CPathSW = 1
         If xmlData.CPath1 = "" And xmlData.CPath2 <> "" Then xmlData.CPathSW = 2
@@ -82,4 +90,5 @@ Public Class XmlList
     Public AutoUpdCB As Boolean  ' 自動更新フラグ
     Public NoticeTell As Boolean ' 受話通知表示のフラグ
     Public DebugMode As Boolean  ' デバッグログ出力モード
+    Public AplUpdOff As Boolean  ' アプリ自動更新OFF
 End Class
