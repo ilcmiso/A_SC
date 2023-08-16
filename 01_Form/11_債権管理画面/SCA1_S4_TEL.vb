@@ -48,12 +48,11 @@
         ' 追加電話番号の更新
         If db.IsExistREM(id) Then
             ' 既存に存在するので05と06だけ更新
-            db.ExeSQL(Sqldb.TID.SCR, "Update FKSCREM Set FKR05 = '" & val & "' Where FKR01 = '" & id & "'")                      ' 追加電話番号
-            db.ExeSQL(Sqldb.TID.SCR, "Update FKSCREM Set FKR06 = '" & val.Replace("-", "") & "' Where FKR01 = '" & id & "'")     ' 追加電話番号のハイフンなし
+            db.ExeSQL(Sqldb.TID.SCR, "Update FKSCREM Set FKR05 = '" & val & "' Where FKR01 = '" & id & "'")                      ' 05 追加電話番号
+            db.ExeSQL(Sqldb.TID.SCR, "Update FKSCREM Set FKR06 = '" & val.Replace("-", "") & "' Where FKR01 = '" & id & "'")     ' 06 追加電話番号のハイフンなし
         Else
             ' 新規は05、06だけ更新して他は空白にしておく
-            db.ExeSQL(Sqldb.TID.SCR, "Insert Into FKSCREM Values('" & id & "','','','','" & val & "')")
-            db.ExeSQL(Sqldb.TID.SCR, "Insert Into FKSCREM Values('" & id & "','','','','" & val.Replace("-", "") & "')")         ' 追加電話番号のハイフンなし
+            db.ExeSQL(Sqldb.TID.SCR, "Insert Into FKSCREM Values('" & id & "','','','','" & val & "','" & val.Replace("-", "") & "')")
         End If
     End Sub
 
