@@ -5,8 +5,9 @@
     ' 団信加入サインの値取得
     Public Function GetGroupCredit(status As String) As String
         Dim cmn As New Common
-        Dim val As Integer = cmn.Int(status)
-
+        Dim val As Integer
+        If status = "" Then Return ""           ' データ読み取り前などのときは未加入ではなく空白で表す
+        val = cmn.Int(status)
         ' 値が範囲外のときは空白を返却
         If val >= GROUPCREDIT.Length Then Return ""
 
