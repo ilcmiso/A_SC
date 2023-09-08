@@ -272,6 +272,8 @@ Partial Class SCA1
         Me.Column27 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Column28 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.CreatorExpress1 = New AdvanceSoftware.ExcelCreator.Xlsx.CreatorExpress(Me.components)
+        Me.Label2 = New System.Windows.Forms.Label()
+        Me.CB_A7 = New System.Windows.Forms.ComboBox()
         Me.CMenu_DGV3.SuspendLayout()
         Me.Tab_4Dun.SuspendLayout()
         CType(Me.DGV4, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -566,6 +568,8 @@ Partial Class SCA1
         '
         'GroupBox1
         '
+        Me.GroupBox1.Controls.Add(Me.CB_A7)
+        Me.GroupBox1.Controls.Add(Me.Label2)
         Me.GroupBox1.Controls.Add(Me.DTP_DunA4)
         Me.GroupBox1.Controls.Add(Me.Label52)
         Me.GroupBox1.Controls.Add(Me.CB_DunA7)
@@ -670,7 +674,7 @@ Partial Class SCA1
         Me.TB_DunA5.Font = New System.Drawing.Font("メイリオ", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.TB_DunA5.ForeColor = System.Drawing.SystemColors.InfoText
         Me.TB_DunA5.ImeMode = System.Windows.Forms.ImeMode.Hiragana
-        Me.TB_DunA5.Location = New System.Drawing.Point(226, 78)
+        Me.TB_DunA5.Location = New System.Drawing.Point(226, 108)
         Me.TB_DunA5.MaxLength = 327670
         Me.TB_DunA5.Multiline = True
         Me.TB_DunA5.Name = "TB_DunA5"
@@ -682,7 +686,7 @@ Partial Class SCA1
         Me.Label43.AutoSize = True
         Me.Label43.Font = New System.Drawing.Font("メイリオ", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.Label43.ForeColor = System.Drawing.Color.Blue
-        Me.Label43.Location = New System.Drawing.Point(223, 51)
+        Me.Label43.Location = New System.Drawing.Point(223, 81)
         Me.Label43.Name = "Label43"
         Me.Label43.Size = New System.Drawing.Size(44, 18)
         Me.Label43.TabIndex = 1770
@@ -2901,6 +2905,28 @@ Partial Class SCA1
         Me.CreatorExpress1.RefAttrMode = True
         Me.CreatorExpress1.TemporaryPath = ""
         '
+        'Label2
+        '
+        Me.Label2.AutoSize = True
+        Me.Label2.Font = New System.Drawing.Font("メイリオ", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.Label2.ForeColor = System.Drawing.Color.Blue
+        Me.Label2.Location = New System.Drawing.Point(223, 51)
+        Me.Label2.Name = "Label2"
+        Me.Label2.Size = New System.Drawing.Size(44, 18)
+        Me.Label2.TabIndex = 1777
+        Me.Label2.Text = "場　所"
+        '
+        'CB_A7
+        '
+        Me.CB_A7.Font = New System.Drawing.Font("MS UI Gothic", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.CB_A7.FormattingEnabled = True
+        Me.CB_A7.ImeMode = System.Windows.Forms.ImeMode.Hiragana
+        Me.CB_A7.Items.AddRange(New Object() {"本店(分室含む)", "決済場所", "機構", "契約者自宅", "融資物件", "その他"})
+        Me.CB_A7.Location = New System.Drawing.Point(273, 50)
+        Me.CB_A7.Name = "CB_A7"
+        Me.CB_A7.Size = New System.Drawing.Size(129, 23)
+        Me.CB_A7.TabIndex = 1778
+        '
         'SCA1
         '
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None
@@ -3152,4 +3178,6 @@ Partial Class SCA1
     Friend WithEvents Column39 As DataGridViewTextBoxColumn
     Friend WithEvents Column40 As DataGridViewTextBoxColumn
     Friend WithEvents Column41 As DataGridViewTextBoxColumn
+    Friend WithEvents Label2 As Label
+    Friend WithEvents CB_A7 As ComboBox
 End Class
