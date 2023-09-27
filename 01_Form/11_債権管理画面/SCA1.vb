@@ -499,7 +499,7 @@ Public Class SCA1
                     dgv(1, 5).Value = cInfo.Item(17)                                 ' 勤務先
                     dgv(3, 1).Value = cInfo.Item(13)                                 ' TEL1
                     dgv(3, 2).Value = cInfo.Item(11)                                 ' 生年月日
-                    dgv(3, 3).Value = sccmn.GetGroupCredit(cInfo.Item(20))              ' 団信加入サイン
+                    ' dgv(3, 3).Value = sccmn.GetGroupCredit(cInfo.Item(20))              ' 団信加入サイン
                     dgv(3, 5).Value = cInfo.Item(18)                                 ' 勤務先TEL1
                     ' 連帯債務者
                     dgv(1, 6).Value = cInfo.Item(30)                                 ' ヨミカナ
@@ -509,7 +509,7 @@ Public Class SCA1
                     dgv(1, 10).Value = cInfo.Item(37)                                ' 勤務先
                     dgv(3, 6).Value = cInfo.Item(33)                                 ' TEL1
                     dgv(3, 7).Value = cInfo.Item(31)                                 ' 生年月日
-                    dgv(3, 8).Value = sccmn.GetGroupCredit(cInfo.Item(40))              ' 団信加入サイン
+                    ' dgv(3, 8).Value = sccmn.GetGroupCredit(cInfo.Item(40))              ' 団信加入サイン
                     dgv(3, 10).Value = cInfo.Item(38)                                ' 勤務先TEL1
                     ' 証券番号(アシスト)
                     Dim dr As DataRow() = db.OrgDataTable(Sqldb.TID.SCAS).Select(String.Format("C02 = '{0}'", cid))
@@ -1872,7 +1872,7 @@ Public Class SCA1
                                                      Name2 & "', '" &                                           ' 債権者名読み(一覧表示用)
                                                      CB_DunA6.Text & "', '" &                                   ' 概要
                                                      "" & "', '" &                                              ' 対応者
-                                                     "" & "','" &                                               ' 場所
+                                                     CB_A7.Text & "','" &                                       ' 場所
                                                      "" & "','" &                                               ' 送付先郵便番号
                                                      "" & "','" &                                               ' 送付先住所
                                                      "" & "','" &                                               ' 送付先名前
