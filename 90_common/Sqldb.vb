@@ -441,6 +441,8 @@ Public Class Sqldb
                 Dim idx As Integer = dupRows(0).Item(1)
                 With dt.Rows(idx)
                     .Item(2) = "3"              ' ローン識別子 1=FKのみ 2=アシストのみ 3=FK,アシスト
+                    .Item(8) = aRow.Item(11)   ' アシスト 証券番号
+                    .Item(58) = aRow.Item(27)   ' アシスト 金消契約日
                     .Item(59) = aRow.Item(23)   ' 貸付金額
                     .Item(60) = aRow.Item(24)   ' 延滞回数
                     .Item(61) = aRow.Item(25)   ' 入金額
@@ -454,6 +456,7 @@ Public Class Sqldb
                     .Item(0) = aRow.Item(1) & "_2"          ' 機構番号_ローン識別子 ユニーク		ex) 25XXXXXXXXXXXX_1
                     .Item(1) = aRow.Item(1)                 ' 機構番号
                     .Item(2) = "2"                          ' ローン識別子 1=FKのみ 2=アシストのみ 3=FK,アシスト
+                    .Item(8) = aRow.Item(11)                ' アシスト 証券番号
                     .Item(9) = aRow.Item(2)                 ' 債務者 氏名
                     .Item(10) = aRow.Item(3)                ' 債務者 ﾖﾐｶﾅ
                     .Item(11) = aRow.Item(4)                ' 債務者 生年月日

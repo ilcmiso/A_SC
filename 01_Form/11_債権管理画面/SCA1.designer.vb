@@ -92,6 +92,8 @@ Partial Class SCA1
         Me.Button15 = New System.Windows.Forms.Button()
         Me.L_STS_Dun = New System.Windows.Forms.Label()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
+        Me.CB_A7 = New System.Windows.Forms.ComboBox()
+        Me.Label2 = New System.Windows.Forms.Label()
         Me.DTP_DunA4 = New System.Windows.Forms.DateTimePicker()
         Me.Label52 = New System.Windows.Forms.Label()
         Me.CB_DunA7 = New System.Windows.Forms.ComboBox()
@@ -272,8 +274,7 @@ Partial Class SCA1
         Me.Column27 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Column28 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.CreatorExpress1 = New AdvanceSoftware.ExcelCreator.Xlsx.CreatorExpress(Me.components)
-        Me.Label2 = New System.Windows.Forms.Label()
-        Me.CB_A7 = New System.Windows.Forms.ComboBox()
+        Me.Button18 = New System.Windows.Forms.Button()
         Me.CMenu_DGV3.SuspendLayout()
         Me.Tab_4Dun.SuspendLayout()
         CType(Me.DGV4, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -357,6 +358,7 @@ Partial Class SCA1
         'Tab_4Dun
         '
         Me.Tab_4Dun.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(225, Byte), Integer), CType(CType(255, Byte), Integer))
+        Me.Tab_4Dun.Controls.Add(Me.Button18)
         Me.Tab_4Dun.Controls.Add(Me.Button9)
         Me.Tab_4Dun.Controls.Add(Me.Label42)
         Me.Tab_4Dun.Controls.Add(Me.DGV4)
@@ -546,7 +548,7 @@ Partial Class SCA1
         Me.Button15.FlatAppearance.BorderColor = System.Drawing.Color.Black
         Me.Button15.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.Button15.ForeColor = System.Drawing.Color.Cyan
-        Me.Button15.Location = New System.Drawing.Point(917, 416)
+        Me.Button15.Location = New System.Drawing.Point(920, 372)
         Me.Button15.Name = "Button15"
         Me.Button15.Size = New System.Drawing.Size(206, 40)
         Me.Button15.TabIndex = 1761
@@ -596,6 +598,28 @@ Partial Class SCA1
         Me.GroupBox1.TabIndex = 1759
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "印刷・記録設定"
+        '
+        'CB_A7
+        '
+        Me.CB_A7.Font = New System.Drawing.Font("MS UI Gothic", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.CB_A7.FormattingEnabled = True
+        Me.CB_A7.ImeMode = System.Windows.Forms.ImeMode.Hiragana
+        Me.CB_A7.Items.AddRange(New Object() {"本店(分室含む)", "決済場所", "機構", "契約者自宅", "融資物件", "その他"})
+        Me.CB_A7.Location = New System.Drawing.Point(273, 50)
+        Me.CB_A7.Name = "CB_A7"
+        Me.CB_A7.Size = New System.Drawing.Size(129, 23)
+        Me.CB_A7.TabIndex = 1778
+        '
+        'Label2
+        '
+        Me.Label2.AutoSize = True
+        Me.Label2.Font = New System.Drawing.Font("メイリオ", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.Label2.ForeColor = System.Drawing.Color.Blue
+        Me.Label2.Location = New System.Drawing.Point(223, 51)
+        Me.Label2.Name = "Label2"
+        Me.Label2.Size = New System.Drawing.Size(44, 18)
+        Me.Label2.TabIndex = 1777
+        Me.Label2.Text = "場　所"
         '
         'DTP_DunA4
         '
@@ -840,7 +864,7 @@ Partial Class SCA1
         Me.Button14.FlatAppearance.BorderColor = System.Drawing.Color.Black
         Me.Button14.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.Button14.ForeColor = System.Drawing.Color.Cyan
-        Me.Button14.Location = New System.Drawing.Point(917, 370)
+        Me.Button14.Location = New System.Drawing.Point(920, 326)
         Me.Button14.Name = "Button14"
         Me.Button14.Size = New System.Drawing.Size(206, 40)
         Me.Button14.TabIndex = 1756
@@ -977,7 +1001,7 @@ Partial Class SCA1
         Me.Button13.FlatAppearance.BorderColor = System.Drawing.Color.Black
         Me.Button13.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.Button13.ForeColor = System.Drawing.Color.Cyan
-        Me.Button13.Location = New System.Drawing.Point(917, 324)
+        Me.Button13.Location = New System.Drawing.Point(920, 280)
         Me.Button13.Name = "Button13"
         Me.Button13.Size = New System.Drawing.Size(206, 40)
         Me.Button13.TabIndex = 1753
@@ -2905,27 +2929,19 @@ Partial Class SCA1
         Me.CreatorExpress1.RefAttrMode = True
         Me.CreatorExpress1.TemporaryPath = ""
         '
-        'Label2
+        'Button18
         '
-        Me.Label2.AutoSize = True
-        Me.Label2.Font = New System.Drawing.Font("メイリオ", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.Label2.ForeColor = System.Drawing.Color.Blue
-        Me.Label2.Location = New System.Drawing.Point(223, 51)
-        Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(44, 18)
-        Me.Label2.TabIndex = 1777
-        Me.Label2.Text = "場　所"
-        '
-        'CB_A7
-        '
-        Me.CB_A7.Font = New System.Drawing.Font("MS UI Gothic", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.CB_A7.FormattingEnabled = True
-        Me.CB_A7.ImeMode = System.Windows.Forms.ImeMode.Hiragana
-        Me.CB_A7.Items.AddRange(New Object() {"本店(分室含む)", "決済場所", "機構", "契約者自宅", "融資物件", "その他"})
-        Me.CB_A7.Location = New System.Drawing.Point(273, 50)
-        Me.CB_A7.Name = "CB_A7"
-        Me.CB_A7.Size = New System.Drawing.Size(129, 23)
-        Me.CB_A7.TabIndex = 1778
+        Me.Button18.BackColor = System.Drawing.Color.SteelBlue
+        Me.Button18.FlatAppearance.BorderColor = System.Drawing.Color.Black
+        Me.Button18.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.Button18.ForeColor = System.Drawing.Color.Cyan
+        Me.Button18.Location = New System.Drawing.Point(920, 418)
+        Me.Button18.Name = "Button18"
+        Me.Button18.Size = New System.Drawing.Size(206, 40)
+        Me.Button18.TabIndex = 1766
+        Me.Button18.TabStop = False
+        Me.Button18.Text = "4. 顧客情報の出力"
+        Me.Button18.UseVisualStyleBackColor = False
         '
         'SCA1
         '
@@ -3180,4 +3196,5 @@ Partial Class SCA1
     Friend WithEvents Column41 As DataGridViewTextBoxColumn
     Friend WithEvents Label2 As Label
     Friend WithEvents CB_A7 As ComboBox
+    Friend WithEvents Button18 As Button
 End Class

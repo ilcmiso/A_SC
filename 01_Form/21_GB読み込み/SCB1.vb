@@ -94,7 +94,7 @@ Public Class SCB1
                                    "'" & cmn.Int(SCList(i + 25)) & "'," &          ' FK56 貸付金額
                                    "'" & cmn.Int(SCList(i + 26)) & "'," &          ' FK57 貸付金額(ボーナス)
                                    "'" & cmn.ToDate(SCList(i + 27)) & "'," &         ' FK58 完済日(使ってない)
-                                   "'" & cmn.Int(Trim(SCList(i + 28))) & "'," &    ' FK59 償還残回数
+                                   "''," &                                           ' FK59 償還残回数(使ってない)
                                    "'','','',''," &                                  ' FK60～63
                                    "'" & SCList(i + 33) & "'," &                     ' FK64 物件情報 住居サイン
                                    "'" & Trim(SCList(i + 34)) & "'," &               ' FK65 物件情報 郵便番号

@@ -1883,6 +1883,14 @@ Public Class SCA1
         'ShowDunLB()
     End Sub
 
+    ' 顧客情報の出力ボタン
+    Private Sub Button18_Click(sender As Object, e As EventArgs) Handles Button18.Click
+        Dim f As New SCA1_SelectInfo
+        f.ShowDialog(Me)
+        f.Dispose()
+    End Sub
+
+
     ' 督促日時選択イベント
     Private Sub LB_DunRead_SelectedIndexChanged(sender As Object, e As EventArgs) Handles LB_DunRead.SelectedIndexChanged
         ShowDGVList(DGV4)
@@ -2013,7 +2021,7 @@ Public Class SCA1
                 ' ただしBindさせると入力値欄でnullを設定するとエラーが発生してしまうので、暫定でDGVに直書きしている。
                 'dt.Rows(n).Item(3) = words(n)          
                 DGV7.Rows(n).Cells(2).Value = words(n)      'DGV直書き (DGVソートが出来なくなる)
-                log.cLog(String.Format("[ReadPIDB]  words({0}): {1}", n, words(n)))
+                ' log.cLog(String.Format("[ReadPIDB]  words({0}): {1}", n, words(n)))
             Next
         End If
 
@@ -2203,15 +2211,24 @@ Public Class SCA1
     Private Sub ShowAssignee()
         If DGV1.Rows.Count = 0 Then Exit Sub
         log.cLog("ShowAssignee 受任マーク設定")
-        ' 予め受任者をOFFに初期化
-        SetAssignee(0, False)
-        SetAssignee(1, False)
 
         Dim cid As String = DGV1.CurrentRow.Cells(0).Value
+        ' 受任条件に一致していたら受任ONに設定
+        SetAssignee(0, GetAssignee(cid, DGV9(1, 2).Value))      ' 主債務者
+        SetAssignee(1, GetAssignee(cid, DGV9(1, 7).Value))      ' 連帯債務者
+    End Sub
+
+    ' 受任者判定
+    ' [ret]   True : 受任者    False : 非受任者
+    ' [cid]   顧客番号
+    ' [cName] 主債務者名 or 連帯債務者名
+    Public Function GetAssignee(cid As String, cName As String) As Boolean
         Dim itemIdx1() As Integer = {6, 7, 8}       ' 大項目番号
         Dim NameIdx As Integer = 0                  ' 該当者名識別番号
         Dim OnIdx As Integer = 1                    ' 受任者ONにする条件の識別番号
         Dim OffIdx() As Integer = {9, 17, 18}       ' 受任者OFFにする条件の識別番号
+
+        If cName.Length = 0 Then Return False       ' 顧客名がない場合は無条件で非受任者
 
         ' 大項目番号リストを全てチェック
         '   受任者は主債務者と連帯債務者の場合があるので、複数個の情報があっても全て有効。
@@ -2237,21 +2254,16 @@ Public Class SCA1
                 offNum += 1
             End While
 
-            ' 該当者名に主債務者名、もしくは連帯債務者が含まれていれば受任者ON
+            ' 該当者名に主債務者名、もしくは連帯債務者のcNameが含まれていれば受任者ON
             ' カタカナを半角→全角、スペース(空白)を削除　して、該当者名に含まれているか比較
-            Dim syuJudge = cmn.RegReplace(StrConv(words(NameIdx), VbStrConv.Wide), "　", "").IndexOf(cmn.RegReplace(DGV9(1, 2).Value, "　", "")) >= 0
-            If syuJudge And DGV9(1, 2).Value.Length > 0 Then
-                SetAssignee(0, syuJudge)  ' 主債務者
-                Continue For
-            End If
-
-            Dim renJudge = cmn.RegReplace(StrConv(words(NameIdx), VbStrConv.Wide), "　", "").IndexOf(cmn.RegReplace(DGV9(1, 7).Value, "　", "")) >= 0
-            If renJudge And DGV9(1, 7).Value.Length > 0 Then
-                SetAssignee(1, renJudge)  ' 連帯債務者
-                Continue For
+            If cmn.RegReplace(StrConv(words(NameIdx), VbStrConv.Wide), "　", "").IndexOf(cmn.RegReplace(cName, "　", "")) >= 0 Then
+                ' 受任者を返却
+                Return True
             End If
         Next
-    End Sub
+
+        Return False
+    End Function
 
     ' 受任者マークのON/OFF
     '   [target] 0: 主債務者 1: 連帯債務者

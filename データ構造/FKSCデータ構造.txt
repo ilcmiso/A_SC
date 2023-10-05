@@ -9,7 +9,7 @@ FKS.FKSC_R.FK05          ' 当月回収元金		2020/10 add
 FKS.FKSC_R.FK06          ' 次回償還金		2020/10 add
 FKS.FKSC_R.FK07          ' 次々回償還金		2020/10 add
 FKS.FKSC_R.FK08          ' 増額返済月		2020/04 add
-FKS.FKSC_R.FK09          ' 
+FKS.FKSC_R.FK09          ' アシスト 証券番号(証書番号)   2023/10 add
 FKS.FKSC_R.FK10          ' 債務者 氏名
 FKS.FKSC_R.FK11          ' 債務者 ﾖﾐｶﾅ
 FKS.FKSC_R.FK12          ' 債務者 生年月日

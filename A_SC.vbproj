@@ -123,6 +123,10 @@
       <HintPath>packages\ExcelNumberFormat.1.0.10\lib\net20\ExcelNumberFormat.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Office.Interop.Excel, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.Office.Interop.Excel.15.0.4795.1001\lib\net20\Microsoft.Office.Interop.Excel.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="SQLite.Designer">
@@ -215,6 +219,12 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="01_Form\11_債権管理画面\SCA1_SelectInfo.designer.vb">
+      <DependentUpon>SCA1_SelectInfo.vb</DependentUpon>
+    </Compile>
+    <Compile Include="01_Form\11_債権管理画面\SCA1_SelectInfo.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="01_Form\13_Schedule\SCE_S2_INPUT.Designer.vb">
       <DependentUpon>SCE_S2_INPUT.vb</DependentUpon>
     </Compile>
@@ -365,6 +375,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="01_Form\11_債権管理画面\SCA1_SelectInfo.resx">
+      <DependentUpon>SCA1_SelectInfo.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="01_Form\13_Schedule\SCE_S1.resx">
       <DependentUpon>SCE_S1.vb</DependentUpon>
     </EmbeddedResource>
