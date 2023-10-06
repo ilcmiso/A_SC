@@ -71,14 +71,15 @@
 
                 ' 該当顧客のFKSC情報を取得して設定
                 Dim dInfoStr As String = ""
-                cInfoDataRow = SCA1.db.OrgDataTablePlusAssist.Select(String.Format("FK02 = '{0}'", cid))
+                cInfoDataRow = ownForm.db.OrgDataTablePlusAssist.Select(String.Format("FK02 = '{0}' Or FK09 = '{0}'", cid))
                 If cInfoDataRow.Length > 0 Then
                     cInfo = cInfoDataRow(0)
 
                     ' InfoItemsが"受任者"のみ、FKSC情報ではなく物件情報(PINFO)から取得して設定する
                     If InfoItems(n) = "受任者" Then
-                        If SCA1.GetAssignee(cid, cInfo(9)) Then dInfoStr = "主"      ' 主債務者
-                        If SCA1.GetAssignee(cid, cInfo(29)) Then dInfoStr += "連"    ' 連帯債務者
+                        ' cidが証券番号の可能性もあるので、cidではなく顧客情報であるcInfo(1)を引数にする
+                        If SCA1.GetAssignee(cInfo(1), cInfo(9)) Then dInfoStr = "主"      ' 主債務者
+                        If SCA1.GetAssignee(cInfo(1), cInfo(29)) Then dInfoStr += "連"    ' 連帯債務者
                         rowValue.Add(dInfoStr)
                         Continue For
                     End If
