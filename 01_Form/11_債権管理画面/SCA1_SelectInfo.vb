@@ -40,9 +40,14 @@
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
         Dim outList As New List(Of List(Of String))
         Dim cid As String
+        Dim cExc As New CExcel
+
+        Dim fileName As String = cExc.GetSaveFileName(CExcel.FILTER_EXCEL, "督促情報一覧.xlsx")
+        If fileName = String.Empty Then Exit Sub
 
         log.cLog("-- Excel出力開始 --")
         log.TimerST()
+        Cursor.Current = Cursors.WaitCursor             ' マウスカーソルを砂時計に
 
         ' 項目名を出力
         Dim rowItems As New List(Of String)
@@ -57,48 +62,51 @@
         ' 顧客番号リストから１つづつ番号を取得
         For cIdx = 0 To ownForm.TB_DunIN.Lines.Length - 1
             cid = ownForm.TB_DunIN.Lines(cIdx)
-            log.cLog("-- cid : " & cid)
+            'log.cLog("-- cid : " & cid)
 
             ' 顧客番号をもとに、顧客DBからInfoItemsのデータを取得してdataRowに格納
-            'Dim dataRow As String() = Nothing
-            Dim cInfo As DataRow
+            Dim cInfo As DataRow = Nothing
             Dim cInfoDataRow As DataRow()
             Dim rowValue As New List(Of String)
+
+            cInfoDataRow = ownForm.db.OrgDataTablePlusAssist.Select(String.Format("FK02 = '{0}' Or FK09 = '{0}'", cid))
+            If cInfoDataRow.Length > 0 Then
+                cInfo = cInfoDataRow(0)
+            End If
 
             For n = 0 To InfoIdx.Length - 1
                 ' 出力情報のチェックボックスがOFFの項目は出力しない
                 If DGV_SI(1, n).Value = False Then Continue For
+                If cInfo Is Nothing Then Continue For
 
                 ' 該当顧客のFKSC情報を取得して設定
                 Dim dInfoStr As String = ""
-                cInfoDataRow = ownForm.db.OrgDataTablePlusAssist.Select(String.Format("FK02 = '{0}' Or FK09 = '{0}'", cid))
-                If cInfoDataRow.Length > 0 Then
-                    cInfo = cInfoDataRow(0)
 
-                    ' InfoItemsが"受任者"のみ、FKSC情報ではなく物件情報(PINFO)から取得して設定する
-                    If InfoItems(n) = "受任者" Then
-                        ' cidが証券番号の可能性もあるので、cidではなく顧客情報であるcInfo(1)を引数にする
-                        If SCA1.GetAssignee(cInfo(1), cInfo(9)) Then dInfoStr = "主"      ' 主債務者
-                        If SCA1.GetAssignee(cInfo(1), cInfo(29)) Then dInfoStr += "連"    ' 連帯債務者
-                        rowValue.Add(dInfoStr)
-                        Continue For
-                    End If
+                ' InfoItemsが"受任者"のみ、FKSC情報ではなく物件情報(PINFO)から取得して設定する
 
-                    ' DBの情報がDBNullだった場合は値を設定せず、空欄のままにしておく
-                    If cInfo(InfoIdx(n) - 1) IsNot DBNull.Value Then
-                        dInfoStr = cInfo(InfoIdx(n) - 1)
-                    End If
+                If InfoItems(n) = "受任者" Then
+                    ' cidが証券番号の可能性もあるので、cidではなく顧客情報であるcInfo(1)を引数にする
+                    If SCA1.GetAssignee(cInfo(1), cInfo(9)) Then dInfoStr = "主"      ' 主債務者
+                    If SCA1.GetAssignee(cInfo(1), cInfo(29)) Then dInfoStr += "連"    ' 連帯債務者
                     rowValue.Add(dInfoStr)
+                    Continue For
                 End If
+
+                ' DBの情報がDBNullだった場合は値を設定せず、空欄のままにしておく
+                If cInfo(InfoIdx(n) - 1) IsNot DBNull.Value Then
+                    dInfoStr = cInfo(InfoIdx(n) - 1)
+                End If
+                rowValue.Add(dInfoStr)
             Next
             outList.Add(rowValue)
         Next
+        log.TimerED("Excel出力")
 
+        log.cLog("-- outList.Count : " & outList.Count)
         If outList.Count > 0 Then
-            log.cLog("-- outList.Count : " & outList.Count)
-            log.TimerED("Excel出力")
-            Dim cExc As New CExcel
-            cExc.ExportToExcel(outList, "督促情報一覧.xlsx")
+            If Not String.IsNullOrEmpty(fileName) Then
+                cExc.ExportToExcel(outList, fileName)
+            End If
         End If
         log.cLog("-- Excel出力終了 --")
         Me.Close()

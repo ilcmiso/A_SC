@@ -4,6 +4,8 @@ Imports System.Windows.Forms
 
 Public Class CExcel
 
+    Public Const FILTER_EXCEL As String = "Excel files (*.xlsx)|*.xlsx"
+
     Public Function ReadExc(ExcFilePath As String, SheetName As String) As String(,)
         Dim ret(,) As String = Nothing
         'Dim xlBook As New Excel.XLWorkbook("C:\Users\hiro\Desktop\A_SC物件情報.xlsx")
@@ -26,35 +28,54 @@ Public Class CExcel
         Return ret
     End Function
 
-    ' Excel出力
+    ' ファイル保存場所ダイアログ関数
+    Public Function GetSaveFileName(filter As String, defaultFileName As String) As String
+        Dim saveFileDialog As New SaveFileDialog()
+        saveFileDialog.Filter = filter
+        saveFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop)
+        saveFileDialog.FileName = defaultFileName
+        If saveFileDialog.ShowDialog() = DialogResult.OK Then
+            Return saveFileDialog.FileName
+        Else
+            Return String.Empty
+        End If
+    End Function
+
+    ' Excel出力関数
     Public Sub ExportToExcel(data As List(Of List(Of String)), fileName As String)
+        If data Is Nothing OrElse data.Count = 0 Then Return
+
         Dim excelApp As New Microsoft.Office.Interop.Excel.Application
         Dim workbook As Workbook = excelApp.Workbooks.Add()
         Dim worksheet As Worksheet = workbook.Sheets(1)
 
-        For i = 0 To data.Count - 1
-            For j = 0 To data(i).Count - 1
-                Dim cell = worksheet.Cells(i + 1, j + 1)
-                cell.NumberFormat = "@"  ' "@"はテキスト形式を意味します
-                cell.Value = data(i)(j)
-            Next
+        Dim rowCount As Integer = data.Count
+        Dim colCount As Integer = 0
+        If data(0) IsNot Nothing Then
+            colCount = data(0).Count
+        End If
+
+        Dim dataArray(rowCount - 1, colCount - 1) As Object
+
+        For i = 0 To rowCount - 1
+            If data(i) IsNot Nothing Then
+                For j = 0 To Math.Min(data(i).Count, colCount) - 1
+                    dataArray(i, j) = data(i)(j)
+                Next
+            End If
         Next
 
-        Dim saveFileDialog As New SaveFileDialog()
-        saveFileDialog.Filter = "Excel files (*.xlsx)|*.xlsx"
-        saveFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop)
-        saveFileDialog.FileName = fileName
+        Dim c1 As Range = worksheet.Cells(1, 1)
+        Dim c2 As Range = worksheet.Cells(rowCount, colCount)
+        Dim range As Range = worksheet.Range(c1, c2)
 
-        If saveFileDialog.ShowDialog() = DialogResult.OK Then
-            workbook.SaveAs(saveFileDialog.FileName)
-            workbook.Close()
-            excelApp.Quit()
-            Process.Start(saveFileDialog.FileName)
-        Else
-            workbook.Close(False)
-            excelApp.Quit()
-        End If
+        range.NumberFormat = "@"
+        range.Value = dataArray
+
+        workbook.SaveAs(fileName)
+        workbook.Close()
+        excelApp.Quit()
+        Process.Start(fileName)
     End Sub
-
 
 End Class
