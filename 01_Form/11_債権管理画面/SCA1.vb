@@ -32,10 +32,10 @@ Public Class SCA1
     Private BeforeAddTel As String = ""
     ' タスク
     Private Const NODE_ALL = "node00"                               ' 全体ノードの名称
-    Public Const ADDTEL_WORD = "電話番号を追加"                     ' 追加電話番号のテキストボックス文言
     ' 外付けフォーム
     Private SearchForm As SCA1_S3_Search = Nothing                  ' 検索オプションフォーム
     Public AddTelForm As SCA1_S4_TEL = Nothing                      ' 電話追加フォーム
+    Public UselessForm As SCA1_USELESSTEL = Nothing                 ' 不通番号フォーム
     Public EditForm As SCE_S2 = Nothing                           ' 交渉記録フォーム
     ' イベントハンドラーロック 記録一覧チェックリストボックス
     Private LockEventHandler_CLB As Boolean = False
@@ -60,7 +60,7 @@ Public Class SCA1
         ' 顧客情報DB(FKSC.DB3,ASSIST.DB3)の最新確認 古ければサーバからダウンロード
         CheckUpdateCDB()
 
-        AddTelInit()
+        InitForms()
 
         ' DGV表示設定
         db.DBFileDL(Sqldb.TID.SCD)
@@ -138,11 +138,8 @@ Public Class SCA1
         ShowDGVList(DGV2)                               ' 交渉記録
         ShowDGVList(DGV7)                               ' 物件情報
         ShowDGVList(DGV9)                               ' 顧客詳細情報
-        'ShowInfoDetail()                                ' 債務者情報の表示
 
         ShowAssignee()                                  ' 物件情報の受任者マークの表示設定
-        'Dim a As New SCA1_S4_TEL
-        AddTelForm.LoadDB()         ' 追加電話番号のDB読み込み(選択中の顧客)
 
         L_STS.Text = " ( " & DGV1.Rows.Count & " / " & db.OrgDataTablePlusAssist.Rows.Count & " ) 件 表示中  -  " &
                      DGV1.SelectedRows.Count & " 人を選択中"
@@ -481,7 +478,6 @@ Public Class SCA1
                 ' DGV情報表示
                 If DGV1.Rows.Count = 0 Then Exit Sub
                 Dim cid As String = DGV1.CurrentRow.Cells(0).Value
-                ShowAddTel("")  ' 追加電話番号の初期設定
                 TB_FreeMemo.Text = ""
 
                 ' 選択中の顧客番号を顧客DBから取得
@@ -558,9 +554,9 @@ Public Class SCA1
                 If remDr.Count = 1 Then
                     Dim cInfo As DataRow = remDr(0)
                     TB_FreeMemo.Text = cInfo.Item(2)
-                    ShowAddTel(cInfo.Item(3))            ' 追加電話番号
                 End If
 
+                UselessColor()
                 SearchColor(TB_SearchInput.Text)
                 log.TimerED("ShowDGVList End:" & dgv.Name & " - CallBack: " & CallerFunc)
                 Exit Sub
@@ -586,7 +582,6 @@ Public Class SCA1
             Case dgv Is DGV1
                 DGV1.Sort(DGV1.Columns(5), ComponentModel.ListSortDirection.Descending)
                 L_STS.Text = " ( " & DGV1.Rows.Count & " / " & db.OrgDataTablePlusAssist.Rows.Count & " ) 件 表示中"
-                AddTelForm.LoadDB()                             ' 追加電話番号のDB読み込み(選択中の顧客)
                 EnableObjects(dgv.Rows.Count <> 0)              ' もしDGV1のメンバーが0なら編集できなくする
             Case dgv Is DGV2
                 TB_Remarks.Text = ""         ' 備考欄初期化
@@ -770,6 +765,29 @@ Public Class SCA1
                t.Value.Replace("-", "").IndexOf(search.Replace("-", "")) >= 0 Then
                 t.Style.BackColor = System.Drawing.Color.LightSalmon
             End If
+        Next
+    End Sub
+
+    ' 不通番号のフォントカラーを変更
+    Public Sub UselessColor()
+        Dim search_txt() = {DGV9(3, 1), DGV9(3, 5), DGV9(3, 6), DGV9(3, 10)}   ' カラーリングするテキストリスト
+        Dim dt As DataTable = db.ReadOrgDtSelect(Sqldb.TID.UNUMS)  ' 電話番号が格納されているテーブル
+
+        For Each t In search_txt
+            t.Style.ForeColor = Color.Black
+            t.ToolTipText = ""
+
+            ' DataTable内の各行を検索
+            For Each dr As DataRow In dt.Rows
+                Dim tel As String = dr("C01").ToString().Replace("-", "") ' C01は電話番号
+                Dim dest As String = dr("C02").ToString()                 ' C02は理由
+
+                If t.Value.ToString().Replace("-", "") = tel Then  ' 完全一致で比較
+                    t.Style.ForeColor = Color.Red
+                    t.ToolTipText = dest                ' ツールチップに理由を設定
+                    Exit For ' 一致したらこの行の検索は終了
+                End If
+            Next
         Next
     End Sub
 
@@ -1336,67 +1354,43 @@ Public Class SCA1
 #End Region
 
 #Region "追加電話番号"
-    ' 追加電話番号のテキストボックス設定
-    Private Sub TB_B11_Enter(sender As Object, e As EventArgs) Handles TB_B11.Enter
-        ' テキストボックスが選択されたら定型文を消す
-        sender.ForeColor = System.Drawing.Color.Black
-        If sender.Text = ADDTEL_WORD Then
-            sender.Text = ""
-        End If
-        BeforeAddTel = sender.Text  ' 編集前の電話番号を保存
-    End Sub
-    Private Sub TB_B11_Leave(sender As Object, e As EventArgs) Handles TB_B11.Leave
-        If BeforeAddTel = sender.Text Then Exit Sub    ' 電話番号が変更されていないならそのまま終了
+    Const FORM_LEFT As Integer = 870
+    Const FORM_TOP As Integer = 26
 
-        ' テキストボックスから離れたときに空白なら定型文を表示
-        If sender.Text = "" Then
-            sender.ForeColor = System.Drawing.Color.DarkGray
-            sender.Text = ADDTEL_WORD
-            Exit Sub
-        End If
-
-        ' 電話番号を設定したらDB保存 FKR04
-        Cursor.Current = Cursors.WaitCursor             ' マウスカーソルを砂時計に
-        Dim id As String = DGV1.CurrentRow.Cells(0).Value
-        ' REMに既にある場合はUPDATE、なければINSERT
-        If db.IsExistREM(id) Then
-            db.ExeSQL(Sqldb.TID.SCR, "Update FKSCREM Set FKR04 = '" & sender.Text & "' Where FKR01 = '" & id & "'")
-        Else
-            db.ExeSQL(Sqldb.TID.SCR, "Insert Into FKSCREM Values('" & id & "','','','" & sender.Text & "','')")     ' FKSCREM更新
-        End If
-        'db.WriteHistory(id, DGV1.CurrentRow.Cells(1).Value, "追加電話番号", "編集", sender.Text)
-        db.UpdateOrigDT(Sqldb.TID.SCR)
-    End Sub
-
-    ' 追加電話番号の表示
-    Private Sub ShowAddTel(word As String)
-        If word = "" Then
-            TB_B11.ForeColor = System.Drawing.Color.DarkGray
-            TB_B11.Text = ADDTEL_WORD
-        Else
-            TB_B11.ForeColor = System.Drawing.Color.Black
-            TB_B11.Text = word
-        End If
-    End Sub
-
-    ' 追加電話番号フォームを生成
-    Private Sub AddTelInit()
-        AddTelForm = New SCA1_S4_TEL()
-        With AddTelForm
+    ' フォーム初期化共通処理
+    Private Sub InitForm(form As Form)
+        With form
             .TopLevel = False
-            Me.Controls.Add(AddTelForm)
+            Me.Controls.Add(form)
             .Show()
             .BringToFront()
-            .Left = 870
-            .Top = 26
+            .Left = FORM_LEFT
+            .Top = FORM_TOP
             .Visible = False
         End With
-        'AddTelForm.LoadDB()         ' 追加電話番号のDB読み込み(選択中の顧客)
     End Sub
 
-    ' 検索オプションの表示/非表示
+    ' 初期化処理
+    Private Sub InitForms()
+        ' 追加電話番号フォームを生成
+        AddTelForm = New SCA1_S4_TEL()
+        InitForm(AddTelForm)
+
+        ' USELESSフォームを生成
+        UselessForm = New SCA1_USELESSTEL()
+        InitForm(UselessForm)
+    End Sub
+
+    ' 追加電話番号フォームの表示
     Private Sub ShowAddTelForm() Handles L_TELADD.MouseEnter
-        If Not AddTelForm.Visible Then AddTelForm.Visible = True
+        AddTelForm.LoadDB()
+        AddTelForm.Visible = True
+    End Sub
+
+    ' USELESSフォームの表示
+    Private Sub ShowUselessForm() Handles L_USELESSTEL.MouseEnter
+        UselessForm.LoadDB()
+        UselessForm.Visible = True
     End Sub
 
     ' 顧客詳細情報DGV9の整形

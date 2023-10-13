@@ -75,6 +75,7 @@ Partial Class SCA1
         Me.menuItem_NotComp = New System.Windows.Forms.ToolStripMenuItem()
         Me.L_UPDMsg = New System.Windows.Forms.Label()
         Me.Tab_4Dun = New System.Windows.Forms.TabPage()
+        Me.Button18 = New System.Windows.Forms.Button()
         Me.Button9 = New System.Windows.Forms.Button()
         Me.Label42 = New System.Windows.Forms.Label()
         Me.DGV4 = New System.Windows.Forms.DataGridView()
@@ -201,6 +202,7 @@ Partial Class SCA1
         Me.DataGridViewTextBoxColumn8 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.DataGridViewTextBoxColumn9 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Tab_1SC = New System.Windows.Forms.TabPage()
+        Me.L_USELESSTEL = New System.Windows.Forms.Label()
         Me.L_JUNIN2 = New System.Windows.Forms.Label()
         Me.L_JUNIN1 = New System.Windows.Forms.Label()
         Me.TB_ADDRESS2 = New System.Windows.Forms.TextBox()
@@ -213,7 +215,6 @@ Partial Class SCA1
         Me.Column39 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Column40 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Column41 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.TB_B11 = New System.Windows.Forms.TextBox()
         Me.CB_AUTOUPD = New System.Windows.Forms.CheckBox()
         Me.DGV_PIMENU = New System.Windows.Forms.DataGridView()
         Me.DataGridViewTextBoxColumn17 = New System.Windows.Forms.DataGridViewTextBoxColumn()
@@ -274,7 +275,6 @@ Partial Class SCA1
         Me.Column27 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Column28 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.CreatorExpress1 = New AdvanceSoftware.ExcelCreator.Xlsx.CreatorExpress(Me.components)
-        Me.Button18 = New System.Windows.Forms.Button()
         Me.CMenu_DGV3.SuspendLayout()
         Me.Tab_4Dun.SuspendLayout()
         CType(Me.DGV4, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -382,6 +382,20 @@ Partial Class SCA1
         Me.Tab_4Dun.Size = New System.Drawing.Size(1132, 682)
         Me.Tab_4Dun.TabIndex = 2
         Me.Tab_4Dun.Text = "督促状管理"
+        '
+        'Button18
+        '
+        Me.Button18.BackColor = System.Drawing.Color.SteelBlue
+        Me.Button18.FlatAppearance.BorderColor = System.Drawing.Color.Black
+        Me.Button18.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.Button18.ForeColor = System.Drawing.Color.Cyan
+        Me.Button18.Location = New System.Drawing.Point(920, 418)
+        Me.Button18.Name = "Button18"
+        Me.Button18.Size = New System.Drawing.Size(206, 40)
+        Me.Button18.TabIndex = 1766
+        Me.Button18.TabStop = False
+        Me.Button18.Text = "4. 顧客情報の出力"
+        Me.Button18.UseVisualStyleBackColor = False
         '
         'Button9
         '
@@ -1935,12 +1949,12 @@ Partial Class SCA1
         '
         'Tab_1SC
         '
+        Me.Tab_1SC.Controls.Add(Me.L_USELESSTEL)
         Me.Tab_1SC.Controls.Add(Me.L_JUNIN2)
         Me.Tab_1SC.Controls.Add(Me.L_JUNIN1)
         Me.Tab_1SC.Controls.Add(Me.TB_ADDRESS2)
         Me.Tab_1SC.Controls.Add(Me.TB_ADDRESS1)
         Me.Tab_1SC.Controls.Add(Me.DGV9)
-        Me.Tab_1SC.Controls.Add(Me.TB_B11)
         Me.Tab_1SC.Controls.Add(Me.CB_AUTOUPD)
         Me.Tab_1SC.Controls.Add(Me.DGV_PIMENU)
         Me.Tab_1SC.Controls.Add(Me.BT_PI6READ)
@@ -1975,6 +1989,17 @@ Partial Class SCA1
         Me.Tab_1SC.TabIndex = 0
         Me.Tab_1SC.Text = "債権情報"
         Me.Tab_1SC.UseVisualStyleBackColor = True
+        '
+        'L_USELESSTEL
+        '
+        Me.L_USELESSTEL.AutoSize = True
+        Me.L_USELESSTEL.Font = New System.Drawing.Font("メイリオ", 9.75!, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.L_USELESSTEL.ForeColor = System.Drawing.Color.DodgerBlue
+        Me.L_USELESSTEL.Location = New System.Drawing.Point(875, 4)
+        Me.L_USELESSTEL.Name = "L_USELESSTEL"
+        Me.L_USELESSTEL.Size = New System.Drawing.Size(58, 20)
+        Me.L_USELESSTEL.TabIndex = 1777
+        Me.L_USELESSTEL.Text = "不通TEL"
         '
         'L_JUNIN2
         '
@@ -2138,20 +2163,6 @@ Partial Class SCA1
         Me.Column41.Name = "Column41"
         Me.Column41.ReadOnly = True
         Me.Column41.Width = 70
-        '
-        'TB_B11
-        '
-        Me.TB_B11.BackColor = System.Drawing.Color.White
-        Me.TB_B11.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.TB_B11.Font = New System.Drawing.Font("MS UI Gothic", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.TB_B11.ForeColor = System.Drawing.Color.Black
-        Me.TB_B11.ImeMode = System.Windows.Forms.ImeMode.Off
-        Me.TB_B11.Location = New System.Drawing.Point(895, 3)
-        Me.TB_B11.MaxLength = 20
-        Me.TB_B11.Name = "TB_B11"
-        Me.TB_B11.Size = New System.Drawing.Size(118, 22)
-        Me.TB_B11.TabIndex = 691
-        Me.TB_B11.Visible = False
         '
         'CB_AUTOUPD
         '
@@ -2929,20 +2940,6 @@ Partial Class SCA1
         Me.CreatorExpress1.RefAttrMode = True
         Me.CreatorExpress1.TemporaryPath = ""
         '
-        'Button18
-        '
-        Me.Button18.BackColor = System.Drawing.Color.SteelBlue
-        Me.Button18.FlatAppearance.BorderColor = System.Drawing.Color.Black
-        Me.Button18.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.Button18.ForeColor = System.Drawing.Color.Cyan
-        Me.Button18.Location = New System.Drawing.Point(920, 418)
-        Me.Button18.Name = "Button18"
-        Me.Button18.Size = New System.Drawing.Size(206, 40)
-        Me.Button18.TabIndex = 1766
-        Me.Button18.TabStop = False
-        Me.Button18.Text = "4. 顧客情報の出力"
-        Me.Button18.UseVisualStyleBackColor = False
-        '
         'SCA1
         '
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None
@@ -3186,7 +3183,6 @@ Partial Class SCA1
     Friend WithEvents L_JUNIN1 As Label
     Friend WithEvents TB_ADDRESS2 As TextBox
     Friend WithEvents TB_ADDRESS1 As TextBox
-    Friend WithEvents TB_B11 As TextBox
     Friend WithEvents DataGridViewTextBoxColumn19 As DataGridViewTextBoxColumn
     Friend WithEvents DataGridViewTextBoxColumn20 As DataGridViewTextBoxColumn
     Friend WithEvents DataGridViewTextBoxColumn21 As DataGridViewTextBoxColumn
@@ -3197,4 +3193,5 @@ Partial Class SCA1
     Friend WithEvents Label2 As Label
     Friend WithEvents CB_A7 As ComboBox
     Friend WithEvents Button18 As Button
+    Friend WithEvents L_USELESSTEL As Label
 End Class

@@ -45,10 +45,6 @@ Public Class VBR_DGV2
 
     ' 見出しページ描画
     Private Sub WriteSheet1(page1 As Integer, page2 As Integer)
-        ' 追加電話番号(TEL3)が初期値「電話番号を追加」だったら空白を設定
-        Dim tel3 As String = SCA1.TB_B11.Text
-        If tel3 = SCA1.ADDTEL_WORD Then tel3 = ""
-
         CellReport1.Cell("A1").Value = SCA1.DGV9(1, 0).Value   ' 債権番号
         CellReport1.Cell("A2").Value = SCA1.DGV9(3, 0).Value   ' 証券番号(アシスト)
 
