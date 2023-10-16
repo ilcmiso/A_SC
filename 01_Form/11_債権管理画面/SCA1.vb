@@ -556,7 +556,9 @@ Public Class SCA1
                     TB_FreeMemo.Text = cInfo.Item(2)
                 End If
 
-                UselessColor()
+                Dim cells() As DataGridViewCell = {DGV9(3, 1), DGV9(3, 5), DGV9(3, 6), DGV9(3, 10)}
+                ChangeColorForUseless(cells)
+
                 SearchColor(TB_SearchInput.Text)
                 log.TimerED("ShowDGVList End:" & dgv.Name & " - CallBack: " & CallerFunc)
                 Exit Sub
@@ -768,12 +770,11 @@ Public Class SCA1
         Next
     End Sub
 
-    ' 不通番号のフォントカラーを変更
-    Public Sub UselessColor()
-        Dim search_txt() = {DGV9(3, 1), DGV9(3, 5), DGV9(3, 6), DGV9(3, 10)}   ' カラーリングするテキストリスト
-        Dim dt As DataTable = db.ReadOrgDtSelect(Sqldb.TID.UNUMS)  ' 電話番号が格納されているテーブル
+    ' 指定したDataGridViewCellのフォントカラーとツールチップを変更
+    Public Sub ChangeColorForUseless(ByVal cells() As DataGridViewCell)
+        Dim dt As DataTable = db.ReadOrgDtSelect(Sqldb.TID.UNUMS)  ' 電話番号と理由が格納されているテーブル
 
-        For Each t In search_txt
+        For Each t In cells
             t.Style.ForeColor = Color.Black
             t.ToolTipText = ""
 
@@ -782,9 +783,9 @@ Public Class SCA1
                 Dim tel As String = dr("C01").ToString().Replace("-", "") ' C01は電話番号
                 Dim dest As String = dr("C02").ToString()                 ' C02は理由
 
-                If t.Value.ToString().Replace("-", "") = tel Then  ' 完全一致で比較
+                If t.Value IsNot Nothing AndAlso t.Value.ToString().Replace("-", "") = tel Then  ' 完全一致で比較
                     t.Style.ForeColor = Color.Red
-                    t.ToolTipText = dest                ' ツールチップに理由を設定
+                    t.ToolTipText = dest  ' ツールチップに理由を設定
                     Exit For ' 一致したらこの行の検索は終了
                 End If
             Next
