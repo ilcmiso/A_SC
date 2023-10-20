@@ -27,10 +27,15 @@ Partial Class SCA1_SelectInfo
         Me.PBXX = New System.Windows.Forms.Button()
         Me.BT_RecE1 = New System.Windows.Forms.Button()
         Me.DGV_SI = New System.Windows.Forms.DataGridView()
-        Me.Button1 = New System.Windows.Forms.Button()
         Me.DataGridViewTextBoxColumn17 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Column1 = New System.Windows.Forms.DataGridViewCheckBoxColumn()
+        Me.Button1 = New System.Windows.Forms.Button()
+        Me.Button2 = New System.Windows.Forms.Button()
+        Me.NUD_AC_DAYS = New System.Windows.Forms.NumericUpDown()
+        Me.Label35 = New System.Windows.Forms.Label()
+        Me.Label1 = New System.Windows.Forms.Label()
         CType(Me.DGV_SI, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.NUD_AC_DAYS, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'PBXX
@@ -47,7 +52,7 @@ Partial Class SCA1_SelectInfo
         '
         'BT_RecE1
         '
-        Me.BT_RecE1.Location = New System.Drawing.Point(261, 609)
+        Me.BT_RecE1.Location = New System.Drawing.Point(261, 567)
         Me.BT_RecE1.Name = "BT_RecE1"
         Me.BT_RecE1.Size = New System.Drawing.Size(101, 23)
         Me.BT_RecE1.TabIndex = 1757
@@ -87,15 +92,6 @@ Partial Class SCA1_SelectInfo
         Me.DGV_SI.TabIndex = 1769
         Me.DGV_SI.TabStop = False
         '
-        'Button1
-        '
-        Me.Button1.Location = New System.Drawing.Point(261, 658)
-        Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(101, 40)
-        Me.Button1.TabIndex = 1770
-        Me.Button1.Text = "Excelに出力"
-        Me.Button1.UseVisualStyleBackColor = True
-        '
         'DataGridViewTextBoxColumn17
         '
         DataGridViewCellStyle4.BackColor = System.Drawing.Color.White
@@ -114,11 +110,67 @@ Partial Class SCA1_SelectInfo
         Me.Column1.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic
         Me.Column1.Width = 30
         '
+        'Button1
+        '
+        Me.Button1.Location = New System.Drawing.Point(261, 596)
+        Me.Button1.Name = "Button1"
+        Me.Button1.Size = New System.Drawing.Size(101, 51)
+        Me.Button1.TabIndex = 1770
+        Me.Button1.Text = "Excelに出力"
+        Me.Button1.UseVisualStyleBackColor = True
+        '
+        'Button2
+        '
+        Me.Button2.Location = New System.Drawing.Point(261, 675)
+        Me.Button2.Name = "Button2"
+        Me.Button2.Size = New System.Drawing.Size(101, 23)
+        Me.Button2.TabIndex = 1771
+        Me.Button2.Text = "中止（閉じる）"
+        Me.Button2.UseVisualStyleBackColor = True
+        '
+        'NUD_AC_DAYS
+        '
+        Me.NUD_AC_DAYS.Font = New System.Drawing.Font("メイリオ", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.NUD_AC_DAYS.Location = New System.Drawing.Point(264, 487)
+        Me.NUD_AC_DAYS.Maximum = New Decimal(New Integer() {60, 0, 0, 0})
+        Me.NUD_AC_DAYS.Name = "NUD_AC_DAYS"
+        Me.NUD_AC_DAYS.Size = New System.Drawing.Size(40, 25)
+        Me.NUD_AC_DAYS.TabIndex = 1772
+        Me.NUD_AC_DAYS.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
+        Me.NUD_AC_DAYS.UpDownAlign = System.Windows.Forms.LeftRightAlignment.Left
+        Me.NUD_AC_DAYS.Value = New Decimal(New Integer() {20, 0, 0, 0})
+        '
+        'Label35
+        '
+        Me.Label35.AutoSize = True
+        Me.Label35.Font = New System.Drawing.Font("メイリオ", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.Label35.ForeColor = System.Drawing.Color.Blue
+        Me.Label35.Location = New System.Drawing.Point(258, 427)
+        Me.Label35.Name = "Label35"
+        Me.Label35.Size = New System.Drawing.Size(116, 54)
+        Me.Label35.TabIndex = 1773
+        Me.Label35.Text = "オートコールの" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "延滞損害金日割計算" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "約定日(13日)から"
+        '
+        'Label1
+        '
+        Me.Label1.AutoSize = True
+        Me.Label1.Font = New System.Drawing.Font("メイリオ", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.Label1.ForeColor = System.Drawing.Color.Blue
+        Me.Label1.Location = New System.Drawing.Point(305, 495)
+        Me.Label1.Name = "Label1"
+        Me.Label1.Size = New System.Drawing.Size(44, 18)
+        Me.Label1.TabIndex = 1774
+        Me.Label1.Text = "日間分"
+        '
         'SCA1_SelectInfo
         '
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None
         Me.BackColor = System.Drawing.Color.FromArgb(CType(CType(192, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
         Me.ClientSize = New System.Drawing.Size(370, 700)
+        Me.Controls.Add(Me.Label1)
+        Me.Controls.Add(Me.Label35)
+        Me.Controls.Add(Me.NUD_AC_DAYS)
+        Me.Controls.Add(Me.Button2)
         Me.Controls.Add(Me.Button1)
         Me.Controls.Add(Me.DGV_SI)
         Me.Controls.Add(Me.BT_RecE1)
@@ -131,7 +183,9 @@ Partial Class SCA1_SelectInfo
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "対応記録の登録"
         CType(Me.DGV_SI, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.NUD_AC_DAYS, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
+        Me.PerformLayout()
 
     End Sub
 
@@ -141,4 +195,8 @@ Partial Class SCA1_SelectInfo
     Friend WithEvents Button1 As Button
     Friend WithEvents DataGridViewTextBoxColumn17 As DataGridViewTextBoxColumn
     Friend WithEvents Column1 As DataGridViewCheckBoxColumn
+    Friend WithEvents Button2 As Button
+    Friend WithEvents NUD_AC_DAYS As NumericUpDown
+    Friend WithEvents Label35 As Label
+    Friend WithEvents Label1 As Label
 End Class

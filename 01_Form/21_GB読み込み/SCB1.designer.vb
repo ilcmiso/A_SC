@@ -35,9 +35,13 @@ Partial Class SCB1
         Me.DGV1 = New System.Windows.Forms.DataGridView()
         Me.CB_A1 = New System.Windows.Forms.CheckBox()
         Me.Button1 = New System.Windows.Forms.Button()
+        Me.Label5 = New System.Windows.Forms.Label()
+        Me.Label6 = New System.Windows.Forms.Label()
+        Me.PB_AC = New System.Windows.Forms.PictureBox()
         CType(Me.PB_TXT, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.PB_CSV, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.DGV1, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.PB_AC, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'bgWorker
@@ -148,7 +152,7 @@ Partial Class SCB1
         Me.DGV1.Name = "DGV1"
         Me.DGV1.RowHeadersVisible = False
         Me.DGV1.RowTemplate.Height = 21
-        Me.DGV1.Size = New System.Drawing.Size(18, 10)
+        Me.DGV1.Size = New System.Drawing.Size(15, 10)
         Me.DGV1.TabIndex = 31
         Me.DGV1.TabStop = False
         Me.DGV1.Visible = False
@@ -177,13 +181,49 @@ Partial Class SCB1
         Me.Button1.Text = "アシスト4ファイル完了"
         Me.Button1.UseVisualStyleBackColor = False
         '
+        'Label5
+        '
+        Me.Label5.BackColor = System.Drawing.Color.LightYellow
+        Me.Label5.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
+        Me.Label5.Font = New System.Drawing.Font("メイリオ", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.Label5.Location = New System.Drawing.Point(460, 34)
+        Me.Label5.Name = "Label5"
+        Me.Label5.Size = New System.Drawing.Size(298, 115)
+        Me.Label5.TabIndex = 1572
+        Me.Label5.Text = "オートコールデータのファイルを、右側のTXTアイコンにドラッグ＆ドロップしてください。"
+        '
+        'Label6
+        '
+        Me.Label6.BackColor = System.Drawing.Color.Khaki
+        Me.Label6.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
+        Me.Label6.Font = New System.Drawing.Font("メイリオ", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.Label6.Location = New System.Drawing.Point(460, 9)
+        Me.Label6.Name = "Label6"
+        Me.Label6.Size = New System.Drawing.Size(160, 25)
+        Me.Label6.TabIndex = 1571
+        Me.Label6.Text = "オートコール"
+        '
+        'PB_AC
+        '
+        Me.PB_AC.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.PB_AC.Image = CType(resources.GetObject("PB_AC.Image"), System.Drawing.Image)
+        Me.PB_AC.Location = New System.Drawing.Point(773, 9)
+        Me.PB_AC.Name = "PB_AC"
+        Me.PB_AC.Size = New System.Drawing.Size(129, 140)
+        Me.PB_AC.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
+        Me.PB_AC.TabIndex = 1570
+        Me.PB_AC.TabStop = False
+        '
         'SCB1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 12.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(464, 365)
-        Me.Controls.Add(Me.Button1)
+        Me.ClientSize = New System.Drawing.Size(914, 365)
         Me.Controls.Add(Me.DGV1)
+        Me.Controls.Add(Me.Label5)
+        Me.Controls.Add(Me.Label6)
+        Me.Controls.Add(Me.PB_AC)
+        Me.Controls.Add(Me.Button1)
         Me.Controls.Add(Me.CB_A1)
         Me.Controls.Add(Me.L_UptimeCSV)
         Me.Controls.Add(Me.L_UptimeTXT)
@@ -202,6 +242,7 @@ Partial Class SCB1
         CType(Me.PB_TXT, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.PB_CSV, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.DGV1, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.PB_AC, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -218,4 +259,7 @@ Partial Class SCB1
     Friend WithEvents DGV1 As DataGridView
     Friend WithEvents CB_A1 As CheckBox
     Friend WithEvents Button1 As Button
+    Friend WithEvents Label5 As Label
+    Friend WithEvents Label6 As Label
+    Friend WithEvents PB_AC As PictureBox
 End Class

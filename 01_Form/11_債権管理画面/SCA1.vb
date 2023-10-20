@@ -2328,6 +2328,14 @@ Public Class SCA1
         f.Show()
     End Sub
 
+    Private Sub 機能ToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles 機能ToolStripMenuItem.Click
+        Dim fm As New Form
+        fm = SCB1
+        fm.ShowInTaskbar = False
+        fm.ShowDialog()
+        fm.Dispose()
+    End Sub
+
 #End Region
 
 

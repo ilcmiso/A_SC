@@ -22,6 +22,7 @@ Public Class Sqldb
     Public Const DB_CALHOLI As String = "CAL_Holiday.db3"
     Public Const DB_CALTAGS As String = "CAL_Tags.db3"
     Public Const DB_USELESS As String = "FKSC_UselessPNums.db3"
+    Public Const DB_AUTOCALL As String = "FKSC_AutoCall.db3"
     ' テーブル名
     Public Const TBL_FKSC As String = "FKSC"
     Public Const TBL_FKSCREM As String = "FKSCREM"
@@ -52,7 +53,8 @@ Public Class Sqldb
         {DB_FKSCCAL, TBL_STANDARD, 10, "C", DBSV, True},
         {DB_CALHOLI, TBL_STANDARD, 2, "C", DBSV, True},
         {DB_CALTAGS, TBL_STANDARD, 3, "C", DBSV, True},
-        {DB_USELESS, TBL_STANDARD, 2, "C", DBSV, True}
+        {DB_USELESS, TBL_STANDARD, 2, "C", DBSV, True},
+        {DB_AUTOCALL, TBL_STANDARD, 4, "C", DBSV, True}
     }
     ' DBテーブルのDB種別 SC_DBTableの[ 列数 ]とリンクする必要がある
     Public Enum TID As Integer
@@ -67,6 +69,7 @@ Public Class Sqldb
         HOLI         ' HOLIDAY
         TAGS         ' TAGS
         UNUMS        ' UselessPhoneNums
+        AC           ' AutoCall
     End Enum
 
     ' DBテーブルの識別子 SC_DBTableの[ 行数 ]とリンクする必要がある

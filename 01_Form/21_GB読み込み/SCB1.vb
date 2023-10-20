@@ -1,6 +1,7 @@
 ﻿Imports System.IO
 Imports System.Text
 Imports System.Data.SQLite
+Imports DocumentFormat.OpenXml.Wordprocessing
 
 Public Class SCB1
 
@@ -27,6 +28,7 @@ Public Class SCB1
     Private Sub Form1_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
         PB_TXT.AllowDrop = True
         PB_CSV.AllowDrop = True
+        PB_AC.AllowDrop = True
         ShowLastUpdateTimes()
     End Sub
 
@@ -113,7 +115,7 @@ Public Class SCB1
     End Sub
 
     ' ファイルドラッグ＆ドロップ
-    Private Sub ListBox1_DragEnter(sender As Object, e As DragEventArgs) Handles PB_TXT.DragEnter, PB_CSV.DragEnter
+    Private Sub ListBox1_DragEnter(sender As Object, e As DragEventArgs) Handles PB_TXT.DragEnter, PB_CSV.DragEnter, PB_AC.DragEnter
         If e.Data.GetDataPresent(DataFormats.FileDrop) Then
             'ドラッグされたデータ形式を調べ、ファイルのときはコピーとする
             e.Effect = DragDropEffects.Copy
@@ -160,6 +162,19 @@ Public Class SCB1
         MsgBox("アシストファイルの読み込みが完了しました。" & vbCrLf &
                "4ファイル全て読み込みが完了したら、下のボタンを押してください。")
         ShowLastUpdateTimes()
+    End Sub
+    ' オートコール D&D
+    Private Sub PB_AC_DragDrop(sender As Object, e As DragEventArgs) Handles PB_AC.DragDrop
+        ' ドロップされたファイルのリストを取得
+        Dim files As String() = CType(e.Data.GetData(DataFormats.FileDrop), String())
+
+        ' 1つのファイルのみを取り扱う場合
+        If files.Length = 1 Then
+            ' ファイルをDGVにロード
+            Cursor.Current = Cursors.WaitCursor             ' マウスカーソルを砂時計に
+            LoadFileToDGV(files(0))
+            MsgBox("オートコールファイルの読み込みが完了しました。" & vbCrLf & $"オートコールのデータ数は {DGV1.RowCount} 件です。")
+        End If
     End Sub
 
     ' ローカルの顧客DBをサーバーにコピー
@@ -549,4 +564,121 @@ Public Class SCB1
         db.ExeSQL(Sqldb.TID.SCAS, "Delete From TBL Where C02 = ''")
         CopyCDBtoServer(Sqldb.DB_FKSCASSIST)            ' DBファイルをローカルからサーバーにコピー
     End Sub
+
+    Private Sub WriteToSQLite(dataTable As DataTable)
+        For Each row As DataRow In dataTable.Rows
+            Dim C01Value As String = row("顧客番号").ToString()
+            Dim C02Value As String = row("延滞元利金（累計）").ToString()
+            Dim C03Value As String = row("延滞損害金（累計）").ToString()
+            Dim C04Value As String = row("延滞損害金単価（今後）").ToString()
+
+            ' 既にC01の値が存在するかのチェック
+            Dim checkCommand As String = $"SELECT * FROM TBL WHERE C01='{C01Value}'"
+            Dim dt As DataTable = db.GetSelect(Sqldb.TID.AC, checkCommand)
+
+            If dt.Rows.Count > 0 Then
+                ' 既存の行をアップデート
+                Dim updateCommand As String = $"UPDATE TBL SET C02='{row("延滞元利金（累計）").ToString()}', C03='{row("延滞損害金（累計）").ToString()}', C04='{row("延滞損害金単価（今後）").ToString()}' WHERE C01='{C01Value}'"
+                db.AddSQL(updateCommand)
+            Else
+                ' 新しい行を挿入
+                Dim insertCommand As String = $"INSERT INTO TBL (C01, C02, C03, C04) VALUES ('{C01Value}', '{row("延滞元利金（累計）").ToString()}', '{row("延滞損害金（累計）").ToString()}', '{row("延滞損害金単価（今後）").ToString()}')"
+                db.AddSQL(insertCommand)
+            End If
+        Next
+        db.ExeSQL(Sqldb.TID.AC)
+    End Sub
+
+
+    ' オートコール読み込み
+    Private Sub LoadFileToDGV(filePath As String)
+        Try
+            ' データレコードの情報
+            Dim records As New List(Of RecordInfo) From {
+                New RecordInfo("レコード区分", 0, 1),
+                New RecordInfo("引落銀行番号", 1, 4),
+                New RecordInfo("引落銀行支店番号", 5, 3),
+                New RecordInfo("預金種目", 8, 1),
+                New RecordInfo("口座番号", 9, 7),
+                New RecordInfo("顧客番号", 21, 15),             ' 本来はIndex16から20文字だが、現在顧客番号は15桁固定なので15文字ちょうどを取得
+                New RecordInfo("振替結果コード", 36, 1),
+                New RecordInfo("主債務者氏名（カナ）", 37, 20),
+                New RecordInfo("現在住所電話番号", 57, 13),
+                New RecordInfo("債権番号", 70, 20),
+                New RecordInfo("連絡先電話番号", 90, 13),
+                New RecordInfo("保証区分", 103, 1),
+                New RecordInfo("貸付金残高", 104, 11),
+                New RecordInfo("予定貸付金残高", 115, 11),
+                New RecordInfo("ボーナス償還月1", 126, 1),
+                New RecordInfo("償還回次", 127, 3),
+                New RecordInfo("予定償還回次", 130, 3),
+                New RecordInfo("残高現在日", 133, 8),
+                New RecordInfo("延滞元利金（累計）", 141, 11),
+                New RecordInfo("延滞損害金（累計）", 152, 6),
+                New RecordInfo("延滞損害金単価（今後）", 158, 9),
+                New RecordInfo("予備", 167, 83)
+            }
+
+            ' 解析ONのときだけDGV表示
+            If CB_A1.Checked Then
+                DGV1.Visible = True
+            End If
+            DGV1.Size = New Size(Me.Size.Width - 20, Me.Size.Height - 35)
+            DGV1.Columns.Clear()
+            DGV1.Rows.Clear()
+
+            ' ファイルの内容を全て読み込む
+            Dim allText As String = File.ReadAllText(filePath, Encoding.GetEncoding("shift_jis"))
+
+            ' 250文字ごとのデータを格納するリストを作成
+            Dim dataList As New List(Of String)
+            For i As Integer = 0 To allText.Length - 1 Step 250
+                Dim record As String = allText.Substring(i, 250)
+                If record.Substring(0, 1) = "2" Then
+                    dataList.Add(record)
+                End If
+            Next
+
+            ' データを格納するDataTableを初期化
+            Dim dt As New DataTable
+
+            ' レコード情報に基づいてカラムを追加
+            For Each rInfo As RecordInfo In records
+                dt.Columns.Add(rInfo.Name)
+            Next
+
+            ' データリストからDataTableを作成
+            For Each data As String In dataList
+                Dim row As DataRow = dt.NewRow()
+                For Each rInfo As RecordInfo In records
+                    Dim cellData As String = data.Substring(rInfo.Offset, rInfo.Size).Trim()
+                    ' cellData = cellData.TrimStart("0"c) ' 先頭の0を削除
+                    row(rInfo.Name) = cellData
+                Next
+                dt.Rows.Add(row)
+            Next
+
+            ' DataTableをDGVにセット
+            DGV1.DataSource = dt
+
+            ' SQL出力
+            WriteToSQLite(dt)
+
+        Catch ex As Exception
+            MessageBox.Show("エラー: " & ex.Message)
+        End Try
+    End Sub
+
+    Private Class RecordInfo
+        Public Property Name As String
+        Public Property Offset As Integer
+        Public Property Size As Integer
+
+        Public Sub New(ByVal name As String, ByVal offset As Integer, ByVal size As Integer)
+            Me.Name = name
+            Me.Offset = offset
+            Me.Size = size
+        End Sub
+    End Class
 End Class
+

@@ -275,6 +275,12 @@ Partial Class SCA1
         Me.Column27 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Column28 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.CreatorExpress1 = New AdvanceSoftware.ExcelCreator.Xlsx.CreatorExpress(Me.components)
+        Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
+        Me.表示ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripMenuItem2 = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripMenuItem3 = New System.Windows.Forms.ToolStripMenuItem()
+        Me.データ読み込みToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.機能ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.CMenu_DGV3.SuspendLayout()
         Me.Tab_4Dun.SuspendLayout()
         CType(Me.DGV4, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -295,6 +301,7 @@ Partial Class SCA1
         Me.TAB_A1.SuspendLayout()
         Me.Tab_5Tell.SuspendLayout()
         CType(Me.DGV8, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.MenuStrip1.SuspendLayout()
         Me.SuspendLayout()
         '
         'PBXX
@@ -389,7 +396,7 @@ Partial Class SCA1
         Me.Button18.FlatAppearance.BorderColor = System.Drawing.Color.Black
         Me.Button18.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.Button18.ForeColor = System.Drawing.Color.Cyan
-        Me.Button18.Location = New System.Drawing.Point(920, 418)
+        Me.Button18.Location = New System.Drawing.Point(920, 407)
         Me.Button18.Name = "Button18"
         Me.Button18.Size = New System.Drawing.Size(206, 40)
         Me.Button18.TabIndex = 1766
@@ -528,7 +535,7 @@ Partial Class SCA1
         Me.LB_DunRead.ItemHeight = 12
         Me.LB_DunRead.Location = New System.Drawing.Point(0, 52)
         Me.LB_DunRead.Name = "LB_DunRead"
-        Me.LB_DunRead.Size = New System.Drawing.Size(129, 256)
+        Me.LB_DunRead.Size = New System.Drawing.Size(129, 268)
         Me.LB_DunRead.TabIndex = 1605
         '
         'L_STS_Dun2
@@ -537,7 +544,7 @@ Partial Class SCA1
         Me.L_STS_Dun2.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(225, Byte), Integer), CType(CType(255, Byte), Integer))
         Me.L_STS_Dun2.Font = New System.Drawing.Font("メイリオ", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.L_STS_Dun2.ForeColor = System.Drawing.Color.Blue
-        Me.L_STS_Dun2.Location = New System.Drawing.Point(3, 319)
+        Me.L_STS_Dun2.Location = New System.Drawing.Point(3, 320)
         Me.L_STS_Dun2.Name = "L_STS_Dun2"
         Me.L_STS_Dun2.Size = New System.Drawing.Size(32, 18)
         Me.L_STS_Dun2.TabIndex = 1764
@@ -562,7 +569,7 @@ Partial Class SCA1
         Me.Button15.FlatAppearance.BorderColor = System.Drawing.Color.Black
         Me.Button15.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.Button15.ForeColor = System.Drawing.Color.Cyan
-        Me.Button15.Location = New System.Drawing.Point(920, 372)
+        Me.Button15.Location = New System.Drawing.Point(920, 361)
         Me.Button15.Name = "Button15"
         Me.Button15.Size = New System.Drawing.Size(206, 40)
         Me.Button15.TabIndex = 1761
@@ -576,7 +583,7 @@ Partial Class SCA1
         Me.L_STS_Dun.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(225, Byte), Integer), CType(CType(255, Byte), Integer))
         Me.L_STS_Dun.Font = New System.Drawing.Font("メイリオ", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.L_STS_Dun.ForeColor = System.Drawing.Color.Blue
-        Me.L_STS_Dun.Location = New System.Drawing.Point(3, 663)
+        Me.L_STS_Dun.Location = New System.Drawing.Point(3, 651)
         Me.L_STS_Dun.Name = "L_STS_Dun"
         Me.L_STS_Dun.Size = New System.Drawing.Size(584, 18)
         Me.L_STS_Dun.TabIndex = 1760
@@ -606,7 +613,7 @@ Partial Class SCA1
         Me.GroupBox1.Controls.Add(Me.Label35)
         Me.GroupBox1.Controls.Add(Me.NUD_DunA1)
         Me.GroupBox1.Font = New System.Drawing.Font("メイリオ", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.GroupBox1.Location = New System.Drawing.Point(705, 462)
+        Me.GroupBox1.Location = New System.Drawing.Point(705, 451)
         Me.GroupBox1.Name = "GroupBox1"
         Me.GroupBox1.Size = New System.Drawing.Size(418, 217)
         Me.GroupBox1.TabIndex = 1759
@@ -868,7 +875,7 @@ Partial Class SCA1
         Me.TB_DunIN.MaxLength = 327670
         Me.TB_DunIN.Multiline = True
         Me.TB_DunIN.Name = "TB_DunIN"
-        Me.TB_DunIN.Size = New System.Drawing.Size(206, 132)
+        Me.TB_DunIN.Size = New System.Drawing.Size(206, 120)
         Me.TB_DunIN.TabIndex = 0
         Me.TB_DunIN.Text = "＜送付対象の顧客番号を入力＞"
         '
@@ -878,7 +885,7 @@ Partial Class SCA1
         Me.Button14.FlatAppearance.BorderColor = System.Drawing.Color.Black
         Me.Button14.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.Button14.ForeColor = System.Drawing.Color.Cyan
-        Me.Button14.Location = New System.Drawing.Point(920, 326)
+        Me.Button14.Location = New System.Drawing.Point(920, 315)
         Me.Button14.Name = "Button14"
         Me.Button14.Size = New System.Drawing.Size(206, 40)
         Me.Button14.TabIndex = 1756
@@ -912,7 +919,7 @@ Partial Class SCA1
         Me.DGV6.RowTemplate.Height = 21
         Me.DGV6.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
         Me.DGV6.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.DGV6.Size = New System.Drawing.Size(698, 298)
+        Me.DGV6.Size = New System.Drawing.Size(698, 286)
         Me.DGV6.TabIndex = 1754
         Me.DGV6.TabStop = False
         '
@@ -1015,7 +1022,7 @@ Partial Class SCA1
         Me.Button13.FlatAppearance.BorderColor = System.Drawing.Color.Black
         Me.Button13.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.Button13.ForeColor = System.Drawing.Color.Cyan
-        Me.Button13.Location = New System.Drawing.Point(920, 280)
+        Me.Button13.Location = New System.Drawing.Point(920, 269)
         Me.Button13.Name = "Button13"
         Me.Button13.Size = New System.Drawing.Size(206, 40)
         Me.Button13.TabIndex = 1753
@@ -1107,7 +1114,7 @@ Partial Class SCA1
         Me.Button17.FlatAppearance.BorderColor = System.Drawing.Color.Black
         Me.Button17.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.Button17.ForeColor = System.Drawing.Color.Cyan
-        Me.Button17.Location = New System.Drawing.Point(849, 646)
+        Me.Button17.Location = New System.Drawing.Point(849, 630)
         Me.Button17.Name = "Button17"
         Me.Button17.Size = New System.Drawing.Size(277, 33)
         Me.Button17.TabIndex = 1599
@@ -1133,7 +1140,7 @@ Partial Class SCA1
         Me.L_STS_Task.BackColor = System.Drawing.Color.Azure
         Me.L_STS_Task.Font = New System.Drawing.Font("メイリオ", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.L_STS_Task.ForeColor = System.Drawing.Color.Blue
-        Me.L_STS_Task.Location = New System.Drawing.Point(4, 663)
+        Me.L_STS_Task.Location = New System.Drawing.Point(4, 651)
         Me.L_STS_Task.Name = "L_STS_Task"
         Me.L_STS_Task.Size = New System.Drawing.Size(104, 18)
         Me.L_STS_Task.TabIndex = 1597
@@ -1175,7 +1182,7 @@ Partial Class SCA1
         Me.TB_TaskContext.Name = "TB_TaskContext"
         Me.TB_TaskContext.ReadOnly = True
         Me.TB_TaskContext.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.TB_TaskContext.Size = New System.Drawing.Size(560, 164)
+        Me.TB_TaskContext.Size = New System.Drawing.Size(560, 153)
         Me.TB_TaskContext.TabIndex = 1585
         Me.TB_TaskContext.TabStop = False
         '
@@ -1219,7 +1226,7 @@ Partial Class SCA1
         Me.PanelMenu.Controls.Add(Me.CLB_Progress)
         Me.PanelMenu.Location = New System.Drawing.Point(0, 0)
         Me.PanelMenu.Name = "PanelMenu"
-        Me.PanelMenu.Size = New System.Drawing.Size(132, 662)
+        Me.PanelMenu.Size = New System.Drawing.Size(132, 650)
         Me.PanelMenu.TabIndex = 1592
         '
         'Label13
@@ -1228,7 +1235,7 @@ Partial Class SCA1
         Me.Label13.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.Label13.Font = New System.Drawing.Font("メイリオ", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.Label13.ForeColor = System.Drawing.Color.White
-        Me.Label13.Location = New System.Drawing.Point(-1, 541)
+        Me.Label13.Location = New System.Drawing.Point(-1, 528)
         Me.Label13.Name = "Label13"
         Me.Label13.Size = New System.Drawing.Size(131, 20)
         Me.Label13.TabIndex = 1597
@@ -1347,9 +1354,9 @@ Partial Class SCA1
         Me.CLB_Group.CheckOnClick = True
         Me.CLB_Group.FormattingEnabled = True
         Me.CLB_Group.Items.AddRange(New Object() {"重要", "低優先", "夜勤対応"})
-        Me.CLB_Group.Location = New System.Drawing.Point(-1, 560)
+        Me.CLB_Group.Location = New System.Drawing.Point(-1, 547)
         Me.CLB_Group.Name = "CLB_Group"
-        Me.CLB_Group.Size = New System.Drawing.Size(132, 88)
+        Me.CLB_Group.Size = New System.Drawing.Size(132, 102)
         Me.CLB_Group.Sorted = True
         Me.CLB_Group.TabIndex = 1586
         '
@@ -1556,7 +1563,7 @@ Partial Class SCA1
         'CB_RecRe
         '
         Me.CB_RecRe.AutoSize = True
-        Me.CB_RecRe.Location = New System.Drawing.Point(1017, 662)
+        Me.CB_RecRe.Location = New System.Drawing.Point(1016, 646)
         Me.CB_RecRe.Name = "CB_RecRe"
         Me.CB_RecRe.Size = New System.Drawing.Size(113, 16)
         Me.CB_RecRe.TabIndex = 1770
@@ -1629,7 +1636,7 @@ Partial Class SCA1
         Me.Button8.FlatAppearance.BorderColor = System.Drawing.Color.Black
         Me.Button8.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.Button8.ForeColor = System.Drawing.Color.White
-        Me.Button8.Location = New System.Drawing.Point(891, 507)
+        Me.Button8.Location = New System.Drawing.Point(891, 499)
         Me.Button8.Name = "Button8"
         Me.Button8.Size = New System.Drawing.Size(113, 27)
         Me.Button8.TabIndex = 1758
@@ -1643,7 +1650,7 @@ Partial Class SCA1
         Me.Button7.FlatAppearance.BorderColor = System.Drawing.Color.Black
         Me.Button7.Font = New System.Drawing.Font("メイリオ", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.Button7.ForeColor = System.Drawing.Color.White
-        Me.Button7.Location = New System.Drawing.Point(1011, 507)
+        Me.Button7.Location = New System.Drawing.Point(1011, 499)
         Me.Button7.Name = "Button7"
         Me.Button7.Size = New System.Drawing.Size(110, 57)
         Me.Button7.TabIndex = 1757
@@ -1653,7 +1660,7 @@ Partial Class SCA1
         '
         'BT_RecE2
         '
-        Me.BT_RecE2.Location = New System.Drawing.Point(1012, 416)
+        Me.BT_RecE2.Location = New System.Drawing.Point(1012, 408)
         Me.BT_RecE2.Name = "BT_RecE2"
         Me.BT_RecE2.Size = New System.Drawing.Size(113, 23)
         Me.BT_RecE2.TabIndex = 1756
@@ -1662,7 +1669,7 @@ Partial Class SCA1
         '
         'BT_RecE1
         '
-        Me.BT_RecE1.Location = New System.Drawing.Point(891, 416)
+        Me.BT_RecE1.Location = New System.Drawing.Point(891, 408)
         Me.BT_RecE1.Name = "BT_RecE1"
         Me.BT_RecE1.Size = New System.Drawing.Size(113, 23)
         Me.BT_RecE1.TabIndex = 1755
@@ -1675,7 +1682,7 @@ Partial Class SCA1
         Me.L_STS_Rec.BackColor = System.Drawing.Color.FromArgb(CType(CType(242, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(242, Byte), Integer))
         Me.L_STS_Rec.Font = New System.Drawing.Font("メイリオ", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.L_STS_Rec.ForeColor = System.Drawing.Color.Blue
-        Me.L_STS_Rec.Location = New System.Drawing.Point(4, 662)
+        Me.L_STS_Rec.Location = New System.Drawing.Point(4, 647)
         Me.L_STS_Rec.Name = "L_STS_Rec"
         Me.L_STS_Rec.Size = New System.Drawing.Size(104, 18)
         Me.L_STS_Rec.TabIndex = 1754
@@ -1701,12 +1708,12 @@ Partial Class SCA1
         Me.TB_RecD1.Font = New System.Drawing.Font("MS UI Gothic", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.TB_RecD1.ForeColor = System.Drawing.Color.Black
         Me.TB_RecD1.ImeMode = System.Windows.Forms.ImeMode.Hiragana
-        Me.TB_RecD1.Location = New System.Drawing.Point(1, 525)
+        Me.TB_RecD1.Location = New System.Drawing.Point(1, 515)
         Me.TB_RecD1.Multiline = True
         Me.TB_RecD1.Name = "TB_RecD1"
         Me.TB_RecD1.ReadOnly = True
         Me.TB_RecD1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.TB_RecD1.Size = New System.Drawing.Size(884, 131)
+        Me.TB_RecD1.Size = New System.Drawing.Size(884, 128)
         Me.TB_RecD1.TabIndex = 1752
         Me.TB_RecD1.TabStop = False
         '
@@ -1725,7 +1732,7 @@ Partial Class SCA1
         Me.BT_RecC1.FlatAppearance.BorderColor = System.Drawing.Color.Black
         Me.BT_RecC1.Font = New System.Drawing.Font("メイリオ", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.BT_RecC1.ForeColor = System.Drawing.Color.White
-        Me.BT_RecC1.Location = New System.Drawing.Point(891, 457)
+        Me.BT_RecC1.Location = New System.Drawing.Point(891, 449)
         Me.BT_RecC1.Name = "BT_RecC1"
         Me.BT_RecC1.Size = New System.Drawing.Size(232, 44)
         Me.BT_RecC1.TabIndex = 1751
@@ -1827,7 +1834,7 @@ Partial Class SCA1
         Me.DGV5.RowTemplate.Height = 21
         Me.DGV5.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
         Me.DGV5.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.DGV5.Size = New System.Drawing.Size(884, 502)
+        Me.DGV5.Size = New System.Drawing.Size(884, 492)
         Me.DGV5.TabIndex = 1578
         Me.DGV5.TabStop = False
         '
@@ -2091,7 +2098,7 @@ Partial Class SCA1
         Me.DGV9.RowTemplate.Height = 21
         Me.DGV9.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
         Me.DGV9.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect
-        Me.DGV9.Size = New System.Drawing.Size(605, 281)
+        Me.DGV9.Size = New System.Drawing.Size(605, 257)
         Me.DGV9.TabIndex = 1776
         Me.DGV9.TabStop = False
         '
@@ -2169,7 +2176,7 @@ Partial Class SCA1
         Me.CB_AUTOUPD.AutoSize = True
         Me.CB_AUTOUPD.Checked = True
         Me.CB_AUTOUPD.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.CB_AUTOUPD.Location = New System.Drawing.Point(369, 5)
+        Me.CB_AUTOUPD.Location = New System.Drawing.Point(367, 6)
         Me.CB_AUTOUPD.Name = "CB_AUTOUPD"
         Me.CB_AUTOUPD.Size = New System.Drawing.Size(72, 16)
         Me.CB_AUTOUPD.TabIndex = 1773
@@ -2197,7 +2204,7 @@ Partial Class SCA1
         Me.DGV_PIMENU.ColumnHeadersVisible = False
         Me.DGV_PIMENU.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.DataGridViewTextBoxColumn17})
         Me.DGV_PIMENU.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter
-        Me.DGV_PIMENU.Location = New System.Drawing.Point(4, 382)
+        Me.DGV_PIMENU.Location = New System.Drawing.Point(4, 358)
         Me.DGV_PIMENU.MultiSelect = False
         Me.DGV_PIMENU.Name = "DGV_PIMENU"
         Me.DGV_PIMENU.ReadOnly = True
@@ -2226,7 +2233,7 @@ Partial Class SCA1
         Me.BT_PI6READ.FlatAppearance.BorderColor = System.Drawing.Color.Black
         Me.BT_PI6READ.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.BT_PI6READ.ForeColor = System.Drawing.Color.Teal
-        Me.BT_PI6READ.Location = New System.Drawing.Point(176, 345)
+        Me.BT_PI6READ.Location = New System.Drawing.Point(176, 321)
         Me.BT_PI6READ.Name = "BT_PI6READ"
         Me.BT_PI6READ.Size = New System.Drawing.Size(86, 31)
         Me.BT_PI6READ.TabIndex = 1767
@@ -2239,7 +2246,7 @@ Partial Class SCA1
         Me.Label32.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.Label32.Font = New System.Drawing.Font("メイリオ", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.Label32.ForeColor = System.Drawing.Color.White
-        Me.Label32.Location = New System.Drawing.Point(523, 564)
+        Me.Label32.Location = New System.Drawing.Point(523, 540)
         Me.Label32.Name = "Label32"
         Me.Label32.Size = New System.Drawing.Size(588, 24)
         Me.Label32.TabIndex = 1766
@@ -2252,7 +2259,7 @@ Partial Class SCA1
         Me.Label30.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.Label30.Font = New System.Drawing.Font("メイリオ", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.Label30.ForeColor = System.Drawing.Color.White
-        Me.Label30.Location = New System.Drawing.Point(523, 308)
+        Me.Label30.Location = New System.Drawing.Point(523, 284)
         Me.Label30.Name = "Label30"
         Me.Label30.Size = New System.Drawing.Size(588, 24)
         Me.Label30.TabIndex = 1765
@@ -2265,7 +2272,7 @@ Partial Class SCA1
         Me.Label33.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.Label33.Font = New System.Drawing.Font("メイリオ", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.Label33.ForeColor = System.Drawing.Color.White
-        Me.Label33.Location = New System.Drawing.Point(1, 308)
+        Me.Label33.Location = New System.Drawing.Point(1, 284)
         Me.Label33.Name = "Label33"
         Me.Label33.Size = New System.Drawing.Size(514, 24)
         Me.Label33.TabIndex = 1764
@@ -2278,7 +2285,7 @@ Partial Class SCA1
         Me.BT_B4.FlatAppearance.BorderColor = System.Drawing.Color.Black
         Me.BT_B4.Font = New System.Drawing.Font("MS UI Gothic", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.BT_B4.ForeColor = System.Drawing.Color.White
-        Me.BT_B4.Location = New System.Drawing.Point(1019, 333)
+        Me.BT_B4.Location = New System.Drawing.Point(1019, 309)
         Me.BT_B4.Name = "BT_B4"
         Me.BT_B4.Size = New System.Drawing.Size(92, 27)
         Me.BT_B4.TabIndex = 1583
@@ -2292,7 +2299,7 @@ Partial Class SCA1
         Me.BT_PI5OUT.FlatAppearance.BorderColor = System.Drawing.Color.Black
         Me.BT_PI5OUT.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.BT_PI5OUT.ForeColor = System.Drawing.Color.White
-        Me.BT_PI5OUT.Location = New System.Drawing.Point(92, 345)
+        Me.BT_PI5OUT.Location = New System.Drawing.Point(92, 321)
         Me.BT_PI5OUT.Name = "BT_PI5OUT"
         Me.BT_PI5OUT.Size = New System.Drawing.Size(86, 31)
         Me.BT_PI5OUT.TabIndex = 1612
@@ -2305,7 +2312,7 @@ Partial Class SCA1
         Me.BT_B2.FlatAppearance.BorderColor = System.Drawing.Color.Black
         Me.BT_B2.Font = New System.Drawing.Font("MS UI Gothic", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.BT_B2.ForeColor = System.Drawing.Color.White
-        Me.BT_B2.Location = New System.Drawing.Point(613, 333)
+        Me.BT_B2.Location = New System.Drawing.Point(613, 309)
         Me.BT_B2.Name = "BT_B2"
         Me.BT_B2.Size = New System.Drawing.Size(92, 27)
         Me.BT_B2.TabIndex = 1581
@@ -2332,7 +2339,7 @@ Partial Class SCA1
         Me.DGV2.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.DGV2.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.Column9, Me.DataGridViewTextBoxColumn1, Me.DataGridViewTextBoxColumn2, Me.Column22, Me.Column4, Me.Column7, Me.Column23, Me.督促通知日, Me.Column3, Me.Column13, Me.Column30})
         Me.DGV2.ImeMode = System.Windows.Forms.ImeMode.[On]
-        Me.DGV2.Location = New System.Drawing.Point(523, 361)
+        Me.DGV2.Location = New System.Drawing.Point(523, 337)
         Me.DGV2.Name = "DGV2"
         Me.DGV2.ReadOnly = True
         Me.DGV2.RowHeadersVisible = False
@@ -2452,7 +2459,7 @@ Partial Class SCA1
         Me.TB_FreeMemo.Font = New System.Drawing.Font("MS UI Gothic", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.TB_FreeMemo.ForeColor = System.Drawing.Color.Black
         Me.TB_FreeMemo.ImeMode = System.Windows.Forms.ImeMode.Hiragana
-        Me.TB_FreeMemo.Location = New System.Drawing.Point(523, 588)
+        Me.TB_FreeMemo.Location = New System.Drawing.Point(523, 564)
         Me.TB_FreeMemo.Multiline = True
         Me.TB_FreeMemo.Name = "TB_FreeMemo"
         Me.TB_FreeMemo.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
@@ -2466,7 +2473,7 @@ Partial Class SCA1
         Me.BT_PI4FIX.FlatAppearance.BorderColor = System.Drawing.Color.Black
         Me.BT_PI4FIX.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.BT_PI4FIX.ForeColor = System.Drawing.Color.White
-        Me.BT_PI4FIX.Location = New System.Drawing.Point(8, 345)
+        Me.BT_PI4FIX.Location = New System.Drawing.Point(8, 321)
         Me.BT_PI4FIX.Name = "BT_PI4FIX"
         Me.BT_PI4FIX.Size = New System.Drawing.Size(86, 31)
         Me.BT_PI4FIX.TabIndex = 1611
@@ -2479,7 +2486,7 @@ Partial Class SCA1
         Me.Button5.FlatAppearance.BorderColor = System.Drawing.Color.Black
         Me.Button5.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.Button5.ForeColor = System.Drawing.Color.White
-        Me.Button5.Location = New System.Drawing.Point(926, 333)
+        Me.Button5.Location = New System.Drawing.Point(926, 309)
         Me.Button5.Name = "Button5"
         Me.Button5.Size = New System.Drawing.Size(87, 27)
         Me.Button5.TabIndex = 1580
@@ -2492,7 +2499,7 @@ Partial Class SCA1
         '
         Me.BT_PI3.Font = New System.Drawing.Font("MS UI Gothic", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.BT_PI3.ForeColor = System.Drawing.Color.Blue
-        Me.BT_PI3.Location = New System.Drawing.Point(405, 357)
+        Me.BT_PI3.Location = New System.Drawing.Point(405, 333)
         Me.BT_PI3.Name = "BT_PI3"
         Me.BT_PI3.Size = New System.Drawing.Size(110, 23)
         Me.BT_PI3.TabIndex = 1609
@@ -2506,7 +2513,7 @@ Partial Class SCA1
         Me.TB_Remarks.Font = New System.Drawing.Font("MS UI Gothic", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.TB_Remarks.ForeColor = System.Drawing.Color.Black
         Me.TB_Remarks.ImeMode = System.Windows.Forms.ImeMode.Hiragana
-        Me.TB_Remarks.Location = New System.Drawing.Point(523, 467)
+        Me.TB_Remarks.Location = New System.Drawing.Point(523, 443)
         Me.TB_Remarks.Multiline = True
         Me.TB_Remarks.Name = "TB_Remarks"
         Me.TB_Remarks.ReadOnly = True
@@ -2522,7 +2529,7 @@ Partial Class SCA1
         Me.Button6.FlatStyle = System.Windows.Forms.FlatStyle.Popup
         Me.Button6.Font = New System.Drawing.Font("メイリオ", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.Button6.ForeColor = System.Drawing.Color.White
-        Me.Button6.Location = New System.Drawing.Point(3, 2)
+        Me.Button6.Location = New System.Drawing.Point(1, 3)
         Me.Button6.Name = "Button6"
         Me.Button6.Size = New System.Drawing.Size(56, 22)
         Me.Button6.TabIndex = 1599
@@ -2535,7 +2542,7 @@ Partial Class SCA1
         Me.BT_B1.FlatAppearance.BorderColor = System.Drawing.Color.Black
         Me.BT_B1.Font = New System.Drawing.Font("MS UI Gothic", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.BT_B1.ForeColor = System.Drawing.Color.Cyan
-        Me.BT_B1.Location = New System.Drawing.Point(522, 333)
+        Me.BT_B1.Location = New System.Drawing.Point(522, 309)
         Me.BT_B1.Name = "BT_B1"
         Me.BT_B1.Size = New System.Drawing.Size(92, 27)
         Me.BT_B1.TabIndex = 1577
@@ -2563,7 +2570,7 @@ Partial Class SCA1
         Me.DGV7.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.DGV7.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.Column26, Me.DataGridViewTextBoxColumn11, Me.DataGridViewTextBoxColumn12})
         Me.DGV7.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter
-        Me.DGV7.Location = New System.Drawing.Point(92, 382)
+        Me.DGV7.Location = New System.Drawing.Point(92, 358)
         Me.DGV7.MultiSelect = False
         Me.DGV7.Name = "DGV7"
         Me.DGV7.RowHeadersVisible = False
@@ -2608,7 +2615,7 @@ Partial Class SCA1
         Me.BT_B3.FlatAppearance.BorderColor = System.Drawing.Color.Black
         Me.BT_B3.Font = New System.Drawing.Font("MS UI Gothic", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.BT_B3.ForeColor = System.Drawing.Color.White
-        Me.BT_B3.Location = New System.Drawing.Point(704, 333)
+        Me.BT_B3.Location = New System.Drawing.Point(704, 309)
         Me.BT_B3.Name = "BT_B3"
         Me.BT_B3.Size = New System.Drawing.Size(92, 27)
         Me.BT_B3.TabIndex = 1578
@@ -2619,7 +2626,7 @@ Partial Class SCA1
         'BT_PI2
         '
         Me.BT_PI2.ForeColor = System.Drawing.Color.DimGray
-        Me.BT_PI2.Location = New System.Drawing.Point(331, 357)
+        Me.BT_PI2.Location = New System.Drawing.Point(331, 333)
         Me.BT_PI2.Name = "BT_PI2"
         Me.BT_PI2.Size = New System.Drawing.Size(75, 23)
         Me.BT_PI2.TabIndex = 1608
@@ -2639,7 +2646,7 @@ Partial Class SCA1
         '
         'DTP_PI1
         '
-        Me.DTP_PI1.Location = New System.Drawing.Point(332, 338)
+        Me.DTP_PI1.Location = New System.Drawing.Point(332, 314)
         Me.DTP_PI1.Name = "DTP_PI1"
         Me.DTP_PI1.Size = New System.Drawing.Size(183, 19)
         Me.DTP_PI1.TabIndex = 1607
@@ -2671,7 +2678,7 @@ Partial Class SCA1
         Me.DGV1.RowTemplate.Height = 21
         Me.DGV1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
         Me.DGV1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.DGV1.Size = New System.Drawing.Size(514, 281)
+        Me.DGV1.Size = New System.Drawing.Size(514, 257)
         Me.DGV1.TabIndex = 1180
         Me.DGV1.TabStop = False
         '
@@ -2768,7 +2775,7 @@ Partial Class SCA1
         Me.Button3.FlatAppearance.BorderColor = System.Drawing.Color.Black
         Me.Button3.Font = New System.Drawing.Font("MS UI Gothic", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.Button3.ForeColor = System.Drawing.Color.Black
-        Me.Button3.Location = New System.Drawing.Point(239, 1)
+        Me.Button3.Location = New System.Drawing.Point(237, 2)
         Me.Button3.Name = "Button3"
         Me.Button3.Size = New System.Drawing.Size(80, 24)
         Me.Button3.TabIndex = 1573
@@ -2785,7 +2792,7 @@ Partial Class SCA1
         Me.TB_SearchInput.Font = New System.Drawing.Font("MS UI Gothic", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.TB_SearchInput.ForeColor = System.Drawing.Color.Black
         Me.TB_SearchInput.ImeMode = System.Windows.Forms.ImeMode.Off
-        Me.TB_SearchInput.Location = New System.Drawing.Point(58, 2)
+        Me.TB_SearchInput.Location = New System.Drawing.Point(56, 3)
         Me.TB_SearchInput.MaxLength = 20
         Me.TB_SearchInput.Name = "TB_SearchInput"
         Me.TB_SearchInput.Size = New System.Drawing.Size(170, 22)
@@ -2797,7 +2804,7 @@ Partial Class SCA1
         Me.L_STS.BackColor = System.Drawing.Color.White
         Me.L_STS.Font = New System.Drawing.Font("メイリオ", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.L_STS.ForeColor = System.Drawing.Color.Blue
-        Me.L_STS.Location = New System.Drawing.Point(4, 662)
+        Me.L_STS.Location = New System.Drawing.Point(4, 638)
         Me.L_STS.Name = "L_STS"
         Me.L_STS.Size = New System.Drawing.Size(104, 18)
         Me.L_STS.TabIndex = 1567
@@ -2809,7 +2816,7 @@ Partial Class SCA1
         Me.Button1.FlatAppearance.BorderColor = System.Drawing.Color.Black
         Me.Button1.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.Button1.ForeColor = System.Drawing.Color.Black
-        Me.Button1.Location = New System.Drawing.Point(446, 1)
+        Me.Button1.Location = New System.Drawing.Point(444, 2)
         Me.Button1.Name = "Button1"
         Me.Button1.Size = New System.Drawing.Size(69, 24)
         Me.Button1.TabIndex = 1568
@@ -2825,7 +2832,7 @@ Partial Class SCA1
         Me.TAB_A1.Controls.Add(Me.Tab_4Dun)
         Me.TAB_A1.Controls.Add(Me.Tab_5Tell)
         Me.TAB_A1.ItemSize = New System.Drawing.Size(100, 16)
-        Me.TAB_A1.Location = New System.Drawing.Point(0, 0)
+        Me.TAB_A1.Location = New System.Drawing.Point(0, 19)
         Me.TAB_A1.Name = "TAB_A1"
         Me.TAB_A1.Padding = New System.Drawing.Point(40, 3)
         Me.TAB_A1.SelectedIndex = 0
@@ -2940,17 +2947,63 @@ Partial Class SCA1
         Me.CreatorExpress1.RefAttrMode = True
         Me.CreatorExpress1.TemporaryPath = ""
         '
+        'MenuStrip1
+        '
+        Me.MenuStrip1.Font = New System.Drawing.Font("Yu Gothic UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.データ読み込みToolStripMenuItem, Me.表示ToolStripMenuItem})
+        Me.MenuStrip1.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.Flow
+        Me.MenuStrip1.Location = New System.Drawing.Point(0, 0)
+        Me.MenuStrip1.Name = "MenuStrip1"
+        Me.MenuStrip1.Padding = New System.Windows.Forms.Padding(6, 0, 0, 0)
+        Me.MenuStrip1.Size = New System.Drawing.Size(1139, 19)
+        Me.MenuStrip1.TabIndex = 1574
+        Me.MenuStrip1.Text = "MenuStrip1"
+        '
+        '表示ToolStripMenuItem
+        '
+        Me.表示ToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripMenuItem2, Me.ToolStripMenuItem3})
+        Me.表示ToolStripMenuItem.Name = "表示ToolStripMenuItem"
+        Me.表示ToolStripMenuItem.Size = New System.Drawing.Size(43, 19)
+        Me.表示ToolStripMenuItem.Text = "設定"
+        '
+        'ToolStripMenuItem2
+        '
+        Me.ToolStripMenuItem2.Name = "ToolStripMenuItem2"
+        Me.ToolStripMenuItem2.Size = New System.Drawing.Size(180, 22)
+        Me.ToolStripMenuItem2.Text = "ユーザー名"
+        '
+        'ToolStripMenuItem3
+        '
+        Me.ToolStripMenuItem3.Name = "ToolStripMenuItem3"
+        Me.ToolStripMenuItem3.Size = New System.Drawing.Size(180, 22)
+        Me.ToolStripMenuItem3.Text = "総務課"
+        '
+        'データ読み込みToolStripMenuItem
+        '
+        Me.データ読み込みToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.機能ToolStripMenuItem})
+        Me.データ読み込みToolStripMenuItem.Name = "データ読み込みToolStripMenuItem"
+        Me.データ読み込みToolStripMenuItem.Size = New System.Drawing.Size(43, 19)
+        Me.データ読み込みToolStripMenuItem.Text = "機能"
+        '
+        '機能ToolStripMenuItem
+        '
+        Me.機能ToolStripMenuItem.Name = "機能ToolStripMenuItem"
+        Me.機能ToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.機能ToolStripMenuItem.Text = "F35データ読み込み"
+        '
         'SCA1
         '
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None
         Me.BackColor = System.Drawing.Color.WhiteSmoke
         Me.ClientSize = New System.Drawing.Size(1139, 706)
+        Me.Controls.Add(Me.MenuStrip1)
         Me.Controls.Add(Me.L_UPDMsg)
         Me.Controls.Add(Me.PBXX)
         Me.Controls.Add(Me.TAB_A1)
         Me.ForeColor = System.Drawing.Color.Black
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
+        Me.MainMenuStrip = Me.MenuStrip1
         Me.MaximizeBox = False
         Me.Name = "SCA1"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
@@ -2981,6 +3034,8 @@ Partial Class SCA1
         Me.Tab_5Tell.ResumeLayout(False)
         Me.Tab_5Tell.PerformLayout()
         CType(Me.DGV8, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.MenuStrip1.ResumeLayout(False)
+        Me.MenuStrip1.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -3194,4 +3249,10 @@ Partial Class SCA1
     Friend WithEvents CB_A7 As ComboBox
     Friend WithEvents Button18 As Button
     Friend WithEvents L_USELESSTEL As Label
+    Friend WithEvents MenuStrip1 As MenuStrip
+    Friend WithEvents 表示ToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents ToolStripMenuItem2 As ToolStripMenuItem
+    Friend WithEvents ToolStripMenuItem3 As ToolStripMenuItem
+    Friend WithEvents データ読み込みToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents 機能ToolStripMenuItem As ToolStripMenuItem
 End Class
