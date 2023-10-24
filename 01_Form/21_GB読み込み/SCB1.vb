@@ -173,6 +173,7 @@ Public Class SCB1
             ' ファイルをDGVにロード
             Cursor.Current = Cursors.WaitCursor             ' マウスカーソルを砂時計に
             LoadFileToDGV(files(0))
+            db.UpdateOrigDT(Sqldb.TID.AC)
             MsgBox("オートコールファイルの読み込みが完了しました。" & vbCrLf & $"オートコールのデータ数は {DGV1.RowCount} 件です。")
         End If
     End Sub
