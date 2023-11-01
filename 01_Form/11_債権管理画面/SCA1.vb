@@ -1,6 +1,7 @@
 ﻿Imports System.IO
 Imports System.Text
 Imports System.Threading
+Imports DocumentFormat.OpenXml.Wordprocessing
 
 Public Class SCA1
 
@@ -495,7 +496,7 @@ Public Class SCA1
                     dgv(1, 5).Value = cInfo.Item(17)                                 ' 勤務先
                     dgv(3, 1).Value = cInfo.Item(13)                                 ' TEL1
                     dgv(3, 2).Value = cInfo.Item(11)                                 ' 生年月日
-                    ' dgv(3, 3).Value = sccmn.GetGroupCredit(cInfo.Item(20))              ' 団信加入サイン
+                    dgv(3, 3).Value = sccmn.GetGroupCredit(cInfo.Item(20))           ' 団信加入サイン
                     dgv(3, 5).Value = cInfo.Item(18)                                 ' 勤務先TEL1
                     ' 連帯債務者
                     dgv(1, 6).Value = cInfo.Item(30)                                 ' ヨミカナ
@@ -505,7 +506,7 @@ Public Class SCA1
                     dgv(1, 10).Value = cInfo.Item(37)                                ' 勤務先
                     dgv(3, 6).Value = cInfo.Item(33)                                 ' TEL1
                     dgv(3, 7).Value = cInfo.Item(31)                                 ' 生年月日
-                    ' dgv(3, 8).Value = sccmn.GetGroupCredit(cInfo.Item(40))              ' 団信加入サイン
+                    dgv(3, 8).Value = sccmn.GetGroupCredit(cInfo.Item(40))           ' 団信加入サイン
                     dgv(3, 10).Value = cInfo.Item(38)                                ' 勤務先TEL1
                     ' 証券番号(アシスト)
                     Dim dr As DataRow() = db.OrgDataTable(Sqldb.TID.SCAS).Select(String.Format("C02 = '{0}'", cid))
@@ -775,7 +776,7 @@ Public Class SCA1
         Dim dt As DataTable = db.ReadOrgDtSelect(Sqldb.TID.UNUMS)  ' 電話番号と理由が格納されているテーブル
 
         For Each t In cells
-            t.Style.ForeColor = Color.Black
+            t.Style.ForeColor = System.Drawing.Color.Black
             t.ToolTipText = ""
 
             ' DataTable内の各行を検索
@@ -784,7 +785,7 @@ Public Class SCA1
                 Dim dest As String = dr("C02").ToString()                 ' C02は理由
 
                 If t.Value IsNot Nothing AndAlso t.Value.ToString().Replace("-", "") = tel Then  ' 完全一致で比較
-                    t.Style.ForeColor = Color.Red
+                    t.Style.ForeColor = System.Drawing.Color.Red
                     t.ToolTipText = dest  ' ツールチップに理由を設定
                     Exit For ' 一致したらこの行の検索は終了
                 End If
@@ -1403,12 +1404,12 @@ Public Class SCA1
                     {"債権番号", "", "証券番号", "", "契約種別", ""},
                     {"ﾖﾐｶﾅ", "", "TEL", "", "金消契約日", ""},
                     {"債務者", "", "生年月日", "", "貸付金額", ""},
-                    {"郵便番号", "", "団信加入", "", "残高", ""},
+                    {"郵便番号", "", "旧団信加入", "", "残高", ""},
                     {"住所", "", "", "", "貸付金額(B)", ""},
                     {"勤務先", "", "勤務先TEL", "", "残高(B)", ""},
                     {"ﾖﾐｶﾅ", "", "TEL", "", "残高更新日", ""},
                     {"連債者", "", "生年月日", "", "返済額", ""},
-                    {"郵便番号", "", "団信加入", "", "返済額(B)", ""},
+                    {"郵便番号", "", "旧団信加入", "", "返済額(B)", ""},
                     {"住所", "", "", "", "延滞月数", ""},
                     {"勤務先", "", "勤務先TEL", "", "延滞合計額", ""}
                 }
@@ -2020,7 +2021,7 @@ Public Class SCA1
             Next
         End If
 
-        DGV7.Columns(2).DefaultCellStyle.BackColor = Color.White                            ' 予め背景色を白に設定
+        DGV7.Columns(2).DefaultCellStyle.BackColor = System.Drawing.Color.White                            ' 予め背景色を白に設定
         ' 各項目ごとの初期セッティング
         Select Case DGV_PIMENU.CurrentRow.Index
             Case 0
@@ -2036,17 +2037,17 @@ Public Class SCA1
                 DGV7(2, 0).ReadOnly = True
                 DGV7(2, 1).ReadOnly = True
                 DGV7(2, 2).ReadOnly = True
-                DGV7(2, 0).Style.BackColor = Color.LightSalmon
-                DGV7(2, 1).Style.BackColor = Color.LightSalmon
-                DGV7(2, 2).Style.BackColor = Color.LightSalmon
+                DGV7(2, 0).Style.BackColor = System.Drawing.Color.LightSalmon
+                DGV7(2, 1).Style.BackColor = System.Drawing.Color.LightSalmon
+                DGV7(2, 2).Style.BackColor = System.Drawing.Color.LightSalmon
 
             Case 4, 5, 6
                 ' 再生・破産のカラーリング
-                DGV7(1, 0).Style.BackColor = Color.DeepSkyBlue
-                DGV7(1, 1).Style.BackColor = Color.DeepSkyBlue
-                DGV7(1, 9).Style.BackColor = Color.Pink
-                DGV7(1, 17).Style.BackColor = Color.Pink
-                DGV7(1, 18).Style.BackColor = Color.Pink
+                DGV7(1, 0).Style.BackColor = System.Drawing.Color.DeepSkyBlue
+                DGV7(1, 1).Style.BackColor = System.Drawing.Color.DeepSkyBlue
+                DGV7(1, 9).Style.BackColor = System.Drawing.Color.Pink
+                DGV7(1, 17).Style.BackColor = System.Drawing.Color.Pink
+                DGV7(1, 18).Style.BackColor = System.Drawing.Color.Pink
         End Select
 
     End Sub
@@ -2314,9 +2315,6 @@ Public Class SCA1
 
                 MsgBox(String.Format("受任を解除します。{0}必要事項(赤い項目)のいずれかに入力して確定してください。", vbCrLf))
         End Select
-
-
-
     End Sub
 
     Private Sub HintSet(str As String)
@@ -2336,6 +2334,69 @@ Public Class SCA1
         fm.Dispose()
     End Sub
 
+    Private Sub CB_MRLIST_SelectedIndexChanged(sender As Object, e As EventArgs) Handles CB_MRLIST.SelectedIndexChanged
+        ' コンボボックスの選択されたインデックスを取得
+        InitDGVInfo(DGV_MR1, Sqldb.TID.MRM, CB_MRLIST.SelectedIndex)
+        LoadDGVInfo(DGV_MR1, Sqldb.TID.MR, CB_MRLIST.SelectedIndex)
+    End Sub
+
+    Public Sub InitDGVInfo(dgv As DataGridView, tid As Integer, index As Integer)
+        ' SQLiteからデータを取得
+        Dim dr As DataRow() = db.OrgDataTable(tid).Select($"C01 = {index}")
+
+        ' DGVを初期化
+        dgv.Columns.Clear()
+
+        ' DataRowをソート（C02値により昇順）
+        Array.Sort(dr, Function(x, y) x("C02").CompareTo(y("C02")))
+
+        ' DGVにデータをセット
+        For Each row As DataRow In dr
+            Dim columnName As String = row("C03").ToString()
+            Dim columnWidthStr As String = row("C04").ToString()
+            Dim columnWidth As Integer
+
+            If String.IsNullOrEmpty(columnWidthStr) Then
+                columnWidth = 60 ' デフォルト値
+            Else
+                columnWidth = Integer.Parse(columnWidthStr)
+            End If
+
+            Dim newColumn As New DataGridViewTextBoxColumn()
+            newColumn.Name = columnName
+            newColumn.HeaderText = columnName
+            newColumn.Width = columnWidth
+            newColumn.Visible = columnWidth <> 0
+
+            dgv.Columns.Add(newColumn)
+        Next
+    End Sub
+
+    Public Sub LoadDGVInfo(dgv As DataGridView, tid As Integer, category As String)
+        ' SQLiteからデータを取得
+        Dim dr As DataRow() = db.OrgDataTable(Sqldb.TID.MR).Select($"C01 = '{category}'")
+
+        ' DGVを初期化
+        dgv.Rows.Clear()
+
+        ' DGVのカラム数に応じてデータを表示
+        For Each row As DataRow In dr
+            Dim newRow As New DataGridViewRow()
+            For i As Integer = 0 To dgv.ColumnCount - 1
+                Dim cell As New DataGridViewTextBoxCell()
+                cell.Value = row($"C{i + 1:D2}")
+                newRow.Cells.Add(cell)
+            Next
+            dgv.Rows.Add(newRow)
+        Next
+    End Sub
+
+    Private Sub Button20_Click(sender As Object, e As EventArgs) Handles Button20.Click
+        Dim fm As New Form
+        fm = SCGA_REG
+        fm.ShowDialog()
+        fm.Dispose()
+    End Sub
 #End Region
 
 

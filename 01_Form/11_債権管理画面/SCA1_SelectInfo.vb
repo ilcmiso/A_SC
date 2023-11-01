@@ -113,8 +113,12 @@
                         Continue For
 
                     Case "返済額(ボーナス)"
+                        ' ボーナス対象月でない場合、ボーナス返済額を0として表示
+                        If cInfo(7) Is DBNull.Value Then
+                            rowValue.Add("0")
+                            Continue For
+                        End If
                         If Not IsBonusMonth(cInfo(7), ownForm.NUD_DunA1.Value.ToString) Then
-                            ' ボーナス対象月でない場合、ボーナス返済額を0として表示
                             rowValue.Add("0")
                             Continue For
                         End If
