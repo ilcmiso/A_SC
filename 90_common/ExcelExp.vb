@@ -92,6 +92,7 @@
 
     ' 交渉記録一覧出力(期間)
     Public Sub OutRec(oPath As String)
+        Dim SheetMAX As Integer = 10000
         Const CLIST_H As Integer = 4
         Const RECORD_H As Integer = 4
         Dim fPath As String = cmn.CurrentPath & Common.DIR_EXC & Common.DIR_EXCFMT3 & Common.FILE_EXCREC
@@ -134,6 +135,7 @@
         Dim cNum As Integer = 0     ' 顧客一覧に表示する顧客の数
         Dim rNum As Integer = 0     ' 固有シートの記録の数
         For idx = 0 To dr.Length - 1
+
             ' 値の設定
             cid = dr(idx)(1)
             cName = cmn.FixSPName(dr(idx)(8))
@@ -170,6 +172,16 @@
                 CreatorExpress1.Pos(6, rNum + RECORD_H).Value = dr(idx)(6)
                 rNum += 1
             Else
+                ' シート数が1万を超えたら新しいExcelファイルを作成
+                If cNum >= SheetMAX Then
+                    Eclose()   ' 現在のExcelファイルを閉じる
+                    oPath = $"{IO.Path.GetDirectoryName(oPath)}\{IO.Path.GetFileNameWithoutExtension(oPath)}_.xlsx"
+                    ret = Eopen(fPath, oPath)   ' 新しいExcelファイルを開く
+                    CreatorExpress1.DeleteSheet(cNum + 1, 1)
+                    cNum = 0
+                    If Not ret Then Exit Sub
+                End If
+
                 ' 顧客番号の１件目の交渉記録なので、一覧シートをコピーして、固有シートを追加
                 CreatorExpress1.CopySheet(cNum + 1, cNum + 1, "S" & cNum + 1)    ' シート追加
                 rNum = 0

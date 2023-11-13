@@ -1,4 +1,6 @@
 ﻿Imports System.IO
+Imports System.Windows.Forms.AxHost
+Imports DocumentFormat.OpenXml.VariantTypes
 
 Public Class SCE_S2
 
@@ -322,10 +324,9 @@ Public Class SCE_S2
         Dim oPath As String = cmn.DialogSaveFile("交渉記録一覧.xlsx")
         log.TimerST()
         Cursor.Current = Cursors.WaitCursor             ' マウスカーソルを砂時計に
-
         Dim ExcExp As New ExcelExp
         If RB_T4_A.Checked Then ExcExp.OutRec(oPath, SCA1.DGV1.CurrentRow.Cells(0).Value)
-        If RB_T4_B.Checked Then ExcExp.OutRec(oPath)
+            If RB_T4_B.Checked Then ExcExp.OutRec(oPath)
         log.TimerED("ExcExp")
     End Sub
 

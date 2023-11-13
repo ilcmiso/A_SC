@@ -243,6 +243,18 @@
     <Compile Include="01_Form\13_Schedule\SCE_S1.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="01_Form\32_総務部\SCGA_OVIEW.designer.vb">
+      <DependentUpon>SCGA_OVIEW.vb</DependentUpon>
+    </Compile>
+    <Compile Include="01_Form\32_総務部\SCGA_OVIEW.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="01_Form\32_総務部\SCGA_REG.designer.vb">
+      <DependentUpon>SCGA_REG.vb</DependentUpon>
+    </Compile>
+    <Compile Include="01_Form\32_総務部\SCGA_REG.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="80_SCcommon\SCcommon.vb" />
     <Compile Include="80_SCcommon\SCThread.vb" />
     <Compile Include="90_common\ILCNetDrive.vb" />
@@ -425,6 +437,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="01_Form\11_債権管理画面\SCA1_S2.resx">
       <DependentUpon>SCA1_S2.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="01_Form\32_総務部\SCGA_OVIEW.resx">
+      <DependentUpon>SCGA_OVIEW.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="01_Form\32_総務部\SCGA_REG.resx">
+      <DependentUpon>SCGA_REG.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="01_Form\81_設定\SCC1_S1_MNG.resx">
       <DependentUpon>SCC1_S1_MNG.vb</DependentUpon>

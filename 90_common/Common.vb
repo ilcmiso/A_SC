@@ -263,4 +263,9 @@ Public Class Common
         Return str
     End Function
 
+    Public Function GetCurrentDateTime() As String
+        Dim currentDateTime As DateTime = DateTime.Now
+        Return currentDateTime.ToString("yyyyMMdd_HHmm_ssfff")
+    End Function
+
 End Class

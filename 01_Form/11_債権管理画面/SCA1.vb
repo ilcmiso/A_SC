@@ -1,6 +1,7 @@
 ﻿Imports System.IO
 Imports System.Text
 Imports System.Threading
+Imports DocumentFormat.OpenXml.Office2010.Excel
 Imports DocumentFormat.OpenXml.Wordprocessing
 
 Public Class SCA1
@@ -79,6 +80,7 @@ Public Class SCA1
 
         SetToolTips()               ' ツールチップの設定
         TaskListInit()              ' タスクリスト初期設定
+        MRInit()                    ' 申請物の初期設定
         ' DGVちらつき防止
         cmn.SetDoubleBufferDGV(DGV1, DGV2, DGV3, DGV4, DGV5, DGV6, DGV7, DGV8, DGV9)
         DunInit()                   ' 督促管理の初期設定
@@ -2334,7 +2336,11 @@ Public Class SCA1
         fm.Dispose()
     End Sub
 
-    Private Sub CB_MRLIST_SelectedIndexChanged(sender As Object, e As EventArgs) Handles CB_MRLIST.SelectedIndexChanged
+    Private Sub MRInit()
+        CB_MRLIST.SelectedIndex = 0
+    End Sub
+
+    Public Sub ShowDGVMR() Handles CB_MRLIST.SelectedIndexChanged
         ' コンボボックスの選択されたインデックスを取得
         InitDGVInfo(DGV_MR1, Sqldb.TID.MRM, CB_MRLIST.SelectedIndex)
         LoadDGVInfo(DGV_MR1, Sqldb.TID.MR, CB_MRLIST.SelectedIndex)
@@ -2374,7 +2380,7 @@ Public Class SCA1
 
     Public Sub LoadDGVInfo(dgv As DataGridView, tid As Integer, category As String)
         ' SQLiteからデータを取得
-        Dim dr As DataRow() = db.OrgDataTable(Sqldb.TID.MR).Select($"C01 = '{category}'")
+        Dim dr As DataRow() = db.OrgDataTable(Sqldb.TID.MR).Select($"C02 = '{category}'")
 
         ' DGVを初期化
         dgv.Rows.Clear()
@@ -2391,12 +2397,28 @@ Public Class SCA1
         Next
     End Sub
 
-    Private Sub Button20_Click(sender As Object, e As EventArgs) Handles Button20.Click
+    Private Sub Button20_Click(sender As Object, e As EventArgs) Handles BT_MRAdd.Click, BT_MREdit.Click
         Dim fm As New Form
         fm = SCGA_REG
-        fm.ShowDialog()
+        fm.ShowDialog(Me)
         fm.Dispose()
     End Sub
+
+    Private Sub BT_MRDel_Click(sender As Object, e As EventArgs) Handles BT_MRDel.Click
+        Dim r As Integer
+        r = MessageBox.Show("削除してよろしいですか？",
+                            "ご確認ください",
+                            MessageBoxButtons.YesNo,
+                            MessageBoxIcon.Question)
+        If r = vbNo Then Exit Sub
+
+        ' DGV2の指定行を削除
+        Cursor.Current = Cursors.WaitCursor             ' マウスカーソルを砂時計に
+        db.ExeSQL(Sqldb.TID.MR, $"Delete From TBL Where C01 = '{DGV_MR1.CurrentRow.Cells(0).Value}'")
+        db.UpdateOrigDT(Sqldb.TID.MR)
+        ShowDGVMR()
+    End Sub
+
 #End Region
 
 
