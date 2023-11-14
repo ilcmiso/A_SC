@@ -109,7 +109,7 @@ Public Class SCGA_REG
         ' 初期値を設定
         Dim initialDate As DateTime = DateTime.Now
         dtPicker.Value = initialDate
-        dgv(colIndex, rowIndex).Value = initialDate.ToString("yyyy/MM/ddm")  ' ここでDataGridViewのセルに初期値を設定
+        dgv(colIndex, rowIndex).Value = initialDate.ToString("yyyy/MM/dd")  ' ここでDataGridViewのセルに初期値を設定
         dgv(colIndex, rowIndex).Tag = dtPicker  ' TagプロパティにDateTimePickerを設定
 
         ' 値変更時にDataGridViewのセルに反映
