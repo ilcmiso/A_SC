@@ -126,6 +126,9 @@
         CreatorExpress1.Pos(1, 4).Value = stDate
         CreatorExpress1.Pos(1, 5).Value = edDate
 
+        ' プログレスバー表示
+        cmn.StartPBar(dr.Length)
+
         Dim cid As String
         Dim sid As String
         Dim cName As String
@@ -135,6 +138,7 @@
         Dim cNum As Integer = 0     ' 顧客一覧に表示する顧客の数
         Dim rNum As Integer = 0     ' 固有シートの記録の数
         For idx = 0 To dr.Length - 1
+            cmn.UpdPBar("顧客情報の出力中")
 
             ' 値の設定
             cid = dr(idx)(1)
@@ -220,6 +224,7 @@
         ' コピー用のフォーマットシート(S0シート)を削除
         CreatorExpress1.DeleteSheet(cNum + 1, 1)
 
+        cmn.EndPBar()
         Eclose()
         Process.Start(oPath)
         If fixDB Then db.UpdateOrigDT(Sqldb.TID.SCD)            ' 日付を修正したDBを元に戻す

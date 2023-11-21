@@ -268,4 +268,17 @@ Public Class Common
         Return currentDateTime.ToString("yyyyMMdd_HHmm_ssfff")
     End Function
 
+    ' プログレスバー表示
+    Public Sub StartPBar(progressCount As Integer)
+        SCA_ProgressBar.Instance.StartProgress(progressCount)
+    End Sub
+    Public Sub UpdPBar(progress As Integer, message As String)
+        SCA_ProgressBar.Instance.UpdateProgress(progress, message)
+    End Sub
+    Public Sub UpdPBar(message As String)
+        SCA_ProgressBar.Instance.UpdateProgress(message)
+    End Sub
+    Public Sub EndPBar()
+        SCA_ProgressBar.Instance.EndProgress()
+    End Sub
 End Class

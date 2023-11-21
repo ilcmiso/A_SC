@@ -434,6 +434,7 @@ Public Class Sqldb
     End Sub
     Public Sub UpdateOrigDT(tid As Integer)
         log.cLog("DBオリジナル更新 : " & tid)
+        cmn.UpdPBar("顧客情報の構築中")
         OrgDataTable(tid) = ReadOrgDtSelect(tid)
     End Sub
 

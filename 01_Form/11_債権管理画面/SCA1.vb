@@ -60,10 +60,13 @@ Public Class SCA1
 
         FPATH_TEL = db.CurrentPath_SV & Common.DIR_TEL & Common.FILE_TEL                     ' 着信ログまでのフルパス生成
         ' 顧客情報DB(FKSC.DB3,ASSIST.DB3)の最新確認 古ければサーバからダウンロード
+        cmn.StartPBar([Enum].GetValues(GetType(Sqldb.TID)).Length + 6)
+
         CheckUpdateCDB()
 
         InitForms()
 
+        cmn.UpdPBar("顧客情報のファイルダウンロード中")
         ' DGV表示設定
         db.DBFileDL(Sqldb.TID.SCD)
         db.DBFileDL(Sqldb.TID.SCTD)
@@ -75,6 +78,7 @@ Public Class SCA1
         'ShowDGVList(DGV8)           ' 着信履歴
         ShowDGVList(DGV9)
 
+        cmn.UpdPBar("最終設定中")
         ' タブ 記録一覧の初期設定
         CheckedListBoxInit()
 
@@ -94,9 +98,9 @@ Public Class SCA1
             DGV_PIMENU(0, nnn).Value = PIItemList(nnn)
         Next
 
-
         ' 解像度が小さいPCは、左端に寄せる (横幅1600px未満なら左寄せ)
         If Screen.PrimaryScreen.Bounds.Width < 1600 Then Me.Left = 0
+        cmn.EndPBar()
         log.cLog("--- Load完了: " & (Date.Now - loadTime).ToString("ss\.fff"))
     End Sub
 
@@ -201,7 +205,9 @@ Public Class SCA1
 
     ' 更新ボタン DGV1
     Private Sub ExUpdateButton() Handles Button1.Click
-        Cursor.Current = Cursors.WaitCursor             ' マウスカーソルを砂時計に
+        'Cursor.Current = Cursors.WaitCursor             ' マウスカーソルを砂時計に
+        cmn.StartPBar(7)
+        cmn.UpdPBar("顧客情報ダウンロード中")
         db.DBFileFDL(Sqldb.TID.SCD)                     ' ファイル強制ダウンロード
         db.UpdateOrigDT(Sqldb.TID.SCD)
         db.UpdateOrigDT(Sqldb.TID.SCR)
@@ -210,7 +216,7 @@ Public Class SCA1
         ShowDGVList(DGV4)
         ShowDGVList(DGV5)
         ShowDunLB()
-        'L_UPDDB.Visible = False
+        cmn.EndPBar()
     End Sub
 
     ' 印刷ボタン
@@ -226,9 +232,11 @@ Public Class SCA1
         If e.KeyChar = ChrW(Keys.Enter) Then
             log.cLog("検索開始")
             e.Handled = True
-            Cursor.Current = Cursors.WaitCursor             ' マウスカーソルを砂時計に
+            ' Cursor.Current = Cursors.WaitCursor             ' マウスカーソルを砂時計に
+            cmn.StartPBar(4)
             ShowDGVList(DGV1, TB_SearchInput.Text)
             DGV1_ClickShow()
+            cmn.EndPBar()
         End If
     End Sub
 
@@ -270,8 +278,10 @@ Public Class SCA1
     Private Sub TB_SearchDGV5_KeyPress(sender As Object, e As KeyPressEventArgs) Handles TB_RecA1.KeyPress
         If e.KeyChar = ChrW(Keys.Enter) Then
             e.Handled = True
-            Cursor.Current = Cursors.WaitCursor             ' マウスカーソルを砂時計に
+            'Cursor.Current = Cursors.WaitCursor             ' マウスカーソルを砂時計に
+            cmn.StartPBar(2)
             ShowDGVList(DGV5, TB_RecA1.Text)
+            cmn.EndPBar()
         End If
     End Sub
 
@@ -301,9 +311,9 @@ Public Class SCA1
             Case Keys.F2
                 Button5.Visible = True
             Case Keys.F3
+                GAFormsToggle(True)
             Case Keys.F4
-                ShowDGVList(DGV9)
-
+                GAFormsToggle(False)
         End Select
     End Sub
 
@@ -343,6 +353,7 @@ Public Class SCA1
         ShowDGVList(dgv, "")
     End Sub
     Private Sub ShowDGVList(dgv As DataGridView, FilterWord As String)
+        cmn.UpdPBar("顧客情報の表示中")
         ' コーラー関数を保持
         Dim st As New StackTrace()
         Dim caller1 As Reflection.MethodBase = st.GetFrame(1).GetMethod()
@@ -2337,8 +2348,45 @@ Public Class SCA1
     End Sub
 
     Private Sub MRInit()
+        CB_MRLIST.Items.AddRange(sccmn.MRITEMLIST)
         CB_MRLIST.SelectedIndex = 0
     End Sub
+
+    ' 総務課フォームの表示切り替え
+    Private Sub GAFormsToggle(showForm2 As Boolean)
+        ' Panel内のすべてのコントロールをループ処理
+        For Each ctrl As System.Windows.Forms.Control In PAN_A.Controls
+            ' Form2のインスタンスを特定
+            Dim f2 As SCGA_OVIEW = TryCast(ctrl, SCGA_OVIEW)
+
+            If f2 IsNot Nothing Then
+                ' Form2の表示状態を切り替える
+                f2.Visible = showForm2
+                f2.Enabled = showForm2
+            Else
+                ' それ以外のコントロールの表示状態を切り替える
+                ctrl.Visible = Not showForm2
+                ctrl.Enabled = Not showForm2
+            End If
+        Next
+
+        ' Form2がまだPanelに追加されていない場合、ここで追加
+        If showForm2 AndAlso PAN_A.Controls.OfType(Of SCGA_OVIEW).Count() = 0 Then
+            Dim newForm2 As New SCGA_OVIEW()
+            newForm2.TopLevel = False
+            newForm2.FormBorderStyle = FormBorderStyle.None
+            newForm2.Dock = DockStyle.Fill
+            PAN_A.Controls.Add(newForm2)
+            newForm2.Show()
+        Else
+        End If
+        If showForm2 Then
+            Label33.Text = "直近の申請書一覧"
+        Else
+            Label33.Text = "物件情報"
+        End If
+    End Sub
+
 
     Public Sub ShowDGVMR() Handles CB_MRLIST.SelectedIndexChanged
         ' コンボボックスの選択されたインデックスを取得
@@ -2417,6 +2465,18 @@ Public Class SCA1
         db.ExeSQL(Sqldb.TID.MR, $"Delete From TBL Where C01 = '{DGV_MR1.CurrentRow.Cells(0).Value}'")
         db.UpdateOrigDT(Sqldb.TID.MR)
         ShowDGVMR()
+    End Sub
+
+    Private Sub 債権管理部ToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles 債権管理部ToolStripMenuItem.Click
+        債権管理部ToolStripMenuItem.Checked = True
+        総務課ToolStripMenuItem.Checked = False
+        GAFormsToggle(False)
+    End Sub
+
+    Private Sub 総務課ToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles 総務課ToolStripMenuItem.Click
+        債権管理部ToolStripMenuItem.Checked = False
+        総務課ToolStripMenuItem.Checked = True
+        GAFormsToggle(True)
     End Sub
 
 #End Region

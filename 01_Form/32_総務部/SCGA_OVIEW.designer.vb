@@ -26,13 +26,15 @@ Partial Class SCGA_OVIEW
         Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle3 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Me.PBXX = New System.Windows.Forms.Button()
-        Me.DGV7 = New System.Windows.Forms.DataGridView()
+        Me.DGV = New System.Windows.Forms.DataGridView()
+        Me.Column5 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.DataGridViewTextBoxColumn11 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Column4 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Column1 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.DataGridViewTextBoxColumn12 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Column2 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Column3 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        CType(Me.DGV7, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.DGV, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'PBXX
@@ -47,15 +49,15 @@ Partial Class SCGA_OVIEW
         Me.PBXX.Text = "PBXX"
         Me.PBXX.UseVisualStyleBackColor = False
         '
-        'DGV7
+        'DGV
         '
-        Me.DGV7.AllowDrop = True
-        Me.DGV7.AllowUserToAddRows = False
-        Me.DGV7.AllowUserToDeleteRows = False
-        Me.DGV7.AllowUserToResizeColumns = False
-        Me.DGV7.AllowUserToResizeRows = False
-        Me.DGV7.BackgroundColor = System.Drawing.SystemColors.ControlLight
-        Me.DGV7.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.[Single]
+        Me.DGV.AllowDrop = True
+        Me.DGV.AllowUserToAddRows = False
+        Me.DGV.AllowUserToDeleteRows = False
+        Me.DGV.AllowUserToResizeColumns = False
+        Me.DGV.AllowUserToResizeRows = False
+        Me.DGV.BackgroundColor = System.Drawing.SystemColors.ControlLight
+        Me.DGV.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.[Single]
         DataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
         DataGridViewCellStyle1.BackColor = System.Drawing.Color.LightGray
         DataGridViewCellStyle1.Font = New System.Drawing.Font("MS UI Gothic", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
@@ -63,37 +65,53 @@ Partial Class SCGA_OVIEW
         DataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight
         DataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText
         DataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.DGV7.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle1
-        Me.DGV7.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.DGV7.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.DataGridViewTextBoxColumn11, Me.Column1, Me.DataGridViewTextBoxColumn12, Me.Column2, Me.Column3})
-        Me.DGV7.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter
-        Me.DGV7.Location = New System.Drawing.Point(0, 0)
-        Me.DGV7.MultiSelect = False
-        Me.DGV7.Name = "DGV7"
-        Me.DGV7.RowHeadersVisible = False
-        Me.DGV7.RowHeadersWidth = 51
-        Me.DGV7.RowTemplate.Height = 21
-        Me.DGV7.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.DGV7.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect
-        Me.DGV7.Size = New System.Drawing.Size(514, 318)
-        Me.DGV7.TabIndex = 1182
-        Me.DGV7.TabStop = False
+        Me.DGV.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle1
+        Me.DGV.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
+        Me.DGV.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.Column5, Me.DataGridViewTextBoxColumn11, Me.Column4, Me.Column1, Me.DataGridViewTextBoxColumn12, Me.Column2, Me.Column3})
+        Me.DGV.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter
+        Me.DGV.Location = New System.Drawing.Point(0, 0)
+        Me.DGV.MultiSelect = False
+        Me.DGV.Name = "DGV"
+        Me.DGV.ReadOnly = True
+        Me.DGV.RowHeadersVisible = False
+        Me.DGV.RowHeadersWidth = 51
+        Me.DGV.RowTemplate.Height = 21
+        Me.DGV.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
+        Me.DGV.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect
+        Me.DGV.Size = New System.Drawing.Size(514, 318)
+        Me.DGV.TabIndex = 1182
+        Me.DGV.TabStop = False
+        '
+        'Column5
+        '
+        Me.Column5.HeaderText = "登録番号"
+        Me.Column5.Name = "Column5"
+        Me.Column5.ReadOnly = True
+        Me.Column5.Visible = False
         '
         'DataGridViewTextBoxColumn11
         '
         DataGridViewCellStyle2.BackColor = System.Drawing.Color.FromArgb(CType(CType(192, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
         Me.DataGridViewTextBoxColumn11.DefaultCellStyle = DataGridViewCellStyle2
-        Me.DataGridViewTextBoxColumn11.HeaderText = "登録日"
+        Me.DataGridViewTextBoxColumn11.HeaderText = "受付日"
         Me.DataGridViewTextBoxColumn11.MinimumWidth = 6
         Me.DataGridViewTextBoxColumn11.Name = "DataGridViewTextBoxColumn11"
         Me.DataGridViewTextBoxColumn11.ReadOnly = True
-        Me.DataGridViewTextBoxColumn11.Width = 85
+        Me.DataGridViewTextBoxColumn11.Width = 80
+        '
+        'Column4
+        '
+        Me.Column4.HeaderText = "番号"
+        Me.Column4.Name = "Column4"
+        Me.Column4.ReadOnly = True
+        Me.Column4.Width = 50
         '
         'Column1
         '
-        Me.Column1.HeaderText = "申請物"
+        Me.Column1.HeaderText = "申請書種類"
         Me.Column1.Name = "Column1"
-        Me.Column1.Width = 110
+        Me.Column1.ReadOnly = True
+        Me.Column1.Width = 105
         '
         'DataGridViewTextBoxColumn12
         '
@@ -102,25 +120,28 @@ Partial Class SCGA_OVIEW
         Me.DataGridViewTextBoxColumn12.HeaderText = "担当者"
         Me.DataGridViewTextBoxColumn12.MinimumWidth = 6
         Me.DataGridViewTextBoxColumn12.Name = "DataGridViewTextBoxColumn12"
-        Me.DataGridViewTextBoxColumn12.Width = 70
+        Me.DataGridViewTextBoxColumn12.ReadOnly = True
+        Me.DataGridViewTextBoxColumn12.Width = 80
         '
         'Column2
         '
-        Me.Column2.HeaderText = "概要"
+        Me.Column2.HeaderText = "債務者名/宛名"
         Me.Column2.Name = "Column2"
-        Me.Column2.Width = 130
+        Me.Column2.ReadOnly = True
         '
         'Column3
         '
-        Me.Column3.HeaderText = "状態"
+        Me.Column3.HeaderText = "ステータス/内容"
         Me.Column3.Name = "Column3"
+        Me.Column3.ReadOnly = True
+        Me.Column3.Width = 95
         '
         'SCGA_OVIEW
         '
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None
         Me.BackColor = System.Drawing.SystemColors.ControlLight
         Me.ClientSize = New System.Drawing.Size(515, 330)
-        Me.Controls.Add(Me.DGV7)
+        Me.Controls.Add(Me.DGV)
         Me.Controls.Add(Me.PBXX)
         Me.ForeColor = System.Drawing.Color.Black
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
@@ -129,14 +150,16 @@ Partial Class SCGA_OVIEW
         Me.ShowIcon = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "交渉記録の登録"
-        CType(Me.DGV7, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.DGV, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub
 
     Friend WithEvents PBXX As Button
-    Friend WithEvents DGV7 As DataGridView
+    Friend WithEvents DGV As DataGridView
+    Friend WithEvents Column5 As DataGridViewTextBoxColumn
     Friend WithEvents DataGridViewTextBoxColumn11 As DataGridViewTextBoxColumn
+    Friend WithEvents Column4 As DataGridViewTextBoxColumn
     Friend WithEvents Column1 As DataGridViewTextBoxColumn
     Friend WithEvents DataGridViewTextBoxColumn12 As DataGridViewTextBoxColumn
     Friend WithEvents Column2 As DataGridViewTextBoxColumn

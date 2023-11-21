@@ -219,6 +219,12 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="01_Form\91_汎用\SCA_ProgressBar.designer.vb">
+      <DependentUpon>SCA_ProgressBar.vb</DependentUpon>
+    </Compile>
+    <Compile Include="01_Form\91_汎用\SCA_ProgressBar.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="01_Form\11_債権管理画面\SCA1_USELESSTEL.designer.vb">
       <DependentUpon>SCA1_USELESSTEL.vb</DependentUpon>
     </Compile>
@@ -393,6 +399,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="01_Form\91_汎用\SCA_ProgressBar.resx">
+      <DependentUpon>SCA_ProgressBar.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="01_Form\11_債権管理画面\SCA1_USELESSTEL.resx">
       <DependentUpon>SCA1_USELESSTEL.vb</DependentUpon>
     </EmbeddedResource>

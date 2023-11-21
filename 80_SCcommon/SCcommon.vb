@@ -1,6 +1,7 @@
 ﻿Public Class SCcommon
     ' 団信加入サインステータス
     Public ReadOnly GROUPCREDIT() As String = {"未加入", "加入(単生)", "加入(連生)", "脱退済"}
+    Public ReadOnly MRITEMLIST() As String = {"団信弁済", "一部繰り上げ返済", "完済管理", "契約条件変更", "口座変更", "郵便発送簿", "郵便受領簿"}
 
     ' 団信加入サインの値取得
     Public Function GetGroupCredit(status As String) As String

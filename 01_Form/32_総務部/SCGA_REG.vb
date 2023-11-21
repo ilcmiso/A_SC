@@ -100,8 +100,11 @@ Public Class SCGA_REG
         Dim dtPicker As New DateTimePicker()
 
         ' DateTimePickerの位置とサイズを設定
-        dtPicker.Location = rect.Location
-        dtPicker.Size = rect.Size
+        'dtPicker.Location = rect.Location
+        'dtPicker.Size = rect.Size
+
+        dtPicker.Location = New Point(rect.Location.X + 132, rect.Location.Y) ' X座標を50ピクセル右にずらす
+        dtPicker.Size = New Size(18, rect.Height) ' 幅を18ピクセルに設定
 
         ' 日付のみ表示するようにフォーマット設定
         dtPicker.Format = DateTimePickerFormat.Short
@@ -112,10 +115,20 @@ Public Class SCGA_REG
         dgv(colIndex, rowIndex).Value = initialDate.ToString("yyyy/MM/dd")  ' ここでDataGridViewのセルに初期値を設定
         dgv(colIndex, rowIndex).Tag = dtPicker  ' TagプロパティにDateTimePickerを設定
 
+        Dim editTimer As New Timer()
+        editTimer.Interval = 100
         ' 値変更時にDataGridViewのセルに反映
-        AddHandler dtPicker.ValueChanged, Sub(sender, e)
-                                              dgv(colIndex, rowIndex).Value = dtPicker.Value
-                                          End Sub
+        ' 空欄からのdtPicker変更時、DGVに反映されない場合があるため、CommitEditと次のセル選択処理をしている
+        AddHandler dtPicker.CloseUp, Sub(sender, e)
+                                         dgv.CommitEdit(DataGridViewDataErrorContexts.Commit)
+                                         dgv(colIndex, rowIndex).Value = dtPicker.Value.ToString("yyyy/MM/dd")
+                                         ' 次の行のセルを選択し、編集モードにする
+                                         If rowIndex + 1 < dgv.Rows.Count Then
+                                             dgv.CurrentCell = dgv(colIndex, rowIndex + 1)
+                                             dgv.BeginEdit(True)
+                                         End If
+                                         editTimer.Stop()
+                                     End Sub
 
         ' DataGridViewに追加
         dgv.Controls.Add(dtPicker)

@@ -4,7 +4,7 @@ Imports System.Text
 Public Class SC
 
 #Region " Open Close "
-    Public Const SCVer As String = "2311C"                         ' A_SC バージョン
+    Public Const SCVer As String = "2311D"                         ' A_SC バージョン
     ' 起動アプリパス
     Public ReadOnly CurrentAppPath As String = Path.GetDirectoryName(Reflection.Assembly.GetExecutingAssembly().Location) & "\"
 
@@ -33,6 +33,10 @@ Public Class SC
 
         ' アプリケーション自動バージョンアップ ＆ 再起動
         If vup.Update(SCVer) Then RestartApl()
+
+        ' プログレスバーのインスタンス生成
+        SCA_ProgressBar.Instance = New SCA_ProgressBar()
+
         log.cLog("--- SC Load完了: " & (Date.Now - loadTime).ToString("ss\.fff"))
     End Sub
 
