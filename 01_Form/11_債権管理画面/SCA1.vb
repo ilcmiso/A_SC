@@ -2354,6 +2354,7 @@ Public Class SCA1
 
     ' 総務課フォームの表示切り替え
     Private Sub GAFormsToggle(showForm2 As Boolean)
+        cmn.DummyPBar()
         ' Panel内のすべてのコントロールをループ処理
         For Each ctrl As System.Windows.Forms.Control In PAN_A.Controls
             ' Form2のインスタンスを特定

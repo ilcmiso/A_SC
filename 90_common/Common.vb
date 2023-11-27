@@ -281,4 +281,7 @@ Public Class Common
     Public Sub EndPBar()
         SCA_ProgressBar.Instance.EndProgress()
     End Sub
+    Public Sub DummyPBar()
+        SCA_ProgressBar.Instance.DummyProgress()
+    End Sub
 End Class

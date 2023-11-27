@@ -149,6 +149,7 @@ Public Class SCGA_REG
 
         If comboBox.Items.Count > 0 Then
             comboBox.SelectedIndex = 0
+            dgv(colIndex, rowIndex).Value = comboBox.SelectedItem
         End If
 
         ' 値変更時にDataGridViewのセルに反映
