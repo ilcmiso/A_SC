@@ -6,6 +6,7 @@ Public Class SCGA_OVIEW
     Private ReadOnly sccmn As New SCcommon
     Private ReadOnly xml As New XmlMng
     Private ReadOnly log As New Log
+    Private ReadOnly ROWMAXCOUNT As Integer = 10
 
     Private Sub FLS_Shown(sender As Object, e As EventArgs) Handles MyBase.Load
         ShowOVIEW()
@@ -39,8 +40,12 @@ Public Class SCGA_OVIEW
             End Select
 
             DGV.Rows.Add(row("C01"), row("C04"), row("C03"), item, row("C05"), column4Value, column5Value)
+            If DGV.Rows.Count = ROWMAXCOUNT Then Exit For
         Next
     End Sub
 
-
+    ' 参照中データ移動ボタン
+    Private Sub BT_PI4FIX_Click(sender As Object, e As EventArgs) Handles BT_PI4FIX.Click
+        SCA1.ViewSelectedMR(DGV.CurrentRow.Cells(3).Value, DGV.CurrentRow.Cells(0).Value)
+    End Sub
 End Class

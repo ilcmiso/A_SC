@@ -271,19 +271,11 @@ Partial Class SCA1
         Me.Button1 = New System.Windows.Forms.Button()
         Me.TAB_A1 = New System.Windows.Forms.TabControl()
         Me.Tab_6GA = New System.Windows.Forms.TabPage()
-        Me.BT_MRDel = New System.Windows.Forms.Button()
-        Me.BT_MREdit = New System.Windows.Forms.Button()
-        Me.BT_MRAdd = New System.Windows.Forms.Button()
-        Me.CB_MRLIST = New System.Windows.Forms.ComboBox()
-        Me.CheckedListBox1 = New System.Windows.Forms.CheckedListBox()
-        Me.CHL_MR1 = New System.Windows.Forms.CheckedListBox()
-        Me.CB_MR_Period = New System.Windows.Forms.ComboBox()
-        Me.TextBox2 = New System.Windows.Forms.TextBox()
+        Me.CB_MRRangeAll = New System.Windows.Forms.CheckBox()
         Me.Label3 = New System.Windows.Forms.Label()
-        Me.TextBox1 = New System.Windows.Forms.TextBox()
+        Me.DTP_MRED = New System.Windows.Forms.DateTimePicker()
+        Me.DTP_MRST = New System.Windows.Forms.DateTimePicker()
         Me.Label4 = New System.Windows.Forms.Label()
-        Me.Label6 = New System.Windows.Forms.Label()
-        Me.Button19 = New System.Windows.Forms.Button()
         Me.DGV_MR1 = New System.Windows.Forms.DataGridView()
         Me.DataGridViewTextBoxColumn23 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.DataGridViewTextBoxColumn24 = New System.Windows.Forms.DataGridViewTextBoxColumn()
@@ -303,6 +295,15 @@ Partial Class SCA1
         Me.DataGridViewTextBoxColumn38 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.DataGridViewTextBoxColumn39 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.DataGridViewTextBoxColumn40 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.CB_Person = New System.Windows.Forms.ComboBox()
+        Me.BT_MRDel = New System.Windows.Forms.Button()
+        Me.BT_MREdit = New System.Windows.Forms.Button()
+        Me.BT_MRAdd = New System.Windows.Forms.Button()
+        Me.CB_MRLIST = New System.Windows.Forms.ComboBox()
+        Me.TextBox2 = New System.Windows.Forms.TextBox()
+        Me.TB_MRSearch = New System.Windows.Forms.TextBox()
+        Me.Label6 = New System.Windows.Forms.Label()
+        Me.Button19 = New System.Windows.Forms.Button()
         Me.Tab_5Tell = New System.Windows.Forms.TabPage()
         Me.CB_NOTICETELL = New System.Windows.Forms.CheckBox()
         Me.Button16 = New System.Windows.Forms.Button()
@@ -320,6 +321,7 @@ Partial Class SCA1
         Me.総務課ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.表示ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripMenuItem2 = New System.Windows.Forms.ToolStripMenuItem()
+        Me.Label7 = New System.Windows.Forms.Label()
         Me.CMenu_DGV3.SuspendLayout()
         Me.Tab_4Dun.SuspendLayout()
         CType(Me.DGV4, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -2035,7 +2037,7 @@ Partial Class SCA1
         'L_STS
         '
         Me.L_STS.AutoSize = True
-        Me.L_STS.BackColor = System.Drawing.Color.White
+        Me.L_STS.BackColor = System.Drawing.Color.WhiteSmoke
         Me.L_STS.Font = New System.Drawing.Font("メイリオ", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.L_STS.ForeColor = System.Drawing.Color.Blue
         Me.L_STS.Location = New System.Drawing.Point(4, 638)
@@ -2894,160 +2896,75 @@ Partial Class SCA1
         'Tab_6GA
         '
         Me.Tab_6GA.BackColor = System.Drawing.Color.LightBlue
+        Me.Tab_6GA.Controls.Add(Me.Label7)
+        Me.Tab_6GA.Controls.Add(Me.CB_MRRangeAll)
+        Me.Tab_6GA.Controls.Add(Me.Label3)
+        Me.Tab_6GA.Controls.Add(Me.DTP_MRED)
+        Me.Tab_6GA.Controls.Add(Me.DTP_MRST)
+        Me.Tab_6GA.Controls.Add(Me.Label4)
+        Me.Tab_6GA.Controls.Add(Me.DGV_MR1)
+        Me.Tab_6GA.Controls.Add(Me.CB_Person)
         Me.Tab_6GA.Controls.Add(Me.BT_MRDel)
         Me.Tab_6GA.Controls.Add(Me.BT_MREdit)
         Me.Tab_6GA.Controls.Add(Me.BT_MRAdd)
         Me.Tab_6GA.Controls.Add(Me.CB_MRLIST)
-        Me.Tab_6GA.Controls.Add(Me.CheckedListBox1)
-        Me.Tab_6GA.Controls.Add(Me.CHL_MR1)
-        Me.Tab_6GA.Controls.Add(Me.CB_MR_Period)
         Me.Tab_6GA.Controls.Add(Me.TextBox2)
-        Me.Tab_6GA.Controls.Add(Me.Label3)
-        Me.Tab_6GA.Controls.Add(Me.TextBox1)
-        Me.Tab_6GA.Controls.Add(Me.Label4)
+        Me.Tab_6GA.Controls.Add(Me.TB_MRSearch)
         Me.Tab_6GA.Controls.Add(Me.Label6)
         Me.Tab_6GA.Controls.Add(Me.Button19)
-        Me.Tab_6GA.Controls.Add(Me.DGV_MR1)
         Me.Tab_6GA.Location = New System.Drawing.Point(4, 20)
         Me.Tab_6GA.Name = "Tab_6GA"
         Me.Tab_6GA.Padding = New System.Windows.Forms.Padding(3)
         Me.Tab_6GA.Size = New System.Drawing.Size(1132, 682)
         Me.Tab_6GA.TabIndex = 5
-        Me.Tab_6GA.Text = "申請物"
+        Me.Tab_6GA.Text = "申請物管理"
         '
-        'BT_MRDel
+        'CB_MRRangeAll
         '
-        Me.BT_MRDel.BackColor = System.Drawing.Color.Red
-        Me.BT_MRDel.FlatAppearance.BorderColor = System.Drawing.Color.Black
-        Me.BT_MRDel.Font = New System.Drawing.Font("MS UI Gothic", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.BT_MRDel.ForeColor = System.Drawing.Color.White
-        Me.BT_MRDel.Location = New System.Drawing.Point(453, 391)
-        Me.BT_MRDel.Name = "BT_MRDel"
-        Me.BT_MRDel.Size = New System.Drawing.Size(92, 27)
-        Me.BT_MRDel.TabIndex = 1784
-        Me.BT_MRDel.TabStop = False
-        Me.BT_MRDel.Text = "削　除"
-        Me.BT_MRDel.UseVisualStyleBackColor = False
-        '
-        'BT_MREdit
-        '
-        Me.BT_MREdit.BackColor = System.Drawing.Color.SteelBlue
-        Me.BT_MREdit.FlatAppearance.BorderColor = System.Drawing.Color.Black
-        Me.BT_MREdit.Font = New System.Drawing.Font("MS UI Gothic", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.BT_MREdit.ForeColor = System.Drawing.Color.White
-        Me.BT_MREdit.Location = New System.Drawing.Point(453, 358)
-        Me.BT_MREdit.Name = "BT_MREdit"
-        Me.BT_MREdit.Size = New System.Drawing.Size(92, 27)
-        Me.BT_MREdit.TabIndex = 1783
-        Me.BT_MREdit.TabStop = False
-        Me.BT_MREdit.Text = "編　集"
-        Me.BT_MREdit.UseVisualStyleBackColor = False
-        '
-        'BT_MRAdd
-        '
-        Me.BT_MRAdd.BackColor = System.Drawing.Color.SteelBlue
-        Me.BT_MRAdd.FlatAppearance.BorderColor = System.Drawing.Color.Black
-        Me.BT_MRAdd.Font = New System.Drawing.Font("MS UI Gothic", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.BT_MRAdd.ForeColor = System.Drawing.Color.Cyan
-        Me.BT_MRAdd.Location = New System.Drawing.Point(453, 325)
-        Me.BT_MRAdd.Name = "BT_MRAdd"
-        Me.BT_MRAdd.Size = New System.Drawing.Size(92, 27)
-        Me.BT_MRAdd.TabIndex = 1782
-        Me.BT_MRAdd.TabStop = False
-        Me.BT_MRAdd.Text = "追　加"
-        Me.BT_MRAdd.UseVisualStyleBackColor = False
-        '
-        'CB_MRLIST
-        '
-        Me.CB_MRLIST.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.CB_MRLIST.Font = New System.Drawing.Font("MS UI Gothic", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.CB_MRLIST.FormattingEnabled = True
-        Me.CB_MRLIST.ImeMode = System.Windows.Forms.ImeMode.Hiragana
-        Me.CB_MRLIST.Location = New System.Drawing.Point(3, 4)
-        Me.CB_MRLIST.Name = "CB_MRLIST"
-        Me.CB_MRLIST.Size = New System.Drawing.Size(225, 23)
-        Me.CB_MRLIST.TabIndex = 1781
-        '
-        'CheckedListBox1
-        '
-        Me.CheckedListBox1.BackColor = System.Drawing.Color.Azure
-        Me.CheckedListBox1.CausesValidation = False
-        Me.CheckedListBox1.CheckOnClick = True
-        Me.CheckedListBox1.Font = New System.Drawing.Font("メイリオ", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.CheckedListBox1.FormattingEnabled = True
-        Me.CheckedListBox1.Items.AddRange(New Object() {"ｘｘ課長", "ｘｘ部長", "ｘｘ担当"})
-        Me.CheckedListBox1.Location = New System.Drawing.Point(251, 344)
-        Me.CheckedListBox1.Name = "CheckedListBox1"
-        Me.CheckedListBox1.Size = New System.Drawing.Size(113, 64)
-        Me.CheckedListBox1.TabIndex = 1780
-        Me.CheckedListBox1.Visible = False
-        '
-        'CHL_MR1
-        '
-        Me.CHL_MR1.BackColor = System.Drawing.Color.Azure
-        Me.CHL_MR1.CausesValidation = False
-        Me.CHL_MR1.CheckOnClick = True
-        Me.CHL_MR1.Font = New System.Drawing.Font("メイリオ", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.CHL_MR1.FormattingEnabled = True
-        Me.CHL_MR1.Items.AddRange(New Object() {"新規受付", "書類返送待ち", "審査終了"})
-        Me.CHL_MR1.Location = New System.Drawing.Point(130, 344)
-        Me.CHL_MR1.Name = "CHL_MR1"
-        Me.CHL_MR1.Size = New System.Drawing.Size(113, 64)
-        Me.CHL_MR1.TabIndex = 1779
-        Me.CHL_MR1.Visible = False
-        '
-        'CB_MR_Period
-        '
-        Me.CB_MR_Period.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.CB_MR_Period.Font = New System.Drawing.Font("MS UI Gothic", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.CB_MR_Period.FormattingEnabled = True
-        Me.CB_MR_Period.ImeMode = System.Windows.Forms.ImeMode.Hiragana
-        Me.CB_MR_Period.Location = New System.Drawing.Point(8, 348)
-        Me.CB_MR_Period.Name = "CB_MR_Period"
-        Me.CB_MR_Period.Size = New System.Drawing.Size(113, 23)
-        Me.CB_MR_Period.TabIndex = 1778
-        Me.CB_MR_Period.Visible = False
-        '
-        'TextBox2
-        '
-        Me.TextBox2.BackColor = System.Drawing.Color.LightYellow
-        Me.TextBox2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.TextBox2.Enabled = False
-        Me.TextBox2.Font = New System.Drawing.Font("MS UI Gothic", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.TextBox2.ForeColor = System.Drawing.Color.Black
-        Me.TextBox2.ImeMode = System.Windows.Forms.ImeMode.Hiragana
-        Me.TextBox2.Location = New System.Drawing.Point(551, 324)
-        Me.TextBox2.Multiline = True
-        Me.TextBox2.Name = "TextBox2"
-        Me.TextBox2.ReadOnly = True
-        Me.TextBox2.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.TextBox2.Size = New System.Drawing.Size(572, 131)
-        Me.TextBox2.TabIndex = 1777
-        Me.TextBox2.TabStop = False
-        Me.TextBox2.Visible = False
+        Me.CB_MRRangeAll.AutoSize = True
+        Me.CB_MRRangeAll.Location = New System.Drawing.Point(253, 55)
+        Me.CB_MRRangeAll.Name = "CB_MRRangeAll"
+        Me.CB_MRRangeAll.Size = New System.Drawing.Size(60, 16)
+        Me.CB_MRRangeAll.TabIndex = 1790
+        Me.CB_MRRangeAll.Text = "全期間"
+        Me.CB_MRRangeAll.UseVisualStyleBackColor = True
         '
         'Label3
         '
-        Me.Label3.BackColor = System.Drawing.Color.SteelBlue
-        Me.Label3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.Label3.Font = New System.Drawing.Font("メイリオ", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.Label3.ForeColor = System.Drawing.Color.White
-        Me.Label3.Location = New System.Drawing.Point(8, 325)
+        Me.Label3.AutoSize = True
+        Me.Label3.Location = New System.Drawing.Point(363, 35)
         Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(113, 20)
-        Me.Label3.TabIndex = 1776
-        Me.Label3.Text = "表示期間"
-        Me.Label3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        Me.Label3.Size = New System.Drawing.Size(17, 12)
+        Me.Label3.TabIndex = 1789
+        Me.Label3.Text = "～"
         '
-        'TextBox1
+        'DTP_MRED
         '
-        Me.TextBox1.BackColor = System.Drawing.Color.Azure
-        Me.TextBox1.Font = New System.Drawing.Font("MS UI Gothic", 11.25!)
-        Me.TextBox1.Location = New System.Drawing.Point(58, 34)
-        Me.TextBox1.Name = "TextBox1"
-        Me.TextBox1.Size = New System.Drawing.Size(170, 22)
-        Me.TextBox1.TabIndex = 1772
-        Me.TextBox1.Visible = False
+        Me.DTP_MRED.CalendarFont = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.DTP_MRED.Font = New System.Drawing.Font("MS UI Gothic", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.DTP_MRED.Format = System.Windows.Forms.DateTimePickerFormat.[Short]
+        Me.DTP_MRED.ImeMode = System.Windows.Forms.ImeMode.Off
+        Me.DTP_MRED.Location = New System.Drawing.Point(383, 29)
+        Me.DTP_MRED.MaxDate = New Date(2100, 12, 31, 0, 0, 0, 0)
+        Me.DTP_MRED.MinDate = New Date(2000, 1, 1, 0, 0, 0, 0)
+        Me.DTP_MRED.Name = "DTP_MRED"
+        Me.DTP_MRED.Size = New System.Drawing.Size(104, 22)
+        Me.DTP_MRED.TabIndex = 1788
+        Me.DTP_MRED.TabStop = False
+        '
+        'DTP_MRST
+        '
+        Me.DTP_MRST.CalendarFont = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.DTP_MRST.Font = New System.Drawing.Font("MS UI Gothic", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.DTP_MRST.Format = System.Windows.Forms.DateTimePickerFormat.[Short]
+        Me.DTP_MRST.ImeMode = System.Windows.Forms.ImeMode.Off
+        Me.DTP_MRST.Location = New System.Drawing.Point(253, 29)
+        Me.DTP_MRST.MaxDate = New Date(2100, 12, 31, 0, 0, 0, 0)
+        Me.DTP_MRST.MinDate = New Date(2000, 1, 1, 0, 0, 0, 0)
+        Me.DTP_MRST.Name = "DTP_MRST"
+        Me.DTP_MRST.Size = New System.Drawing.Size(104, 22)
+        Me.DTP_MRST.TabIndex = 1787
+        Me.DTP_MRST.TabStop = False
         '
         'Label4
         '
@@ -3055,39 +2972,12 @@ Partial Class SCA1
         Me.Label4.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.Label4.Font = New System.Drawing.Font("メイリオ", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.Label4.ForeColor = System.Drawing.Color.White
-        Me.Label4.Location = New System.Drawing.Point(130, 325)
+        Me.Label4.Location = New System.Drawing.Point(253, 9)
         Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(113, 20)
-        Me.Label4.TabIndex = 1775
-        Me.Label4.Text = "審査状況"
+        Me.Label4.Size = New System.Drawing.Size(234, 20)
+        Me.Label4.TabIndex = 1786
+        Me.Label4.Text = "表示期間"
         Me.Label4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        '
-        'Label6
-        '
-        Me.Label6.BackColor = System.Drawing.Color.SteelBlue
-        Me.Label6.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.Label6.Font = New System.Drawing.Font("メイリオ", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.Label6.ForeColor = System.Drawing.Color.White
-        Me.Label6.Location = New System.Drawing.Point(251, 325)
-        Me.Label6.Name = "Label6"
-        Me.Label6.Size = New System.Drawing.Size(113, 20)
-        Me.Label6.TabIndex = 1774
-        Me.Label6.Text = "担当者"
-        Me.Label6.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        '
-        'Button19
-        '
-        Me.Button19.BackColor = System.Drawing.Color.CornflowerBlue
-        Me.Button19.FlatAppearance.BorderColor = System.Drawing.Color.Black
-        Me.Button19.FlatStyle = System.Windows.Forms.FlatStyle.Popup
-        Me.Button19.Font = New System.Drawing.Font("メイリオ", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.Button19.ForeColor = System.Drawing.Color.White
-        Me.Button19.Location = New System.Drawing.Point(3, 34)
-        Me.Button19.Name = "Button19"
-        Me.Button19.Size = New System.Drawing.Size(56, 22)
-        Me.Button19.TabIndex = 1773
-        Me.Button19.Text = "検 索"
-        Me.Button19.UseVisualStyleBackColor = False
         '
         'DGV_MR1
         '
@@ -3108,7 +2998,7 @@ Partial Class SCA1
         Me.DGV_MR1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.DGV_MR1.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.DataGridViewTextBoxColumn23, Me.DataGridViewTextBoxColumn24, Me.DataGridViewTextBoxColumn25, Me.DataGridViewTextBoxColumn26, Me.DataGridViewTextBoxColumn27, Me.DataGridViewTextBoxColumn28, Me.DataGridViewTextBoxColumn29, Me.DataGridViewTextBoxColumn30, Me.DataGridViewTextBoxColumn31, Me.DataGridViewTextBoxColumn32, Me.DataGridViewTextBoxColumn33, Me.DataGridViewTextBoxColumn34, Me.DataGridViewTextBoxColumn35, Me.DataGridViewTextBoxColumn36, Me.DataGridViewTextBoxColumn37, Me.DataGridViewTextBoxColumn38, Me.DataGridViewTextBoxColumn39, Me.DataGridViewTextBoxColumn40})
         Me.DGV_MR1.ImeMode = System.Windows.Forms.ImeMode.[On]
-        Me.DGV_MR1.Location = New System.Drawing.Point(1, 56)
+        Me.DGV_MR1.Location = New System.Drawing.Point(1, 96)
         Me.DGV_MR1.Name = "DGV_MR1"
         Me.DGV_MR1.ReadOnly = True
         Me.DGV_MR1.RowHeadersVisible = False
@@ -3266,6 +3156,124 @@ Partial Class SCA1
         Me.DataGridViewTextBoxColumn40.ReadOnly = True
         Me.DataGridViewTextBoxColumn40.Visible = False
         Me.DataGridViewTextBoxColumn40.Width = 125
+        '
+        'CB_Person
+        '
+        Me.CB_Person.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.CB_Person.Font = New System.Drawing.Font("MS UI Gothic", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.CB_Person.FormattingEnabled = True
+        Me.CB_Person.ImeMode = System.Windows.Forms.ImeMode.Hiragana
+        Me.CB_Person.Location = New System.Drawing.Point(493, 29)
+        Me.CB_Person.Name = "CB_Person"
+        Me.CB_Person.Size = New System.Drawing.Size(114, 23)
+        Me.CB_Person.TabIndex = 1785
+        '
+        'BT_MRDel
+        '
+        Me.BT_MRDel.BackColor = System.Drawing.Color.Red
+        Me.BT_MRDel.FlatAppearance.BorderColor = System.Drawing.Color.Black
+        Me.BT_MRDel.Font = New System.Drawing.Font("MS UI Gothic", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.BT_MRDel.ForeColor = System.Drawing.Color.White
+        Me.BT_MRDel.Location = New System.Drawing.Point(204, 368)
+        Me.BT_MRDel.Name = "BT_MRDel"
+        Me.BT_MRDel.Size = New System.Drawing.Size(92, 27)
+        Me.BT_MRDel.TabIndex = 1784
+        Me.BT_MRDel.TabStop = False
+        Me.BT_MRDel.Text = "削　除"
+        Me.BT_MRDel.UseVisualStyleBackColor = False
+        '
+        'BT_MREdit
+        '
+        Me.BT_MREdit.BackColor = System.Drawing.Color.SteelBlue
+        Me.BT_MREdit.FlatAppearance.BorderColor = System.Drawing.Color.Black
+        Me.BT_MREdit.Font = New System.Drawing.Font("MS UI Gothic", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.BT_MREdit.ForeColor = System.Drawing.Color.White
+        Me.BT_MREdit.Location = New System.Drawing.Point(106, 368)
+        Me.BT_MREdit.Name = "BT_MREdit"
+        Me.BT_MREdit.Size = New System.Drawing.Size(92, 27)
+        Me.BT_MREdit.TabIndex = 1783
+        Me.BT_MREdit.TabStop = False
+        Me.BT_MREdit.Text = "編　集"
+        Me.BT_MREdit.UseVisualStyleBackColor = False
+        '
+        'BT_MRAdd
+        '
+        Me.BT_MRAdd.BackColor = System.Drawing.Color.SteelBlue
+        Me.BT_MRAdd.FlatAppearance.BorderColor = System.Drawing.Color.Black
+        Me.BT_MRAdd.Font = New System.Drawing.Font("MS UI Gothic", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.BT_MRAdd.ForeColor = System.Drawing.Color.Cyan
+        Me.BT_MRAdd.Location = New System.Drawing.Point(8, 368)
+        Me.BT_MRAdd.Name = "BT_MRAdd"
+        Me.BT_MRAdd.Size = New System.Drawing.Size(92, 27)
+        Me.BT_MRAdd.TabIndex = 1782
+        Me.BT_MRAdd.TabStop = False
+        Me.BT_MRAdd.Text = "追　加"
+        Me.BT_MRAdd.UseVisualStyleBackColor = False
+        '
+        'CB_MRLIST
+        '
+        Me.CB_MRLIST.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.CB_MRLIST.Font = New System.Drawing.Font("MS UI Gothic", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.CB_MRLIST.FormattingEnabled = True
+        Me.CB_MRLIST.ImeMode = System.Windows.Forms.ImeMode.Hiragana
+        Me.CB_MRLIST.Location = New System.Drawing.Point(3, 29)
+        Me.CB_MRLIST.Name = "CB_MRLIST"
+        Me.CB_MRLIST.Size = New System.Drawing.Size(225, 23)
+        Me.CB_MRLIST.TabIndex = 1781
+        '
+        'TextBox2
+        '
+        Me.TextBox2.BackColor = System.Drawing.Color.LightYellow
+        Me.TextBox2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.TextBox2.Enabled = False
+        Me.TextBox2.Font = New System.Drawing.Font("MS UI Gothic", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.TextBox2.ForeColor = System.Drawing.Color.Black
+        Me.TextBox2.ImeMode = System.Windows.Forms.ImeMode.Hiragana
+        Me.TextBox2.Location = New System.Drawing.Point(551, 364)
+        Me.TextBox2.Multiline = True
+        Me.TextBox2.Name = "TextBox2"
+        Me.TextBox2.ReadOnly = True
+        Me.TextBox2.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
+        Me.TextBox2.Size = New System.Drawing.Size(572, 131)
+        Me.TextBox2.TabIndex = 1777
+        Me.TextBox2.TabStop = False
+        Me.TextBox2.Visible = False
+        '
+        'TB_MRSearch
+        '
+        Me.TB_MRSearch.BackColor = System.Drawing.Color.Azure
+        Me.TB_MRSearch.Font = New System.Drawing.Font("MS UI Gothic", 11.25!)
+        Me.TB_MRSearch.Location = New System.Drawing.Point(58, 75)
+        Me.TB_MRSearch.Name = "TB_MRSearch"
+        Me.TB_MRSearch.Size = New System.Drawing.Size(170, 22)
+        Me.TB_MRSearch.TabIndex = 1772
+        '
+        'Label6
+        '
+        Me.Label6.BackColor = System.Drawing.Color.SteelBlue
+        Me.Label6.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.Label6.Font = New System.Drawing.Font("メイリオ", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.Label6.ForeColor = System.Drawing.Color.White
+        Me.Label6.Location = New System.Drawing.Point(493, 9)
+        Me.Label6.Name = "Label6"
+        Me.Label6.Size = New System.Drawing.Size(113, 20)
+        Me.Label6.TabIndex = 1774
+        Me.Label6.Text = "担当者"
+        Me.Label6.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
+        'Button19
+        '
+        Me.Button19.BackColor = System.Drawing.Color.CornflowerBlue
+        Me.Button19.FlatAppearance.BorderColor = System.Drawing.Color.Black
+        Me.Button19.FlatStyle = System.Windows.Forms.FlatStyle.Popup
+        Me.Button19.Font = New System.Drawing.Font("メイリオ", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.Button19.ForeColor = System.Drawing.Color.White
+        Me.Button19.Location = New System.Drawing.Point(3, 74)
+        Me.Button19.Name = "Button19"
+        Me.Button19.Size = New System.Drawing.Size(56, 22)
+        Me.Button19.TabIndex = 1773
+        Me.Button19.Text = "検 索"
+        Me.Button19.UseVisualStyleBackColor = False
         '
         'Tab_5Tell
         '
@@ -3432,6 +3440,19 @@ Partial Class SCA1
         Me.ToolStripMenuItem2.Name = "ToolStripMenuItem2"
         Me.ToolStripMenuItem2.Size = New System.Drawing.Size(180, 22)
         Me.ToolStripMenuItem2.Text = "ユーザー名"
+        '
+        'Label7
+        '
+        Me.Label7.BackColor = System.Drawing.Color.SteelBlue
+        Me.Label7.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.Label7.Font = New System.Drawing.Font("メイリオ", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.Label7.ForeColor = System.Drawing.Color.White
+        Me.Label7.Location = New System.Drawing.Point(4, 9)
+        Me.Label7.Name = "Label7"
+        Me.Label7.Size = New System.Drawing.Size(224, 20)
+        Me.Label7.TabIndex = 1791
+        Me.Label7.Text = "申請書の種類"
+        Me.Label7.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'SCA1
         '
@@ -3702,13 +3723,8 @@ Partial Class SCA1
     Friend WithEvents 機能ToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents Tab_6GA As TabPage
     Friend WithEvents CB_MRLIST As ComboBox
-    Friend WithEvents CheckedListBox1 As CheckedListBox
-    Friend WithEvents CHL_MR1 As CheckedListBox
-    Friend WithEvents CB_MR_Period As ComboBox
     Friend WithEvents TextBox2 As TextBox
-    Friend WithEvents Label3 As Label
-    Friend WithEvents TextBox1 As TextBox
-    Friend WithEvents Label4 As Label
+    Friend WithEvents TB_MRSearch As TextBox
     Friend WithEvents Label6 As Label
     Friend WithEvents Button19 As Button
     Friend WithEvents DGV_MR1 As DataGridView
@@ -3737,4 +3753,11 @@ Partial Class SCA1
     Friend WithEvents 画面モードToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents 債権管理部ToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents 総務課ToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents CB_Person As ComboBox
+    Friend WithEvents CB_MRRangeAll As CheckBox
+    Friend WithEvents Label3 As Label
+    Friend WithEvents DTP_MRED As DateTimePicker
+    Friend WithEvents DTP_MRST As DateTimePicker
+    Friend WithEvents Label4 As Label
+    Friend WithEvents Label7 As Label
 End Class

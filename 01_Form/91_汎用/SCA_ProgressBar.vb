@@ -53,10 +53,11 @@
     End Sub
 
     Public Sub DummyProgress()
+        If Me.Visible Then Exit Sub
         StartProgress(1)
         For n = 1 To 10
             UpdateProgress(n * 10, "情報の読み込み中")
-            System.Threading.Thread.Sleep(40)
+            System.Threading.Thread.Sleep(30)
         Next
         EndProgress()
     End Sub

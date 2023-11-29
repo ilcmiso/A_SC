@@ -32,6 +32,12 @@ Public Class Common
     Private ReadOnly culture As CultureInfo
     Public ReadOnly CurrentPath As String
 
+    ' 部署一覧
+    Public Enum DIV As Integer
+        SC = 0       ' 0 債権管理部
+        GA           ' 1 総務課
+    End Enum
+
     ' コンストラクタ(初期化設定)
     Sub New()
         Dim xml As New XmlMng

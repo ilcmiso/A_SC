@@ -16,7 +16,7 @@ Public Class SCA1
     Public ReadOnly db As New Sqldb
     Private thSC As SCThread
     Private CallerFunc = ""
-
+    Private xml As New XmlMng
 
     ' 着信
     Private ReadOnly TEL_HEADLEN As Integer = 17                    ' 着信ファイルのヘッダ文字数     ※yyyy/MM/dd HH:mm-
@@ -53,7 +53,6 @@ Public Class SCA1
 
     Private Sub FK4B_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Dim loadTime = Date.Now
-        Dim xml As New XmlMng
         Me.Text += " - " & xml.GetCPath
         CB_AUTOUPD.Checked = xml.GetAutoUpd
         CB_NOTICETELL.Checked = xml.GetNoticeTell
@@ -123,7 +122,6 @@ Public Class SCA1
     Private Sub FLS_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
         StopWatching()
         'thSC.Dispose()
-        Dim xml As New XmlMng
         xml.SetAutoUpd(CB_AUTOUPD.Checked)
         xml.SetNoticeTell(CB_NOTICETELL.Checked)
     End Sub
@@ -311,9 +309,7 @@ Public Class SCA1
             Case Keys.F2
                 Button5.Visible = True
             Case Keys.F3
-                GAFormsToggle(True)
             Case Keys.F4
-                GAFormsToggle(False)
         End Select
     End Sub
 
@@ -1750,7 +1746,6 @@ Public Class SCA1
         CB_DunA6.SelectedIndex = 0
         CB_DunA7.SelectedIndex = 0
         NUD_DunA1.Value = Today.AddMonths(-1).ToString("MMM")
-        Dim xml As New XmlMng
         If xml.xmlData.UserName <> "" Then TB_DunA4.Text = xml.xmlData.UserName2        ' 最後に書き込んだユーザー名(PC固有)を表示
 
     End Sub
@@ -2339,60 +2334,73 @@ Public Class SCA1
         f.Show()
     End Sub
 
-    Private Sub 機能ToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles 機能ToolStripMenuItem.Click
-        Dim fm As New Form
-        fm = SCB1
-        fm.ShowInTaskbar = False
-        fm.ShowDialog()
-        fm.Dispose()
-    End Sub
+#End Region
 
+#Region "申請物管理(MR)"
     Private Sub MRInit()
         CB_MRLIST.Items.AddRange(sccmn.MRITEMLIST)
         CB_MRLIST.SelectedIndex = 0
+        DTP_MRST.Value = Today.AddDays(-7)
+        ShowDGVMR()
+
+
+        DivMode(xml.GetDiv)
     End Sub
 
-    ' 総務課フォームの表示切り替え
-    Private Sub GAFormsToggle(showForm2 As Boolean)
+    ' 部署毎フォーム表示切り替え
+    Private Sub DivMode(divNo As Common.DIV)
         cmn.DummyPBar()
+        Dim labelStr As String() = {"物件情報", "直近の申請書一覧"}
+        Label33.Text = labelStr(divNo)  ' ラベル文字の切り替え
+        xml.SetDiv(divNo)               ' 部署xml記録
+
         ' Panel内のすべてのコントロールをループ処理
         For Each ctrl As System.Windows.Forms.Control In PAN_A.Controls
             ' Form2のインスタンスを特定
             Dim f2 As SCGA_OVIEW = TryCast(ctrl, SCGA_OVIEW)
 
-            If f2 IsNot Nothing Then
-                ' Form2の表示状態を切り替える
-                f2.Visible = showForm2
-                f2.Enabled = showForm2
-            Else
-                ' それ以外のコントロールの表示状態を切り替える
-                ctrl.Visible = Not showForm2
-                ctrl.Enabled = Not showForm2
-            End If
+            Select Case divNo
+                Case Common.DIV.SC  ' 債権管理部
+                    If f2 IsNot Nothing Then
+                        f2.Visible = False
+                        f2.Enabled = False
+                    Else
+                        ctrl.Visible = True
+                        ctrl.Enabled = True
+                    End If
+                    債権管理部ToolStripMenuItem.Checked = True
+                    総務課ToolStripMenuItem.Checked = False
+
+                Case Common.DIV.GA  ' 総務課
+                    If f2 IsNot Nothing Then
+                        f2.Visible = True
+                        f2.Enabled = True
+                    Else
+                        ctrl.Visible = False
+                        ctrl.Enabled = False
+                    End If
+                    債権管理部ToolStripMenuItem.Checked = False
+                    総務課ToolStripMenuItem.Checked = True
+
+                    ' FormがまだPanelに追加されていない場合、ここで追加
+                    If PAN_A.Controls.OfType(Of SCGA_OVIEW).Count() = 0 Then
+                        Dim newForm2 As New SCGA_OVIEW()
+                        newForm2.TopLevel = False
+                        newForm2.FormBorderStyle = FormBorderStyle.None
+                        newForm2.Dock = DockStyle.Fill
+                        PAN_A.Controls.Add(newForm2)
+                        newForm2.Show()
+                    End If
+            End Select
         Next
-
-        ' Form2がまだPanelに追加されていない場合、ここで追加
-        If showForm2 AndAlso PAN_A.Controls.OfType(Of SCGA_OVIEW).Count() = 0 Then
-            Dim newForm2 As New SCGA_OVIEW()
-            newForm2.TopLevel = False
-            newForm2.FormBorderStyle = FormBorderStyle.None
-            newForm2.Dock = DockStyle.Fill
-            PAN_A.Controls.Add(newForm2)
-            newForm2.Show()
-        Else
-        End If
-        If showForm2 Then
-            Label33.Text = "直近の申請書一覧"
-        Else
-            Label33.Text = "物件情報"
-        End If
     End Sub
-
 
     Public Sub ShowDGVMR() Handles CB_MRLIST.SelectedIndexChanged
         ' コンボボックスの選択されたインデックスを取得
         InitDGVInfo(DGV_MR1, Sqldb.TID.MRM, CB_MRLIST.SelectedIndex)
         LoadDGVInfo(DGV_MR1, Sqldb.TID.MR, CB_MRLIST.SelectedIndex)
+        InitComboBoxMRParson()
+        FilterMRSearch(TB_MRSearch.Text)
     End Sub
 
     Public Sub InitDGVInfo(dgv As DataGridView, tid As Integer, index As Integer)
@@ -2446,6 +2454,7 @@ Public Class SCA1
         Next
     End Sub
 
+    ' 追加・編集ボタン
     Private Sub Button20_Click(sender As Object, e As EventArgs) Handles BT_MRAdd.Click, BT_MREdit.Click
         Dim fm As New Form
         fm = SCGA_REG
@@ -2453,6 +2462,7 @@ Public Class SCA1
         fm.Dispose()
     End Sub
 
+    ' 削除ボタン
     Private Sub BT_MRDel_Click(sender As Object, e As EventArgs) Handles BT_MRDel.Click
         Dim r As Integer
         r = MessageBox.Show("削除してよろしいですか？",
@@ -2468,20 +2478,138 @@ Public Class SCA1
         ShowDGVMR()
     End Sub
 
+    ' 担当者コンボボックスの生成
+    Private Sub InitComboBoxMRParson()
+        Dim personSet As New HashSet(Of String)
+
+        ' DataGridViewの各行を走査
+        For Each row As DataGridViewRow In DGV_MR1.Rows
+            If Not row.IsNewRow Then
+                ' "担当者" 列の値を取得 (列名が正しく設定されていることが前提)
+                Dim person As String = row.Cells("担当者").Value.ToString()
+                ' HashSetに追加することで重複を除外
+                personSet.Add(person)
+            End If
+        Next
+
+        ' コンボボックスに設定
+        CB_Person.Items.Clear()
+        CB_Person.Items.Add("(全表示)")
+        For Each person In personSet
+            CB_Person.Items.Add(person)
+        Next
+        CB_Person.SelectedIndex = 0
+    End Sub
+
+    Private Sub FilterMRSearch(word As String)
+        FilterMRSearch(word, "")
+    End Sub
+    ' DGV_MRフィルタ
+    Private Sub FilterMRSearch(word As String, SelectRegNo As String)
+        Dim searchText As String = word.ToLower()
+        Dim selectedPerson As String = If(CB_Person.SelectedItem IsNot Nothing, CB_Person.SelectedItem.ToString(), String.Empty)
+        Dim startDate As Date = DTP_MRST.Value.Date
+        Dim endDate As Date = DTP_MRED.Value.Date
+
+        ' 一旦すべての行を非表示にする
+        For Each row As DataGridViewRow In DGV_MR1.Rows
+            row.Visible = False
+        Next
+
+        ' DataGridViewの各行を走査
+        For Each row As DataGridViewRow In DGV_MR1.Rows
+            ' 日付の範囲チェック
+            If Not CB_MRRangeAll.Checked Then
+                Dim dateValue As Date = DateTime.Parse(row.Cells(3).Value.ToString())
+                If dateValue < startDate OrElse dateValue > endDate Then Continue For
+            End If
+
+            ' "担当者"カラムのフィルタリングを行うかどうかのチェック
+            If selectedPerson <> "(全表示)" Then
+                Dim person As String = row.Cells("担当者").Value.ToString()
+                If Not selectedPerson.Equals(String.Empty) AndAlso Not person.Equals(selectedPerson) Then Continue For
+                If selectedPerson.Equals(String.Empty) AndAlso Not person.Equals(String.Empty) Then Continue For
+            End If
+
+            ' 文字列の検索
+            Dim containsSearchText As Boolean = False
+            For Each cell As DataGridViewCell In row.Cells
+                If cell.Value IsNot Nothing AndAlso cell.Value.ToString().ToLower().Contains(searchText) Then
+                    containsSearchText = True
+                    Exit For
+                End If
+            Next
+
+            ' 条件に一致する行を表示
+            If containsSearchText Then row.Visible = True
+
+            ' SelectRegNoに一致する行を選択
+            If SelectRegNo.Length > 0 Then
+                If row.Cells(0).Value IsNot Nothing AndAlso row.Cells(0).Value.ToString().Equals(SelectRegNo) Then
+                    DGV_MR1.ClearSelection()
+                    row.Selected = True
+                    DGV_MR1.FirstDisplayedScrollingRowIndex = row.Index
+                    DGV_MR1.Focus()
+                End If
+            End If
+        Next
+    End Sub
+
+
+    ' OVIEWで選択中のデータに参照移動
+    Public Sub ViewSelectedMR(TargetType As String, TargetNo As String)
+        ' OVIEWで選択中の申請書種別と申請書登録番号から表示する行を算出
+        Dim index As Integer = Array.IndexOf(sccmn.MRITEMLIST, TargetType)
+        If index < 0 Then Exit Sub
+        cmn.DummyPBar()
+
+        ' 検索でフィルタがかからない状態にしておく
+        CB_MRLIST.SelectedIndex = index                     ' 申請書の種類変更
+        CB_MRRangeAll.Checked = True                        ' 全期間のチェックON
+        CB_Person.Text = "(全表示)"                         ' 担当者を全表示
+        TAB_A1.SelectedTab = TAB_A1.TabPages("Tab_6GA")     ' タブ移動
+
+        ' 一致したデータの表示
+        FilterMRSearch("", TargetNo)
+    End Sub
+
+
+    ' 検索欄
+    Private Sub TB_MRSearch_TextChanged(sender As Object, e As EventArgs) Handles TB_MRSearch.TextChanged
+        FilterMRSearch(TB_MRSearch.Text)
+    End Sub
+    ' 開始・終了期間
+    Private Sub DTP_MRST_CloseUp(sender As Object, e As EventArgs) Handles DTP_MRST.CloseUp, DTP_MRED.CloseUp
+        FilterMRSearch(TB_MRSearch.Text)
+    End Sub
+    ' 全期間チェックボックス
+    Private Sub CB_MRRangeAll_CheckedChanged(sender As Object, e As EventArgs) Handles CB_MRRangeAll.CheckedChanged
+        FilterMRSearch(TB_MRSearch.Text)
+    End Sub
+    ' 担当者コンボボックス
+    Private Sub CB_Person_SelectedIndexChanged(sender As Object, e As EventArgs) Handles CB_Person.SelectedIndexChanged
+        FilterMRSearch(TB_MRSearch.Text)
+    End Sub
+#End Region
+
+#Region "MenuItemEvent"
+    Private Sub 機能ToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles 機能ToolStripMenuItem.Click
+        Dim fm As New Form
+        fm = SCB1
+        fm.ShowInTaskbar = False
+        fm.ShowDialog()
+        fm.Dispose()
+    End Sub
+
     Private Sub 債権管理部ToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles 債権管理部ToolStripMenuItem.Click
-        債権管理部ToolStripMenuItem.Checked = True
-        総務課ToolStripMenuItem.Checked = False
-        GAFormsToggle(False)
+        DivMode(Common.DIV.SC)
     End Sub
 
     Private Sub 総務課ToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles 総務課ToolStripMenuItem.Click
-        債権管理部ToolStripMenuItem.Checked = False
-        総務課ToolStripMenuItem.Checked = True
-        GAFormsToggle(True)
+        DivMode(Common.DIV.GA)
     End Sub
 
 #End Region
-
 
 
 End Class
