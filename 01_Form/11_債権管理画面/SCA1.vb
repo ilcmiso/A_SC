@@ -73,7 +73,7 @@ Public Class SCA1
         db.UpdateOrigDT_ASsist()
         ShowDGVList(DGV1)
         ShowDGVList(DGV2)
-        ShowDGVList(DGV5)           ' 交渉記録
+        'ShowDGVList(DGV5)           ' 交渉記録
         'ShowDGVList(DGV8)           ' 着信履歴
         ShowDGVList(DGV9)
 
@@ -397,13 +397,13 @@ Public Class SCA1
                 'AddColumnsDun(dt)                           ' 督促管理に残高更新日を追加     処理に時間かかるから一旦削除
             Case dgv Is DGV5                                ' ## 対応一覧タブ リスト
                 bindID = 4
-                dt = db.OrgDataTable(Sqldb.TID.SCD).Copy    ' DataTableをオリジナルからコピー
 
                 ' 記録一覧を従来のフィルタに戻す
                 If CB_RecRe.Checked Then
+                    dt = db.OrgDataTable(Sqldb.TID.SCD).Copy    ' DataTableをオリジナルからコピー
                     FilterDGV5_old(dt)                          ' 検索条件チェックボックスのフィルタ(従来)
                 Else
-                    FilterDGV5(dt)                              ' 検索条件チェックボックスのフィルタ
+                    dt = FilterDGV5() ' フィルタリング条件を設定
                 End If
 
             Case dgv Is DGV6                                ' ## 督促リスト
@@ -605,7 +605,6 @@ Public Class SCA1
             Case dgv Is DGV4
                 dgv.Sort(dgv.Columns(2), ComponentModel.ListSortDirection.Descending)
             Case dgv Is DGV5
-                dgv.Sort(dgv.Columns(2), ComponentModel.ListSortDirection.Descending)
                 DGV5_CellClick()
                 L_STS_Rec.Text = " ( " & DGV5.Rows.Count & " / " & db.OrgDataTable(Sqldb.TID.SCD).Rows.Count & " ) 件 表示中"
             Case dgv Is DGV7
@@ -1499,6 +1498,7 @@ Public Class SCA1
         ' チェックボックスを全てONに
         CLB_RecE1_AllSet()
         CLB_RecE2_AllSet()
+        CLB_B1_ItemCheck()  ' 最後に1回だけは変更後のイベントを発生させる
 
         ' チェックボックスを全てONにするときにイベント多発して時間かかるからチェックボックスをONにした後でハンドラ設定
         'AddHandler CLB_RecB1.ItemCheck, AddressOf CLB_B1_ItemCheck
@@ -1601,13 +1601,12 @@ Public Class SCA1
     End Sub
 
     ' 記録一覧フィルタ ShowDGVListにコールされる
-    Private Sub FilterDGV5(ByRef dt As DataTable)
+    Private Function FilterDGV5() As DataTable
         log.TimerST()
         Dim dr As DataRow()
         ' チェック全解除の場合は0行で表示
         If CLB_RecB1.CheckedItems.Count = 0 Or CLB_RecB2.CheckedItems.Count = 0 Then
-            dt.Rows.Clear()
-            Exit Sub
+            Return Nothing
         End If
 
         ' 表示期間 範囲設定
@@ -1618,7 +1617,7 @@ Public Class SCA1
         Dim methodCmd As String = ""
         If CLB_RecB1.CheckedItems.Count < CLB_RecB1.Items.Count Then
             For n = 0 To CLB_RecB1.Items.Count - 1
-                If CLB_RecB1.GetItemChecked(n) Then methodCmd += "[FKD05] like '%" & CLB_RecB1.Items(n) & "%' Or "
+                If CLB_RecB1.GetItemChecked(n) Then methodCmd += "[FKD05] = '" & CLB_RecB1.Items(n) & "' Or "
             Next
             methodCmd = cmn.RegReplace(methodCmd, " Or $", "")  ' 末尾の Or を削除
         End If
@@ -1640,15 +1639,13 @@ Public Class SCA1
         If methodCmd.Length > 0 Then selectCmd += $" And ({methodCmd})"
         If personCmd.Length > 0 Then selectCmd += $" And ({personCmd})"
         selectCmd = cmn.RegReplace(selectCmd, "^ And ", "")  ' 先頭の And を削除
-        dr = dt.Select(selectCmd)
+        dr = db.OrgDataTable(Sqldb.TID.SCD).Select(selectCmd, "FKD03 DESC")
         If dr.Length = 0 Then
-            dt.Rows.Clear()
-            Exit Sub
+            Return Nothing
         End If
-        dt = dr.CopyToDataTable
-        Exit Sub
         log.TimerED("FilterDGV5")
-    End Sub
+        Return dr.CopyToDataTable
+    End Function
 
 
     ' 各チェックボックスクリックイベント
@@ -1683,7 +1680,6 @@ Public Class SCA1
             CLB.SetItemChecked(idx, sw)
         Next
         LockEventHandler_CLB = False
-        CLB_B1_ItemCheck()  ' 最後に1回だけは変更後のイベントを発生させる
     End Sub
 
     ' 交渉記録 Excelファイルに出力ボタン
