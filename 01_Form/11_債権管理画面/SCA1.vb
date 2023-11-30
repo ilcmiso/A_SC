@@ -820,8 +820,8 @@ Public Class SCA1
             Me.Controls.Add(SearchForm)
             .Show()
             .BringToFront()
-            .Left = 62
-            .Top = 43
+            .Left = 60
+            .Top = 63
             .Visible = False
         End With
     End Sub
@@ -1366,7 +1366,7 @@ Public Class SCA1
 
 #Region "追加電話番号"
     Const FORM_LEFT As Integer = 870
-    Const FORM_TOP As Integer = 26
+    Const FORM_TOP As Integer = 55
 
     ' フォーム初期化共通処理
     Private Sub InitForm(form As Form)
@@ -1602,6 +1602,7 @@ Public Class SCA1
 
     ' 記録一覧フィルタ ShowDGVListにコールされる
     Private Sub FilterDGV5(ByRef dt As DataTable)
+        log.TimerST()
         Dim dr As DataRow()
         ' チェック全解除の場合は0行で表示
         If CLB_RecB1.CheckedItems.Count = 0 Or CLB_RecB2.CheckedItems.Count = 0 Then
@@ -1615,25 +1616,30 @@ Public Class SCA1
 
         ' 手法チェックボックス 範囲設定
         Dim methodCmd As String = ""
-        For n = 0 To CLB_RecB1.Items.Count - 1
-            If CLB_RecB1.GetItemChecked(n) Then methodCmd += "[FKD05] like '%" & CLB_RecB1.Items(n) & "%' Or "
-        Next
-        methodCmd = cmn.RegReplace(methodCmd, " Or $", "")  ' 末尾の Or を削除
+        If CLB_RecB1.CheckedItems.Count < CLB_RecB1.Items.Count Then
+            For n = 0 To CLB_RecB1.Items.Count - 1
+                If CLB_RecB1.GetItemChecked(n) Then methodCmd += "[FKD05] like '%" & CLB_RecB1.Items(n) & "%' Or "
+            Next
+            methodCmd = cmn.RegReplace(methodCmd, " Or $", "")  ' 末尾の Or を削除
+        End If
 
         ' 対応者チェックボックス 範囲設定
         Dim personCmd As String = ""
-        For n = 0 To CLB_RecB2.Items.Count - 1
-            If CLB_RecB2.Items(n) = "" Then Continue For    ' チェックボックス「空白」は後でチェックするからパス
-            If CLB_RecB2.GetItemChecked(n) Then personCmd += "([FKD06] = '" & CLB_RecB2.Items(n) & "' Or [FKD12] = '" & CLB_RecB2.Items(n) & "') Or "   ' 担当者・対応者 共に含まれていなければ排除
-        Next
-        If CLB_RecB2.GetItemChecked(0) Then personCmd += "([FKD06] = '' And [FKD12] = '')"    ' チェックボックス「空白」がONなら、対応者が両方空白を追加
-        personCmd = cmn.RegReplace(personCmd, " Or $", "")  ' 末尾の Or を削除
+        If CLB_RecB2.CheckedItems.Count < CLB_RecB2.Items.Count Then
+            For n = 0 To CLB_RecB2.Items.Count - 1
+                If CLB_RecB2.Items(n) = "" Then Continue For    ' チェックボックス「空白」は後でチェックするからパス
+                If CLB_RecB2.GetItemChecked(n) Then personCmd += "([FKD06] = '" & CLB_RecB2.Items(n) & "' Or [FKD12] = '" & CLB_RecB2.Items(n) & "') Or "   ' 担当者・対応者 共に含まれていなければ排除
+            Next
+            If CLB_RecB2.GetItemChecked(0) Then personCmd += "([FKD06] = '' And [FKD12] = '')"    ' チェックボックス「空白」がONなら、対応者が両方空白を追加
+            personCmd = cmn.RegReplace(personCmd, " Or $", "")  ' 末尾の Or を削除
+        End If
 
         ' 各[期間][手法][対応者]条件の結合
-        Dim selectCmd = String.Format("({0}) And ({1}) And ({2})", dateRngCmd, methodCmd, personCmd)
-        selectCmd = cmn.RegReplace(selectCmd, "\(\) And", "")  ' 上の条件で、いずれかのCmdが空白の場合にエラーになってしまうので防止
-        selectCmd = cmn.RegReplace(selectCmd, "And \(\)", "")
-
+        Dim selectCmd As String = ""
+        If dateRngCmd.Length > 0 Then selectCmd += $"({dateRngCmd})"
+        If methodCmd.Length > 0 Then selectCmd += $" And ({methodCmd})"
+        If personCmd.Length > 0 Then selectCmd += $" And ({personCmd})"
+        selectCmd = cmn.RegReplace(selectCmd, "^ And ", "")  ' 先頭の And を削除
         dr = dt.Select(selectCmd)
         If dr.Length = 0 Then
             dt.Rows.Clear()
@@ -1641,6 +1647,7 @@ Public Class SCA1
         End If
         dt = dr.CopyToDataTable
         Exit Sub
+        log.TimerED("FilterDGV5")
     End Sub
 
 

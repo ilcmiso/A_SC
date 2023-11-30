@@ -24,6 +24,7 @@ Public Class Sqldb
     Public Const DB_USELESS As String = "FKSC_UselessPNums.db3"
     Public Const DB_AUTOCALL As String = "FKSC_AutoCall.db3"
     Public Const DB_MNGREQ As String = "FKGA_MngRequest.db3"
+    Public Const DB_MRITEM As String = "FKGA_MRItem.db3"
     ' テーブル名
     Public Const TBL_FKSC As String = "FKSC"
     Public Const TBL_FKSCREM As String = "FKSCREM"
@@ -57,7 +58,7 @@ Public Class Sqldb
         {DB_USELESS, TBL_STANDARD, 2, "C", DBSV, True},
         {DB_AUTOCALL, TBL_STANDARD, 4, "C", DBSV, True},
         {DB_MNGREQ, TBL_STANDARD, 20, "C", DBSV, True},
-        {DB_MNGREQ, TBL_ITEM, 5, "C", DBSV, True}
+        {DB_MRITEM, TBL_STANDARD, 5, "C", DBSV, True}
     }
     ' DBテーブルのDB種別 SC_DBTableの[ 列数 ]とリンクする必要がある
     Public Enum TID As Integer
