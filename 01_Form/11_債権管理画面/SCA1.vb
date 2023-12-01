@@ -2459,14 +2459,20 @@ Public Class SCA1
 
     ' 追加・編集ボタン
     Private Sub Button20_Click(sender As Object, e As EventArgs) Handles BT_MRAdd.Click, BT_MREdit.Click
-        Dim fm As New Form
-        fm = SCGA_REG
+        ' 何も選択せず編集ボタンを押していたら起動させない
+        If sender.Text Is BT_MREdit.Text And DGV_MR1.CurrentRow Is Nothing Then
+            Exit Sub
+        End If
+
+
+        Dim fm As Form = SCGA_REG
         fm.ShowDialog(Me)
         fm.Dispose()
     End Sub
 
     ' 削除ボタン
     Private Sub BT_MRDel_Click(sender As Object, e As EventArgs) Handles BT_MRDel.Click
+        If DGV_MR1.CurrentRow Is Nothing Then Exit Sub
         Dim r As Integer
         r = MessageBox.Show("削除してよろしいですか？",
                             "ご確認ください",
@@ -2542,17 +2548,20 @@ Public Class SCA1
                     Exit For
                 End If
             Next
+            ' 検索文字列が含まれていなければ次の行へ
+            If Not containsSearchText Then Continue For
 
             ' 条件に一致する行を表示
-            If containsSearchText Then row.Visible = True
+            row.Visible = True
+
+            ' 行を選択中にする
+            If DGV_MR1.CurrentCell Is Nothing And row.Cells(2).Visible Then DGV_MR1.CurrentCell = row.Cells(2)
 
             ' SelectRegNoに一致する行を選択
             If SelectRegNo.Length > 0 Then
                 If row.Cells(0).Value IsNot Nothing AndAlso row.Cells(0).Value.ToString().Equals(SelectRegNo) Then
-                    DGV_MR1.ClearSelection()
-                    row.Selected = True
+                    If row.Cells(2).Visible Then DGV_MR1.CurrentCell = row.Cells(2)
                     DGV_MR1.FirstDisplayedScrollingRowIndex = row.Index
-                    DGV_MR1.Focus()
                 End If
             End If
         Next
@@ -2597,8 +2606,7 @@ Public Class SCA1
 
 #Region "MenuItemEvent"
     Private Sub 機能ToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles 機能ToolStripMenuItem.Click
-        Dim fm As New Form
-        fm = SCB1
+        Dim fm As Form = SCB1
         fm.ShowInTaskbar = False
         fm.ShowDialog()
         fm.Dispose()

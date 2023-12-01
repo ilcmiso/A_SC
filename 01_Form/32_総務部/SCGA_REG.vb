@@ -1,41 +1,68 @@
-﻿Imports System.IO
-Imports DocumentFormat.OpenXml.Spreadsheet
-
-Public Class SCGA_REG
+﻿Public Class SCGA_REG
 
     Private ReadOnly cmn As New Common
     Private ReadOnly xml As New XmlMng
     Private ReadOnly log As New Log
     Private ownForm As SCA1
+    Private MRType As Integer
     Private Const BTADD As String = "BT_MRAdd"
     Private Const BTEDIT As String = "BT_MREdit"
 
+    Private Const MR_CALENDAR As String = "Cal"
+    Private Const MR_BLANK As String = "Blank"
+    Private Const MR_FORMAT As String = "Format"
+
 #Region " OPEN CLOSE "
-    Private Sub FLS_Shown(sender As Object, e As EventArgs) Handles MyBase.Load
+    Private Sub FLS_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         ownForm = DirectCast(Me.Owner, SCA1)            ' 親フォームを参照できるようにキャスト
+        MRType = ownForm.CB_MRLIST.SelectedIndex
+        ownForm.db.UpdateOrigDT(Sqldb.TID.MR)
+        ownForm.db.UpdateOrigDT(Sqldb.TID.MRM)
         cmn.SetDoubleBufferDGV(DGV_REG1)
         Label33.Text = $"{ownForm.CB_MRLIST.SelectedItem} の 登録"
 
         FillDataGridView()
-        ' 編集ボタン契機だとデータ読み込みを含める
-        If ownForm.ActiveControl.Name = BTEDIT Then
-            LoadDataGridView()
-        End If
+
+        Select Case ownForm.ActiveControl.Name
+            Case BTADD  ' 追加ボタン契機
+                ' 各項目に初期入力値を設定
+                SetValueDGV("番号", GetNextMaxValue(MRType))
+                If ownForm.DGV1.CurrentRow IsNot Nothing Then
+                    If ownForm.DGV1.CurrentRow.Cells(0).Value <> Common.DUMMY_NO Then
+                        SetValueDGV("顧客番号", ownForm.DGV1.CurrentRow.Cells(0).Value)
+                        SetValueDGV("主債務者名", ownForm.DGV1.CurrentRow.Cells(1).Value)
+                    End If
+                End If
+
+                Select Case MRType
+                    Case 0
+                        SetValueDGV("相続人代表者", ownForm.DGV9(1, 7).Value)
+                        If ownForm.DGV9(1, 7).Value <> "" Then
+                            SetValueDGV("続柄", "配偶者")
+                        End If
+                    Case 4
+                        SetValueDGV("フリガナ", ownForm.DGV1.CurrentRow.Cells(2).Value)
+                End Select
+
+            Case BTEDIT ' 編集ボタン契機
+                ' DGVデータ読み込み
+                LoadDataGridView()
+        End Select
     End Sub
 
     Private Sub LoadDataGridView()
         For n = 0 To ownForm.DGV_MR1.CurrentRow.Cells.Count - 1
             DGV_REG1(1, n).Value = ownForm.DGV_MR1.CurrentRow.Cells(n).Value
-            'DirectCast(DGV_REG1(1, n).Tag, DateTimePicker).Value = targetDate
         Next
     End Sub
 
+    ' DB(MRItem)を元にDGVを作成
     Private Sub FillDataGridView()
         ' DGVの既存の行をクリア
         DGV_REG1.Rows.Clear()
 
         ' 定義データを取得
-        Dim dr As DataRow() = ownForm.db.OrgDataTable(Sqldb.TID.MRM).Select($"C01 = '{ownForm.CB_MRLIST.SelectedIndex}'")
+        Dim dr As DataRow() = ownForm.db.OrgDataTable(Sqldb.TID.MRM).Select($"C01 = '{MRType}'")
 
         ' DGVに新しい行を追加
         For Each row As DataRow In dr
@@ -48,11 +75,20 @@ Public Class SCGA_REG
                 DGV_REG1.Rows(DGV_REG1.Rows.Count - 1).Visible = False
             End If
 
-            Select Case format
-                Case "Cal"
-                    ReplaceCell2DTP(DGV_REG1, order, 1)
+            Dim formatParts As String() = format.Split(":"c)
+
+            Select Case formatParts(0)
+                Case MR_CALENDAR
+                    Select Case formatParts(1)
+                        Case "", MR_BLANK
+                            ReplaceCell2DTP(DGV_REG1, order, 1, formatParts(1))
+                        Case MR_FORMAT
+                            ReplaceCell2DTP(DGV_REG1, order, 1, formatParts(2))
+                    End Select
+
                 Case "CB"
-                    ReplaceCell2Checkbox(DGV_REG1, order, 1)
+                    ' ReplaceCell2Checkbox(DGV_REG1, order, 1)
+
                 Case Else
                     If format.Contains(",") Then
                         Dim items As String() = format.Split(",")
@@ -66,11 +102,6 @@ Public Class SCGA_REG
 #Region "ボタン"
     ' 登録ボタン
     Private Sub BT_A1_Click(sender As Object, e As EventArgs) Handles BT_A1.Click
-        '' 値を設定する例
-        'Dim targetDate As DateTime = DateTime.Parse("2022/2/22")
-        'DGV_REG1(1, 3).Value = targetDate
-        'DirectCast(DGV_REG1(1, 3).Tag, DateTimePicker).Value = targetDate
-
         ' SQLコマンド生成
         Dim commandText As New List(Of String)
         For n = 0 To DGV_REG1.Rows.Count - 1
@@ -80,7 +111,7 @@ Public Class SCGA_REG
         If ownForm.ActiveControl.Name = BTADD Then
             commandText(0) = cmn.GetCurrentDateTime()               ' 登録日時
         End If
-        commandText(1) = ownForm.CB_MRLIST.SelectedIndex            ' カテゴリ
+        commandText(1) = MRType            ' カテゴリ
 
         ownForm.db.ExeSQLInsUpd(Sqldb.TID.MR, commandText)
         ownForm.db.ExeSQL(Sqldb.TID.MR)
@@ -94,26 +125,85 @@ Public Class SCGA_REG
     Private Sub BT_A2_Click(sender As Object, e As EventArgs) Handles BT_A2.Click
         Me.Close()
     End Sub
+#End Region
 
-    Private Sub ReplaceCell2DTP(dgv As DataGridView, rowIndex As Integer, colIndex As Integer)
+    ' 番号の最大値+1取得
+    Public Function GetNextMaxValue(CateNo As String) As String
+        ' DataTableを取得
+        Dim dt As DataTable = ownForm.db.OrgDataTable(Sqldb.TID.MR)
+
+        ' CateNoと等しい行をフィルタリングし、3列目の最大値を取得
+        Dim maxVal As Integer? = dt.AsEnumerable().
+                             Where(Function(row) row.Field(Of String)("C02") = CateNo).
+                             Select(Function(row)
+                                        Dim value As Integer
+                                        If Integer.TryParse(row.Field(Of String)("C03"), value) Then
+                                            Return value
+                                        Else
+                                            Return 0
+                                        End If
+                                    End Function).
+                             DefaultIfEmpty(0).
+                             Max()
+
+        ' 最大値に1を加える
+        Dim nextMaxVal As Integer = maxVal.GetValueOrDefault() + 1
+        ' 先頭文字にカテゴリ番号を追加
+
+        ' 結果をString型で返す
+        Return $"{CateNo}{nextMaxVal:D4}"
+    End Function
+
+    ' 指定文字のセルに値を設定
+    Sub SetValueDGV(searchWord As String, valueToSet As String)
+        Dim dgv = DGV_REG1
+
+        For Each row As DataGridViewRow In dgv.Rows
+            If row.Cells(0).Value.ToString() = searchWord Then
+                ' DGVセルに値を設定
+                row.Cells(1).Value = valueToSet
+
+                ' セルの上にComboBoxがある場合、ComboBoxにも値を設定しなければDGV上に値が見えないため設定する
+                For Each control As Control In dgv.Controls
+                    If TypeOf control Is ComboBox Then
+                        Dim comboBox As ComboBox = DirectCast(control, ComboBox)
+                        ' ComboBoxの位置をチェック
+                        Dim cellRect As Rectangle = dgv.GetCellDisplayRectangle(1, row.Index, False)
+                        If comboBox.Bounds.IntersectsWith(cellRect) Then
+                            ' 適切なComboBoxに値を設定
+                            If comboBox.Items.Contains(valueToSet) Then
+                                comboBox.SelectedItem = valueToSet
+                            Else
+                                comboBox.Text = valueToSet
+                            End If
+                            Exit For
+                        End If
+                    End If
+                Next
+                Exit For ' 最初に見つかった一致行でループを終了
+            End If
+        Next
+    End Sub
+
+
+    Private Sub ReplaceCell2DTP(dgv As DataGridView, rowIndex As Integer, colIndex As Integer, type As String)
         Dim rect As Rectangle = dgv.GetCellDisplayRectangle(colIndex, rowIndex, False)
         Dim dtPicker As New DateTimePicker()
-
-        ' DateTimePickerの位置とサイズを設定
-        'dtPicker.Location = rect.Location
-        'dtPicker.Size = rect.Size
+        Dim formatType As String = "yyyy/MM/dd"
 
         dtPicker.Location = New Point(rect.Location.X + 132, rect.Location.Y) ' X座標を50ピクセル右にずらす
         dtPicker.Size = New Size(18, rect.Height) ' 幅を18ピクセルに設定
 
-        ' 日付のみ表示するようにフォーマット設定
-        dtPicker.Format = DateTimePickerFormat.Short
-
         ' 初期値を設定
         Dim initialDate As DateTime = DateTime.Now
-        dtPicker.Value = initialDate
-        dgv(colIndex, rowIndex).Value = initialDate.ToString("yyyy/MM/dd")  ' ここでDataGridViewのセルに初期値を設定
+
+        ' typeにFormatが設定されていればそのFormatを反映する
+        If type <> MR_BLANK And type <> "" Then formatType = type
+
+        dgv(colIndex, rowIndex).Value = initialDate.ToString(formatType)
         dgv(colIndex, rowIndex).Tag = dtPicker  ' TagプロパティにDateTimePickerを設定
+
+        If type = MR_BLANK Then dgv(colIndex, rowIndex).Value = ""
 
         Dim editTimer As New Timer()
         editTimer.Interval = 100
@@ -121,7 +211,7 @@ Public Class SCGA_REG
         ' 空欄からのdtPicker変更時、DGVに反映されない場合があるため、CommitEditと次のセル選択処理をしている
         AddHandler dtPicker.CloseUp, Sub(sender, e)
                                          dgv.CommitEdit(DataGridViewDataErrorContexts.Commit)
-                                         dgv(colIndex, rowIndex).Value = dtPicker.Value.ToString("yyyy/MM/dd")
+                                         dgv(colIndex, rowIndex).Value = dtPicker.Value.ToString(formatType)
                                          ' 次の行のセルを選択し、編集モードにする
                                          If rowIndex + 1 < dgv.Rows.Count Then
                                              dgv.CurrentCell = dgv(colIndex, rowIndex + 1)
@@ -134,7 +224,6 @@ Public Class SCGA_REG
         dgv.Controls.Add(dtPicker)
     End Sub
 
-
     Private Sub ReplaceCell2ComboBox(dgv As DataGridView, rowIndex As Integer, colIndex As Integer, items As String())
         Dim rect As Rectangle = dgv.GetCellDisplayRectangle(colIndex, rowIndex, False)
         Dim comboBox As New ComboBox()
@@ -142,7 +231,13 @@ Public Class SCGA_REG
         ' コンボボックスの位置とサイズを設定
         comboBox.Location = rect.Location
         comboBox.Size = rect.Size
-        comboBox.DropDownStyle = ComboBoxStyle.DropDownList
+        ' items(C05)に "*" があればDropDown(任意入力可)にする
+        If items.Any(Function(w) w = "*") Then
+            items = items.Where(Function(w) w <> "*").ToArray   ' "*" を選択肢から削除
+            comboBox.DropDownStyle = ComboBoxStyle.DropDown
+        Else
+            comboBox.DropDownStyle = ComboBoxStyle.DropDownList
+        End If
 
         ' コンボボックスにアイテムを追加
         comboBox.Items.AddRange(items)
@@ -183,15 +278,9 @@ Public Class SCGA_REG
     Private Sub SCA1_KeyPress(ByVal sender As Object, ByVal e As KeyEventArgs) Handles DGV_REG1.KeyDown
         Select Case e.KeyData
             Case Keys.F1
-                For n = 0 To DGV_REG1.Rows.Count - 1
-                    log.cLog(DGV_REG1(1, n).Value)
-                Next
             Case Keys.F2
-                LoadDataGridView()
             Case Keys.F3
         End Select
     End Sub
-
-#End Region
 
 End Class
