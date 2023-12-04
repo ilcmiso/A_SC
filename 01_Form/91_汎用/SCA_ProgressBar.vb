@@ -22,6 +22,7 @@
 
     ' プログレスバーを更新するメソッド
     Public Sub StartProgress(progressCount As Integer)
+        If Me.InvokeRequired Then Exit Sub
         PrgMaxCount = progressCount
         PrgCount = 0
         ' フォームを表示
@@ -29,11 +30,13 @@
     End Sub
 
     Public Sub EndProgress()
+        If Me.InvokeRequired Then Exit Sub
         ' 進捗が100%に達したらフォームを非表示に
         Me.Hide()
     End Sub
 
     Public Sub UpdateProgress(loadItemName As String)
+        If Me.InvokeRequired Then Exit Sub
         PrgCount += 1
         If PrgMaxCount < PrgCount Then
             EndProgress()
@@ -43,6 +46,7 @@
     End Sub
 
     Public Sub UpdateProgress(progressValue As Integer, loadItemName As String)
+        If Me.InvokeRequired Then Exit Sub
         If progressValue < 0 OrElse progressValue > 100 Then
             Throw New ArgumentException("進捗度は0～100の間でなければなりません。")
         End If
@@ -53,6 +57,7 @@
     End Sub
 
     Public Sub DummyProgress()
+        If Me.InvokeRequired Then Exit Sub
         If Me.Visible Then Exit Sub
         StartProgress(1)
         For n = 1 To 10

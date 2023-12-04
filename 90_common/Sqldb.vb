@@ -25,6 +25,7 @@ Public Class Sqldb
     Public Const DB_AUTOCALL As String = "FKSC_AutoCall.db3"
     Public Const DB_MNGREQ As String = "FKGA_MngRequest.db3"
     Public Const DB_MRITEM As String = "FKGA_MRItem.db3"
+    Public Const DB_USERLIST As String = "MNG_UserList.db3"
     ' テーブル名
     Public Const TBL_FKSC As String = "FKSC"
     Public Const TBL_FKSCREM As String = "FKSCREM"
@@ -58,7 +59,8 @@ Public Class Sqldb
         {DB_USELESS, TBL_STANDARD, 2, "C", DBSV, True},
         {DB_AUTOCALL, TBL_STANDARD, 4, "C", DBSV, True},
         {DB_MNGREQ, TBL_STANDARD, 20, "C", DBSV, True},
-        {DB_MRITEM, TBL_STANDARD, 5, "C", DBSV, True}
+        {DB_MRITEM, TBL_STANDARD, 5, "C", DBSV, True},
+        {DB_USERLIST, TBL_STANDARD, 5, "C", DBSV, True}
     }
     ' DBテーブルのDB種別 SC_DBTableの[ 列数 ]とリンクする必要がある
     Public Enum TID As Integer
@@ -76,6 +78,7 @@ Public Class Sqldb
         AC           ' AutoCall
         MR           ' MngRequest 申請物管理
         MRM          ' MngRequest(ITEM)
+        USER         ' UserList
     End Enum
 
     ' DBテーブルの識別子 SC_DBTableの[ 行数 ]とリンクする必要がある
@@ -434,7 +437,7 @@ Public Class Sqldb
         Next
     End Sub
     Public Sub UpdateOrigDT(tid As Integer)
-        log.cLog("DBオリジナル更新 : " & tid)
+        log.cLog($"UpdateOrigDT:{[Enum].GetName(GetType(TID), tid)}")
         cmn.UpdPBar("顧客情報の構築中")
         OrgDataTable(tid) = ReadOrgDtSelect(tid)
     End Sub
@@ -442,7 +445,7 @@ Public Class Sqldb
     ' オリジナルDT(アシスト)の更新 FKSC+AssistのDataTableを作成
     ' FKSCに存在したら、アシストのデータ追記。 存在しなければ全データ生成
     Public Sub UpdateOrigDT_ASsist()
-        log.cLog("DBオリジナル更新 Assist")
+        log.cLog("UpdateOrigDT:Assist")
 
         Dim dt As DataTable = OrgDataTable(TID.SC).Copy
         Dim fk02dt As DataTable = dt.DefaultView.ToTable(False, {"FK02", "FK69"})   ' FKSCから顧客番号(FK02)とIndex値(FK69)のみ抽出
@@ -544,7 +547,7 @@ Public Class Sqldb
         If cid = "" Then Return False
 
         ' IsExistでDB内のID重複確認、RegIDListで一括登録時のID重複確認
-        If (IsExist(TableID, cid)) Or (RegIDList.Contains(cid)) Then
+        If (IsExist(TableID, "C01", cid)) Or (RegIDList.Contains(cid)) Then
             ' --- [ Update ]
             ' 可変引数を整形
             ReDim Preserve args(DBTbl(TableID, DBID.CNUM) - 1)
@@ -557,11 +560,11 @@ Public Class Sqldb
             ' --- [ Insert ]
             ' 引数確認
             ' 可変引数を整形
-            arg = String.Format("'{0}'", String.Join("','", args))    ' 引数をこの形式に加工 'arg0','arg1','arg2'
+            arg = $"'{String.Join("','", args)}'"           ' 引数をこの形式に加工 'arg0','arg1','arg2'
             For n = 0 To (DBTbl(TableID, DBID.CNUM) - args.Length) - 1
                 arg += ",''"        ' 引数がDB数より少ない場合は空白を付与
             Next
-            cmd = String.Format("Insert Into [{0}] Values({1})", DBTbl(TableID, DBID.TABLE), arg)
+            cmd = $"Insert Into [{DBTbl(TableID, DBID.TABLE)}] Values({arg})"
             RegIDList.Add(cid)
         End If
         'ExeSQL(TableID, cmd)
@@ -574,10 +577,19 @@ Public Class Sqldb
     End Function
 
     ' 重複する場合True返却
-    Public Function IsExist(TableID As String, cid As String) As Boolean
-        Dim cmd As String = String.Format("Select C01 From {0} Where C01 = '{1}'", DBTbl(TableID, DBID.TABLE), cid)
+    Public Function IsExist(TableID As String, ColumnName As String, cid As String) As Boolean
+        Dim cmd As String = $"Select C01 From {DBTbl(TableID, DBID.TABLE)} Where {ColumnName} = '{cid}'"
         Dim dt As DataTable = GetSelect(TableID, cmd)
         Return dt.Rows.Count > 0
+    End Function
+    ' 指定カラムの+1の値取得
+    Public Function GetNextID(TableID As String, ColumnName As String) As Integer
+        Dim num As Integer = 1
+        Dim dt As DataTable = GetSelect(TableID, $"Select Max({ColumnName}) From {DBTbl(TableID, DBID.TABLE)}")
+        If dt.Rows.Count > 0 AndAlso Not IsDBNull(dt.Rows(0).Item(0)) Then
+            num = CType(dt.Rows(0).Item(0), Integer) + 1
+        End If
+        Return num
     End Function
 
 End Class

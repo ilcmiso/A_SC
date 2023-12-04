@@ -60,6 +60,44 @@ Public Class XmlMng
 
 
     ' 提供IF
+    Public Sub SetUserName(uName As String)
+        Dim db As Sqldb = SCA1.db
+        db.UpdateOrigDT(Sqldb.TID.USER)
+        Dim regList As String() = {
+            My.Computer.Name,
+            "",
+            uName,
+            GetDiv(),
+            ""
+        }
+        Dim dr As DataRow() = db.OrgDataTable(Sqldb.TID.USER).Select($"C01 = '{My.Computer.Name}'")
+        If dr.Length > 0 Then
+            ' 既に登録済みユーザーは、ユーザー識別子をそのままの値で設定
+            regList(1) = dr(0)(1)       ' 
+        Else
+            ' 新規ユーザーの場合は、ユーザー識別子を最大値+1の値を設定
+            regList(1) = db.GetNextID(Sqldb.TID.USER, "C02").ToString("D5")
+        End If
+
+        ' UserListDB更新
+        db.ExeSQLInsUpd(Sqldb.TID.USER, regList)
+        db.ExeSQL(Sqldb.TID.USER)
+        xmlData.UserName = uName
+        SetXml()
+    End Sub
+    Public Function GetUserName() As String
+        If xmlData.UserName Is Nothing Then xmlData.UserName = ""
+        Return xmlData.UserName
+    End Function
+    Public Sub SetUserName2(name As String)
+        xmlData.UserName2 = name
+        SetXml()
+    End Sub
+    Public Function GetUserName2() As String
+        If xmlData.UserName2 Is Nothing Then xmlData.UserName2 = ""
+        Return xmlData.UserName2
+    End Function
+
     Public Sub SetAutoUpd(sw As Boolean)
         xmlData.AutoUpdCB = sw
         SetXml()
@@ -75,10 +113,10 @@ Public Class XmlMng
     Public Function GetNoticeTell() As Boolean
         Return xmlData.NoticeTell
     End Function
-    Public Function SetDiv(No As Integer)
+    Public Sub SetDiv(No As Integer)
         xmlData.DivisionNo = No
         SetXml()
-    End Function
+    End Sub
     Public Function GetDiv() As Integer
         Return xmlData.DivisionNo
     End Function

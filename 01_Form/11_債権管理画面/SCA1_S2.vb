@@ -26,9 +26,9 @@ Public Class SCE_S2
         TB_A2.SelectedIndex = 0
         TB_A3.SelectedIndex = 0
         TB_A8.SelectedIndex = 0
-        If xml.xmlData.UserName <> "" Then
-            TB_A4.Text = xml.xmlData.UserName        ' 最後に書き込んだユーザー名(PC固有)を表示
-            TB_A7.Text = xml.xmlData.UserName2
+        If xml.GetUserName <> "" Then
+            TB_A4.Text = xml.GetUserName        ' 最後に書き込んだユーザー名(PC固有)を表示
+            TB_A7.Text = xml.GetUserName2
         Else
             TB_A4.Text = My.Computer.Name
         End If
@@ -150,8 +150,8 @@ Public Class SCE_S2
         End If
 
         ' ユーザー名をPCに記録
-        xml.xmlData.UserName = TB_A4.Text
-        xml.xmlData.UserName2 = TB_A7.Text
+        'xml.GetUserName = TB_A4.Text
+        xml.SetUserName2(TB_A7.Text)
         xml.SetXml()
         If sqlret Then  ' SQL結果が正常ならフォーム閉じて正常応答
             'If CheckBox1.Checked Then

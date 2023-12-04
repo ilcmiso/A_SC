@@ -159,7 +159,7 @@
         TB_A1.Text = ""
         CB_A2.Text = "00:00"
         CB_A3.Text = ""
-        TB_A4.Text = xml.xmlData.UserName       ' 担当者
+        TB_A4.Text = xml.GetUserName       ' 担当者
         TB_A6.Text = ""
         BT_A1.Text = "保　存"
 

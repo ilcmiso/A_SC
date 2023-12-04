@@ -9,24 +9,30 @@
     Private Const BTEDIT As String = "BT_MREdit"
 
     Private Const MR_CALENDAR As String = "Cal"
+    Private Const MR_NUMERIC As String = "NUM"
     Private Const MR_BLANK As String = "Blank"
     Private Const MR_FORMAT As String = "Format"
+    Private Const NUMBER_LENGTH As Integer = 5
 
 #Region " OPEN CLOSE "
     Private Sub FLS_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        ownForm = DirectCast(Me.Owner, SCA1)            ' 親フォームを参照できるようにキャスト
+        ownForm = DirectCast(Me.Owner, SCA1)
         MRType = ownForm.CB_MRLIST.SelectedIndex
-        ownForm.db.UpdateOrigDT(Sqldb.TID.MR)
-        ownForm.db.UpdateOrigDT(Sqldb.TID.MRM)
         cmn.SetDoubleBufferDGV(DGV_REG1)
-        Label33.Text = $"{ownForm.CB_MRLIST.SelectedItem} の 登録"
+        L_REGTITLE.Text = $"{ownForm.CB_MRLIST.SelectedItem} の 登録"
+        ' UserListのユーザー名を配列に設定
+        Dim dataTable As DataTable = ownForm.db.OrgDataTable(Sqldb.TID.USER)
+        Dim userList As String() = dataTable.AsEnumerable().Select(Function(row) row.Field(Of String)("C03")).ToArray()
 
         FillDataGridView()
 
         Select Case ownForm.ActiveControl.Name
             Case BTADD  ' 追加ボタン契機
+
                 ' 各項目に初期入力値を設定
                 SetValueDGV("番号", GetNextMaxValue(MRType))
+                SetComboBoxItemsDGV("担当者", userList)
+                SetValueDGV("担当者", xml.GetUserName)
                 If ownForm.DGV1.CurrentRow IsNot Nothing Then
                     If ownForm.DGV1.CurrentRow.Cells(0).Value <> Common.DUMMY_NO Then
                         SetValueDGV("顧客番号", ownForm.DGV1.CurrentRow.Cells(0).Value)
@@ -41,11 +47,21 @@
                             SetValueDGV("続柄", "配偶者")
                         End If
                     Case 4
-                        SetValueDGV("フリガナ", ownForm.DGV1.CurrentRow.Cells(2).Value)
+                        If ownForm.DGV1.CurrentRow.Cells(0).Value <> Common.DUMMY_NO Then
+                            SetValueDGV("フリガナ", ownForm.DGV1.CurrentRow.Cells(2).Value)
+                        End If
+                    Case 5
+                        ' UserListにあるユーザー名をコンボボックスのItemsに設定
+                        SetComboBoxItemsDGV("再鑑者", userList)
+                    Case 6
+                        ' UserListにあるユーザー名をコンボボックスのItemsに設定
+                        SetComboBoxItemsDGV("受領者", userList)
                 End Select
 
             Case BTEDIT ' 編集ボタン契機
                 ' DGVデータ読み込み
+                SetComboBoxItemsDGV("担当者", userList)
+                SetValueDGV("担当者", xml.GetUserName)
                 LoadDataGridView()
         End Select
     End Sub
@@ -53,8 +69,35 @@
     Private Sub LoadDataGridView()
         For n = 0 To ownForm.DGV_MR1.CurrentRow.Cells.Count - 1
             DGV_REG1(1, n).Value = ownForm.DGV_MR1.CurrentRow.Cells(n).Value
+
+            ' DGV_REG1の対応するセルに配置されたNumericUpDownを探す
+            Dim rect As Rectangle = DGV_REG1.GetCellDisplayRectangle(1, n, False)
+            For Each control In DGV_REG1.Controls
+                If TypeOf control Is NumericUpDown AndAlso
+               control.Bounds.IntersectsWith(rect) Then
+
+                    Dim numericUpDown As NumericUpDown = CType(control, NumericUpDown)
+                    ' セルの値をDecimalに変換し、NumericUpDownのValueに設定
+                    Dim cellValue As Decimal
+                    If Decimal.TryParse(DGV_REG1(1, n).Value.ToString(), cellValue) Then
+                        numericUpDown.Value = cellValue
+                    End If
+
+                ElseIf TypeOf control Is ComboBox AndAlso
+                   control.Bounds.IntersectsWith(rect) Then
+
+                    Dim comboBox As ComboBox = CType(control, ComboBox)
+                    ' セルの値をStringに変換し、ComboBoxのSelectedItemに設定
+                    Dim cellValue As String = DGV_REG1(1, n).Value.ToString()
+                    If comboBox.Items.Contains(cellValue) Then
+                        comboBox.SelectedItem = cellValue
+                    End If
+
+                End If
+            Next
         Next
     End Sub
+
 
     ' DB(MRItem)を元にDGVを作成
     Private Sub FillDataGridView()
@@ -86,8 +129,8 @@
                             ReplaceCell2DTP(DGV_REG1, order, 1, formatParts(2))
                     End Select
 
-                Case "CB"
-                    ' ReplaceCell2Checkbox(DGV_REG1, order, 1)
+                Case MR_NUMERIC
+                    ReplaceCell2NumericUpDown(DGV_REG1, order, 1)
 
                 Case Else
                     If format.Contains(",") Then
@@ -116,8 +159,6 @@
         ownForm.db.ExeSQLInsUpd(Sqldb.TID.MR, commandText)
         ownForm.db.ExeSQL(Sqldb.TID.MR)
         MsgBox("登録しました。")
-        ownForm.db.UpdateOrigDT(Sqldb.TID.MR)
-        ownForm.ShowDGVMR()
         Me.Close()
     End Sub
 
@@ -148,10 +189,11 @@
 
         ' 最大値に1を加える
         Dim nextMaxVal As Integer = maxVal.GetValueOrDefault() + 1
-        ' 先頭文字にカテゴリ番号を追加
-
-        ' 結果をString型で返す
-        Return $"{CateNo}{nextMaxVal:D4}"
+        If nextMaxVal.ToString.Length <= NUMBER_LENGTH Then
+            Return CateNo & nextMaxVal.ToString("D" & NUMBER_LENGTH)
+        Else
+            Return nextMaxVal.ToString("D" & NUMBER_LENGTH)
+        End If
     End Function
 
     ' 指定文字のセルに値を設定
@@ -185,6 +227,35 @@
         Next
     End Sub
 
+    ' ComboBoxのアイテムリストを設定
+    Sub SetComboBoxItemsDGV(searchWord As String, items As String())
+        Dim dgv = DGV_REG1
+
+        For Each row As DataGridViewRow In dgv.Rows
+            If row.Cells(0).Value.ToString() = searchWord Then
+                ' セルの上にあるComboBoxを探す
+                For Each control As Control In dgv.Controls
+                    If TypeOf control Is ComboBox Then
+                        Dim comboBox As ComboBox = DirectCast(control, ComboBox)
+                        ' ComboBoxの位置をチェック
+                        Dim cellRect As Rectangle = dgv.GetCellDisplayRectangle(1, row.Index, False)
+                        If comboBox.Bounds.IntersectsWith(cellRect) Then
+                            ' ComboBoxのアイテムリストを設定
+                            comboBox.Items.Clear()
+                            comboBox.Items.AddRange(items)
+
+                            ' 必要に応じて、最初のアイテムを選択
+                            If comboBox.Items.Count > 0 Then
+                                comboBox.SelectedIndex = 0
+                            End If
+                            Exit For
+                        End If
+                    End If
+                Next
+                Exit For ' 最初に見つかった一致行でループを終了
+            End If
+        Next
+    End Sub
 
     Private Sub ReplaceCell2DTP(dgv As DataGridView, rowIndex As Integer, colIndex As Integer, type As String)
         Dim rect As Rectangle = dgv.GetCellDisplayRectangle(colIndex, rowIndex, False)
@@ -256,23 +327,29 @@
         dgv.Controls.Add(comboBox)
     End Sub
 
-    Private Sub ReplaceCell2Checkbox(dgv As DataGridView, rowIndex As Integer, colIndex As Integer)
+    Private Sub ReplaceCell2NumericUpDown(dgv As DataGridView, rowIndex As Integer, colIndex As Integer)
         ' DataGridViewのセルの位置とサイズを取得
         Dim rect As Rectangle = dgv.GetCellDisplayRectangle(colIndex, rowIndex, False)
 
-        ' CheckBoxコントロールを生成
-        Dim checkBox As New CheckBox()
-        checkBox.Size = New Size(rect.Width, rect.Height)
-        checkBox.Location = New Point(rect.X, rect.Y)
+        ' NumericUpDownコントロールを生成
+        Dim numericUpDown As New NumericUpDown()
+        numericUpDown.Size = New Size(rect.Width, rect.Height)
+        numericUpDown.Location = New Point(rect.X, rect.Y)
+        numericUpDown.TextAlign = LeftRightAlignment.Right
+        numericUpDown.UpDownAlign = LeftRightAlignment.Left
+        numericUpDown.Font = New Font(DGV_REG1.Font.FontFamily, 10, FontStyle.Regular)
 
         ' 値変更時にDataGridViewのセルに反映
-        AddHandler checkBox.CheckedChanged, Sub(sender, e)
-                                                dgv(colIndex, rowIndex).Value = checkBox.Checked
-                                            End Sub
+        AddHandler numericUpDown.ValueChanged, Sub(sender, e)
+                                                   dgv(colIndex, rowIndex).Value = numericUpDown.Value
+                                               End Sub
 
-        ' CheckBoxをDataGridViewに追加
-        dgv.Controls.Add(checkBox)
+        ' NumericUpDownをDataGridViewに追加
+        dgv.Controls.Add(numericUpDown)
+        ' NumericUpDownをDataGridViewのTagに格納する（あるいは他の方法で保持）
+        dgv.Tag = numericUpDown
     End Sub
+
 
     ' ショートカット F1
     Private Sub SCA1_KeyPress(ByVal sender As Object, ByVal e As KeyEventArgs) Handles DGV_REG1.KeyDown

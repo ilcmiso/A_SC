@@ -4,7 +4,7 @@ Imports System.Text
 Public Class SC
 
 #Region " Open Close "
-    Public Const SCVer As String = "2311D"                         ' A_SC バージョン
+    Public Const SCVer As String = "2312A"                         ' A_SC バージョン
     ' 起動アプリパス
     Public ReadOnly CurrentAppPath As String = Path.GetDirectoryName(Reflection.Assembly.GetExecutingAssembly().Location) & "\"
 
@@ -61,6 +61,7 @@ Public Class SC
         Dim fm As New Form
         Select Case sender.name
             Case Button1.Name   ' 顧客検索メイン画面
+                CheckUserName
                 fm = SCA1
             Case Button2.Name   ' F35読み込み画面
                 fm = SCB1
@@ -84,6 +85,19 @@ Public Class SC
         fm.ShowDialog()
         fm.Dispose()
         If Not Me.IsDisposed Then Me.Visible = True     ' 非表示になっていたTOP画面を再表示 ただし、アプリ更新時は既に破棄されているから表示できない
+    End Sub
+
+    Private Sub CheckUserName()
+        Dim db As New Sqldb
+        db.UpdateOrigDT(Sqldb.TID.USER)
+        Dim dr As DataRow() = db.OrgDataTable(Sqldb.TID.USER).Select($"C01 = '{My.Computer.Name}'")
+        If dr.Length = 0 Then
+            MsgBox($"新たにユーザー名を設定するようになりました。{vbCrLf}　ご自身の名前を入力してください。")
+            Dim fm As Form = SCA_SetUserName
+            fm.ShowInTaskbar = False
+            fm.ShowDialog()
+            fm.Dispose()
+        End If
     End Sub
 
     ' 電話接続画面フォーム終了イベント受信

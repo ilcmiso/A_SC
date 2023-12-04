@@ -915,11 +915,11 @@ Partial Class SCA1
         '
         Me.TB_DunIN.Font = New System.Drawing.Font("メイリオ", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.TB_DunIN.ForeColor = System.Drawing.SystemColors.InfoText
-        Me.TB_DunIN.Location = New System.Drawing.Point(705, 326)
+        Me.TB_DunIN.Location = New System.Drawing.Point(705, 337)
         Me.TB_DunIN.MaxLength = 327670
         Me.TB_DunIN.Multiline = True
         Me.TB_DunIN.Name = "TB_DunIN"
-        Me.TB_DunIN.Size = New System.Drawing.Size(206, 120)
+        Me.TB_DunIN.Size = New System.Drawing.Size(206, 109)
         Me.TB_DunIN.TabIndex = 0
         Me.TB_DunIN.Text = "＜送付対象の顧客番号を入力＞"
         '
@@ -2998,7 +2998,7 @@ Partial Class SCA1
         Me.DGV_MR1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.DGV_MR1.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.DataGridViewTextBoxColumn23, Me.DataGridViewTextBoxColumn24, Me.DataGridViewTextBoxColumn25, Me.DataGridViewTextBoxColumn26, Me.DataGridViewTextBoxColumn27, Me.DataGridViewTextBoxColumn28, Me.DataGridViewTextBoxColumn29, Me.DataGridViewTextBoxColumn30, Me.DataGridViewTextBoxColumn31, Me.DataGridViewTextBoxColumn32, Me.DataGridViewTextBoxColumn33, Me.DataGridViewTextBoxColumn34, Me.DataGridViewTextBoxColumn35, Me.DataGridViewTextBoxColumn36, Me.DataGridViewTextBoxColumn37, Me.DataGridViewTextBoxColumn38, Me.DataGridViewTextBoxColumn39, Me.DataGridViewTextBoxColumn40})
         Me.DGV_MR1.ImeMode = System.Windows.Forms.ImeMode.[On]
-        Me.DGV_MR1.Location = New System.Drawing.Point(1, 96)
+        Me.DGV_MR1.Location = New System.Drawing.Point(3, 100)
         Me.DGV_MR1.Name = "DGV_MR1"
         Me.DGV_MR1.ReadOnly = True
         Me.DGV_MR1.RowHeadersVisible = False
@@ -3006,7 +3006,7 @@ Partial Class SCA1
         Me.DGV_MR1.RowTemplate.DefaultCellStyle.BackColor = System.Drawing.Color.White
         Me.DGV_MR1.RowTemplate.Height = 21
         Me.DGV_MR1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.DGV_MR1.Size = New System.Drawing.Size(1122, 266)
+        Me.DGV_MR1.Size = New System.Drawing.Size(1125, 266)
         Me.DGV_MR1.TabIndex = 1771
         Me.DGV_MR1.TabStop = False
         '
@@ -3165,7 +3165,7 @@ Partial Class SCA1
         Me.CB_Person.ImeMode = System.Windows.Forms.ImeMode.Hiragana
         Me.CB_Person.Location = New System.Drawing.Point(493, 29)
         Me.CB_Person.Name = "CB_Person"
-        Me.CB_Person.Size = New System.Drawing.Size(114, 23)
+        Me.CB_Person.Size = New System.Drawing.Size(122, 23)
         Me.CB_Person.TabIndex = 1785
         '
         'BT_MRDel
@@ -3174,7 +3174,7 @@ Partial Class SCA1
         Me.BT_MRDel.FlatAppearance.BorderColor = System.Drawing.Color.Black
         Me.BT_MRDel.Font = New System.Drawing.Font("MS UI Gothic", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.BT_MRDel.ForeColor = System.Drawing.Color.White
-        Me.BT_MRDel.Location = New System.Drawing.Point(204, 368)
+        Me.BT_MRDel.Location = New System.Drawing.Point(204, 372)
         Me.BT_MRDel.Name = "BT_MRDel"
         Me.BT_MRDel.Size = New System.Drawing.Size(92, 27)
         Me.BT_MRDel.TabIndex = 1784
@@ -3188,7 +3188,7 @@ Partial Class SCA1
         Me.BT_MREdit.FlatAppearance.BorderColor = System.Drawing.Color.Black
         Me.BT_MREdit.Font = New System.Drawing.Font("MS UI Gothic", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.BT_MREdit.ForeColor = System.Drawing.Color.White
-        Me.BT_MREdit.Location = New System.Drawing.Point(106, 368)
+        Me.BT_MREdit.Location = New System.Drawing.Point(106, 372)
         Me.BT_MREdit.Name = "BT_MREdit"
         Me.BT_MREdit.Size = New System.Drawing.Size(92, 27)
         Me.BT_MREdit.TabIndex = 1783
@@ -3202,7 +3202,7 @@ Partial Class SCA1
         Me.BT_MRAdd.FlatAppearance.BorderColor = System.Drawing.Color.Black
         Me.BT_MRAdd.Font = New System.Drawing.Font("MS UI Gothic", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.BT_MRAdd.ForeColor = System.Drawing.Color.Cyan
-        Me.BT_MRAdd.Location = New System.Drawing.Point(8, 368)
+        Me.BT_MRAdd.Location = New System.Drawing.Point(8, 372)
         Me.BT_MRAdd.Name = "BT_MRAdd"
         Me.BT_MRAdd.Size = New System.Drawing.Size(92, 27)
         Me.BT_MRAdd.TabIndex = 1782
@@ -3212,8 +3212,9 @@ Partial Class SCA1
         '
         'CB_MRLIST
         '
+        Me.CB_MRLIST.BackColor = System.Drawing.Color.FromArgb(CType(CType(192, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
         Me.CB_MRLIST.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.CB_MRLIST.Font = New System.Drawing.Font("MS UI Gothic", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.CB_MRLIST.Font = New System.Drawing.Font("MS UI Gothic", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.CB_MRLIST.FormattingEnabled = True
         Me.CB_MRLIST.ImeMode = System.Windows.Forms.ImeMode.Hiragana
         Me.CB_MRLIST.Location = New System.Drawing.Point(3, 29)
@@ -3229,7 +3230,7 @@ Partial Class SCA1
         Me.TextBox2.Font = New System.Drawing.Font("MS UI Gothic", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.TextBox2.ForeColor = System.Drawing.Color.Black
         Me.TextBox2.ImeMode = System.Windows.Forms.ImeMode.Hiragana
-        Me.TextBox2.Location = New System.Drawing.Point(551, 364)
+        Me.TextBox2.Location = New System.Drawing.Point(554, 368)
         Me.TextBox2.Multiline = True
         Me.TextBox2.Name = "TextBox2"
         Me.TextBox2.ReadOnly = True
@@ -3256,7 +3257,7 @@ Partial Class SCA1
         Me.Label6.ForeColor = System.Drawing.Color.White
         Me.Label6.Location = New System.Drawing.Point(493, 9)
         Me.Label6.Name = "Label6"
-        Me.Label6.Size = New System.Drawing.Size(113, 20)
+        Me.Label6.Size = New System.Drawing.Size(121, 20)
         Me.Label6.TabIndex = 1774
         Me.Label6.Text = "担当者"
         Me.Label6.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -3439,7 +3440,7 @@ Partial Class SCA1
         '
         Me.ToolStripMenuItem2.Name = "ToolStripMenuItem2"
         Me.ToolStripMenuItem2.Size = New System.Drawing.Size(180, 22)
-        Me.ToolStripMenuItem2.Text = "ユーザー名"
+        Me.ToolStripMenuItem2.Text = "ユーザー名設定"
         '
         'Label7
         '

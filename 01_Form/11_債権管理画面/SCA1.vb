@@ -14,6 +14,7 @@ Public Class SCA1
     Private ReadOnly log As New Log
     Private ReadOnly exc As New CExcel
     Public ReadOnly db As New Sqldb
+    Private oview As SCGA_OVIEW
     Private thSC As SCThread
     Private CallerFunc = ""
     Private xml As New XmlMng
@@ -29,6 +30,8 @@ Public Class SCA1
     Private Const POLLING_ID_CUDB As String = "顧客DB更新"          ' 顧客DB更新イベントの識別子
     Private Const POLLING_ID_ASC As String = "A_SC本体"             ' A_SC更新イベントの識別子
     Private Const POLLING_CYCLE As Integer = 500                    ' イベント監視周期(ms)
+    ' 監視 new
+    Private fwatchers As List(Of FileWatcher)
     ' フリーメモ変更前バッファ(変更されたか検知したい)
     Private BeforeFreeTxt As String = ""
     Private BeforeAddTel As String = ""
@@ -56,6 +59,7 @@ Public Class SCA1
         Me.Text += " - " & xml.GetCPath
         CB_AUTOUPD.Checked = xml.GetAutoUpd
         CB_NOTICETELL.Checked = xml.GetNoticeTell
+        fwatchers = New List(Of FileWatcher)
 
         FPATH_TEL = db.CurrentPath_SV & Common.DIR_TEL & Common.FILE_TEL                     ' 着信ログまでのフルパス生成
         ' 顧客情報DB(FKSC.DB3,ASSIST.DB3)の最新確認 古ければサーバからダウンロード
@@ -89,6 +93,8 @@ Public Class SCA1
         DunInit()                   ' 督促管理の初期設定
         ' スレッド生成
         'ThreadInit()
+        ' ファイル監視開始
+        FWatchingStart()
 
         ' 物件情報初期設定
         PIItemList = {"基本物件情報", "任売", "競売①", "競売②", "再生・破産①", "再生・破産②", "再生・破産③", "差押①", "差押②", "差押③"}
@@ -119,7 +125,48 @@ Public Class SCA1
         SC.Visible = False
     End Sub
 
+    ' 監視 new 
+    Private Sub FWatchingStart()
+        Dim fileSettings As List(Of FileSetting) = New List(Of FileSetting) From {
+            New FileSetting($"{cmn.CurrentPath}{Common.DIR_DB3}{Sqldb.DB_MNGREQ}", AddressOf CBWatcherMNGREQ),
+            New FileSetting($"{cmn.CurrentPath}{Common.DIR_DB3}{Sqldb.DB_MRITEM}", AddressOf CBWatcherMRITEM)
+        }
+
+        For Each setting In fileSettings
+            Dim fwatch As New FileWatcher
+            fwatch.StartWatching(setting.FilePath, setting.Callback)
+            log.cLog($" file watching: {setting.FilePath}")
+            fwatchers.Add(fwatch)
+        Next
+    End Sub
+
+    Private Sub FWatchingEnd()
+        For Each w In fwatchers
+            w.StopWatching()
+        Next
+    End Sub
+
+    ' コールバックIF
+    Sub CBWatcherMNGREQ()
+        If Me.InvokeRequired Then
+            ' 非メインスレッド処理
+            log.cLog("[CB][Watcher] MngRequest")
+            db.UpdateOrigDT(Sqldb.TID.MR)
+            Me.Invoke(New MethodInvoker(AddressOf CBWatcherMNGREQ))
+        Else
+            ' メインスレッド処理
+            oview.ShowOVIEW()
+            ShowDGVMR()
+        End If
+    End Sub
+
+    Sub CBWatcherMRITEM()
+        log.cLog("[CB][Watcher] MRItem")
+        db.UpdateOrigDT(Sqldb.TID.MRM)
+    End Sub
+
     Private Sub FLS_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
+        FWatchingEnd()
         StopWatching()
         'thSC.Dispose()
         xml.SetAutoUpd(CB_AUTOUPD.Checked)
@@ -213,6 +260,7 @@ Public Class SCA1
         ShowDGVList(DGV2)
         ShowDGVList(DGV4)
         ShowDGVList(DGV5)
+        ShowDGVMR()
         ShowDunLB()
         cmn.EndPBar()
     End Sub
@@ -1749,7 +1797,7 @@ Public Class SCA1
         CB_DunA6.SelectedIndex = 0
         CB_DunA7.SelectedIndex = 0
         NUD_DunA1.Value = Today.AddMonths(-1).ToString("MMM")
-        If xml.xmlData.UserName <> "" Then TB_DunA4.Text = xml.xmlData.UserName2        ' 最後に書き込んだユーザー名(PC固有)を表示
+        If xml.GetUserName <> "" Then TB_DunA4.Text = xml.GetUserName2        ' 最後に書き込んだユーザー名(PC固有)を表示
 
     End Sub
 
@@ -2341,6 +2389,7 @@ Public Class SCA1
 
 #Region "申請物管理(MR)"
     Private Sub MRInit()
+        oview = New SCGA_OVIEW
         CB_MRLIST.Items.AddRange(sccmn.MRITEMLIST)
         CB_MRLIST.SelectedIndex = 0
         DTP_MRST.Value = Today.AddDays(-7)
@@ -2356,6 +2405,7 @@ Public Class SCA1
         Dim labelStr As String() = {"物件情報", "直近の申請書一覧"}
         Label33.Text = labelStr(divNo)  ' ラベル文字の切り替え
         xml.SetDiv(divNo)               ' 部署xml記録
+        db.ExeSQL(Sqldb.TID.USER, $"Update TBL Set C04 = '{CType(divNo, Integer)}' Where C01 = '{My.Computer.Name}'")
 
         ' Panel内のすべてのコントロールをループ処理
         For Each ctrl As System.Windows.Forms.Control In PAN_A.Controls
@@ -2387,12 +2437,11 @@ Public Class SCA1
 
                     ' FormがまだPanelに追加されていない場合、ここで追加
                     If PAN_A.Controls.OfType(Of SCGA_OVIEW).Count() = 0 Then
-                        Dim newForm2 As New SCGA_OVIEW()
-                        newForm2.TopLevel = False
-                        newForm2.FormBorderStyle = FormBorderStyle.None
-                        newForm2.Dock = DockStyle.Fill
-                        PAN_A.Controls.Add(newForm2)
-                        newForm2.Show()
+                        oview.TopLevel = False
+                        oview.FormBorderStyle = FormBorderStyle.None
+                        oview.Dock = DockStyle.Fill
+                        PAN_A.Controls.Add(oview)
+                        oview.Show()
                     End If
             End Select
         Next
@@ -2402,7 +2451,7 @@ Public Class SCA1
         ' コンボボックスの選択されたインデックスを取得
         InitDGVInfo(DGV_MR1, Sqldb.TID.MRM, CB_MRLIST.SelectedIndex)
         LoadDGVInfo(DGV_MR1, Sqldb.TID.MR, CB_MRLIST.SelectedIndex)
-        InitComboBoxMRParson()
+        InitComboBoxMRParson()  ' 担当コンボボックス
         FilterMRSearch(TB_MRSearch.Text)
     End Sub
 
@@ -2464,7 +2513,6 @@ Public Class SCA1
             Exit Sub
         End If
 
-
         Dim fm As Form = SCGA_REG
         fm.ShowDialog(Me)
         fm.Dispose()
@@ -2483,7 +2531,6 @@ Public Class SCA1
         ' DGV2の指定行を削除
         Cursor.Current = Cursors.WaitCursor             ' マウスカーソルを砂時計に
         db.ExeSQL(Sqldb.TID.MR, $"Delete From TBL Where C01 = '{DGV_MR1.CurrentRow.Cells(0).Value}'")
-        db.UpdateOrigDT(Sqldb.TID.MR)
         ShowDGVMR()
     End Sub
 
@@ -2619,8 +2666,13 @@ Public Class SCA1
     Private Sub 総務課ToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles 総務課ToolStripMenuItem.Click
         DivMode(Common.DIV.GA)
     End Sub
+    ' ユーザー名設定
+    Private Sub ToolStripMenuItem2_Click(sender As Object, e As EventArgs) Handles ToolStripMenuItem2.Click
+        Dim fm As Form = SCA_SetUserName
+        fm.ShowInTaskbar = False
+        fm.ShowDialog()
+        fm.Dispose()
+    End Sub
 
 #End Region
-
-
 End Class

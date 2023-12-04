@@ -6,6 +6,7 @@ Public Class SCGA_OVIEW
     Private ReadOnly sccmn As New SCcommon
     Private ReadOnly xml As New XmlMng
     Private ReadOnly log As New Log
+    Private ReadOnly db As Sqldb = SCA1.db
     Private ReadOnly ROWMAXCOUNT As Integer = 10
 
     Private Sub FLS_Shown(sender As Object, e As EventArgs) Handles MyBase.Load
@@ -13,7 +14,8 @@ Public Class SCGA_OVIEW
     End Sub
 
     Public Sub ShowOVIEW()
-        Dim selectedRows As DataRow() = SCA1.db.OrgDataTable(Sqldb.TID.MR).Select("", "C01 DESC")
+        DGV.Rows.Clear()
+        Dim selectedRows As DataRow() = db.OrgDataTable(Sqldb.TID.MR).Select("", "C01 DESC")
 
         For Each row As DataRow In selectedRows
             Dim index As Integer = Convert.ToInt32(row("C02"))

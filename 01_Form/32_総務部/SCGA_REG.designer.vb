@@ -26,7 +26,7 @@ Partial Class SCGA_REG
         Dim DataGridViewCellStyle3 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Me.PBXX = New System.Windows.Forms.Button()
-        Me.Label33 = New System.Windows.Forms.Label()
+        Me.L_REGTITLE = New System.Windows.Forms.Label()
         Me.DGV_REG1 = New System.Windows.Forms.DataGridView()
         Me.項目 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Column1 = New System.Windows.Forms.DataGridViewTextBoxColumn()
@@ -47,18 +47,18 @@ Partial Class SCGA_REG
         Me.PBXX.Text = "PBXX"
         Me.PBXX.UseVisualStyleBackColor = False
         '
-        'Label33
+        'L_REGTITLE
         '
-        Me.Label33.BackColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(192, Byte), Integer))
-        Me.Label33.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.Label33.Font = New System.Drawing.Font("メイリオ", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.Label33.ForeColor = System.Drawing.Color.White
-        Me.Label33.Location = New System.Drawing.Point(1, -1)
-        Me.Label33.Name = "Label33"
-        Me.Label33.Size = New System.Drawing.Size(298, 24)
-        Me.Label33.TabIndex = 1814
-        Me.Label33.Text = "団信弁済の登録内容"
-        Me.Label33.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        Me.L_REGTITLE.BackColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(192, Byte), Integer))
+        Me.L_REGTITLE.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.L_REGTITLE.Font = New System.Drawing.Font("メイリオ", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.L_REGTITLE.ForeColor = System.Drawing.Color.White
+        Me.L_REGTITLE.Location = New System.Drawing.Point(1, -1)
+        Me.L_REGTITLE.Name = "L_REGTITLE"
+        Me.L_REGTITLE.Size = New System.Drawing.Size(298, 24)
+        Me.L_REGTITLE.TabIndex = 1814
+        Me.L_REGTITLE.Text = "団信弁済の登録内容"
+        Me.L_REGTITLE.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'DGV_REG1
         '
@@ -147,7 +147,7 @@ Partial Class SCGA_REG
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None
         Me.BackColor = System.Drawing.SystemColors.ControlLight
         Me.ClientSize = New System.Drawing.Size(302, 495)
-        Me.Controls.Add(Me.Label33)
+        Me.Controls.Add(Me.L_REGTITLE)
         Me.Controls.Add(Me.DGV_REG1)
         Me.Controls.Add(Me.BT_A1)
         Me.Controls.Add(Me.BT_A2)
@@ -165,7 +165,7 @@ Partial Class SCGA_REG
     End Sub
 
     Friend WithEvents PBXX As Button
-    Friend WithEvents Label33 As Label
+    Friend WithEvents L_REGTITLE As Label
     Friend WithEvents DGV_REG1 As DataGridView
     Friend WithEvents BT_A1 As Button
     Friend WithEvents BT_A2 As Button

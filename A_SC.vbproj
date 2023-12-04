@@ -219,6 +219,12 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="01_Form\91_汎用\SCA_SetUserName.designer.vb">
+      <DependentUpon>SCA_SetUserName.vb</DependentUpon>
+    </Compile>
+    <Compile Include="01_Form\91_汎用\SCA_SetUserName.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="01_Form\91_汎用\SCA_ProgressBar.designer.vb">
       <DependentUpon>SCA_ProgressBar.vb</DependentUpon>
     </Compile>
@@ -263,6 +269,7 @@
     </Compile>
     <Compile Include="80_SCcommon\SCcommon.vb" />
     <Compile Include="80_SCcommon\SCThread.vb" />
+    <Compile Include="90_common\FileWatcher.vb" />
     <Compile Include="90_common\ILCNetDrive.vb" />
     <Compile Include="ApplicationEvents.vb" />
     <Compile Include="01_Form\11_債権管理画面\SCA1_S5_ExcOut.designer.vb">
@@ -399,6 +406,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="01_Form\91_汎用\SCA_SetUserName.resx">
+      <DependentUpon>SCA_SetUserName.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="01_Form\91_汎用\SCA_ProgressBar.resx">
       <DependentUpon>SCA_ProgressBar.vb</DependentUpon>
     </EmbeddedResource>
