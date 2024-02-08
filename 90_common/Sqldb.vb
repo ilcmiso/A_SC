@@ -26,6 +26,7 @@ Public Class Sqldb
     Public Const DB_MNGREQ As String = "FKGA_MngRequest.db3"
     Public Const DB_MRITEM As String = "FKGA_MRItem.db3"
     Public Const DB_USERLIST As String = "MNG_UserList.db3"
+    Public Const DB_OVERTAX As String = "FKSC_OverTax.db3"
     ' テーブル名
     Public Const TBL_FKSC As String = "FKSC"
     Public Const TBL_FKSCREM As String = "FKSCREM"
@@ -60,7 +61,8 @@ Public Class Sqldb
         {DB_AUTOCALL, TBL_STANDARD, 4, "C", DBSV, True},
         {DB_MNGREQ, TBL_STANDARD, 20, "C", DBSV, True},
         {DB_MRITEM, TBL_STANDARD, 5, "C", DBSV, True},
-        {DB_USERLIST, TBL_STANDARD, 5, "C", DBSV, True}
+        {DB_USERLIST, TBL_STANDARD, 5, "C", DBSV, True},
+        {DB_OVERTAX, TBL_STANDARD, 103, "C", DBSV, True}
     }
     ' DBテーブルのDB種別 SC_DBTableの[ 列数 ]とリンクする必要がある
     Public Enum TID As Integer
@@ -79,6 +81,7 @@ Public Class Sqldb
         MR           ' MngRequest 申請物管理
         MRM          ' MngRequest(ITEM)
         USER         ' UserList
+        OTAX         ' OverTax
     End Enum
 
     ' DBテーブルの識別子 SC_DBTableの[ 行数 ]とリンクする必要がある
@@ -237,7 +240,7 @@ Public Class Sqldb
                 Case Else
                     log.D(Log.DB, cmdl)                                 ' DBログ書き込み => DB変更通知になる
             End Select
-            log.cLog("SQLExe: " & cmd.CommandText)
+            log.cLog($"SQLExe: [{[Enum].GetName(GetType(TID), TableID)}]{cmd.CommandText}")
         Catch ex As Exception
             log.D(Log.ERR, ex.Message & vbCrLf & cmd.CommandText)
             ret = False
@@ -397,6 +400,11 @@ Public Class Sqldb
         Dim dt As DataTable = GetSelect(TableID, "select * FROM " & DBTbl(TableID, DBID.TABLE) & " limit 1")
         Dim columnName As String = DBTbl(TableID, DBID.CTAG) & (dt.Columns.Count + 1).ToString("00")
         AddColumns(TableID, columnName)
+    End Sub
+
+    ' データ削除
+    Public Sub DeleteAllData(TableID As String)
+        ExeSQL(TableID, $"Delete From {DBTbl(TableID, DBID.TABLE)}")
     End Sub
 
     ' 汎用SQL文結果取得
@@ -574,6 +582,25 @@ Public Class Sqldb
     ' 簡易Insert/Update (List型)
     Public Function ExeSQLInsUpd(TableID As Integer, args As List(Of String)) As Boolean
         Return ExeSQLInsUpd(TableID, args.ToArray)
+    End Function
+
+    ' 簡易Insert
+    Public Function ExeSQLInsert(TableID As Integer, ParamArray args As String()) As Boolean
+        If args.Length = 0 Then Return False
+        Dim cid As String = args(0)
+        Dim arg As String 
+        Dim cmd As String
+        If cid = "" Then Return False
+
+        ' 引数確認
+        ' 可変引数を整形
+        arg = $"'{String.Join("','", args)}'"           ' 引数をこの形式に加工 'arg0','arg1','arg2'
+        For n = 0 To (DBTbl(TableID, DBID.CNUM) - args.Length) - 1
+            arg += ",''"        ' 引数がDB数より少ない場合は空白を付与
+        Next
+        cmd = $"Insert Into [{DBTbl(TableID, DBID.TABLE)}] Values({arg})"
+        AddSQL(cmd)
+        Return True
     End Function
 
     ' 重複する場合True返却

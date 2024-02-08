@@ -28,6 +28,9 @@
         For Each str As String In InfoItems
             dgv.Rows.Add(str, False)
         Next
+        dgv(1, 0).Value = True
+        dgv(1, 8).Value = True
+        dgv(1, 42).Value = True
     End Sub
 
     ' 全選択
@@ -67,7 +70,8 @@
         ' 顧客番号リストから１つづつ番号を取得
         For cIdx = 0 To ownForm.TB_DunIN.Lines.Length - 1
             cid = ownForm.TB_DunIN.Lines(cIdx)
-            'log.cLog("-- cid : " & cid)
+            If cid = "" Then Continue For
+            log.cLog("-- cid : " & cid)
 
             ' 顧客番号をもとに、顧客DBからInfoItemsのデータを取得してdataRowに格納
             Dim cInfo As DataRow = Nothing
@@ -88,7 +92,6 @@
                 Dim dInfoStr As String = ""
 
                 ' InfoItemsが"受任者"のみ、FKSC情報ではなく物件情報(PINFO)から取得して設定する
-
                 Select Case (InfoItems(n))
                     Case "受任者"
                         ' cidが証券番号の可能性もあるので、cidではなく顧客情報であるcInfo(1)を引数にする
@@ -99,16 +102,38 @@
 
                     Case "延滞請求額"
                         ' オートコールによる延滞損害金の合計額
+                        Dim lateVal1 As Integer
+                        Dim lateVal2 As Integer
+                        Dim lateValU As Integer
                         Dim dr As DataRow()
-                        dr = ownForm.db.OrgDataTable(Sqldb.TID.AC).Select($"C01 = {cInfo(1)}")
+                        dr = ownForm.db.OrgDataTable(Sqldb.TID.AC).Select($"C01 = '{cInfo(1)}'")
                         If dr.Length > 0 Then
-                            Dim lateVal1 As Integer = cmn.Int(dr(0)(1)) ' 延滞元利金（累計）      約定日現在の累計（当月分含む）
-                            Dim lateVal2 As Integer = cmn.Int(dr(0)(2)) ' 延滞損害金（累計）      約定日現在の累計（当月分含まず）
-                            Dim lateValU As Integer = cmn.Int(dr(0)(3)) ' 延滞損害金単価（今後）  前回までの単価累計と今回の単価合計値（下4桁は円未満）
-                            Dim period As Integer = NUD_AC_DAYS.Value
-                            Dim lateValDay As Integer = (Math.Floor((lateValU * period) / 10000)) ' 延滞損害金の単価 x 日数 （小数値を切り捨て）
-                            Dim totalVal As Integer = lateVal1 + lateVal2 + lateValDay
-                            rowValue.Add(totalVal)
+                            lateVal1 = cmn.Int(dr(0)(1)) ' 延滞元利金（累計）      約定日現在の累計（当月分含む）
+                            lateVal2 = cmn.Int(dr(0)(2)) ' 延滞損害金（累計）      約定日現在の累計（当月分含まず）
+                            lateValU = cmn.Int(dr(0)(3)) ' 延滞損害金単価（今後）  前回までの単価累計と今回の単価合計値（下4桁は円未満）
+                        End If
+                        Dim period As Integer = NUD_AC_DAYS.Value
+                        Dim lateValDay As Integer = (Math.Floor((lateValU * period) / 10000)) ' 延滞損害金の単価 x 日数 （小数値を切り捨て）
+                        Dim totalVal As Integer = lateVal1 + lateVal2 + lateValDay
+                        rowValue.Add(totalVal)
+                        log.cLog($"1 cid:{cid} 延滞元金[{lateVal1}] 延滞損害金[{lateVal2}] 延滞損害金単価[{lateValU}] 日数[{period}] 延滞損害金x日数[{lateValDay}] 合計[{totalVal}]")
+
+                        ' 延滞情報(OverTax.db3)に該当顧客番号があれば右列に追記
+                        dr = ownForm.db.OrgDataTable(Sqldb.TID.OTAX).Select($"C05 = '{cInfo(1)}'")
+                        If dr.Length > 0 Then
+                            ' 延滞情報に存在した
+                            If Not outList(0).Contains("延滞請求額TEST") Then
+                                outList(0).Add("延滞請求額TEST")     ' 1度だけ目次を追加する
+                            End If
+                            Dim gankin As Integer = cmn.Int(dr(0)(45))      ' 延滞元金
+                            Dim gankinB As Integer = cmn.Int(dr(0)(46))     ' 元金ボーナス分
+                            Dim risoku As Integer = cmn.Int(dr(0)(47))      ' 利息分
+                            Dim risokuB As Integer = cmn.Int(dr(0)(48))     ' 利息ボーナス分
+                            Dim songai As Integer = cmn.Int(dr(0)(49))      ' 延滞損害金
+                            Dim songaiB As Integer = cmn.Int(dr(0)(50))     ' 延滞損害金ボーナス分
+                            Dim total As Integer = gankin + gankinB + risoku + risokuB + songai + songaiB
+                            rowValue.Add(total)
+                            log.cLog($"2 cid:{cid} 延滞元金[{gankin}]B[{gankinB}] 利息[{risoku}]B[{risokuB}] 損害金[{songai}]B[{songaiB}] 合計[{total}]")
                         End If
                         Continue For
 

@@ -139,6 +139,9 @@
                     End If
             End Select
         Next
+
+        ' DGV_REG1.Columns(1).DefaultCellStyle.WrapMode = DataGridViewTriState.True
+
     End Sub
 #End Region
 
@@ -290,6 +293,10 @@
                                          End If
                                          editTimer.Stop()
                                      End Sub
+        AddHandler dtPicker.Leave, Sub(sender, e)
+                                       DGV_REG1.Focus()
+                                       log.cLog("Cocus")
+                                   End Sub
 
         ' DataGridViewに追加
         dgv.Controls.Add(dtPicker)
@@ -322,7 +329,6 @@
         AddHandler comboBox.SelectedIndexChanged, Sub(sender, e)
                                                       dgv(colIndex, rowIndex).Value = comboBox.SelectedItem
                                                   End Sub
-
         ' DataGridViewに追加
         dgv.Controls.Add(comboBox)
     End Sub
@@ -350,6 +356,18 @@
         dgv.Tag = numericUpDown
     End Sub
 
+    Private Sub DGV_REG1_CellEnter(sender As Object, e As DataGridViewCellEventArgs) Handles DGV_REG1.CellEnter
+        For Each control As Control In DGV_REG1.Controls
+            If TypeOf control Is ComboBox OrElse TypeOf control Is DateTimePicker OrElse TypeOf control Is NumericUpDown Then
+                Dim cellRect As Rectangle = DGV_REG1.GetCellDisplayRectangle(e.ColumnIndex, e.RowIndex, False)
+                If control.Bounds.IntersectsWith(cellRect) Then
+                    ' コントロールにフォーカスを移動
+                    control.Focus()
+                    Exit Sub
+                End If
+            End If
+        Next
+    End Sub
 
     ' ショートカット F1
     Private Sub SCA1_KeyPress(ByVal sender As Object, ByVal e As KeyEventArgs) Handles DGV_REG1.KeyDown

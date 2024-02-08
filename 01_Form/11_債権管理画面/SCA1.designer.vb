@@ -271,6 +271,7 @@ Partial Class SCA1
         Me.Button1 = New System.Windows.Forms.Button()
         Me.TAB_A1 = New System.Windows.Forms.TabControl()
         Me.Tab_6GA = New System.Windows.Forms.TabPage()
+        Me.Label7 = New System.Windows.Forms.Label()
         Me.CB_MRRangeAll = New System.Windows.Forms.CheckBox()
         Me.Label3 = New System.Windows.Forms.Label()
         Me.DTP_MRED = New System.Windows.Forms.DateTimePicker()
@@ -321,7 +322,6 @@ Partial Class SCA1
         Me.総務課ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.表示ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripMenuItem2 = New System.Windows.Forms.ToolStripMenuItem()
-        Me.Label7 = New System.Windows.Forms.Label()
         Me.CMenu_DGV3.SuspendLayout()
         Me.Tab_4Dun.SuspendLayout()
         CType(Me.DGV4, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -916,7 +916,7 @@ Partial Class SCA1
         Me.TB_DunIN.Font = New System.Drawing.Font("メイリオ", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.TB_DunIN.ForeColor = System.Drawing.SystemColors.InfoText
         Me.TB_DunIN.Location = New System.Drawing.Point(705, 337)
-        Me.TB_DunIN.MaxLength = 327670
+        Me.TB_DunIN.MaxLength = 2000000000
         Me.TB_DunIN.Multiline = True
         Me.TB_DunIN.Name = "TB_DunIN"
         Me.TB_DunIN.Size = New System.Drawing.Size(206, 109)
@@ -2919,6 +2919,19 @@ Partial Class SCA1
         Me.Tab_6GA.TabIndex = 5
         Me.Tab_6GA.Text = "申請物管理"
         '
+        'Label7
+        '
+        Me.Label7.BackColor = System.Drawing.Color.SteelBlue
+        Me.Label7.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.Label7.Font = New System.Drawing.Font("メイリオ", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.Label7.ForeColor = System.Drawing.Color.White
+        Me.Label7.Location = New System.Drawing.Point(4, 9)
+        Me.Label7.Name = "Label7"
+        Me.Label7.Size = New System.Drawing.Size(224, 20)
+        Me.Label7.TabIndex = 1791
+        Me.Label7.Text = "申請書の種類"
+        Me.Label7.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
         'CB_MRRangeAll
         '
         Me.CB_MRRangeAll.AutoSize = True
@@ -3405,7 +3418,7 @@ Partial Class SCA1
         '機能ToolStripMenuItem
         '
         Me.機能ToolStripMenuItem.Name = "機能ToolStripMenuItem"
-        Me.機能ToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.機能ToolStripMenuItem.Size = New System.Drawing.Size(164, 22)
         Me.機能ToolStripMenuItem.Text = "F35データ読み込み"
         '
         '画面モードToolStripMenuItem
@@ -3420,13 +3433,13 @@ Partial Class SCA1
         Me.債権管理部ToolStripMenuItem.Checked = True
         Me.債権管理部ToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked
         Me.債権管理部ToolStripMenuItem.Name = "債権管理部ToolStripMenuItem"
-        Me.債権管理部ToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.債権管理部ToolStripMenuItem.Size = New System.Drawing.Size(134, 22)
         Me.債権管理部ToolStripMenuItem.Text = "債権管理部"
         '
         '総務課ToolStripMenuItem
         '
         Me.総務課ToolStripMenuItem.Name = "総務課ToolStripMenuItem"
-        Me.総務課ToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.総務課ToolStripMenuItem.Size = New System.Drawing.Size(134, 22)
         Me.総務課ToolStripMenuItem.Text = "総務課"
         '
         '表示ToolStripMenuItem
@@ -3439,21 +3452,8 @@ Partial Class SCA1
         'ToolStripMenuItem2
         '
         Me.ToolStripMenuItem2.Name = "ToolStripMenuItem2"
-        Me.ToolStripMenuItem2.Size = New System.Drawing.Size(180, 22)
+        Me.ToolStripMenuItem2.Size = New System.Drawing.Size(146, 22)
         Me.ToolStripMenuItem2.Text = "ユーザー名設定"
-        '
-        'Label7
-        '
-        Me.Label7.BackColor = System.Drawing.Color.SteelBlue
-        Me.Label7.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.Label7.Font = New System.Drawing.Font("メイリオ", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.Label7.ForeColor = System.Drawing.Color.White
-        Me.Label7.Location = New System.Drawing.Point(4, 9)
-        Me.Label7.Name = "Label7"
-        Me.Label7.Size = New System.Drawing.Size(224, 20)
-        Me.Label7.TabIndex = 1791
-        Me.Label7.Text = "申請書の種類"
-        Me.Label7.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'SCA1
         '

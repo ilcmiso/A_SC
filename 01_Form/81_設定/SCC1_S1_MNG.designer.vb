@@ -30,6 +30,9 @@ Partial Class SCC1_S1_MNG
         Me.Button3 = New System.Windows.Forms.Button()
         Me.CB_DebugLog = New System.Windows.Forms.CheckBox()
         Me.CB_AplUpdateOff = New System.Windows.Forms.CheckBox()
+        Me.NumericUpDown1 = New System.Windows.Forms.NumericUpDown()
+        Me.TextBox1 = New System.Windows.Forms.TextBox()
+        CType(Me.NumericUpDown1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'ListBox1
@@ -97,11 +100,28 @@ Partial Class SCC1_S1_MNG
         Me.CB_AplUpdateOff.Text = "アプリ更新の停止"
         Me.CB_AplUpdateOff.UseVisualStyleBackColor = True
         '
+        'NumericUpDown1
+        '
+        Me.NumericUpDown1.Location = New System.Drawing.Point(359, 200)
+        Me.NumericUpDown1.Maximum = New Decimal(New Integer() {100000, 0, 0, 0})
+        Me.NumericUpDown1.Name = "NumericUpDown1"
+        Me.NumericUpDown1.Size = New System.Drawing.Size(60, 19)
+        Me.NumericUpDown1.TabIndex = 35
+        '
+        'TextBox1
+        '
+        Me.TextBox1.Location = New System.Drawing.Point(359, 175)
+        Me.TextBox1.Name = "TextBox1"
+        Me.TextBox1.Size = New System.Drawing.Size(100, 19)
+        Me.TextBox1.TabIndex = 36
+        '
         'SCC1_S1_MNG
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 12.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(549, 328)
+        Me.Controls.Add(Me.TextBox1)
+        Me.Controls.Add(Me.NumericUpDown1)
         Me.Controls.Add(Me.CB_AplUpdateOff)
         Me.Controls.Add(Me.CB_DebugLog)
         Me.Controls.Add(Me.Button3)
@@ -115,6 +135,7 @@ Partial Class SCC1_S1_MNG
         Me.Name = "SCC1_S1_MNG"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "管理"
+        CType(Me.NumericUpDown1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -127,4 +148,6 @@ Partial Class SCC1_S1_MNG
     Friend WithEvents Button3 As Button
     Friend WithEvents CB_DebugLog As CheckBox
     Friend WithEvents CB_AplUpdateOff As CheckBox
+    Friend WithEvents NumericUpDown1 As NumericUpDown
+    Friend WithEvents TextBox1 As TextBox
 End Class

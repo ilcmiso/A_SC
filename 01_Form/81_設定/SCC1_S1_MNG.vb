@@ -1,4 +1,6 @@
-﻿Public Class SCC1_S1_MNG
+﻿Imports System.Data.SQLite
+
+Public Class SCC1_S1_MNG
 
     Private ReadOnly db As New Sqldb
     Private ReadOnly cmn As New Common
@@ -42,7 +44,8 @@
     Private Sub InitCommandList()
         Dim commandNames As String() = {
             "SC.exeのタイムスタンプ更新",
-            "追加電話番号の検索ハイフン無しFKR06初期設定"
+            "追加電話番号の検索ハイフン無しFKR06初期設定",
+            "db3ファイル新規作成 (Value値)"
             }
         ListBox2.Items.Clear()
         For Each cl In commandNames
@@ -78,6 +81,41 @@
                 Next
                 log.cLog(dt.Rows.Count)
                 db.ExeSQL(Sqldb.TID.SCR)
+
+            Case 2
+                Dim fileName As String = $"{Environment.GetFolderPath(Environment.SpecialFolder.Desktop)}\{TextBox1.Text}.db3"
+                Dim columnCount As Integer = NumericUpDown1.Value
+
+                Dim connectionString As String = $"Data Source={fileName}; Version=3;"
+                Using connection As New SQLiteConnection(connectionString)
+                    Try
+                        connection.Open()
+
+                        Dim command As New SQLiteCommand(connection)
+
+                        ' テーブル作成コマンドの作成
+                        Dim createTableCommand As String = "CREATE TABLE IF NOT EXISTS TBL ("
+
+                        ' 主キーのカラムを追加（NULL非許容、ブランクの初期値）
+                        createTableCommand &= "C01 TEXT PRIMARY KEY NOT NULL DEFAULT ''"
+
+                        ' その他のカラムを追加（ブランクの初期値）
+                        For i As Integer = 2 To columnCount
+                            createTableCommand &= $", C{i.ToString("D2")} TEXT NOT NULL DEFAULT ''"
+                        Next
+
+                        createTableCommand &= ");"
+
+                        command.CommandText = createTableCommand
+                        command.ExecuteNonQuery()
+                    Finally
+                        ' 接続を明示的に閉じる
+                        If connection.State = ConnectionState.Open Then
+                            connection.Close()
+                        End If
+                    End Try
+                End Using
+
         End Select
 
     End Sub

@@ -29,6 +29,7 @@ Public Class SCB1
         PB_TXT.AllowDrop = True
         PB_CSV.AllowDrop = True
         PB_AC.AllowDrop = True
+        PB_OverTax.AllowDrop = True
         ShowLastUpdateTimes()
     End Sub
 
@@ -115,7 +116,7 @@ Public Class SCB1
     End Sub
 
     ' ファイルドラッグ＆ドロップ
-    Private Sub ListBox1_DragEnter(sender As Object, e As DragEventArgs) Handles PB_TXT.DragEnter, PB_CSV.DragEnter, PB_AC.DragEnter
+    Private Sub ListBox1_DragEnter(sender As Object, e As DragEventArgs) Handles PB_TXT.DragEnter, PB_CSV.DragEnter, PB_AC.DragEnter, PB_OverTax.DragEnter
         If e.Data.GetDataPresent(DataFormats.FileDrop) Then
             'ドラッグされたデータ形式を調べ、ファイルのときはコピーとする
             e.Effect = DragDropEffects.Copy
@@ -175,6 +176,20 @@ Public Class SCB1
             LoadFileToDGV(files(0))
             db.UpdateOrigDT(Sqldb.TID.AC)
             MsgBox("オートコールファイルの読み込みが完了しました。" & vbCrLf & $"オートコールのデータ数は {DGV1.RowCount} 件です。")
+        End If
+    End Sub
+    ' 延滞損害情報 D&D
+    Private Sub PB_OverTax_DragDrop(sender As Object, e As DragEventArgs) Handles PB_OverTax.DragDrop
+        ' ドロップされたファイルのリストを取得
+        Dim files As String() = CType(e.Data.GetData(DataFormats.FileDrop), String())
+
+        ' 1つのファイルのみを取り扱う場合
+        If files.Length = 1 Then
+            ' ファイルをDGVにロード
+            Cursor.Current = Cursors.WaitCursor             ' マウスカーソルを砂時計に
+            LoadOverTax(files(0))
+            db.UpdateOrigDT(Sqldb.TID.OTAX)
+            MsgBox("延滞情報ファイルの読み込みが完了しました。")
         End If
     End Sub
 
@@ -669,6 +684,26 @@ Public Class SCB1
             MessageBox.Show("エラー: " & ex.Message)
         End Try
     End Sub
+
+    Public Sub LoadOverTax(filePath As String)
+        Try
+            db.DeleteAllData(Sqldb.TID.OTAX)
+            ' CSVファイルの各行を読み込む
+            Using sr As StreamReader = New StreamReader(filePath, Encoding.GetEncoding("Shift_JIS"))
+                While Not sr.EndOfStream
+                    Dim line As String = sr.ReadLine()
+                    Dim elements As String() = line.Split(","c).Select(Function(s) s.Trim()).ToArray()
+
+                    ' 分割された各要素をリストに追加
+                    db.ExeSQLInsert(Sqldb.TID.OTAX, elements)
+                End While
+            End Using
+            db.ExeSQL(Sqldb.TID.OTAX)
+        Catch ex As Exception
+            Console.WriteLine("エラーが発生しました: " & ex.Message)
+        End Try
+    End Sub
+
 
     Private Class RecordInfo
         Public Property Name As String

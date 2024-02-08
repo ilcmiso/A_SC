@@ -38,10 +38,14 @@ Partial Class SCB1
         Me.Label5 = New System.Windows.Forms.Label()
         Me.Label6 = New System.Windows.Forms.Label()
         Me.PB_AC = New System.Windows.Forms.PictureBox()
+        Me.Label7 = New System.Windows.Forms.Label()
+        Me.Label8 = New System.Windows.Forms.Label()
+        Me.PB_OverTax = New System.Windows.Forms.PictureBox()
         CType(Me.PB_TXT, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.PB_CSV, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.DGV1, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.PB_AC, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.PB_OverTax, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'bgWorker
@@ -214,11 +218,47 @@ Partial Class SCB1
         Me.PB_AC.TabIndex = 1570
         Me.PB_AC.TabStop = False
         '
+        'Label7
+        '
+        Me.Label7.BackColor = System.Drawing.Color.LightYellow
+        Me.Label7.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
+        Me.Label7.Font = New System.Drawing.Font("メイリオ", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.Label7.Location = New System.Drawing.Point(460, 215)
+        Me.Label7.Name = "Label7"
+        Me.Label7.Size = New System.Drawing.Size(298, 115)
+        Me.Label7.TabIndex = 1574
+        Me.Label7.Text = "延滞損害のファイルを、右側のCSVアイコンにドラッグ＆ドロップしてください。"
+        '
+        'Label8
+        '
+        Me.Label8.BackColor = System.Drawing.Color.Khaki
+        Me.Label8.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
+        Me.Label8.Font = New System.Drawing.Font("メイリオ", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.Label8.Location = New System.Drawing.Point(460, 190)
+        Me.Label8.Name = "Label8"
+        Me.Label8.Size = New System.Drawing.Size(160, 25)
+        Me.Label8.TabIndex = 1573
+        Me.Label8.Text = "延滞損害情報"
+        '
+        'PB_OverTax
+        '
+        Me.PB_OverTax.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.PB_OverTax.Image = CType(resources.GetObject("PB_OverTax.Image"), System.Drawing.Image)
+        Me.PB_OverTax.Location = New System.Drawing.Point(773, 190)
+        Me.PB_OverTax.Name = "PB_OverTax"
+        Me.PB_OverTax.Size = New System.Drawing.Size(129, 140)
+        Me.PB_OverTax.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
+        Me.PB_OverTax.TabIndex = 1575
+        Me.PB_OverTax.TabStop = False
+        '
         'SCB1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 12.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(914, 365)
+        Me.Controls.Add(Me.PB_OverTax)
+        Me.Controls.Add(Me.Label7)
+        Me.Controls.Add(Me.Label8)
         Me.Controls.Add(Me.DGV1)
         Me.Controls.Add(Me.Label5)
         Me.Controls.Add(Me.Label6)
@@ -243,6 +283,7 @@ Partial Class SCB1
         CType(Me.PB_CSV, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.DGV1, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.PB_AC, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.PB_OverTax, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -262,4 +303,7 @@ Partial Class SCB1
     Friend WithEvents Label5 As Label
     Friend WithEvents Label6 As Label
     Friend WithEvents PB_AC As PictureBox
+    Friend WithEvents Label7 As Label
+    Friend WithEvents Label8 As Label
+    Friend WithEvents PB_OverTax As PictureBox
 End Class
