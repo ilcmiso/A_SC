@@ -41,6 +41,8 @@ Partial Class SCB1
         Me.Label7 = New System.Windows.Forms.Label()
         Me.Label8 = New System.Windows.Forms.Label()
         Me.PB_OverTax = New System.Windows.Forms.PictureBox()
+        Me.L_UptimeOverTax = New System.Windows.Forms.Label()
+        Me.L_UptimeAutoCall = New System.Windows.Forms.Label()
         CType(Me.PB_TXT, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.PB_CSV, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.DGV1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -152,7 +154,7 @@ Partial Class SCB1
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.DGV1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.DGV1.Location = New System.Drawing.Point(0, 0)
+        Me.DGV1.Location = New System.Drawing.Point(1, 0)
         Me.DGV1.Name = "DGV1"
         Me.DGV1.RowHeadersVisible = False
         Me.DGV1.RowTemplate.Height = 21
@@ -225,9 +227,9 @@ Partial Class SCB1
         Me.Label7.Font = New System.Drawing.Font("メイリオ", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.Label7.Location = New System.Drawing.Point(460, 215)
         Me.Label7.Name = "Label7"
-        Me.Label7.Size = New System.Drawing.Size(298, 115)
+        Me.Label7.Size = New System.Drawing.Size(298, 130)
         Me.Label7.TabIndex = 1574
-        Me.Label7.Text = "延滞損害のファイルを、右側のCSVアイコンにドラッグ＆ドロップしてください。"
+        Me.Label7.Text = "延滞損害のファイルを、纏めて全て選択した状態で右側のCSVアイコンにドラッグ＆ドロップしてください。"
         '
         'Label8
         '
@@ -251,15 +253,39 @@ Partial Class SCB1
         Me.PB_OverTax.TabIndex = 1575
         Me.PB_OverTax.TabStop = False
         '
+        'L_UptimeOverTax
+        '
+        Me.L_UptimeOverTax.BackColor = System.Drawing.Color.Transparent
+        Me.L_UptimeOverTax.Font = New System.Drawing.Font("メイリオ", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.L_UptimeOverTax.ForeColor = System.Drawing.Color.Blue
+        Me.L_UptimeOverTax.Location = New System.Drawing.Point(460, 345)
+        Me.L_UptimeOverTax.Name = "L_UptimeOverTax"
+        Me.L_UptimeOverTax.Size = New System.Drawing.Size(442, 20)
+        Me.L_UptimeOverTax.TabIndex = 1576
+        Me.L_UptimeOverTax.Text = "[最終更新日時] 2020/01/01"
+        '
+        'L_UptimeAutoCall
+        '
+        Me.L_UptimeAutoCall.BackColor = System.Drawing.Color.Transparent
+        Me.L_UptimeAutoCall.Font = New System.Drawing.Font("メイリオ", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.L_UptimeAutoCall.ForeColor = System.Drawing.Color.Blue
+        Me.L_UptimeAutoCall.Location = New System.Drawing.Point(460, 149)
+        Me.L_UptimeAutoCall.Name = "L_UptimeAutoCall"
+        Me.L_UptimeAutoCall.Size = New System.Drawing.Size(442, 20)
+        Me.L_UptimeAutoCall.TabIndex = 1577
+        Me.L_UptimeAutoCall.Text = "[最終更新日時] 2020/01/01"
+        '
         'SCB1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 12.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(914, 365)
+        Me.Controls.Add(Me.L_UptimeAutoCall)
+        Me.Controls.Add(Me.L_UptimeOverTax)
+        Me.Controls.Add(Me.DGV1)
         Me.Controls.Add(Me.PB_OverTax)
         Me.Controls.Add(Me.Label7)
         Me.Controls.Add(Me.Label8)
-        Me.Controls.Add(Me.DGV1)
         Me.Controls.Add(Me.Label5)
         Me.Controls.Add(Me.Label6)
         Me.Controls.Add(Me.PB_AC)
@@ -306,4 +332,6 @@ Partial Class SCB1
     Friend WithEvents Label7 As Label
     Friend WithEvents Label8 As Label
     Friend WithEvents PB_OverTax As PictureBox
+    Friend WithEvents L_UptimeOverTax As Label
+    Friend WithEvents L_UptimeAutoCall As Label
 End Class

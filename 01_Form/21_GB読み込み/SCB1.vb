@@ -13,7 +13,7 @@ Public Class SCB1
     Private ReadOnly id_st As Integer() = {1, 2, 4, 6, 10, 13, 21, 36, 51, 54, 58, 60, 62, 66, 67, 68, 69, 77, 103, 129, 137, 145, 305, 318, 358, 371, 372, 374, 400, 426, 434, 435, 443, 603, 616, 656, 669, 670, 671, 686, 712, 738, 746, 754, 914, 927, 967, 980, 995, 1003, 1029, 1055, 1063, 1064, 1065, 1073, 1233, 1393, 1394, 1395, 1396, 1404, 1412, 1420, 1428, 1429, 1437, 1467, 1475, 1476, 1484, 1514, 1515, 1523, 1543, 1623, 1624, 1625, 1630, 1638, 1646, 1647, 1667, 1668, 1949, 1954, 1974, 1975, 1976, 1977, 1985, 1993, 2001, 2009, 2017, 2025, 2033, 2041, 2049, 2057, 2065, 2073, 2081, 2089, 2094, 2099, 2104, 2115, 2126, 2137, 2148, 2151, 2154, 2165, 2176, 2187, 2198, 2201, 2204, 2215, 2226, 2237, 2238, 2248, 2249, 2259, 2260, 2270, 2281, 2292, 2303, 2314, 2325, 2336, 2347, 2358, 2369, 2370, 2380, 2381, 2391, 2392, 2402, 2413, 2424, 2435, 2446, 2457, 2468, 2471, 2482, 2485, 2496, 2507, 2512, 2517, 2525, 2536, 2544, 2555, 2563, 2693, 2698, 2718, 2719, 2720, 2721, 2729, 2737, 2745, 2753, 2761, 2769, 2777, 2785, 2793, 2801, 2809, 2817, 2825, 2833, 2838, 2843, 2848, 2859, 2870, 2881, 2892, 2895, 2898, 2909, 2920, 2931, 2942, 2945, 2948, 2959, 2970, 2981, 2982, 2992, 2993, 3003, 3004, 3014, 3025, 3036, 3047, 3058, 3069, 3080, 3091, 3102, 3113, 3114, 3124, 3125, 3135, 3136, 3146, 3157, 3168, 3179, 3190, 3201, 3212, 3215, 3226, 3229, 3240, 3251, 3256, 3261, 3269, 3280, 3288, 3299, 3307, 3437, 3442, 3462, 3463, 3464, 3465, 3473, 3481, 3489, 3497, 3505, 3513, 3521, 3529, 3537, 3545, 3553, 3561, 3569, 3577, 3582, 3587, 3592, 3603, 3614, 3625, 3636, 3639, 3642, 3653, 3664, 3675, 3686, 3689, 3692, 3703, 3714, 3725, 3726, 3736, 3737, 3747, 3748, 3758, 3769, 3780, 3791, 3802, 3813, 3824, 3835, 3846, 3857, 3858, 3868, 3869, 3879, 3880, 3890, 3901, 3912, 3923, 3934, 3945, 3956, 3959, 3970, 3973, 3984, 3995, 4000, 4005, 4013, 4024, 4032, 4043, 4051, 4181, 4186, 4206, 4207, 4208, 4209, 4217, 4225, 4233, 4241, 4249, 4257, 4265, 4273, 4281, 4289, 4297, 4305, 4313, 4321, 4326, 4331, 4336, 4347, 4358, 4369, 4380, 4383, 4386, 4397, 4408, 4419, 4430, 4433, 4436, 4447, 4458, 4469, 4470, 4480, 4481, 4491, 4492, 4502, 4513, 4524, 4535, 4546, 4557, 4568, 4579, 4590, 4601, 4602, 4612, 4613, 4623, 4624, 4634, 4645, 4656, 4667, 4678, 4689, 4700, 4703, 4714, 4717, 4728, 4739, 4744, 4749, 4757, 4768, 4776, 4787, 4795}
     Private ReadOnly id_len As Integer() = {1, 2, 2, 4, 3, 8, 15, 15, 3, 4, 2, 2, 4, 1, 1, 1, 8, 26, 26, 8, 8, 160, 13, 40, 13, 1, 2, 26, 26, 8, 1, 8, 160, 13, 40, 13, 1, 1, 15, 26, 26, 8, 8, 160, 13, 40, 13, 15, 8, 26, 26, 8, 1, 1, 8, 160, 160, 1, 1, 1, 8, 8, 8, 8, 1, 8, 30, 8, 1, 8, 30, 1, 8, 20, 80, 1, 1, 5, 8, 8, 1, 20, 1, 281, 5, 20, 1, 1, 1, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 5, 5, 5, 11, 11, 11, 11, 3, 3, 11, 11, 11, 11, 3, 3, 11, 11, 11, 1, 10, 1, 10, 1, 10, 11, 11, 11, 11, 11, 11, 11, 11, 11, 1, 10, 1, 10, 1, 10, 11, 11, 11, 11, 11, 11, 3, 11, 3, 11, 11, 5, 5, 8, 11, 8, 11, 8, 130, 5, 20, 1, 1, 1, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 5, 5, 5, 11, 11, 11, 11, 3, 3, 11, 11, 11, 11, 3, 3, 11, 11, 11, 1, 10, 1, 10, 1, 10, 11, 11, 11, 11, 11, 11, 11, 11, 11, 1, 10, 1, 10, 1, 10, 11, 11, 11, 11, 11, 11, 3, 11, 3, 11, 11, 5, 5, 8, 11, 8, 11, 8, 130, 5, 20, 1, 1, 1, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 5, 5, 5, 11, 11, 11, 11, 3, 3, 11, 11, 11, 11, 3, 3, 11, 11, 11, 1, 10, 1, 10, 1, 10, 11, 11, 11, 11, 11, 11, 11, 11, 11, 1, 10, 1, 10, 1, 10, 11, 11, 11, 11, 11, 11, 3, 11, 3, 11, 11, 5, 5, 8, 11, 8, 11, 8, 130, 5, 20, 1, 1, 1, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 5, 5, 5, 11, 11, 11, 11, 3, 3, 11, 11, 11, 11, 3, 3, 11, 11, 11, 1, 10, 1, 10, 1, 10, 11, 11, 11, 11, 11, 11, 11, 11, 11, 1, 10, 1, 10, 1, 10, 11, 11, 11, 11, 11, 11, 3, 11, 3, 11, 11, 5, 5, 8, 11, 8, 11, 8, 130}
 
-    Private ReadOnly GBFILE_LISTCNT = 39                ' GBFile格納リストの要素数
+    Private ReadOnly GBFILE_LISTCNT = 41                ' GBFile格納リストの要素数
     Private ReadOnly DB_OUTPUT = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory) & "\" & Sqldb.DB_FKSC
 
     Private ReadOnly SCList As New List(Of String)               ' SCデータリスト
@@ -84,8 +84,10 @@ Public Class SCB1
                                    "'" & Trim(SCList(i + 16)) & "'," &               ' FK38 連債者 勤務先 
                                    "'" & Trim(SCList(i + 17)) & "'," &               ' FK39 連債者 勤務先TEL1
                                    "''," &                                           ' FK40 連債者 勤務先TEL2(情報なし)
-                                   "'" & Trim(SCList(i + 38)) & "'," &             ' FK41 連債者 団信加入サイン
-                                   "'','','','','',''," &                          ' FK42～47
+                                   "'" & Trim(SCList(i + 38)) & "'," &               ' FK41 連債者 団信加入サイン
+                                   "'" & Trim(SCList(i + 39)) & "'," &               ' FK42 償還金口座情報 口座番号
+                                   "'" & Trim(SCList(i + 40)) & "'," &               ' FK43 償還金口座情報 口座名義人ｶﾅ
+                                   "'','','',''," &                                  ' FK44～47
                                    "'" & cmn.Int(SCList(i + 36)) & "'," &          ' FK48 更新日残高(ボーナス)
                                    "'" & cmn.Int(SCList(i + 18)) & "'," &          ' FK49 返済額2(顧客番号05始まり用)
                                    "'" & cmn.Int(SCList(i + 19)) & "'," &          ' FK50 返済額
@@ -183,15 +185,12 @@ Public Class SCB1
         ' ドロップされたファイルのリストを取得
         Dim files As String() = CType(e.Data.GetData(DataFormats.FileDrop), String())
 
-        ' 1つのファイルのみを取り扱う場合
-        If files.Length = 1 Then
-            ' ファイルをDGVにロード
-            Cursor.Current = Cursors.WaitCursor             ' マウスカーソルを砂時計に
-            LoadOverTax(files(0))
-            db.UpdateOrigDT(Sqldb.TID.OTAX)
-            MsgBox("延滞情報ファイルの読み込みが完了しました。")
-        End If
+        Cursor.Current = Cursors.WaitCursor     ' マウスカーソルを砂時計に
+        ' 複数ファイルの内容をLoadOverTaxに渡してデータベースに読み込む
+        LoadOverTax(files)
+        MsgBox(files.Length.ToString() & "個の延滞情報ファイルの読み込みが完了しました。")
     End Sub
+
 
     ' ローカルの顧客DBをサーバーにコピー
     Private Sub CopyCDBtoServer(dbFile As String)
@@ -259,6 +258,8 @@ Public Class SCB1
                 SCList.Add(cmn.MidB(recode, 2347, 11))      ' 37 更新日残高(ボーナス)
                 SCList.Add(cmn.MidB(recode, 371, 1))        ' 38 債務者 団信加入サイン
                 SCList.Add(cmn.MidB(recode, 669, 1))        ' 39 連債者 団信加入サイン
+                SCList.Add(cmn.MidB(recode, 1429, 8))       ' 40 償還金口座情報 口座番号
+                SCList.Add(cmn.MidB(recode, 1437, 30))      ' 41 償還金口座情報 口座名義人カナ
                 ' *** ↑ここの数を変更したら GBFILE_LISTCNT の値も合わせて変更すること ***
             End While
         End Using
@@ -562,6 +563,8 @@ Public Class SCB1
     Private Sub ShowLastUpdateTimes()
         L_UptimeTXT.Text = "[最終更新日] " & File.GetLastWriteTime(db.CurrentPath_LO & Sqldb.DB_FKSC).ToShortDateString
         L_UptimeCSV.Text = "[最終更新日] " & File.GetLastWriteTime(db.CurrentPath_LO & Sqldb.DB_FKSCASSIST).ToShortDateString
+        L_UptimeAutoCall.Text = "[最終更新日] " & File.GetLastWriteTime(db.CurrentPath_LO & Sqldb.DB_AUTOCALL).ToShortDateString
+        L_UptimeOverTax.Text = "[最終更新日] " & File.GetLastWriteTime(db.CurrentPath_LO & Sqldb.DB_OVERTAX).ToShortDateString
     End Sub
 
 
@@ -685,25 +688,26 @@ Public Class SCB1
         End Try
     End Sub
 
-    Public Sub LoadOverTax(filePath As String)
+    Public Sub LoadOverTax(files As String())
         Try
             db.DeleteAllData(Sqldb.TID.OTAX)
-            ' CSVファイルの各行を読み込む
-            Using sr As StreamReader = New StreamReader(filePath, Encoding.GetEncoding("Shift_JIS"))
-                While Not sr.EndOfStream
-                    Dim line As String = sr.ReadLine()
-                    Dim elements As String() = line.Split(","c).Select(Function(s) s.Trim()).ToArray()
+            For Each filePath In files
+                ' CSVファイルの各行を読み込む
+                Using sr As StreamReader = New StreamReader(filePath, Encoding.GetEncoding("Shift_JIS"))
+                    While Not sr.EndOfStream
+                        Dim line As String = sr.ReadLine()
+                        Dim elements As String() = line.Split(","c).Select(Function(s) s.Trim()).ToArray()
 
-                    ' 分割された各要素をリストに追加
-                    db.ExeSQLInsert(Sqldb.TID.OTAX, elements)
-                End While
-            End Using
+                        ' 分割された各要素をリストに追加
+                        db.ExeSQLInsert(Sqldb.TID.OTAX, elements)
+                    End While
+                End Using
+            Next
             db.ExeSQL(Sqldb.TID.OTAX)
         Catch ex As Exception
             Console.WriteLine("エラーが発生しました: " & ex.Message)
         End Try
     End Sub
-
 
     Private Class RecordInfo
         Public Property Name As String
@@ -716,5 +720,6 @@ Public Class SCB1
             Me.Size = size
         End Sub
     End Class
+
 End Class
 

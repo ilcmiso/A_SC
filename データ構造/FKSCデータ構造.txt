@@ -42,8 +42,8 @@ FKS.FKSC_R.FK38          ' 連帯債務者 勤務先
 FKS.FKSC_R.FK39          ' 連帯債務者 勤務先TEL1 
 FKS.FKSC_R.FK40          ' 連帯債務者 勤務先TEL2 
 FKS.FKSC_R.FK41          ' 連帯債務者 団信加入サイン 2023/06 add
-FKS.FKSC_R.FK42          ' 
-FKS.FKSC_R.FK43          ' 
+FKS.FKSC_R.FK42          ' 償還金口座情報 口座番号
+FKS.FKSC_R.FK43          ' 償還金口座情報 口座名義人ｶﾅ
 FKS.FKSC_R.FK44          ' 
 FKS.FKSC_R.FK45          ' 
 FKS.FKSC_R.FK46          ' 
@@ -58,7 +58,7 @@ FKS.FKSC_R.FK54          ' 更新日残高
 FKS.FKSC_R.FK55          ' 延滞合計額
 FKS.FKSC_R.FK56          ' 貸付金額
 FKS.FKSC_R.FK57          ' 貸付金額ボーナス
-FKS.FKSC_R.FK58          ' 完済日(使ってない)
+FKS.FKSC_R.FK58          ' 完済日
 FKS.FKSC_R.FK59          ' 償還残回数(使ってない) → アシスト 金消契約日 2022/07追加
 
 FKS.FKSC_R.FK60          ' アシスト 貸付金額

@@ -50,11 +50,6 @@ Partial Class SCA1
         Dim DataGridViewCellStyle17 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle18 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle24 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle19 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle20 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle21 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle22 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle23 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle25 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle26 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle27 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
@@ -69,6 +64,11 @@ Partial Class SCA1
         Dim DataGridViewCellStyle36 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle37 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle38 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle19 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle20 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle21 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle22 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle23 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(SCA1))
         Me.PBXX = New System.Windows.Forms.Button()
         Me.tt1 = New System.Windows.Forms.ToolTip(Me.components)
@@ -219,19 +219,11 @@ Partial Class SCA1
         Me.BT_PI6READ = New System.Windows.Forms.Button()
         Me.DGV_PIMENU = New System.Windows.Forms.DataGridView()
         Me.DataGridViewTextBoxColumn17 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.L_USELESSTEL = New System.Windows.Forms.Label()
         Me.L_JUNIN2 = New System.Windows.Forms.Label()
         Me.L_JUNIN1 = New System.Windows.Forms.Label()
         Me.TB_ADDRESS2 = New System.Windows.Forms.TextBox()
         Me.TB_ADDRESS1 = New System.Windows.Forms.TextBox()
         Me.DGV9 = New System.Windows.Forms.DataGridView()
-        Me.DataGridViewTextBoxColumn19 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.DataGridViewTextBoxColumn20 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.DataGridViewTextBoxColumn21 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.DataGridViewTextBoxColumn22 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Column39 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Column40 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Column41 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.CB_AUTOUPD = New System.Windows.Forms.CheckBox()
         Me.Label32 = New System.Windows.Forms.Label()
         Me.Label30 = New System.Windows.Forms.Label()
@@ -322,6 +314,14 @@ Partial Class SCA1
         Me.総務課ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.表示ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripMenuItem2 = New System.Windows.Forms.ToolStripMenuItem()
+        Me.TB_ADDRESS3 = New System.Windows.Forms.TextBox()
+        Me.DataGridViewTextBoxColumn19 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.DataGridViewTextBoxColumn20 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.DataGridViewTextBoxColumn21 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.DataGridViewTextBoxColumn22 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Column39 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Column40 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Column41 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.CMenu_DGV3.SuspendLayout()
         Me.Tab_4Dun.SuspendLayout()
         CType(Me.DGV4, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -2000,9 +2000,9 @@ Partial Class SCA1
         '
         'Tab_1SC
         '
+        Me.Tab_1SC.Controls.Add(Me.TB_ADDRESS3)
         Me.Tab_1SC.Controls.Add(Me.L_STS)
         Me.Tab_1SC.Controls.Add(Me.PAN_A)
-        Me.Tab_1SC.Controls.Add(Me.L_USELESSTEL)
         Me.Tab_1SC.Controls.Add(Me.L_JUNIN2)
         Me.Tab_1SC.Controls.Add(Me.L_JUNIN1)
         Me.Tab_1SC.Controls.Add(Me.TB_ADDRESS2)
@@ -2231,17 +2231,6 @@ Partial Class SCA1
         Me.DataGridViewTextBoxColumn17.ReadOnly = True
         Me.DataGridViewTextBoxColumn17.Width = 125
         '
-        'L_USELESSTEL
-        '
-        Me.L_USELESSTEL.AutoSize = True
-        Me.L_USELESSTEL.Font = New System.Drawing.Font("メイリオ", 9.75!, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.L_USELESSTEL.ForeColor = System.Drawing.Color.DodgerBlue
-        Me.L_USELESSTEL.Location = New System.Drawing.Point(875, 4)
-        Me.L_USELESSTEL.Name = "L_USELESSTEL"
-        Me.L_USELESSTEL.Size = New System.Drawing.Size(58, 20)
-        Me.L_USELESSTEL.TabIndex = 1777
-        Me.L_USELESSTEL.Text = "不通TEL"
-        '
         'L_JUNIN2
         '
         Me.L_JUNIN2.AutoSize = True
@@ -2277,7 +2266,7 @@ Partial Class SCA1
         Me.TB_ADDRESS2.Multiline = True
         Me.TB_ADDRESS2.Name = "TB_ADDRESS2"
         Me.TB_ADDRESS2.ReadOnly = True
-        Me.TB_ADDRESS2.Size = New System.Drawing.Size(313, 22)
+        Me.TB_ADDRESS2.Size = New System.Drawing.Size(304, 22)
         Me.TB_ADDRESS2.TabIndex = 6
         Me.TB_ADDRESS2.WordWrap = False
         '
@@ -2292,7 +2281,7 @@ Partial Class SCA1
         Me.TB_ADDRESS1.Multiline = True
         Me.TB_ADDRESS1.Name = "TB_ADDRESS1"
         Me.TB_ADDRESS1.ReadOnly = True
-        Me.TB_ADDRESS1.Size = New System.Drawing.Size(313, 22)
+        Me.TB_ADDRESS1.Size = New System.Drawing.Size(304, 22)
         Me.TB_ADDRESS1.TabIndex = 7
         Me.TB_ADDRESS1.WordWrap = False
         '
@@ -2335,75 +2324,6 @@ Partial Class SCA1
         Me.DGV9.Size = New System.Drawing.Size(605, 257)
         Me.DGV9.TabIndex = 1776
         Me.DGV9.TabStop = False
-        '
-        'DataGridViewTextBoxColumn19
-        '
-        Me.DataGridViewTextBoxColumn19.HeaderText = "１"
-        Me.DataGridViewTextBoxColumn19.MinimumWidth = 6
-        Me.DataGridViewTextBoxColumn19.Name = "DataGridViewTextBoxColumn19"
-        Me.DataGridViewTextBoxColumn19.ReadOnly = True
-        Me.DataGridViewTextBoxColumn19.Width = 70
-        '
-        'DataGridViewTextBoxColumn20
-        '
-        DataGridViewCellStyle19.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle19.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.DataGridViewTextBoxColumn20.DefaultCellStyle = DataGridViewCellStyle19
-        Me.DataGridViewTextBoxColumn20.HeaderText = "２"
-        Me.DataGridViewTextBoxColumn20.MinimumWidth = 6
-        Me.DataGridViewTextBoxColumn20.Name = "DataGridViewTextBoxColumn20"
-        Me.DataGridViewTextBoxColumn20.ReadOnly = True
-        Me.DataGridViewTextBoxColumn20.Width = 130
-        '
-        'DataGridViewTextBoxColumn21
-        '
-        DataGridViewCellStyle20.BackColor = System.Drawing.Color.White
-        DataGridViewCellStyle20.ForeColor = System.Drawing.Color.Black
-        Me.DataGridViewTextBoxColumn21.DefaultCellStyle = DataGridViewCellStyle20
-        Me.DataGridViewTextBoxColumn21.HeaderText = "３"
-        Me.DataGridViewTextBoxColumn21.MinimumWidth = 6
-        Me.DataGridViewTextBoxColumn21.Name = "DataGridViewTextBoxColumn21"
-        Me.DataGridViewTextBoxColumn21.ReadOnly = True
-        Me.DataGridViewTextBoxColumn21.Width = 70
-        '
-        'DataGridViewTextBoxColumn22
-        '
-        DataGridViewCellStyle21.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle21.BackColor = System.Drawing.Color.White
-        DataGridViewCellStyle21.ForeColor = System.Drawing.Color.Black
-        DataGridViewCellStyle21.Format = "d"
-        DataGridViewCellStyle21.NullValue = Nothing
-        Me.DataGridViewTextBoxColumn22.DefaultCellStyle = DataGridViewCellStyle21
-        Me.DataGridViewTextBoxColumn22.HeaderText = "４"
-        Me.DataGridViewTextBoxColumn22.MinimumWidth = 6
-        Me.DataGridViewTextBoxColumn22.Name = "DataGridViewTextBoxColumn22"
-        Me.DataGridViewTextBoxColumn22.ReadOnly = True
-        Me.DataGridViewTextBoxColumn22.Width = 113
-        '
-        'Column39
-        '
-        Me.Column39.HeaderText = "５"
-        Me.Column39.Name = "Column39"
-        Me.Column39.ReadOnly = True
-        Me.Column39.Width = 80
-        '
-        'Column40
-        '
-        DataGridViewCellStyle22.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        Me.Column40.DefaultCellStyle = DataGridViewCellStyle22
-        Me.Column40.HeaderText = "６"
-        Me.Column40.Name = "Column40"
-        Me.Column40.ReadOnly = True
-        Me.Column40.Width = 70
-        '
-        'Column41
-        '
-        DataGridViewCellStyle23.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        Me.Column41.DefaultCellStyle = DataGridViewCellStyle23
-        Me.Column41.HeaderText = "７"
-        Me.Column41.Name = "Column41"
-        Me.Column41.ReadOnly = True
-        Me.Column41.Width = 70
         '
         'CB_AUTOUPD
         '
@@ -3455,6 +3375,91 @@ Partial Class SCA1
         Me.ToolStripMenuItem2.Size = New System.Drawing.Size(146, 22)
         Me.ToolStripMenuItem2.Text = "ユーザー名設定"
         '
+        'TB_ADDRESS3
+        '
+        Me.TB_ADDRESS3.BackColor = System.Drawing.Color.White
+        Me.TB_ADDRESS3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.TB_ADDRESS3.Font = New System.Drawing.Font("メイリオ", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.TB_ADDRESS3.ForeColor = System.Drawing.Color.Black
+        Me.TB_ADDRESS3.ImeMode = System.Windows.Forms.ImeMode.Hiragana
+        Me.TB_ADDRESS3.Location = New System.Drawing.Point(592, 259)
+        Me.TB_ADDRESS3.Multiline = True
+        Me.TB_ADDRESS3.Name = "TB_ADDRESS3"
+        Me.TB_ADDRESS3.ReadOnly = True
+        Me.TB_ADDRESS3.Size = New System.Drawing.Size(304, 22)
+        Me.TB_ADDRESS3.TabIndex = 1779
+        Me.TB_ADDRESS3.Visible = False
+        Me.TB_ADDRESS3.WordWrap = False
+        '
+        'DataGridViewTextBoxColumn19
+        '
+        Me.DataGridViewTextBoxColumn19.HeaderText = "１"
+        Me.DataGridViewTextBoxColumn19.MinimumWidth = 6
+        Me.DataGridViewTextBoxColumn19.Name = "DataGridViewTextBoxColumn19"
+        Me.DataGridViewTextBoxColumn19.ReadOnly = True
+        Me.DataGridViewTextBoxColumn19.Width = 70
+        '
+        'DataGridViewTextBoxColumn20
+        '
+        DataGridViewCellStyle19.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle19.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.DataGridViewTextBoxColumn20.DefaultCellStyle = DataGridViewCellStyle19
+        Me.DataGridViewTextBoxColumn20.HeaderText = "２"
+        Me.DataGridViewTextBoxColumn20.MinimumWidth = 6
+        Me.DataGridViewTextBoxColumn20.Name = "DataGridViewTextBoxColumn20"
+        Me.DataGridViewTextBoxColumn20.ReadOnly = True
+        Me.DataGridViewTextBoxColumn20.Width = 124
+        '
+        'DataGridViewTextBoxColumn21
+        '
+        DataGridViewCellStyle20.BackColor = System.Drawing.Color.White
+        DataGridViewCellStyle20.ForeColor = System.Drawing.Color.Black
+        Me.DataGridViewTextBoxColumn21.DefaultCellStyle = DataGridViewCellStyle20
+        Me.DataGridViewTextBoxColumn21.HeaderText = "３"
+        Me.DataGridViewTextBoxColumn21.MinimumWidth = 6
+        Me.DataGridViewTextBoxColumn21.Name = "DataGridViewTextBoxColumn21"
+        Me.DataGridViewTextBoxColumn21.ReadOnly = True
+        Me.DataGridViewTextBoxColumn21.Width = 70
+        '
+        'DataGridViewTextBoxColumn22
+        '
+        DataGridViewCellStyle21.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle21.BackColor = System.Drawing.Color.White
+        DataGridViewCellStyle21.ForeColor = System.Drawing.Color.Black
+        DataGridViewCellStyle21.Format = "d"
+        DataGridViewCellStyle21.NullValue = Nothing
+        Me.DataGridViewTextBoxColumn22.DefaultCellStyle = DataGridViewCellStyle21
+        Me.DataGridViewTextBoxColumn22.HeaderText = "４"
+        Me.DataGridViewTextBoxColumn22.MinimumWidth = 6
+        Me.DataGridViewTextBoxColumn22.Name = "DataGridViewTextBoxColumn22"
+        Me.DataGridViewTextBoxColumn22.ReadOnly = True
+        Me.DataGridViewTextBoxColumn22.Width = 110
+        '
+        'Column39
+        '
+        Me.Column39.HeaderText = "５"
+        Me.Column39.Name = "Column39"
+        Me.Column39.ReadOnly = True
+        Me.Column39.Width = 75
+        '
+        'Column40
+        '
+        DataGridViewCellStyle22.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        Me.Column40.DefaultCellStyle = DataGridViewCellStyle22
+        Me.Column40.HeaderText = "６"
+        Me.Column40.Name = "Column40"
+        Me.Column40.ReadOnly = True
+        Me.Column40.Width = 68
+        '
+        'Column41
+        '
+        DataGridViewCellStyle23.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        Me.Column41.DefaultCellStyle = DataGridViewCellStyle23
+        Me.Column41.HeaderText = "７"
+        Me.Column41.Name = "Column41"
+        Me.Column41.ReadOnly = True
+        Me.Column41.Width = 68
+        '
         'SCA1
         '
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None
@@ -3706,17 +3711,9 @@ Partial Class SCA1
     Friend WithEvents L_JUNIN1 As Label
     Friend WithEvents TB_ADDRESS2 As TextBox
     Friend WithEvents TB_ADDRESS1 As TextBox
-    Friend WithEvents DataGridViewTextBoxColumn19 As DataGridViewTextBoxColumn
-    Friend WithEvents DataGridViewTextBoxColumn20 As DataGridViewTextBoxColumn
-    Friend WithEvents DataGridViewTextBoxColumn21 As DataGridViewTextBoxColumn
-    Friend WithEvents DataGridViewTextBoxColumn22 As DataGridViewTextBoxColumn
-    Friend WithEvents Column39 As DataGridViewTextBoxColumn
-    Friend WithEvents Column40 As DataGridViewTextBoxColumn
-    Friend WithEvents Column41 As DataGridViewTextBoxColumn
     Friend WithEvents Label2 As Label
     Friend WithEvents CB_A7 As ComboBox
     Friend WithEvents Button18 As Button
-    Friend WithEvents L_USELESSTEL As Label
     Friend WithEvents MenuStrip1 As MenuStrip
     Friend WithEvents 表示ToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents ToolStripMenuItem2 As ToolStripMenuItem
@@ -3761,4 +3758,12 @@ Partial Class SCA1
     Friend WithEvents DTP_MRST As DateTimePicker
     Friend WithEvents Label4 As Label
     Friend WithEvents Label7 As Label
+    Friend WithEvents TB_ADDRESS3 As TextBox
+    Friend WithEvents DataGridViewTextBoxColumn19 As DataGridViewTextBoxColumn
+    Friend WithEvents DataGridViewTextBoxColumn20 As DataGridViewTextBoxColumn
+    Friend WithEvents DataGridViewTextBoxColumn21 As DataGridViewTextBoxColumn
+    Friend WithEvents DataGridViewTextBoxColumn22 As DataGridViewTextBoxColumn
+    Friend WithEvents Column39 As DataGridViewTextBoxColumn
+    Friend WithEvents Column40 As DataGridViewTextBoxColumn
+    Friend WithEvents Column41 As DataGridViewTextBoxColumn
 End Class

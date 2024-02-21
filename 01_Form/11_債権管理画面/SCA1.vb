@@ -40,7 +40,6 @@ Public Class SCA1
     ' 外付けフォーム
     Private SearchForm As SCA1_S3_Search = Nothing                  ' 検索オプションフォーム
     Public AddTelForm As SCA1_S4_TEL = Nothing                      ' 電話追加フォーム
-    Public UselessForm As SCA1_USELESSTEL = Nothing                 ' 不通番号フォーム
     Public EditForm As SCE_S2 = Nothing                           ' 交渉記録フォーム
     ' イベントハンドラーロック 記録一覧チェックリストボックス
     Private LockEventHandler_CLB As Boolean = False
@@ -574,9 +573,17 @@ Public Class SCA1
                     Dim dr As DataRow() = db.OrgDataTable(Sqldb.TID.SCAS).Select(String.Format("C02 = '{0}'", cid))
                     If dr.Length > 0 Then dgv(3, 0).Value = dr(0).Item(11)
 
+                    dgv(1, 11).Value = cInfo.Item(57)                                ' 完済日
+                    dgv(1, 12).Value = cInfo.Item(63)                                ' 住居サイン
+                    dgv(3, 12).Value = cInfo.Item(64)                                ' 物件郵便番号
+                    dgv(1, 13).Value = cInfo.Item(65)                                ' 物件住所
+                    dgv(1, 14).Value = cInfo.Item(41)                                ' 口座番号
+                    dgv(3, 14).Value = cInfo.Item(42)                                ' 口座名義
+
                     ' DGV9の住所欄の幅が狭いのでテキストボックスにも表示させておく
                     TB_ADDRESS1.Text = dgv(1, 4).Value
                     TB_ADDRESS2.Text = dgv(1, 9).Value
+                    TB_ADDRESS3.Text = dgv(1, 13).Value
 
                     ' F35 契約金額
                     Dim repmo As Integer = cmn.Int(cInfo.Item(49))
@@ -794,6 +801,29 @@ Public Class SCA1
             End If
         Next
         log.TimerED("検索終了")
+    End Sub
+
+    ' 顧客情報詳細のテキストボックス位置調整
+    Private Sub DataGridView1_Scroll(sender As Object, e As ScrollEventArgs) Handles DGV9.Scroll
+        TextBoxPositionSetting(TB_ADDRESS1, 1, 4)
+        TextBoxPositionSetting(TB_ADDRESS2, 1, 9)
+        TextBoxPositionSetting(TB_ADDRESS3, 1, 13)
+    End Sub
+
+    ' テキストボックスの表示/非表示を判定し、位置を調整する
+    Private Sub TextBoxPositionSetting(textBox As TextBox, columnIndex As Integer, rowIndex As Integer)
+        Dim Label1Rocatangle As Rectangle = DGV9.GetCellDisplayRectangle(0, 1, False)
+        Dim Label2Rocatangle As Rectangle = DGV9.GetCellDisplayRectangle(0, 6, False)
+        Dim cellRectangle As Rectangle = DGV9.GetCellDisplayRectangle(columnIndex, rowIndex, False)
+        textBox.Location = New Point(cellRectangle.X + DGV9.Location.X - 1, cellRectangle.Y + DGV9.Location.Y - 1)
+        L_JUNIN1.Location = New Point(Label1Rocatangle.X + DGV9.Location.X + 37, Label1Rocatangle.Y + DGV9.Location.Y + 1)
+        L_JUNIN2.Location = New Point(Label2Rocatangle.X + DGV9.Location.X + 37, Label2Rocatangle.Y + DGV9.Location.Y + 1)
+
+        ' テキストボックスがDGVの表示範囲内にあるか判断して表示/非表示を切り替える
+        textBox.Visible = Not (cellRectangle.Y = 0 Or cellRectangle.Y > 250)
+        L_JUNIN1.Visible = Not (Label1Rocatangle.Y = 0 Or Label1Rocatangle.Y > 250)
+        L_JUNIN2.Visible = Not (Label2Rocatangle.Y = 0 Or Label2Rocatangle.Y > 250)
+        log.cLog($"{textBox.Name}:{cellRectangle.Y}:{textBox.Visible}")
     End Sub
 
     ' DataTableにFKSCREMを結合
@@ -1438,22 +1468,12 @@ Public Class SCA1
         ' 追加電話番号フォームを生成
         AddTelForm = New SCA1_S4_TEL()
         InitForm(AddTelForm)
-
-        ' USELESSフォームを生成
-        UselessForm = New SCA1_USELESSTEL()
-        InitForm(UselessForm)
     End Sub
 
     ' 追加電話番号フォームの表示
     Private Sub ShowAddTelForm() Handles L_TELADD.MouseEnter
         AddTelForm.LoadDB()
         AddTelForm.Visible = True
-    End Sub
-
-    ' USELESSフォームの表示
-    Private Sub ShowUselessForm() Handles L_USELESSTEL.MouseEnter
-        UselessForm.LoadDB()
-        UselessForm.Visible = True
     End Sub
 
     ' 顧客詳細情報DGV9の整形
@@ -1472,7 +1492,11 @@ Public Class SCA1
                     {"連債者", "", "生年月日", "", "返済額", ""},
                     {"郵便番号", "", "旧団信加入", "", "返済額(B)", ""},
                     {"住所", "", "", "", "延滞月数", ""},
-                    {"勤務先", "", "勤務先TEL", "", "延滞合計額", ""}
+                    {"勤務先", "", "勤務先TEL", "", "延滞合計額", ""},
+                    {"完済日", "", "", "", "", ""},
+                    {"住居サイン", "", "物件〒", "", "", ""},
+                    {"物件住所", "", "", "", "", ""},
+                    {"口座番号", "", "口座名義", "", "", ""}
                 }
             For row = 0 To ItemNames.GetLength(0) - 1
                 dgv.Rows.Add()
@@ -1481,12 +1505,13 @@ Public Class SCA1
                 Next
             Next
 
-            ' DGVデザイン
+            ' DGVデザイン 太線,背景色
             dgv.Columns(0).DefaultCellStyle.BackColor = System.Drawing.Color.Gainsboro
             dgv.Columns(2).DefaultCellStyle.BackColor = System.Drawing.Color.Gainsboro
             dgv.Columns(4).DefaultCellStyle.BackColor = System.Drawing.Color.Gainsboro
             dgv.Rows(0).DividerHeight = 1
             dgv.Rows(5).DividerHeight = 1
+            dgv.Rows(10).DividerHeight = 1
             dgv.Columns(3).DividerWidth = 1
         Else
             ' 顧客情報のみクリア
