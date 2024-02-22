@@ -59,6 +59,7 @@ Public Class VBR_DGV2
         CellReport1.Cell("B9").Value = SCA1.DGV9(1, 5).Value   ' 勤務先
         CellReport1.Cell("B10").Value = SCA1.DGV9(3, 5).Value         ' 勤務先TEL
         CellReport1.Cell("B11").Value = SCA1.DGV9(3, 2).Value         ' 生年月日
+        CellReport1.Cell("B12").Value = SCA1.DGV9(3, 3).Value         ' 旧団信加入
 
         CellReport1.Cell("C1").Value = SCA1.DGV9(1, 6).Value    ' 連帯債務者名ﾖﾐ
         CellReport1.Cell("C2").Value = SCA1.DGV9(1, 7).Value    ' 連帯債務者名
@@ -71,6 +72,7 @@ Public Class VBR_DGV2
         CellReport1.Cell("C9").Value = SCA1.DGV9(1, 10).Value        ' 勤務先
         CellReport1.Cell("C10").Value = SCA1.DGV9(3, 10).Value        ' 勤務先TEL
         CellReport1.Cell("C11").Value = SCA1.DGV9(3, 7).Value        ' 生年月日
+        CellReport1.Cell("C12").Value = SCA1.DGV9(3, 8).Value        ' 旧団信加入
 
         ' フラット35
         CellReport1.Cell("D1").Value = SCA1.DGV9(5, 2).Value         ' 貸付金額
@@ -79,9 +81,10 @@ Public Class VBR_DGV2
         CellReport1.Cell("D4").Value = SCA1.DGV9(5, 3).Value         ' 貸付金額(B)
         CellReport1.Cell("D5").Value = SCA1.DGV9(5, 5).Value         ' 返済額(B)
         CellReport1.Cell("D6").Value = SCA1.DGV9(5, 6).Value         ' 残高更新日
-        CellReport1.Cell("D7").Value = SCA1.DGV9(5, 8).Value         ' 延滞月数
-        CellReport1.Cell("D8").Value = SCA1.DGV9(5, 9).Value         ' 延滞合計額
+        CellReport1.Cell("D7").Value = SCA1.DGV9(5, 9).Value         ' 延滞月数
+        CellReport1.Cell("D8").Value = SCA1.DGV9(5, 10).Value        ' 延滞合計額
         CellReport1.Cell("D9").Value = SCA1.DGV9(5, 1).Value         ' 金消契約日
+        CellReport1.Cell("D10").Value = SCA1.DGV9(5, 11).Value       ' 完済日
         ' アシスト
         CellReport1.Cell("E1").Value = SCA1.DGV9(6, 2).Value         ' 貸付金額
         CellReport1.Cell("E2").Value = SCA1.DGV9(6, 4).Value         ' 返済額
@@ -89,9 +92,16 @@ Public Class VBR_DGV2
         CellReport1.Cell("E4").Value = SCA1.DGV9(6, 3).Value         ' 貸付金額(B)
         CellReport1.Cell("E5").Value = SCA1.DGV9(6, 5).Value         ' 返済額(B)
         CellReport1.Cell("E6").Value = SCA1.DGV9(6, 6).Value         ' 残高更新日
-        CellReport1.Cell("E7").Value = SCA1.DGV9(6, 8).Value         ' 延滞月数
-        CellReport1.Cell("E8").Value = SCA1.DGV9(6, 9).Value         ' 延滞合計額
-        CellReport1.Cell("E9").Value = SCA1.DGV9(6, 1).Value         ' 完済日
+        CellReport1.Cell("E7").Value = SCA1.DGV9(6, 9).Value         ' 延滞月数
+        CellReport1.Cell("E8").Value = SCA1.DGV9(6, 10).Value        ' 延滞合計額
+
+        CellReport1.Cell("E10").Value = SCA1.DGV9(1, 11).Value       ' 居住サイン
+        CellReport1.Cell("E11").Value = SCA1.DGV9(3, 11).Value       ' 物件郵便番号
+        CellReport1.Cell("E12").Value = SCA1.DGV9(1, 12).Value       ' 物件住所
+        CellReport1.Cell("E13").Value = SCA1.DGV9(1, 13).Value       ' 金融機関
+        CellReport1.Cell("E14").Value = SCA1.DGV9(3, 13).Value       ' 支店コード
+        CellReport1.Cell("E15").Value = SCA1.DGV9(1, 14).Value       ' 口座番号
+        CellReport1.Cell("E16").Value = SCA1.DGV9(3, 14).Value       ' 口座名義
 
         CellReport1.Cell("G1").Value = SCA1.TB_FreeMemo.Text          ' フリーメモ
 

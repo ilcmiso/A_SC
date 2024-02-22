@@ -573,17 +573,18 @@ Public Class SCA1
                     Dim dr As DataRow() = db.OrgDataTable(Sqldb.TID.SCAS).Select(String.Format("C02 = '{0}'", cid))
                     If dr.Length > 0 Then dgv(3, 0).Value = dr(0).Item(11)
 
-                    dgv(1, 11).Value = cInfo.Item(57)                                ' 完済日
-                    dgv(1, 12).Value = cInfo.Item(63)                                ' 住居サイン
-                    dgv(3, 12).Value = cInfo.Item(64)                                ' 物件郵便番号
-                    dgv(1, 13).Value = cInfo.Item(65)                                ' 物件住所
+                    dgv(1, 11).Value = cInfo.Item(63)                                ' 住居サイン
+                    dgv(3, 11).Value = cInfo.Item(64)                                ' 物件郵便番号
+                    dgv(1, 12).Value = cInfo.Item(65)                                ' 物件住所
+                    dgv(1, 13).Value = cInfo.Item(43)                                ' 金融機関
+                    dgv(3, 13).Value = cInfo.Item(44)                                ' 支店番号
                     dgv(1, 14).Value = cInfo.Item(41)                                ' 口座番号
                     dgv(3, 14).Value = cInfo.Item(42)                                ' 口座名義
 
                     ' DGV9の住所欄の幅が狭いのでテキストボックスにも表示させておく
                     TB_ADDRESS1.Text = dgv(1, 4).Value
                     TB_ADDRESS2.Text = dgv(1, 9).Value
-                    TB_ADDRESS3.Text = dgv(1, 13).Value
+                    TB_ADDRESS3.Text = dgv(1, 12).Value
 
                     ' F35 契約金額
                     Dim repmo As Integer = cmn.Int(cInfo.Item(49))
@@ -600,6 +601,7 @@ Public Class SCA1
                         dgv(5, 8).Value = cmn.Int(cInfo.Item(52)).ToString("#,0")     ' 返済額(B)
                         dgv(5, 9).Value = cmn.Int(cInfo.Item(51)).ToString("#,0")     ' 延滞回数
                         dgv(5, 10).Value = cmn.Int(cInfo.Item(54)).ToString("#,0")    ' 延滞合計額
+                        dgv(5, 11).Value = cInfo.Item(57)                             ' 完済日
                     End If
                     If cInfo.Item(2) = "2" Or cInfo.Item(2) = "3" Then
                         dgv(6, 0).Value = "アシスト"
@@ -616,6 +618,7 @@ Public Class SCA1
                         'dgv(6, 8).Value = ""                                         ' 返済額(B)
                         dgv(6, 9).Value = cmn.Int(cInfo.Item(60)).ToString("#,0")     ' 延滞回数
                         'dgv(6, 10).Value = ""                                         ' 延滞合計額
+                        'dgv(6, 11).Value = cInfo.Item(57)                             ' 完済日
                     End If
                 End If
 
@@ -807,7 +810,7 @@ Public Class SCA1
     Private Sub DataGridView1_Scroll(sender As Object, e As ScrollEventArgs) Handles DGV9.Scroll
         TextBoxPositionSetting(TB_ADDRESS1, 1, 4)
         TextBoxPositionSetting(TB_ADDRESS2, 1, 9)
-        TextBoxPositionSetting(TB_ADDRESS3, 1, 13)
+        TextBoxPositionSetting(TB_ADDRESS3, 1, 12)
     End Sub
 
     ' テキストボックスの表示/非表示を判定し、位置を調整する
@@ -1493,9 +1496,9 @@ Public Class SCA1
                     {"郵便番号", "", "旧団信加入", "", "返済額(B)", ""},
                     {"住所", "", "", "", "延滞月数", ""},
                     {"勤務先", "", "勤務先TEL", "", "延滞合計額", ""},
-                    {"完済日", "", "", "", "", ""},
-                    {"住居サイン", "", "物件〒", "", "", ""},
+                    {"住居サイン", "", "物件〒", "", "完済日", ""},
                     {"物件住所", "", "", "", "", ""},
+                    {"金融機関", "", "支店番号", "", "", ""},
                     {"口座番号", "", "口座名義", "", "", ""}
                 }
             For row = 0 To ItemNames.GetLength(0) - 1
@@ -1523,6 +1526,7 @@ Public Class SCA1
             Next
             TB_ADDRESS1.Text = ""
             TB_ADDRESS2.Text = ""
+            TB_ADDRESS3.Text = ""
 
         End If
     End Sub
