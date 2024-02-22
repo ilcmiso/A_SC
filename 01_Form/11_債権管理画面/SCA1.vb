@@ -73,7 +73,6 @@ Public Class SCA1
         cmn.UpdPBar("顧客情報のファイルダウンロード中")
         ' DGV表示設定
         db.DBFileDL(Sqldb.TID.SCD)
-        db.DBFileDL(Sqldb.TID.SCTD)
         db.UpdateOrigDT()
         db.UpdateOrigDT_ASsist()
         ShowDGVList(DGV1)
@@ -491,9 +490,7 @@ Public Class SCA1
                     dgv(1, 5).Value = cInfo.Item(17)                                 ' 勤務先
                     dgv(3, 1).Value = cInfo.Item(13)                                 ' TEL1
                     dgv(3, 2).Value = cInfo.Item(11)                                 ' 生年月日
-                    If cInfo.Item(20) IsNot DBNull.Value Then
-                        dgv(3, 3).Value = sccmn.GetGroupCredit(cInfo.Item(20))       ' 団信加入サイン
-                    End If
+                    dgv(3, 3).Value = cmn.SetValueDefault(sccmn.GetGroupCredit(cInfo.Item(20)), "") ' 団信加入サイン
                     dgv(3, 5).Value = cInfo.Item(18)                                 ' 勤務先TEL1
                     ' 連帯債務者
                     dgv(1, 6).Value = cInfo.Item(30)                                 ' ヨミカナ
@@ -503,27 +500,25 @@ Public Class SCA1
                     dgv(1, 10).Value = cInfo.Item(37)                                ' 勤務先
                     dgv(3, 6).Value = cInfo.Item(33)                                 ' TEL1
                     dgv(3, 7).Value = cInfo.Item(31)                                 ' 生年月日
-                    If cInfo.Item(40) IsNot DBNull.Value Then
-                        dgv(3, 8).Value = sccmn.GetGroupCredit(cInfo.Item(40))       ' 団信加入サイン
-                    End If
+                    dgv(3, 8).Value = cmn.SetValueDefault(sccmn.GetGroupCredit(cInfo.Item(40)), "") ' 団信加入サイン
 
                     dgv(3, 10).Value = cInfo.Item(38)                                ' 勤務先TEL1
                     ' 証券番号(アシスト)
                     Dim dr As DataRow() = db.OrgDataTable(Sqldb.TID.SCAS).Select(String.Format("C02 = '{0}'", cid))
                     If dr.Length > 0 Then dgv(3, 0).Value = dr(0).Item(11)
 
-                    dgv(1, 11).Value = cInfo.Item(63)                                ' 住居サイン
-                    dgv(3, 11).Value = cInfo.Item(64)                                ' 物件郵便番号
-                    dgv(1, 12).Value = cInfo.Item(65)                                ' 物件住所
-                    dgv(1, 13).Value = cInfo.Item(43)                                ' 金融機関
-                    dgv(3, 13).Value = cInfo.Item(44)                                ' 支店番号
-                    dgv(1, 14).Value = cInfo.Item(41)                                ' 口座番号
-                    dgv(3, 14).Value = cInfo.Item(42)                                ' 口座名義
+                    dgv(1, 11).Value = cmn.SetValueDefault(cInfo.Item(63), "")       ' 住居サイン
+                    dgv(3, 11).Value = cmn.SetValueDefault(cInfo.Item(64), "")       ' 物件郵便番号
+                    dgv(1, 12).Value = cmn.SetValueDefault(cInfo.Item(65), "")       ' 物件住所
+                    dgv(1, 13).Value = cmn.SetValueDefault(cInfo.Item(43), "")       ' 金融機関
+                    dgv(3, 13).Value = cmn.SetValueDefault(cInfo.Item(44), "")       ' 支店番号
+                    dgv(1, 14).Value = cmn.SetValueDefault(cInfo.Item(41), "")       ' 口座番号
+                    dgv(3, 14).Value = cmn.SetValueDefault(cInfo.Item(42), "")       ' 口座名義
 
                     ' DGV9の住所欄の幅が狭いのでテキストボックスにも表示させておく
-                    TB_ADDRESS1.Text = dgv(1, 4).Value
-                    TB_ADDRESS2.Text = dgv(1, 9).Value
-                    TB_ADDRESS3.Text = dgv(1, 12).Value
+                    TB_ADDRESS1.Text = cmn.SetValueDefault(cInfo.Item(16), "")
+                    TB_ADDRESS2.Text = cmn.SetValueDefault(cInfo.Item(36), "")
+                    TB_ADDRESS3.Text = cmn.SetValueDefault(cInfo.Item(65), "")
 
                     ' F35 契約金額
                     Dim repmo As Integer = cmn.Int(cInfo.Item(49))
@@ -567,9 +562,6 @@ Public Class SCA1
                     Dim cInfo As DataRow = remDr(0)
                     TB_FreeMemo.Text = cInfo.Item(2)
                 End If
-
-                Dim cells() As DataGridViewCell = {DGV9(3, 1), DGV9(3, 5), DGV9(3, 6), DGV9(3, 10)}
-                ChangeColorForUseless(cells)
 
                 SearchColor(TB_SearchInput.Text)
                 log.TimerED("ShowDGVList End:" & dgv.Name & " - CallBack: " & CallerFunc)
@@ -772,28 +764,6 @@ Public Class SCA1
                t.Value.Replace("-", "").IndexOf(search.Replace("-", "")) >= 0 Then
                 t.Style.BackColor = System.Drawing.Color.LightSalmon
             End If
-        Next
-    End Sub
-
-    ' 指定したDataGridViewCellのフォントカラーとツールチップを変更
-    Public Sub ChangeColorForUseless(ByVal cells() As DataGridViewCell)
-        Dim dt As DataTable = db.ReadOrgDtSelect(Sqldb.TID.UNUMS)  ' 電話番号と理由が格納されているテーブル
-
-        For Each t In cells
-            t.Style.ForeColor = System.Drawing.Color.Black
-            t.ToolTipText = ""
-
-            ' DataTable内の各行を検索
-            For Each dr As DataRow In dt.Rows
-                Dim tel As String = dr("C01").ToString().Replace("-", "") ' C01は電話番号
-                Dim dest As String = dr("C02").ToString()                 ' C02は理由
-
-                If t.Value IsNot Nothing AndAlso t.Value.ToString().Replace("-", "") = tel Then  ' 完全一致で比較
-                    t.Style.ForeColor = System.Drawing.Color.Red
-                    t.ToolTipText = dest  ' ツールチップに理由を設定
-                    Exit For ' 一致したらこの行の検索は終了
-                End If
-            Next
         Next
     End Sub
 

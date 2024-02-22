@@ -274,6 +274,14 @@ Public Class Common
         Return currentDateTime.ToString("yyyyMMdd_HHmm_ssfff")
     End Function
 
+    Public Function SetValueDefault(ByVal obj As Object, Optional ByVal defaultValue As Object = Nothing) As Object
+        If obj Is DBNull.Value Then
+            Return defaultValue
+        Else
+            Return obj
+        End If
+    End Function
+
     ' プログレスバー表示
     Public Sub StartPBar(progressCount As Integer)
         SCA_ProgressBar.Instance.StartProgress(progressCount)

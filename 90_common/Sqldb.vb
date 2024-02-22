@@ -16,12 +16,7 @@ Public Class Sqldb
     Public Const DB_FKSC As String = "FKSC.db3"
     Public Const DB_FKSCLOG As String = "FKSC_LOG.db3"
     Public Const DB_FKSCPI As String = "FKSC_PINFO.db3"
-    Public Const DB_FKSCTODO As String = "FKSC_TODO.db3"
     Public Const DB_FKSCASSIST As String = "FKSC_ASSIST.db3"
-    Public Const DB_FKSCCAL As String = "FKSC_CALENDAR.db3"
-    Public Const DB_CALHOLI As String = "CAL_Holiday.db3"
-    Public Const DB_CALTAGS As String = "CAL_Tags.db3"
-    Public Const DB_USELESS As String = "FKSC_UselessPNums.db3"
     Public Const DB_AUTOCALL As String = "FKSC_AutoCall.db3"
     Public Const DB_MNGREQ As String = "FKGA_MngRequest.db3"
     Public Const DB_MRITEM As String = "FKGA_MRItem.db3"
@@ -52,12 +47,7 @@ Public Class Sqldb
         {DB_FKSCLOG, TBL_FKSCD, 17, "FKD", DBSV, True},
         {DB_FKSCPI, TBL_STANDARD, 11, "C", DBSV, True},
         {DB_FKSCPI, TBL_ITEM, 5, "C", DBSV, True},
-        {DB_FKSCTODO, TBL_TODO, 15, "C", DBSV, True},
         {DB_FKSCASSIST, TBL_STANDARD, 28, "C", DBLO, True},
-        {DB_FKSCCAL, TBL_STANDARD, 10, "C", DBSV, True},
-        {DB_CALHOLI, TBL_STANDARD, 2, "C", DBSV, True},
-        {DB_CALTAGS, TBL_STANDARD, 3, "C", DBSV, True},
-        {DB_USELESS, TBL_STANDARD, 2, "C", DBSV, True},
         {DB_AUTOCALL, TBL_STANDARD, 4, "C", DBSV, True},
         {DB_MNGREQ, TBL_STANDARD, 20, "C", DBSV, True},
         {DB_MRITEM, TBL_STANDARD, 5, "C", DBSV, True},
@@ -71,12 +61,7 @@ Public Class Sqldb
         SCD          ' FKSCD
         PI           ' PINFO
         PIM          ' PINFO MASTER(ITEM)
-        SCTD         ' TODO
         SCAS         ' ASSIST
-        CAL          ' CALENDAR
-        HOLI         ' HOLIDAY
-        TAGS         ' TAGS
-        UNUMS        ' UselessPhoneNums
         AC           ' AutoCall
         MR           ' MngRequest 申請物管理
         MRM          ' MngRequest(ITEM)
@@ -132,7 +117,7 @@ Public Class Sqldb
     Private Sub CreateDBFiles()
         Dim DBPath = CurrentPath_SV & Common.DIR_DB3
         ' 作成するDBリスト
-        Dim DBFileList() = {DB_FKSCLOG, DB_FKSCTODO}
+        Dim DBFileList() = {DB_FKSCLOG}
         Dim DBRsrcList() = {My.Resources.FKSC_LOG, My.Resources.FKSC_TODO, My.Resources.HISTORY}
 
         For n = 0 To DBFileList.Count - 1
@@ -368,28 +353,6 @@ Public Class Sqldb
         Dim dt As DataTable = GetSelect(TID.SCD, "Select * From " & DBTbl(TID.SCD, DBID.TABLE) & " Where FKD02 = '" & id & "'")
         Return dt.Rows.Count > 0
     End Function
-
-    ' タスクリストNoの最大値+1を取得
-    Public Function GetNextID_TD() As Integer
-        Dim dt As DataTable = GetSelect(TID.SCTD, "Select Max(C01) From " & DBTbl(TID.SCTD, DBID.TABLE))
-        Return CType(dt.Rows(0).Item(0), Integer) + 1
-    End Function
-
-    ' 追加したときに、既存の項目を上書きで空白書き込みしたことでデータが消えた問題があったので今は使わない
-    '' カラム不足確認 不足してたら自動追加
-    'Private Sub ColumnsInit()
-    '    log.timerST()
-    '    For t = 0 To SC_DBTable.GetLength(0) - 1
-    '        Dim dt As DataTable = GetSelect(t, "select * FROM " & SC_DBTable(t, DBID.TABLE) & " limit 1")
-    '        For n As Integer = dt.Columns.Count + 1 To SC_DBTable(t, DBID.CNUM)
-    '            Dim addColumn As String = SC_DBTable(t, DBID.CTAG) & n.ToString("00")
-    '            log.DBGLOG("列追加 " & addColumn)
-    '            ExeSQL(t, "alter table " & SC_DBTable(t, DBID.TABLE) & " add column " & addColumn)
-    '            ExeSQL(t, "UPDATE " & SC_DBTable(t, DBID.TABLE) & " set " & addColumn & " = ''")
-    '        Next
-    '    Next
-    '    log.timerED("ColumnInit")
-    'End Sub
 
     ' カラム追加
     Public Sub AddColumns(TableID As String, columnName As String)

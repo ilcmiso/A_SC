@@ -76,9 +76,6 @@
             SCA1.AddTelForm.DGV1.Rows(c / 2).Cells(1).Value = arr(c + 1)
         Next
 
-        ' 設定した値に不通判定を行う
-        ChangeFontColorAndToolTipForAllCells(DGV1)
-
         log.TimerED("LoadDB")
     End Sub
 
@@ -93,18 +90,5 @@
         log.cLog("GetDGVVal:" & val)
         Return val
     End Function
-
-    ' 指定したDataGridView内の全てのセルのフォントカラーとツールチップを変更
-    Private Sub ChangeFontColorAndToolTipForAllCells(ByVal dgv As DataGridView)
-        Dim cells As New List(Of DataGridViewCell)
-
-        For Each row As DataGridViewRow In dgv.Rows
-            For Each cell As DataGridViewCell In row.Cells
-                cells.Add(cell)
-            Next
-        Next
-
-        SCA1.ChangeColorForUseless(cells.ToArray())
-    End Sub
 
 End Class
