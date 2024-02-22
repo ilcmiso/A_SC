@@ -117,10 +117,6 @@ Public Class SC
         If e.KeyCode = Keys.F1 Then
             Dim cmn As New Common
             cmn.OpenCurrentDir()
-        ElseIf e.KeyCode = Keys.F2 Then
-            Dim fff As New SCE_S1
-            fff.Show()
-            Exit Sub
         End If
     End Sub
 

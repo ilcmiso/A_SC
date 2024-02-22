@@ -17,7 +17,7 @@ Public Class SCA1
     Private oview As SCGA_OVIEW
     Private thSC As SCThread
     Private CallerFunc = ""
-    Private xml As New XmlMng
+    Public xml As New XmlMng
 
     ' 着信
     Private ReadOnly TEL_HEADLEN As Integer = 17                    ' 着信ファイルのヘッダ文字数     ※yyyy/MM/dd HH:mm-
@@ -48,6 +48,9 @@ Public Class SCA1
     Private PIItemList As String()                                   ' 物件情報の大項目
     ' スレッド
     Private ReadOnly Thread_Entry As Thread = Nothing
+    ' デリゲート
+    Delegate Sub delegate_PoolingCallBack(id As String)         ' UIコールバック用Delegate宣言
+
 
 #End Region
 
@@ -57,7 +60,6 @@ Public Class SCA1
         Dim loadTime = Date.Now
         Me.Text += " - " & xml.GetCPath
         CB_AUTOUPD.Checked = xml.GetAutoUpd
-        CB_NOTICETELL.Checked = xml.GetNoticeTell
         fwatchers = New List(Of FileWatcher)
 
         FPATH_TEL = db.CurrentPath_SV & Common.DIR_TEL & Common.FILE_TEL                     ' 着信ログまでのフルパス生成
@@ -77,7 +79,6 @@ Public Class SCA1
         ShowDGVList(DGV1)
         ShowDGVList(DGV2)
         'ShowDGVList(DGV5)           ' 交渉記録
-        'ShowDGVList(DGV8)           ' 着信履歴
         ShowDGVList(DGV9)
 
         cmn.UpdPBar("最終設定中")
@@ -85,10 +86,9 @@ Public Class SCA1
         CheckedListBoxInit()
 
         SetToolTips()               ' ツールチップの設定
-        TaskListInit()              ' タスクリスト初期設定
         MRInit()                    ' 申請物の初期設定
         ' DGVちらつき防止
-        cmn.SetDoubleBufferDGV(DGV1, DGV2, DGV3, DGV4, DGV5, DGV6, DGV7, DGV8, DGV9)
+        cmn.SetDoubleBufferDGV(DGV1, DGV2, DGV4, DGV5, DGV6, DGV7, DGV9)
         DunInit()                   ' 督促管理の初期設定
         ' スレッド生成
         'ThreadInit()
@@ -114,10 +114,6 @@ Public Class SCA1
 
         ' イベントハンドラ設定
         AddHandler DGV1.CellEnter, AddressOf DGV1_CellEnter
-        AddHandler TV_A1.AfterSelect, AddressOf ChangeTaskFilter
-        AddHandler CLB_Progress.SelectedIndexChanged, AddressOf ChangeTaskFilter
-        AddHandler CLB_Group.SelectedIndexChanged, AddressOf ChangeTaskFilter
-        AddHandler CB_Limit.SelectedIndexChanged, AddressOf ChangeTaskFilter
 
         SearchOptionInit()          ' 検索オプション
 
@@ -166,10 +162,8 @@ Public Class SCA1
 
     Private Sub FLS_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
         FWatchingEnd()
-        StopWatching()
         'thSC.Dispose()
         xml.SetAutoUpd(CB_AUTOUPD.Checked)
-        xml.SetNoticeTell(CB_NOTICETELL.Checked)
     End Sub
 
 #End Region
@@ -354,7 +348,6 @@ Public Class SCA1
             Case Keys.F1
                 cmn.OpenCurrentDir()
             Case Keys.F2
-                Button5.Visible = True
             Case Keys.F3
             Case Keys.F4
         End Select
@@ -433,10 +426,9 @@ Public Class SCA1
                     Dim dr As DataRow() = db.OrgDataTable(Sqldb.TID.SCD).Select("FKD02 = '" & DGV1.CurrentRow.Cells(0).Value & "'")
                     If dr.Length > 0 Then dt = dr.CopyToDataTable
                 End If
-            Case dgv Is DGV3                                ' ## タスクタブ リスト
-                bindID = 2
-                dt = db.OrgDataTable(Sqldb.TID.SCTD).Copy   ' DataTableをオリジナルからコピー
-                FilterTaskList(dt)                          ' 条件フィルタ
+            'Case dgv Is DGV3                                ' ## タスクタブ リスト
+            '    bindID = 2
+            '    dt = db.OrgDataTable(Sqldb.TID.SCTD).Copy   ' DataTableをオリジナルからコピー
             Case dgv Is DGV4                                ' ## 更新履歴タブ リスト
                 bindID = 3
                 ' 日時が一致した督促状を取得
@@ -473,60 +465,7 @@ Public Class SCA1
                 bindID = 6
                 dt = db.GetSelect(Sqldb.TID.PIM, "Select C02, C03, C04, C05 From ITEM Where C01 = '" & DGV_PIMENU.CurrentRow.Index & "' Order By C02")
 
-            Case dgv Is DGV8                                ' 着信履歴
-
-                Cursor.Current = Cursors.WaitCursor             ' マウスカーソルを砂時計に
-                Dim showCnt As Integer = 10     ' 着信履歴の表示行数
-                log.TimerST()
-                dgv.Rows.Clear()
-
-                ' 着信履歴ファイルテキストから読み込み
-                Dim lines As IEnumerable(Of String) = File.ReadLines(FPATH_TEL)
-                'dt = New DataTable
-                'dt = cmn.DataGridViewClone(dt, DGV8)
-                Dim tim As String
-                Dim tel As String
-                If lines.Count = 0 Then Exit Sub
-                If showCnt > lines.Count Then showCnt = lines.Count
-                For n = 0 To showCnt - 1
-                    If lines(n).Length <= (TEL_HEADLEN) Then Continue For           ' ヘッダがないのでスキップ
-                    tim = lines(n).Substring(0, TEL_HEADLEN - 1)                          ' 着信時刻取得
-                    tel = lines(n).Substring(TEL_HEADLEN, lines(n).Length - TEL_HEADLEN)  ' 電話番号取得
-
-                    dgv.Rows.Add()
-                    dgv(0, n).Value = tim
-                    dgv(1, n).Value = tel
-                Next
-
-                log.TimerED("dgv8-1")
-                log.TimerST()
-                ' 電話番号をもとに、債務者名と債務者番号を取得
-                ' 　顧客情報の電話番号はハイフンありで、受話履歴はハイフンがないので直接の検索できない。
-                ' 　受話履歴の末尾5桁をもとにSelectで検索   ※080-1234-5678なら4-5678で顧客情報の電話番号(主債務者TEL,TEL2、連帯債務者TEL,TEL2)から検索する
-                Dim telNo As String
-                dt = db.GetSelect(Sqldb.TID.SC, "Select FK02, FK10, FK14, FK15, FK34, FK35  From FKSC")
-
-                Dim dr As DataRow()
-
-                For nn = 0 To showCnt - 1
-                    telNo = dgv(1, nn).Value
-                    Dim telFilter As String = telNo.Substring(telNo.Length - 5).Insert(1, "-").Insert(0, "*")   ' 末尾5桁にハイフンをつけて取得 ※*5-6789
-                    dr = dt.Select(String.Format("FK14 like '{0}' OR FK15 like '{0}' OR FK34 like '{0}' OR FK35 like '{0}'", telFilter))
-                    log.cLog("len:" & dr.Length)
-
-                    ' 末尾5桁だから複数一致する場合があるので、その中から番号検索して完全一致させる
-                    For Each tellno As DataRow In dr
-                        If cmn.RegReplace(String.Format("{0},{1},{2},{3}", tellno(2), tellno(3), tellno(4), tellno(5)), "-", "").IndexOf(telNo) >= 0 Then
-                            dgv(2, nn).Value = tellno(0)
-                            dgv(3, nn).Value = tellno(1)
-                        End If
-                    Next
-
-                Next
-                dgv.Sort(dgv.Columns(0), ComponentModel.ListSortDirection.Descending)
-
-                log.TimerED("ShowDGVList End:" & dgv.Name & " - CallBack: " & CallerFunc)
-                Exit Sub
+            'Case dgv Is DGV8           
 
             Case dgv Is DGV9    ' 顧客詳細情報表示
                 ' DGV生成
@@ -663,8 +602,7 @@ Public Class SCA1
                 'LockEventHandler_LCSum = False
                 dgv.Sort(dgv.Columns(1), ComponentModel.ListSortDirection.Descending)
                 If DGV2.Rows.Count > 0 Then TB_Remarks.Text = DGV2.CurrentRow.Cells(8).Value
-            Case dgv Is DGV3
-                UpdateStatusBar_Task()
+            'Case dgv Is DGV3
             Case dgv Is DGV4
                 dgv.Sort(dgv.Columns(2), ComponentModel.ListSortDirection.Descending)
             Case dgv Is DGV5
@@ -781,11 +719,7 @@ Public Class SCA1
                     sb.Clear()
                 Case dgv Is DGV2
                     Exit Sub
-                Case dgv Is DGV3
-                    word = dt.Rows(r).Item(0).ToString & "," &
-                           dt.Rows(r).Item(5).ToString & "," &
-                           dt.Rows(r).Item(6).ToString
-                    word = word.Replace(" ", "").Replace("　", "").Replace("-", "")
+                'Case dgv Is DGV3
                 Case dgv Is DGV4
                     Exit Sub
                 Case dgv Is DGV5
@@ -828,30 +762,6 @@ Public Class SCA1
         L_JUNIN2.Visible = Not (Label2Rocatangle.Y = 0 Or Label2Rocatangle.Y > 250)
         log.cLog($"{textBox.Name}:{cellRectangle.Y}:{textBox.Visible}")
     End Sub
-
-    ' DataTableにFKSCREMを結合
-    'Public Sub AddREMtoDGV1(ByRef dt As DataTable)
-
-    '    ' ワード検索の対象に追加電話番号を含めるためにDataTableに追加電話番号などを結合していた。
-    '    ' 結合処理にかなり時間がかかるためコメントアウト
-
-    '    log.cLog("DataTable REM連結 Start REM総数: " & db.OrgDataTable(Sqldb.TID.SCR).Rows.Count)
-    '    For Each row As DataRow In db.OrgDataTable(Sqldb.TID.SCR).Rows
-    '        Dim dDay = row.Item(1)
-    '        Dim addTel = row.Item(3)
-    '        Dim addTel2 = row.Item(4)
-    '        If dDay = "" And addTel = "" And addTel2 = "" Then Continue For           ' 全てブランクなら設定しない
-    '        For Each dtrow As DataRow In dt.Rows
-    '            If row.Item(0) = dtrow.Item(1) Then  ' 機構番号が一致するデータに設定
-    '                dtrow.Item(66) = addTel2         ' DataTableのFK67 に追加電話番号(複数)
-    '                dtrow.Item(67) = addTel          ' DataTableのFK68 に追加電話番号
-    '                dtrow.Item(69) = dDay            ' DataTableのFK70 に督促日設定
-    '                Exit For
-    '            End If
-    '        Next
-    '    Next
-    '    log.cLog("DataTable REM連結 End")
-    'End Sub
 
     ' 検索結果一致のカラーリング
     Public Sub SearchColor(search As String)
@@ -924,112 +834,6 @@ Public Class SCA1
     End Sub
 #End Region
 
-#Region "子フォーム関連"
-    Private f1 As SCA1_S1 = Nothing     ' 子フォーム1
-    Private f2 As SCA1_S1 = Nothing     ' 子フォーム2
-    Private f3 As SCA1_S1 = Nothing     ' 子フォーム3
-
-    ' 疑似着信ボタン
-    Private Sub Button5_Click(sender As Object, e As EventArgs) Handles Button5.Click
-        Dim dNow As DateTime = DateTime.Now  ' 現在の日時を取得
-        Dim rnd As Integer = DateTime.Now.Millisecond Mod db.OrgDataTablePlusAssist.Rows.Count ' 債務者からランダムな値取得
-        Dim sw As New StreamWriter(FPATH_TEL, True, Encoding.GetEncoding("shift_jis"))
-        sw.WriteLine(dNow.ToString("yyyy/MM/dd HH:mm-") & db.OrgDataTablePlusAssist.Rows(rnd).Item(13).Replace("-", ""))
-        sw.Close()
-    End Sub
-
-    ' 子フォーム終了イベント受信
-    Private Sub F1_closed(sender As Object, e As FormClosedEventArgs)   ' f1が閉じた時
-        f1 = Nothing
-    End Sub
-    Private Sub F2_closed(sender As Object, e As FormClosedEventArgs)   ' f2が閉じた時
-        f2 = Nothing
-    End Sub
-    Private Sub F3_closed(sender As Object, e As FormClosedEventArgs)   ' f3が閉じた時
-        f3 = Nothing
-    End Sub
-
-    ' 子フォーム作成
-    Private Sub CreateChildForm()
-        log.cLog("createChildForm")
-        If Not CB_NOTICETELL.Checked Then Exit Sub              ' 受話ポップアップ表示のチェックボックスOFFなら非表示
-
-        Static Dim LastTel As String = ""
-        If Not File.Exists(FPATH_TEL) Then
-            MsgBox("着信を検出しましたが、以下の受信データが見つかりませんでした。" & vbCrLf & FPATH_TEL)
-            log.D(Log.ERR, "着信ファイルが見つからない。 " & FPATH_TEL)
-            Exit Sub
-        End If
-
-        Dim lines As IEnumerable(Of String) = File.ReadLines(FPATH_TEL)
-        If lines.Count = 0 Then Exit Sub
-        If lines(lines.Count - 1).Length <= (TEL_HEADLEN) Then Exit Sub         ' ヘッダが書かれてなければ読み込めないので終了
-
-        Dim tim = lines(lines.Count - 1).Substring(0, TEL_HEADLEN - 1)                                        ' 着信時刻取得
-        Dim tel = lines(lines.Count - 1).Substring(TEL_HEADLEN, lines(lines.Count - 1).Length - TEL_HEADLEN)  ' 電話番号取得
-        ' [時刻] と [電話番号] が前回と一緒の場合は、重複イベントとして破棄
-        If LastTel = (tim & tel) Then Exit Sub
-        LastTel = (tim & tel)   ' 最後に来たイベントを保持しておく
-
-        ' ポップアップの位置調整(メイン画面の現在位置を基準に右側に表示する)
-        Dim cleft = Me.Left - 15 + Me.Width
-        Dim ctop = Me.Top
-
-        If f1 Is Nothing Then
-            Me.f1 = New SCA1_S1()
-            AddHandler f1.FormClosed, AddressOf F1_closed           ' フォーム閉じたときのイベント関数登録
-            f1.ShowInTaskbar = False                                ' タスクバー非表示
-            f1.Show(Me)
-            f1.Location = New Point(cleft, ctop)                    ' ポップアップの位置調整
-            ShowChildForm(f1, tel, tim)
-        ElseIf f2 Is Nothing Then
-            Me.f2 = New SCA1_S1()
-            AddHandler f2.FormClosed, AddressOf F2_closed
-            f2.ShowInTaskbar = False
-            f2.Show(Me)
-            f2.Location = New Point(cleft, ctop + f2.Size.Height - 10)
-            ShowChildForm(f2, tel, tim)
-        ElseIf f3 Is Nothing Then
-            Me.f3 = New SCA1_S1()
-            AddHandler f3.FormClosed, AddressOf F3_closed
-            f3.ShowInTaskbar = False
-            f3.Show(Me)
-            f3.Location = New Point(cleft, ctop + (f3.Size.Height - 10) * 2)
-            ShowChildForm(f3, tel, tim)
-        Else
-            ' 3つ以上はフォーム作らない
-        End If
-    End Sub
-
-    ' 子フォーム情報表示
-    Private Sub ShowChildForm(f As SCA1_S1, num As String, tim As String)
-        f.Text &= num
-        For Each row As DataRow In db.OrgDataTablePlusAssist.Rows
-            ' TEL検索 　前の番号と、後の番号を混ぜて検索しないようにカンマを間に入れる
-            Dim searchWord = ("," & row.Item(13) & "," & row.Item(14) & "," & row.Item(18) & "," & row.Item(19) & "," &
-                                    row.Item(33) & "," & row.Item(34) & "," & row.Item(38) & "," & row.Item(39) & ",").Replace(" ", "").Replace("-", "")
-
-            If searchWord.IndexOf("," & num & ",") >= 0 Then        ' 完全一致させるためにカンマも含めて検索
-                f.recvCID = row.Item(1)      ' 着信識別番号
-                f.recvTelNo = num            ' 着信TEL番号
-
-                f.TB_A1.Text = row.Item(9)   ' 債務者氏名
-                f.TB_A2.Text = row.Item(10)   ' 債務者氏名(ヨミ)
-                f.TB_A3.Text = row.Item(13)   ' 債務者TEL1
-                f.TB_A4.Text = row.Item(14)   ' 債務者TEL2
-                'f.TB_B1.Text = row.item(29)   ' 連帯債務者氏名
-                'f.TB_B2.Text = row.item(30)   ' 連帯債務者氏名(ヨミ)
-                f.TB_B3.Text = row.Item(33)  ' 連帯債務者TEL1
-                f.TB_B4.Text = row.Item(34)  ' 連帯債務者TEL2
-                f.TB_C1.Text = row.Item(54)  ' 延滞合計額
-                'f.TB_C2.Text = tim           ' 着信時刻
-                Exit For
-            End If
-        Next
-
-        ' Media.SystemSounds.Asterisk.Play()   ' システム音声
-    End Sub
-#End Region
 #Region "ファイル監視関連"
     ' ファイル監視準備 開始
     '   以下の2つの方法でファイルを監視する。
@@ -1044,43 +848,11 @@ Public Class SCA1
                 Using fs As FileStream = File.Create(FPATH_TEL)
                 End Using
             End If
-            ' 監視機能①  Watcherを使った監視    高速だけどsamba非対応            対象：着信ログ
-            WatcherFiles()
             ' 監視機能②  周期監視による監視     タイムラグあるけどsambaも対応    対象：着信ログ、DB更新、TaskDB更新
             PoolingFiles()
         Catch ex As Exception
             ' 監視ファイルが無い等の理由で監視できない
         End Try
-    End Sub
-
-    ' 監視機能①
-    Private Sub WatcherFiles()
-        Watcher = New FileSystemWatcher()
-        Watcher.Path = db.CurrentPath_SV & Common.DIR_TEL                   ' 監視するパス
-        Watcher.NotifyFilter = NotifyFilters.LastWrite Or                   ' 検知条件 最終書き込み時間
-        Watcher.Filter = Common.FILE_TEL                                    ' フィルタで監視するファイルを.txtのみにする
-        Watcher.IncludeSubdirectories = False                               ' サブディレクトリ以下も監視する
-        AddHandler Watcher.Changed, AddressOf Changed                       ' 変更発生時のイベントを定義する　変更時
-        Watcher.EnableRaisingEvents = True                                  ' 監視開始  必要がなくなったら監視終了処理(StopWatching)を呼ぶ
-    End Sub
-
-    ' 監視機能① イベント受信 (同じイベントが2回発生する仕様あり)
-    Delegate Function dele() As Boolean
-    Private Sub Changed(ByVal source As Object, ByVal e As FileSystemEventArgs)
-        Select Case e.ChangeType
-            Case WatcherChangeTypes.Changed
-                log.cLog("--- changed 着信検知:")
-                Invoke(New MethodInvoker(AddressOf CreateChildForm))
-        End Select
-    End Sub
-
-    ' 監視機能① 監視停止
-    Private Sub StopWatching()
-        PoolingStart = False
-        If (Not IsNothing(Watcher)) Then
-            Watcher.EnableRaisingEvents = False
-            Watcher.Dispose()
-        End If
     End Sub
 
     ' 監視機能② ポーリング処理
@@ -1149,16 +921,11 @@ Public Class SCA1
     End Sub
 
     ' 監視機能② イベント受信 (Pooling)                     
-    Delegate Sub delegate_PoolingCallBack(id As String)         ' UIコールバック用Delegate宣言
     Private Sub PoolingCallBack(id As String)
         log.cLog("Pooling 検出: " & id)
         Select Case id
-            Case POLLING_ID_TEL     ' 着信ログ
-                Invoke(New MethodInvoker(AddressOf CreateChildForm))       ' 子フォーム作成処理
             Case POLLING_ID_SCD     ' SCD DB更新
                 Invoke(New MethodInvoker(AddressOf UpdateDB_SCD))          ' SCD更新
-            Case POLLING_ID_TASK    ' Task更新
-                Invoke(New MethodInvoker(AddressOf UpdateDB_Task))         ' タスク一覧更新
             Case POLLING_ID_CUDB    ' 顧客DB更新
                 Invoke(New MethodInvoker(AddressOf DownloadCustomerDB))    ' 顧客DBのダウンロード更新
             Case POLLING_ID_ASC     ' A_SC本体の更新
@@ -1189,264 +956,6 @@ Public Class SCA1
         log.cLog(" -- NoticeUpdate_ASC")
         L_UPDMsg.Visible = True
     End Sub
-#End Region
-
-    ' DGV1カーソル選択中の債務者の最新督促日を設定
-    'Private Sub SetLatestDDay()
-    '    log.cLog("最新督促日の設定")
-    '    For Each r As DataGridViewRow In DGV1.SelectedRows
-    '        Dim id As String = DGV1(0, r.Index).Value
-    '        Dim dday As String = ""
-    '        ' FKSCDから最新督促日を取得
-    '        For Each row As DataRow In db.OrgDataTable(Sqldb.TID.SCD).Rows
-    '            If row.Item(1) <> id Then Continue For
-    '            If row.Item(7) > dday Then dday = row.Item(7)
-    '        Next
-    '        ' REMに既にある場合はUPDATE、なければINSERT
-    '        If db.IsExistREM(id) Then
-    '            db.AddSQL("Update FKSCREM Set FKR02 = '" & dday & "' Where FKR01 = '" & id & "'") ' 督促日更新
-    '        Else
-    '            db.AddSQL("Insert Into FKSCREM Values('" & id & "','" & dday & "','','','')")     ' 督促日新規登録
-    '        End If
-    '        DGV1(4, r.Index).Value = dday                                                       ' DGV1の督促通知日を更新
-    '    Next
-    '    db.ExeSQL(Sqldb.TID.SCR)
-    'End Sub
-
-#Region "タスクリスト"
-    ' タスクリスト初期設定
-    Private Sub TaskListInit()
-        SetChedkedList(CLB_Progress)
-        SetChedkedList(CLB_Group)
-        TV_A1.ExpandAll()                   ' ノード展開
-        TV_A1.SelectedNode = TV_A1.TopNode  ' ノードの先頭を選択
-        DGV3.ContextMenuStrip = CMenu_DGV3
-        CB_Limit.SelectedIndex = 0
-    End Sub
-
-    ' タスク表選択時、更新ボタン時にタスク表の最新化
-    Private Sub UpdateDB_Task() Handles Tab_3ToDo.Enter, Button2.Click
-        log.cLog(" -- UpdateDB_Task")
-        db.UpdateOrigDT(Sqldb.TID.SCTD)         ' タスクDB取得
-        ShowDGVList(DGV3)                       ' タスクリスト表示
-    End Sub
-
-    ' 検索ボタン
-    Private Sub Button3_Click_1(sender As Object, e As EventArgs) Handles BT_TaskSearch.Click
-        ShowDGVList(DGV3, TB_TaskSeach.Text)          ' タスクリスト表示
-    End Sub
-    ' 検索でEnterキー
-    Private Sub TB_KeyPress(sender As Object, e As KeyPressEventArgs) Handles TB_TaskSeach.KeyPress
-        If e.KeyChar = ChrW(Keys.Enter) Then
-            e.Handled = True
-            ShowDGVList(DGV3, TB_TaskSeach.Text)          ' タスクリスト表示
-
-        End If
-    End Sub
-    ' 検索フォーカス
-    Private Sub TB_TaskSeach_Enter(sender As Object, e As EventArgs) Handles TB_SearchInput.Click, TB_TaskSeach.Click
-        sender.SelectAll()
-    End Sub
-
-    ' タスクのフィルタを変更した契機で表示更新
-    Private Sub ChangeTaskFilter() ' Handles  TV_A1.AfterSelect, CLB_Progress.SelectedIndexChanged, CLB_Group.SelectedIndexChanged, CB_Limit.SelectedIndexChanged
-        ' ShowTaskList()
-        ShowDGVList(DGV3)
-    End Sub
-    Private Sub UpdateTitle() Handles TV_A1.AfterSelect
-        L_TITLE.Text = TV_A1.SelectedNode.Text
-    End Sub
-
-    ' タスクリストの表示に条件フィルタをかける
-    Private Sub FilterTaskList(ByRef dt As DataTable)
-        For r = dt.Rows.Count - 1 To 0 Step -1
-            ' ノードのフィルタ ノードが指定されているタスクは非表示にする
-            Dim nodeID = NODE_ALL
-            If TV_A1.SelectedNode IsNot Nothing Then nodeID = TV_A1.SelectedNode.Name
-            If nodeID <> NODE_ALL Then
-                If nodeID <> dt.Rows(r).Item(1).ToString Then
-                    dt.Rows(r).Delete()
-                    Continue For
-                End If
-            End If
-
-            ' 期限
-            Dim LimitDate As String = dt.Rows(r).Item(4).ToString
-            Select Case CB_Limit.SelectedIndex
-                Case 0 ' 全表示
-                Case 1 ' 期限切れ
-                    If LimitDate >= Date.Today.ToString("yyyy/MM/dd") Or LimitDate = "" Then
-                        dt.Rows(r).Delete()
-                        Continue For
-                    End If
-                Case 2 ' 今日まで
-                    If LimitDate > Date.Today.ToString("yyyy/MM/dd") Or LimitDate = "" Then
-                        dt.Rows(r).Delete()
-                        Continue For
-                    End If
-                Case 3 ' 明日まで
-                    If LimitDate > Date.Today.AddDays(1).ToString("yyyy/MM/dd") Or LimitDate = "" Then
-                        dt.Rows(r).Delete()
-                        Continue For
-                    End If
-            End Select
-
-            ' 担当
-
-            ' 進捗
-            Dim n = 0
-            While n < CLB_Progress.Items.Count
-                If CLB_Progress.GetItemChecked(n) = False And                       ' チェックがOFFならその進捗をフィルタかける
-                   dt.Rows(r).Item(2).ToString = CLB_Progress.Items(n).ToString Then
-                    dt.Rows(r).Delete()
-                    Continue For
-                End If
-                n += 1
-            End While
-
-            ' 分類
-            n = 0
-            While n < CLB_Group.Items.Count
-                If CLB_Group.GetItemChecked(n) = False And                          ' チェックがOFFならその分類をフィルタかける
-                   dt.Rows(r).Item(3).ToString = CLB_Group.Items(n).ToString Then
-                    dt.Rows(r).Delete()
-                    Continue For
-                End If
-                n += 1
-            End While
-        Next
-    End Sub
-
-    ' タスク 編集・追加ボタン
-    Private Sub Button3_Click(sender As Object, e As EventArgs) Handles BT_A1_ADD.Click, BT_A1_EDIT.Click
-        If DGV3.RowCount = 0 And sender.text = BT_A1_EDIT.Text Then Exit Sub   ' 編集はタスクがないときは不要
-
-        Dim form = New SCA1_S3()
-        If sender.text = BT_A1_EDIT.Text Then       ' 編集
-            form.SetItems(DGV3.CurrentRow)          ' 選択中のタスク行をSCA1_S3に送る
-        End If
-        form.ShowInTaskbar = False
-        form.ShowDialog()
-        If form.DialogResult = DialogResult.OK Then
-            Dim i As S3Items = form.GetItems()              ' 登録or編集で入力した情報取得
-            Cursor.Current = Cursors.WaitCursor             ' マウスカーソルを砂時計に
-
-            ' 識別子を取得
-            Dim nextNo As Integer = db.GetNextID_TD()
-
-            ' 添付ファイルのアップロード  .\A_SC\File\[識別番号4桁]\ に格納
-            Dim FileCheck = ""
-            If i.p_file IsNot Nothing Then
-                FileCheck = "○"
-                For Each f In i.p_file
-                    My.Computer.FileSystem.CopyFile(f, db.CurrentPath_SV & Common.DIR_FLE & nextNo.ToString("D4") & "\" & Path.GetFileName(f).ToString)
-                Next
-            End If
-
-            ' SQL実行 タスクを追加or編集
-            If sender.text = BT_A1_ADD.Text Then
-                ' 追加      No 分類リスト(NodeID) 進捗 分類 期限 タスク 担当 添付 作成日
-                db.ExeSQL(Sqldb.TID.SCTD, "INSERT INTO TODO VALUES('" &
-                            nextNo.ToString("D4") & "','" &       ' C01 No
-                            i.p_list & "','" &                          ' C02 分類リスト(nodeID)
-                            "未完了','" &                               ' C03 進捗 初回は"未"固定
-                            i.p_group & "','" &                         ' C04 分類
-                            i.p_limit & "','" &                         ' C05 期限
-                            i.p_content & "','" &                       ' C06 タスク
-                            i.p_person & "','" &                        ' C07 担当
-                            FileCheck & "','" &                         ' C08 添付
-                            i.p_date &                                  ' C09 作成日
-                            "','','','','','','')")
-                log.cLog("タスク登録: " & nextNo.ToString("D4"))
-            Else
-                ' 編集
-                db.ExeSQL(Sqldb.TID.SCTD, "UPDATE TODO SET " &
-                            "C04 = '" & i.p_group & "'," &
-                            "C05 = '" & i.p_limit & "'," &
-                            "C06 = '" & i.p_content & "'," &
-                            "C07 = '" & i.p_person & "' " &
-                            "WHERE C01 = '" & DGV3.CurrentRow.Cells(0).Value & "'")
-                log.cLog("タスク更新: " & DGV3.CurrentRow.Cells(0).Value)
-            End If
-        End If
-        form.Dispose()
-        db.UpdateOrigDT(Sqldb.TID.SCTD)         ' タスクDB取得
-        ShowDGVList(DGV3)           ' タスクリスト表示
-    End Sub
-
-    ' タスク 削除ボタン
-    Private Sub BT_A1_DEL_Click(sender As Object, e As EventArgs) Handles BT_A1_DEL.Click
-        If DGV3.RowCount = 0 Then Exit Sub   ' 削除はタスクがないときは不要
-        Dim taskID As String = DGV3.CurrentRow.Cells(0).Value
-        Dim r As Integer
-        r = MessageBox.Show("削除してよろしいですか？",
-                            "ご確認ください",
-                            MessageBoxButtons.YesNo,
-                            MessageBoxIcon.Question)
-        If r = vbNo Then Exit Sub
-        Dim ret = db.ExeSQL(Sqldb.TID.SCTD, "Delete From TODO Where C01 = '" & taskID & "'")
-        If ret And GetTaskFilePath(taskID) <> "" Then                                   ' DB削除が成功して、添付フォルダが存在するならフォルダ削除
-            ' 添付フォルダを削除するとき、削除の代わりにリネームする
-            ' ただし、リネームしたフォルダが既に存在したら古いフォルダを先に削除する
-            Dim DelFile = GetTaskFilePath(taskID) & Date.Now.ToString("DEL_MMddHHmm")
-            If Directory.Exists(DelFile) Then Directory.Delete(DelFile, True)
-            Directory.Move(GetTaskFilePath(taskID), GetTaskFilePath(taskID) & Date.Now.ToString("DEL_MMddHHmm"))   ' 削除の代わりに、フォルダ名変更
-        End If
-        db.UpdateOrigDT(Sqldb.TID.SCTD)         ' タスクDB取得
-        ShowDGVList(DGV3)           ' タスクリスト表示
-    End Sub
-
-    ' タスクリスト クリック 添付ファイル表示
-    Private Sub DGV3_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles DGV3.CellClick
-        If sender.CurrentCell.OwningColumn.Name <> "DGVTask_添付" Then Exit Sub    ' 添付ファイルセルのみ実行
-        If DGV3.CurrentRow.Cells("DGVTask_添付").Value = "" Then Exit Sub          ' タスクファイル無いなら終了
-
-        log.cLog("メニュー表示 row:" & e.RowIndex & ", columns:" & e.ColumnIndex)
-        Dim TaskID As Integer = DGV3.CurrentRow.Cells("DGVTask_No").Value                       ' タスクの識別子
-        If Directory.Exists(GetTaskFilePath(TaskID)) Then Process.Start(GetTaskFilePath(TaskID))
-    End Sub
-
-    ' タスクリスト 添付ファイルパス取得 ファイルなければ "" 返却
-    Private Function GetTaskFilePath(taskID As Integer) As String
-        Dim ret = ""
-        If Directory.Exists(db.CurrentPath_SV & Common.DIR_FLE & taskID.ToString("D4")) Then ret = db.CurrentPath_SV & Common.DIR_FLE & taskID.ToString("D4")
-        Return ret
-    End Function
-
-    ' タスクリスト 内容表示
-    Private Sub DGV3_CellEnter(sender As Object, e As DataGridViewCellEventArgs) Handles DGV3.CellEnter
-        TB_TaskContext.Text = DGV3.CurrentRow.Cells("DGVTask_タスク").Value
-    End Sub
-
-    ' タスクリスト 条件チェックリストの初期設定
-    Private Sub SetChedkedList(CheckList As CheckedListBox)
-        For cl = 0 To CheckList.Items.Count - 1
-            CheckList.SetItemChecked(cl, True)
-        Next
-    End Sub
-
-    ' 進捗更新 ダブルクリック or 進捗ボタン
-    Private Sub DGV3_DoubleClick(sender As Object, e As EventArgs) Handles DGV3.DoubleClick, BT_A1_PROG.Click
-        Dim Proggress = "完了"
-        If DGV3.CurrentRow.Cells(2).Value = "完了" Then Proggress = "未完了"
-        db.ExeSQL(Sqldb.TID.SCTD, "UPDATE TODO SET C03 = '" & Proggress & "' WHERE C01 = '" & DGV3.CurrentRow.Cells(0).Value & "'")
-        db.UpdateOrigDT(Sqldb.TID.SCTD)         ' タスクDB取得
-        ShowDGVList(DGV3)                       ' タスクリスト表示
-    End Sub
-
-    ' タスクリストのステータスバー表示
-    Private Sub UpdateStatusBar_Task()
-        Dim dt As DataTable = db.OrgDataTable(Sqldb.TID.SCTD).Copy               ' 現在のDataTableをコピー
-        Dim total As Integer = dt.Rows.Count
-        Dim comp As Integer = 0
-        Dim todayl As Integer = 0
-        For r = dt.Rows.Count - 1 To 0 Step -1
-            If dt.Rows(r).Item(2).ToString = "完了" Then comp += 1 : Continue For
-            If dt.Rows(r).Item(4).ToString = Date.Today.ToString("yyyy/MM/dd") Then todayl += 1
-        Next
-        L_STS_Task.Text = "[本日期限の未完了タスク数]　" & todayl & "件　　[合計未完了タスク数]　" & (total - comp) & "件"
-    End Sub
-
 #End Region
 
 #Region "追加電話番号"
@@ -1559,8 +1068,6 @@ Public Class SCA1
         Next
         TAB_A1.SelectedTab = Tab_1SC
     End Sub
-
-
 
 #Region "記録一覧"
     Private Sub CheckedListBoxInit()
@@ -2368,11 +1875,6 @@ Public Class SCA1
         End If
     End Sub
 
-    ' 受信履歴更新ボタン
-    Private Sub Button16_Click(sender As Object, e As EventArgs) Handles Button16.Click
-        ShowDGVList(DGV8)
-    End Sub
-
     ' 受任ボタン
     Private Sub L_JUNIN1_Click(sender As Object, e As EventArgs) Handles L_JUNIN1.Click, L_JUNIN2.Click
         If DGV1.Rows.Count = 0 Then Exit Sub
@@ -2412,11 +1914,6 @@ Public Class SCA1
 
     Private Sub HintSet(str As String)
         L_STS.Text = str
-    End Sub
-
-    Private Sub Button17_Click(sender As Object, e As EventArgs) Handles Button17.Click
-        Dim f As New SCE_S1
-        f.Show()
     End Sub
 
 #End Region

@@ -27,14 +27,6 @@ Partial Class SCA1
         Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle3 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle4 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim TreeNode1 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("週報")
-        Dim TreeNode2 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("月報")
-        Dim TreeNode3 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("業務連絡", New System.Windows.Forms.TreeNode() {TreeNode1, TreeNode2})
-        Dim TreeNode4 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("入金確認")
-        Dim TreeNode5 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("督促状")
-        Dim TreeNode6 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("未入金関連", New System.Windows.Forms.TreeNode() {TreeNode4, TreeNode5})
-        Dim TreeNode7 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("その他")
-        Dim TreeNode8 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("全体", New System.Windows.Forms.TreeNode() {TreeNode3, TreeNode6, TreeNode7})
         Dim DataGridViewCellStyle5 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle6 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle7 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
@@ -44,17 +36,17 @@ Partial Class SCA1
         Dim DataGridViewCellStyle11 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle12 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle13 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle19 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle14 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle15 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle16 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle17 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle18 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle24 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle19 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle20 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle21 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle22 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle23 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle24 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle25 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle26 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle27 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
@@ -62,13 +54,6 @@ Partial Class SCA1
         Dim DataGridViewCellStyle29 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle30 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle31 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle32 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle33 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle34 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle35 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle36 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle37 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle38 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(SCA1))
         Me.PBXX = New System.Windows.Forms.Button()
         Me.tt1 = New System.Windows.Forms.ToolTip(Me.components)
@@ -136,39 +121,6 @@ Partial Class SCA1
         Me.Button11 = New System.Windows.Forms.Button()
         Me.Button10 = New System.Windows.Forms.Button()
         Me.Label27 = New System.Windows.Forms.Label()
-        Me.Tab_3ToDo = New System.Windows.Forms.TabPage()
-        Me.Button17 = New System.Windows.Forms.Button()
-        Me.BT_A1_PROG = New System.Windows.Forms.Button()
-        Me.L_STS_Task = New System.Windows.Forms.Label()
-        Me.BT_TaskSearch = New System.Windows.Forms.Button()
-        Me.TB_TaskSeach = New System.Windows.Forms.TextBox()
-        Me.TB_TaskContext = New System.Windows.Forms.TextBox()
-        Me.L_TITLE = New System.Windows.Forms.Label()
-        Me.Button2 = New System.Windows.Forms.Button()
-        Me.PanelMenu = New System.Windows.Forms.Panel()
-        Me.Label13 = New System.Windows.Forms.Label()
-        Me.Label9 = New System.Windows.Forms.Label()
-        Me.CB_Limit = New System.Windows.Forms.ComboBox()
-        Me.Label12 = New System.Windows.Forms.Label()
-        Me.CMB_A1 = New System.Windows.Forms.ComboBox()
-        Me.Label11 = New System.Windows.Forms.Label()
-        Me.Label10 = New System.Windows.Forms.Label()
-        Me.TV_A1 = New System.Windows.Forms.TreeView()
-        Me.CLB_Group = New System.Windows.Forms.CheckedListBox()
-        Me.CLB_Progress = New System.Windows.Forms.CheckedListBox()
-        Me.BT_A1_DEL = New System.Windows.Forms.Button()
-        Me.BT_A1_EDIT = New System.Windows.Forms.Button()
-        Me.BT_A1_ADD = New System.Windows.Forms.Button()
-        Me.DGV3 = New System.Windows.Forms.DataGridView()
-        Me.DGVTask_No = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.DGVTask_分類リスト = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.DGVTask_分類進捗 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.DGVTask_分類ジャンル = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.DGVTask_期限 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.DGVTask_タスク = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.DGVTask_担当 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.DGVTask_添付 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.DGVTask_作成日 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Tab_2Record = New System.Windows.Forms.TabPage()
         Me.CB_RecRe = New System.Windows.Forms.CheckBox()
         Me.CB_RecRNG = New System.Windows.Forms.CheckBox()
@@ -251,7 +203,6 @@ Partial Class SCA1
         Me.Column13 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Column30 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.TB_FreeMemo = New System.Windows.Forms.TextBox()
-        Me.Button5 = New System.Windows.Forms.Button()
         Me.TB_Remarks = New System.Windows.Forms.TextBox()
         Me.Button6 = New System.Windows.Forms.Button()
         Me.BT_B1 = New System.Windows.Forms.Button()
@@ -305,14 +256,6 @@ Partial Class SCA1
         Me.TB_MRSearch = New System.Windows.Forms.TextBox()
         Me.Label6 = New System.Windows.Forms.Label()
         Me.Button19 = New System.Windows.Forms.Button()
-        Me.Tab_5Tell = New System.Windows.Forms.TabPage()
-        Me.CB_NOTICETELL = New System.Windows.Forms.CheckBox()
-        Me.Button16 = New System.Windows.Forms.Button()
-        Me.DGV8 = New System.Windows.Forms.DataGridView()
-        Me.DataGridViewTextBoxColumn16 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.DataGridViewTextBoxColumn18 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Column27 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Column28 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.CreatorExpress1 = New AdvanceSoftware.ExcelCreator.Xlsx.CreatorExpress(Me.components)
         Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
         Me.データ読み込みToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -328,9 +271,6 @@ Partial Class SCA1
         Me.GroupBox1.SuspendLayout()
         CType(Me.NUD_DunA1, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.DGV6, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.Tab_3ToDo.SuspendLayout()
-        Me.PanelMenu.SuspendLayout()
-        CType(Me.DGV3, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Tab_2Record.SuspendLayout()
         CType(Me.DGV5, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Tab_1SC.SuspendLayout()
@@ -343,8 +283,6 @@ Partial Class SCA1
         Me.TAB_A1.SuspendLayout()
         Me.Tab_6GA.SuspendLayout()
         CType(Me.DGV_MR1, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.Tab_5Tell.SuspendLayout()
-        CType(Me.DGV8, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.MenuStrip1.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -1129,450 +1067,6 @@ Partial Class SCA1
         Me.Label27.Text = "過去の送付履歴の閲覧"
         Me.Label27.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
-        'Tab_3ToDo
-        '
-        Me.Tab_3ToDo.BackColor = System.Drawing.Color.Azure
-        Me.Tab_3ToDo.Controls.Add(Me.Button17)
-        Me.Tab_3ToDo.Controls.Add(Me.BT_A1_PROG)
-        Me.Tab_3ToDo.Controls.Add(Me.L_STS_Task)
-        Me.Tab_3ToDo.Controls.Add(Me.BT_TaskSearch)
-        Me.Tab_3ToDo.Controls.Add(Me.TB_TaskSeach)
-        Me.Tab_3ToDo.Controls.Add(Me.TB_TaskContext)
-        Me.Tab_3ToDo.Controls.Add(Me.L_TITLE)
-        Me.Tab_3ToDo.Controls.Add(Me.Button2)
-        Me.Tab_3ToDo.Controls.Add(Me.PanelMenu)
-        Me.Tab_3ToDo.Controls.Add(Me.BT_A1_DEL)
-        Me.Tab_3ToDo.Controls.Add(Me.BT_A1_EDIT)
-        Me.Tab_3ToDo.Controls.Add(Me.BT_A1_ADD)
-        Me.Tab_3ToDo.Controls.Add(Me.DGV3)
-        Me.Tab_3ToDo.Location = New System.Drawing.Point(4, 20)
-        Me.Tab_3ToDo.Name = "Tab_3ToDo"
-        Me.Tab_3ToDo.Padding = New System.Windows.Forms.Padding(3)
-        Me.Tab_3ToDo.Size = New System.Drawing.Size(1132, 682)
-        Me.Tab_3ToDo.TabIndex = 1
-        Me.Tab_3ToDo.Text = "タスク"
-        '
-        'Button17
-        '
-        Me.Button17.BackColor = System.Drawing.Color.SteelBlue
-        Me.Button17.FlatAppearance.BorderColor = System.Drawing.Color.Black
-        Me.Button17.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.Button17.ForeColor = System.Drawing.Color.Cyan
-        Me.Button17.Location = New System.Drawing.Point(849, 630)
-        Me.Button17.Name = "Button17"
-        Me.Button17.Size = New System.Drawing.Size(277, 33)
-        Me.Button17.TabIndex = 1599
-        Me.Button17.Text = "カレンダー表示"
-        Me.Button17.UseVisualStyleBackColor = False
-        '
-        'BT_A1_PROG
-        '
-        Me.BT_A1_PROG.BackColor = System.Drawing.Color.SteelBlue
-        Me.BT_A1_PROG.FlatAppearance.BorderColor = System.Drawing.Color.Black
-        Me.BT_A1_PROG.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.BT_A1_PROG.ForeColor = System.Drawing.Color.Cyan
-        Me.BT_A1_PROG.Location = New System.Drawing.Point(849, 538)
-        Me.BT_A1_PROG.Name = "BT_A1_PROG"
-        Me.BT_A1_PROG.Size = New System.Drawing.Size(183, 27)
-        Me.BT_A1_PROG.TabIndex = 1598
-        Me.BT_A1_PROG.Text = "完了/未完了"
-        Me.BT_A1_PROG.UseVisualStyleBackColor = False
-        '
-        'L_STS_Task
-        '
-        Me.L_STS_Task.AutoSize = True
-        Me.L_STS_Task.BackColor = System.Drawing.Color.Azure
-        Me.L_STS_Task.Font = New System.Drawing.Font("メイリオ", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.L_STS_Task.ForeColor = System.Drawing.Color.Blue
-        Me.L_STS_Task.Location = New System.Drawing.Point(4, 651)
-        Me.L_STS_Task.Name = "L_STS_Task"
-        Me.L_STS_Task.Size = New System.Drawing.Size(104, 18)
-        Me.L_STS_Task.TabIndex = 1597
-        Me.L_STS_Task.Text = "　ヒント　　　　"
-        '
-        'BT_TaskSearch
-        '
-        Me.BT_TaskSearch.BackColor = System.Drawing.Color.CornflowerBlue
-        Me.BT_TaskSearch.FlatAppearance.BorderColor = System.Drawing.Color.Black
-        Me.BT_TaskSearch.FlatStyle = System.Windows.Forms.FlatStyle.Popup
-        Me.BT_TaskSearch.Font = New System.Drawing.Font("メイリオ", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.BT_TaskSearch.ForeColor = System.Drawing.Color.White
-        Me.BT_TaskSearch.Location = New System.Drawing.Point(925, 1)
-        Me.BT_TaskSearch.Name = "BT_TaskSearch"
-        Me.BT_TaskSearch.Size = New System.Drawing.Size(56, 24)
-        Me.BT_TaskSearch.TabIndex = 1596
-        Me.BT_TaskSearch.Text = "検 索"
-        Me.BT_TaskSearch.UseVisualStyleBackColor = False
-        '
-        'TB_TaskSeach
-        '
-        Me.TB_TaskSeach.BackColor = System.Drawing.Color.Azure
-        Me.TB_TaskSeach.Font = New System.Drawing.Font("メイリオ", 8.0!)
-        Me.TB_TaskSeach.Location = New System.Drawing.Point(980, 2)
-        Me.TB_TaskSeach.Name = "TB_TaskSeach"
-        Me.TB_TaskSeach.Size = New System.Drawing.Size(151, 23)
-        Me.TB_TaskSeach.TabIndex = 1595
-        '
-        'TB_TaskContext
-        '
-        Me.TB_TaskContext.BackColor = System.Drawing.Color.Azure
-        Me.TB_TaskContext.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.TB_TaskContext.Enabled = False
-        Me.TB_TaskContext.Font = New System.Drawing.Font("MS UI Gothic", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.TB_TaskContext.ForeColor = System.Drawing.Color.Black
-        Me.TB_TaskContext.ImeMode = System.Windows.Forms.ImeMode.Hiragana
-        Me.TB_TaskContext.Location = New System.Drawing.Point(131, 498)
-        Me.TB_TaskContext.Multiline = True
-        Me.TB_TaskContext.Name = "TB_TaskContext"
-        Me.TB_TaskContext.ReadOnly = True
-        Me.TB_TaskContext.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.TB_TaskContext.Size = New System.Drawing.Size(560, 153)
-        Me.TB_TaskContext.TabIndex = 1585
-        Me.TB_TaskContext.TabStop = False
-        '
-        'L_TITLE
-        '
-        Me.L_TITLE.BackColor = System.Drawing.Color.SteelBlue
-        Me.L_TITLE.Font = New System.Drawing.Font("メイリオ", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.L_TITLE.ForeColor = System.Drawing.Color.White
-        Me.L_TITLE.Location = New System.Drawing.Point(132, 1)
-        Me.L_TITLE.Name = "L_TITLE"
-        Me.L_TITLE.Padding = New System.Windows.Forms.Padding(10, 0, 0, 0)
-        Me.L_TITLE.Size = New System.Drawing.Size(999, 24)
-        Me.L_TITLE.TabIndex = 1594
-        Me.L_TITLE.Text = "全体"
-        '
-        'Button2
-        '
-        Me.Button2.BackColor = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(128, Byte), Integer))
-        Me.Button2.FlatAppearance.BorderColor = System.Drawing.Color.Black
-        Me.Button2.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.Button2.ForeColor = System.Drawing.Color.Black
-        Me.Button2.Location = New System.Drawing.Point(697, 508)
-        Me.Button2.Name = "Button2"
-        Me.Button2.Size = New System.Drawing.Size(69, 24)
-        Me.Button2.TabIndex = 1593
-        Me.Button2.Text = "更　新"
-        Me.Button2.UseVisualStyleBackColor = False
-        '
-        'PanelMenu
-        '
-        Me.PanelMenu.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.PanelMenu.Controls.Add(Me.Label13)
-        Me.PanelMenu.Controls.Add(Me.Label9)
-        Me.PanelMenu.Controls.Add(Me.CB_Limit)
-        Me.PanelMenu.Controls.Add(Me.Label12)
-        Me.PanelMenu.Controls.Add(Me.CMB_A1)
-        Me.PanelMenu.Controls.Add(Me.Label11)
-        Me.PanelMenu.Controls.Add(Me.Label10)
-        Me.PanelMenu.Controls.Add(Me.TV_A1)
-        Me.PanelMenu.Controls.Add(Me.CLB_Group)
-        Me.PanelMenu.Controls.Add(Me.CLB_Progress)
-        Me.PanelMenu.Location = New System.Drawing.Point(0, 0)
-        Me.PanelMenu.Name = "PanelMenu"
-        Me.PanelMenu.Size = New System.Drawing.Size(132, 650)
-        Me.PanelMenu.TabIndex = 1592
-        '
-        'Label13
-        '
-        Me.Label13.BackColor = System.Drawing.Color.SteelBlue
-        Me.Label13.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.Label13.Font = New System.Drawing.Font("メイリオ", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.Label13.ForeColor = System.Drawing.Color.White
-        Me.Label13.Location = New System.Drawing.Point(-1, 528)
-        Me.Label13.Name = "Label13"
-        Me.Label13.Size = New System.Drawing.Size(131, 20)
-        Me.Label13.TabIndex = 1597
-        Me.Label13.Text = "分　類"
-        Me.Label13.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        '
-        'Label9
-        '
-        Me.Label9.BackColor = System.Drawing.Color.SteelBlue
-        Me.Label9.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.Label9.Font = New System.Drawing.Font("メイリオ", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.Label9.ForeColor = System.Drawing.Color.White
-        Me.Label9.Location = New System.Drawing.Point(0, 436)
-        Me.Label9.Name = "Label9"
-        Me.Label9.Size = New System.Drawing.Size(131, 20)
-        Me.Label9.TabIndex = 1596
-        Me.Label9.Text = "担　当"
-        Me.Label9.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        '
-        'CB_Limit
-        '
-        Me.CB_Limit.BackColor = System.Drawing.Color.Azure
-        Me.CB_Limit.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.CB_Limit.FlatStyle = System.Windows.Forms.FlatStyle.Popup
-        Me.CB_Limit.FormattingEnabled = True
-        Me.CB_Limit.Items.AddRange(New Object() {"全表示", "期限切れ", "本日まで", "明日まで"})
-        Me.CB_Limit.Location = New System.Drawing.Point(0, 414)
-        Me.CB_Limit.Name = "CB_Limit"
-        Me.CB_Limit.Size = New System.Drawing.Size(130, 20)
-        Me.CB_Limit.TabIndex = 1593
-        '
-        'Label12
-        '
-        Me.Label12.BackColor = System.Drawing.Color.SteelBlue
-        Me.Label12.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.Label12.Font = New System.Drawing.Font("メイリオ", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.Label12.ForeColor = System.Drawing.Color.White
-        Me.Label12.Location = New System.Drawing.Point(-1, -1)
-        Me.Label12.Name = "Label12"
-        Me.Label12.Size = New System.Drawing.Size(131, 17)
-        Me.Label12.TabIndex = 1595
-        Me.Label12.Text = "タスクリスト"
-        Me.Label12.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        '
-        'CMB_A1
-        '
-        Me.CMB_A1.BackColor = System.Drawing.Color.Azure
-        Me.CMB_A1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.CMB_A1.Enabled = False
-        Me.CMB_A1.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.CMB_A1.FormattingEnabled = True
-        Me.CMB_A1.Items.AddRange(New Object() {"担当者"})
-        Me.CMB_A1.Location = New System.Drawing.Point(0, 456)
-        Me.CMB_A1.Name = "CMB_A1"
-        Me.CMB_A1.Size = New System.Drawing.Size(132, 20)
-        Me.CMB_A1.TabIndex = 1589
-        '
-        'Label11
-        '
-        Me.Label11.BackColor = System.Drawing.Color.SteelBlue
-        Me.Label11.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.Label11.Font = New System.Drawing.Font("メイリオ", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.Label11.ForeColor = System.Drawing.Color.White
-        Me.Label11.Location = New System.Drawing.Point(-1, 394)
-        Me.Label11.Name = "Label11"
-        Me.Label11.Size = New System.Drawing.Size(131, 20)
-        Me.Label11.TabIndex = 1594
-        Me.Label11.Text = "期　限"
-        Me.Label11.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        '
-        'Label10
-        '
-        Me.Label10.BackColor = System.Drawing.Color.SteelBlue
-        Me.Label10.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.Label10.Font = New System.Drawing.Font("メイリオ", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.Label10.ForeColor = System.Drawing.Color.White
-        Me.Label10.Location = New System.Drawing.Point(-1, 477)
-        Me.Label10.Name = "Label10"
-        Me.Label10.Size = New System.Drawing.Size(131, 20)
-        Me.Label10.TabIndex = 1593
-        Me.Label10.Text = "進　捗"
-        Me.Label10.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        '
-        'TV_A1
-        '
-        Me.TV_A1.BackColor = System.Drawing.Color.Azure
-        Me.TV_A1.Indent = 15
-        Me.TV_A1.ItemHeight = 15
-        Me.TV_A1.LabelEdit = True
-        Me.TV_A1.Location = New System.Drawing.Point(-1, 16)
-        Me.TV_A1.Name = "TV_A1"
-        TreeNode1.Name = "ノード8"
-        TreeNode1.Text = "週報"
-        TreeNode2.Name = "ノード9"
-        TreeNode2.Text = "月報"
-        TreeNode3.Name = "node01"
-        TreeNode3.Text = "業務連絡"
-        TreeNode4.Name = "ノード13"
-        TreeNode4.Text = "入金確認"
-        TreeNode5.Name = "ノード11"
-        TreeNode5.Text = "督促状"
-        TreeNode6.Name = "node02"
-        TreeNode6.Text = "未入金関連"
-        TreeNode7.Name = "ノード14"
-        TreeNode7.Text = "その他"
-        TreeNode8.Name = "node00"
-        TreeNode8.Text = "全体"
-        Me.TV_A1.Nodes.AddRange(New System.Windows.Forms.TreeNode() {TreeNode8})
-        Me.TV_A1.Size = New System.Drawing.Size(132, 427)
-        Me.TV_A1.TabIndex = 1587
-        '
-        'CLB_Group
-        '
-        Me.CLB_Group.BackColor = System.Drawing.Color.Azure
-        Me.CLB_Group.CausesValidation = False
-        Me.CLB_Group.CheckOnClick = True
-        Me.CLB_Group.FormattingEnabled = True
-        Me.CLB_Group.Items.AddRange(New Object() {"重要", "低優先", "夜勤対応"})
-        Me.CLB_Group.Location = New System.Drawing.Point(-1, 547)
-        Me.CLB_Group.Name = "CLB_Group"
-        Me.CLB_Group.Size = New System.Drawing.Size(132, 102)
-        Me.CLB_Group.Sorted = True
-        Me.CLB_Group.TabIndex = 1586
-        '
-        'CLB_Progress
-        '
-        Me.CLB_Progress.BackColor = System.Drawing.Color.Azure
-        Me.CLB_Progress.CausesValidation = False
-        Me.CLB_Progress.CheckOnClick = True
-        Me.CLB_Progress.FormattingEnabled = True
-        Me.CLB_Progress.Items.AddRange(New Object() {"完了", "未完了"})
-        Me.CLB_Progress.Location = New System.Drawing.Point(-1, 496)
-        Me.CLB_Progress.Name = "CLB_Progress"
-        Me.CLB_Progress.Size = New System.Drawing.Size(132, 32)
-        Me.CLB_Progress.Sorted = True
-        Me.CLB_Progress.TabIndex = 1588
-        '
-        'BT_A1_DEL
-        '
-        Me.BT_A1_DEL.BackColor = System.Drawing.Color.Red
-        Me.BT_A1_DEL.FlatAppearance.BorderColor = System.Drawing.Color.Black
-        Me.BT_A1_DEL.Font = New System.Drawing.Font("MS UI Gothic", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.BT_A1_DEL.ForeColor = System.Drawing.Color.White
-        Me.BT_A1_DEL.Location = New System.Drawing.Point(1031, 505)
-        Me.BT_A1_DEL.Name = "BT_A1_DEL"
-        Me.BT_A1_DEL.Size = New System.Drawing.Size(92, 27)
-        Me.BT_A1_DEL.TabIndex = 1583
-        Me.BT_A1_DEL.Text = "削　除"
-        Me.BT_A1_DEL.UseVisualStyleBackColor = False
-        '
-        'BT_A1_EDIT
-        '
-        Me.BT_A1_EDIT.BackColor = System.Drawing.Color.SteelBlue
-        Me.BT_A1_EDIT.FlatAppearance.BorderColor = System.Drawing.Color.Black
-        Me.BT_A1_EDIT.Font = New System.Drawing.Font("MS UI Gothic", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.BT_A1_EDIT.ForeColor = System.Drawing.Color.White
-        Me.BT_A1_EDIT.Location = New System.Drawing.Point(940, 505)
-        Me.BT_A1_EDIT.Name = "BT_A1_EDIT"
-        Me.BT_A1_EDIT.Size = New System.Drawing.Size(92, 27)
-        Me.BT_A1_EDIT.TabIndex = 1584
-        Me.BT_A1_EDIT.Text = "編　集"
-        Me.BT_A1_EDIT.UseVisualStyleBackColor = False
-        '
-        'BT_A1_ADD
-        '
-        Me.BT_A1_ADD.BackColor = System.Drawing.Color.SteelBlue
-        Me.BT_A1_ADD.FlatAppearance.BorderColor = System.Drawing.Color.Black
-        Me.BT_A1_ADD.Font = New System.Drawing.Font("MS UI Gothic", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.BT_A1_ADD.ForeColor = System.Drawing.Color.Cyan
-        Me.BT_A1_ADD.Location = New System.Drawing.Point(849, 505)
-        Me.BT_A1_ADD.Name = "BT_A1_ADD"
-        Me.BT_A1_ADD.Size = New System.Drawing.Size(92, 27)
-        Me.BT_A1_ADD.TabIndex = 1582
-        Me.BT_A1_ADD.Text = "追　加"
-        Me.BT_A1_ADD.UseVisualStyleBackColor = False
-        '
-        'DGV3
-        '
-        Me.DGV3.AllowUserToAddRows = False
-        Me.DGV3.AllowUserToDeleteRows = False
-        Me.DGV3.AllowUserToResizeColumns = False
-        Me.DGV3.AllowUserToResizeRows = False
-        Me.DGV3.BackgroundColor = System.Drawing.Color.Azure
-        Me.DGV3.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.[Single]
-        DataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle5.BackColor = System.Drawing.Color.LightGray
-        DataGridViewCellStyle5.Font = New System.Drawing.Font("MS UI Gothic", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        DataGridViewCellStyle5.ForeColor = System.Drawing.SystemColors.WindowText
-        DataGridViewCellStyle5.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        DataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.DGV3.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle5
-        Me.DGV3.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.DGV3.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.DGVTask_No, Me.DGVTask_分類リスト, Me.DGVTask_分類進捗, Me.DGVTask_分類ジャンル, Me.DGVTask_期限, Me.DGVTask_タスク, Me.DGVTask_担当, Me.DGVTask_添付, Me.DGVTask_作成日})
-        Me.DGV3.Location = New System.Drawing.Point(131, 24)
-        Me.DGV3.MultiSelect = False
-        Me.DGV3.Name = "DGV3"
-        Me.DGV3.ReadOnly = True
-        Me.DGV3.RowHeadersVisible = False
-        Me.DGV3.RowHeadersWidth = 51
-        Me.DGV3.RowTemplate.Height = 21
-        Me.DGV3.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.DGV3.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.DGV3.Size = New System.Drawing.Size(1003, 473)
-        Me.DGV3.TabIndex = 1570
-        Me.DGV3.TabStop = False
-        '
-        'DGVTask_No
-        '
-        DataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        DataGridViewCellStyle6.NullValue = Nothing
-        Me.DGVTask_No.DefaultCellStyle = DataGridViewCellStyle6
-        Me.DGVTask_No.HeaderText = "No"
-        Me.DGVTask_No.MinimumWidth = 6
-        Me.DGVTask_No.Name = "DGVTask_No"
-        Me.DGVTask_No.ReadOnly = True
-        Me.DGVTask_No.Width = 38
-        '
-        'DGVTask_分類リスト
-        '
-        Me.DGVTask_分類リスト.HeaderText = "分類リスト"
-        Me.DGVTask_分類リスト.MinimumWidth = 6
-        Me.DGVTask_分類リスト.Name = "DGVTask_分類リスト"
-        Me.DGVTask_分類リスト.ReadOnly = True
-        Me.DGVTask_分類リスト.Visible = False
-        Me.DGVTask_分類リスト.Width = 60
-        '
-        'DGVTask_分類進捗
-        '
-        DataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        Me.DGVTask_分類進捗.DefaultCellStyle = DataGridViewCellStyle7
-        Me.DGVTask_分類進捗.HeaderText = "進捗"
-        Me.DGVTask_分類進捗.MinimumWidth = 6
-        Me.DGVTask_分類進捗.Name = "DGVTask_分類進捗"
-        Me.DGVTask_分類進捗.ReadOnly = True
-        Me.DGVTask_分類進捗.Width = 50
-        '
-        'DGVTask_分類ジャンル
-        '
-        Me.DGVTask_分類ジャンル.HeaderText = "分類"
-        Me.DGVTask_分類ジャンル.MinimumWidth = 6
-        Me.DGVTask_分類ジャンル.Name = "DGVTask_分類ジャンル"
-        Me.DGVTask_分類ジャンル.ReadOnly = True
-        Me.DGVTask_分類ジャンル.Width = 90
-        '
-        'DGVTask_期限
-        '
-        Me.DGVTask_期限.HeaderText = "期限"
-        Me.DGVTask_期限.MinimumWidth = 6
-        Me.DGVTask_期限.Name = "DGVTask_期限"
-        Me.DGVTask_期限.ReadOnly = True
-        Me.DGVTask_期限.Width = 80
-        '
-        'DGVTask_タスク
-        '
-        DataGridViewCellStyle8.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.DGVTask_タスク.DefaultCellStyle = DataGridViewCellStyle8
-        Me.DGVTask_タスク.HeaderText = "タスク"
-        Me.DGVTask_タスク.MinimumWidth = 6
-        Me.DGVTask_タスク.Name = "DGVTask_タスク"
-        Me.DGVTask_タスク.ReadOnly = True
-        Me.DGVTask_タスク.Width = 565
-        '
-        'DGVTask_担当
-        '
-        Me.DGVTask_担当.HeaderText = "担当"
-        Me.DGVTask_担当.MinimumWidth = 6
-        Me.DGVTask_担当.Name = "DGVTask_担当"
-        Me.DGVTask_担当.ReadOnly = True
-        Me.DGVTask_担当.Width = 60
-        '
-        'DGVTask_添付
-        '
-        DataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        DataGridViewCellStyle9.Font = New System.Drawing.Font("MS UI Gothic", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        DataGridViewCellStyle9.ForeColor = System.Drawing.Color.Blue
-        Me.DGVTask_添付.DefaultCellStyle = DataGridViewCellStyle9
-        Me.DGVTask_添付.HeaderText = "添付"
-        Me.DGVTask_添付.MinimumWidth = 3
-        Me.DGVTask_添付.Name = "DGVTask_添付"
-        Me.DGVTask_添付.ReadOnly = True
-        Me.DGVTask_添付.Resizable = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.DGVTask_添付.ToolTipText = "クリックで添付ファイルの閲覧"
-        Me.DGVTask_添付.Width = 37
-        '
-        'DGVTask_作成日
-        '
-        Me.DGVTask_作成日.HeaderText = "作成日"
-        Me.DGVTask_作成日.MinimumWidth = 6
-        Me.DGVTask_作成日.Name = "DGVTask_作成日"
-        Me.DGVTask_作成日.ReadOnly = True
-        Me.DGVTask_作成日.Width = 80
-        '
         'Tab_2Record
         '
         Me.Tab_2Record.BackColor = System.Drawing.Color.FromArgb(CType(CType(242, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(242, Byte), Integer))
@@ -1858,14 +1352,14 @@ Partial Class SCA1
         Me.DGV5.AllowUserToResizeRows = False
         Me.DGV5.BackgroundColor = System.Drawing.Color.WhiteSmoke
         Me.DGV5.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.[Single]
-        DataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle10.BackColor = System.Drawing.Color.LightGray
-        DataGridViewCellStyle10.Font = New System.Drawing.Font("ＭＳ ゴシック", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        DataGridViewCellStyle10.ForeColor = System.Drawing.SystemColors.WindowText
-        DataGridViewCellStyle10.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle10.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        DataGridViewCellStyle10.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.DGV5.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle10
+        DataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle5.BackColor = System.Drawing.Color.LightGray
+        DataGridViewCellStyle5.Font = New System.Drawing.Font("ＭＳ ゴシック", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        DataGridViewCellStyle5.ForeColor = System.Drawing.SystemColors.WindowText
+        DataGridViewCellStyle5.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.DGV5.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle5
         Me.DGV5.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.DGV5.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.Column38, Me.DataGridViewTextBoxColumn3, Me.DataGridViewTextBoxColumn4, Me.Column20, Me.Column21, Me.DataGridViewTextBoxColumn5, Me.Column24, Me.DataGridViewTextBoxColumn6, Me.Column29, Me.DataGridViewTextBoxColumn7, Me.Column25, Me.DataGridViewTextBoxColumn8, Me.DataGridViewTextBoxColumn9})
         Me.DGV5.ImeMode = System.Windows.Forms.ImeMode.[On]
@@ -1927,10 +1421,10 @@ Partial Class SCA1
         '
         'DataGridViewTextBoxColumn5
         '
-        DataGridViewCellStyle11.BackColor = System.Drawing.Color.White
-        DataGridViewCellStyle11.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        DataGridViewCellStyle11.ForeColor = System.Drawing.Color.Black
-        Me.DataGridViewTextBoxColumn5.DefaultCellStyle = DataGridViewCellStyle11
+        DataGridViewCellStyle6.BackColor = System.Drawing.Color.White
+        DataGridViewCellStyle6.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        DataGridViewCellStyle6.ForeColor = System.Drawing.Color.Black
+        Me.DataGridViewTextBoxColumn5.DefaultCellStyle = DataGridViewCellStyle6
         Me.DataGridViewTextBoxColumn5.HeaderText = "相手"
         Me.DataGridViewTextBoxColumn5.MinimumWidth = 6
         Me.DataGridViewTextBoxColumn5.Name = "DataGridViewTextBoxColumn5"
@@ -1979,9 +1473,9 @@ Partial Class SCA1
         '
         'DataGridViewTextBoxColumn8
         '
-        DataGridViewCellStyle12.Format = "d"
-        DataGridViewCellStyle12.NullValue = Nothing
-        Me.DataGridViewTextBoxColumn8.DefaultCellStyle = DataGridViewCellStyle12
+        DataGridViewCellStyle7.Format = "d"
+        DataGridViewCellStyle7.NullValue = Nothing
+        Me.DataGridViewTextBoxColumn8.DefaultCellStyle = DataGridViewCellStyle7
         Me.DataGridViewTextBoxColumn8.HeaderText = "督促通知"
         Me.DataGridViewTextBoxColumn8.MinimumWidth = 6
         Me.DataGridViewTextBoxColumn8.Name = "DataGridViewTextBoxColumn8"
@@ -2016,7 +1510,6 @@ Partial Class SCA1
         Me.Tab_1SC.Controls.Add(Me.BT_B2)
         Me.Tab_1SC.Controls.Add(Me.DGV2)
         Me.Tab_1SC.Controls.Add(Me.TB_FreeMemo)
-        Me.Tab_1SC.Controls.Add(Me.Button5)
         Me.Tab_1SC.Controls.Add(Me.TB_Remarks)
         Me.Tab_1SC.Controls.Add(Me.Button6)
         Me.Tab_1SC.Controls.Add(Me.BT_B1)
@@ -2086,14 +1579,14 @@ Partial Class SCA1
         Me.DGV7.AllowUserToResizeRows = False
         Me.DGV7.BackgroundColor = System.Drawing.SystemColors.ControlLight
         Me.DGV7.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.[Single]
-        DataGridViewCellStyle13.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle13.BackColor = System.Drawing.Color.LightGray
-        DataGridViewCellStyle13.Font = New System.Drawing.Font("MS UI Gothic", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        DataGridViewCellStyle13.ForeColor = System.Drawing.SystemColors.WindowText
-        DataGridViewCellStyle13.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle13.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        DataGridViewCellStyle13.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.DGV7.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle13
+        DataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle8.BackColor = System.Drawing.Color.LightGray
+        DataGridViewCellStyle8.Font = New System.Drawing.Font("MS UI Gothic", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        DataGridViewCellStyle8.ForeColor = System.Drawing.SystemColors.WindowText
+        DataGridViewCellStyle8.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle8.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle8.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.DGV7.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle8
         Me.DGV7.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.DGV7.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.Column26, Me.DataGridViewTextBoxColumn11, Me.DataGridViewTextBoxColumn12})
         Me.DGV7.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter
@@ -2119,8 +1612,8 @@ Partial Class SCA1
         '
         'DataGridViewTextBoxColumn11
         '
-        DataGridViewCellStyle14.BackColor = System.Drawing.Color.FromArgb(CType(CType(192, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
-        Me.DataGridViewTextBoxColumn11.DefaultCellStyle = DataGridViewCellStyle14
+        DataGridViewCellStyle9.BackColor = System.Drawing.Color.FromArgb(CType(CType(192, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
+        Me.DataGridViewTextBoxColumn11.DefaultCellStyle = DataGridViewCellStyle9
         Me.DataGridViewTextBoxColumn11.HeaderText = "項目"
         Me.DataGridViewTextBoxColumn11.MinimumWidth = 6
         Me.DataGridViewTextBoxColumn11.Name = "DataGridViewTextBoxColumn11"
@@ -2129,8 +1622,8 @@ Partial Class SCA1
         '
         'DataGridViewTextBoxColumn12
         '
-        DataGridViewCellStyle15.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.DataGridViewTextBoxColumn12.DefaultCellStyle = DataGridViewCellStyle15
+        DataGridViewCellStyle10.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.DataGridViewTextBoxColumn12.DefaultCellStyle = DataGridViewCellStyle10
         Me.DataGridViewTextBoxColumn12.HeaderText = "入力情報"
         Me.DataGridViewTextBoxColumn12.MinimumWidth = 6
         Me.DataGridViewTextBoxColumn12.Name = "DataGridViewTextBoxColumn12"
@@ -2212,14 +1705,14 @@ Partial Class SCA1
         Me.DGV_PIMENU.AllowUserToResizeRows = False
         Me.DGV_PIMENU.BackgroundColor = System.Drawing.Color.White
         Me.DGV_PIMENU.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.[Single]
-        DataGridViewCellStyle16.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle16.BackColor = System.Drawing.Color.LightGray
-        DataGridViewCellStyle16.Font = New System.Drawing.Font("MS UI Gothic", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        DataGridViewCellStyle16.ForeColor = System.Drawing.SystemColors.WindowText
-        DataGridViewCellStyle16.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle16.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        DataGridViewCellStyle16.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.DGV_PIMENU.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle16
+        DataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle11.BackColor = System.Drawing.Color.LightGray
+        DataGridViewCellStyle11.Font = New System.Drawing.Font("MS UI Gothic", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        DataGridViewCellStyle11.ForeColor = System.Drawing.SystemColors.WindowText
+        DataGridViewCellStyle11.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle11.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle11.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.DGV_PIMENU.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle11
         Me.DGV_PIMENU.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.DGV_PIMENU.ColumnHeadersVisible = False
         Me.DGV_PIMENU.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.DataGridViewTextBoxColumn17})
@@ -2239,8 +1732,8 @@ Partial Class SCA1
         '
         'DataGridViewTextBoxColumn17
         '
-        DataGridViewCellStyle17.BackColor = System.Drawing.Color.White
-        Me.DataGridViewTextBoxColumn17.DefaultCellStyle = DataGridViewCellStyle17
+        DataGridViewCellStyle12.BackColor = System.Drawing.Color.White
+        Me.DataGridViewTextBoxColumn17.DefaultCellStyle = DataGridViewCellStyle12
         Me.DataGridViewTextBoxColumn17.HeaderText = "項目"
         Me.DataGridViewTextBoxColumn17.MinimumWidth = 6
         Me.DataGridViewTextBoxColumn17.Name = "DataGridViewTextBoxColumn17"
@@ -2310,14 +1803,14 @@ Partial Class SCA1
         Me.DGV9.BackgroundColor = System.Drawing.SystemColors.ControlLight
         Me.DGV9.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableWithoutHeaderText
         Me.DGV9.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.[Single]
-        DataGridViewCellStyle18.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle18.BackColor = System.Drawing.Color.LightGray
-        DataGridViewCellStyle18.Font = New System.Drawing.Font("MS UI Gothic", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        DataGridViewCellStyle18.ForeColor = System.Drawing.SystemColors.WindowText
-        DataGridViewCellStyle18.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle18.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        DataGridViewCellStyle18.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.DGV9.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle18
+        DataGridViewCellStyle13.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle13.BackColor = System.Drawing.Color.LightGray
+        DataGridViewCellStyle13.Font = New System.Drawing.Font("MS UI Gothic", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        DataGridViewCellStyle13.ForeColor = System.Drawing.SystemColors.WindowText
+        DataGridViewCellStyle13.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle13.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle13.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.DGV9.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle13
         Me.DGV9.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.DGV9.ColumnHeadersVisible = False
         Me.DGV9.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.DataGridViewTextBoxColumn19, Me.DataGridViewTextBoxColumn20, Me.DataGridViewTextBoxColumn21, Me.DataGridViewTextBoxColumn22, Me.Column39, Me.Column40, Me.Column41})
@@ -2325,13 +1818,13 @@ Partial Class SCA1
         Me.DGV9.MultiSelect = False
         Me.DGV9.Name = "DGV9"
         Me.DGV9.ReadOnly = True
-        DataGridViewCellStyle24.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle24.BackColor = System.Drawing.SystemColors.Control
-        DataGridViewCellStyle24.ForeColor = System.Drawing.SystemColors.WindowText
-        DataGridViewCellStyle24.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle24.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        DataGridViewCellStyle24.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.DGV9.RowHeadersDefaultCellStyle = DataGridViewCellStyle24
+        DataGridViewCellStyle19.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle19.BackColor = System.Drawing.SystemColors.Control
+        DataGridViewCellStyle19.ForeColor = System.Drawing.SystemColors.WindowText
+        DataGridViewCellStyle19.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle19.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle19.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.DGV9.RowHeadersDefaultCellStyle = DataGridViewCellStyle19
         Me.DGV9.RowHeadersVisible = False
         Me.DGV9.RowHeadersWidth = 51
         Me.DGV9.RowTemplate.Height = 21
@@ -2351,9 +1844,9 @@ Partial Class SCA1
         '
         'DataGridViewTextBoxColumn20
         '
-        DataGridViewCellStyle19.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle19.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.DataGridViewTextBoxColumn20.DefaultCellStyle = DataGridViewCellStyle19
+        DataGridViewCellStyle14.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle14.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.DataGridViewTextBoxColumn20.DefaultCellStyle = DataGridViewCellStyle14
         Me.DataGridViewTextBoxColumn20.HeaderText = "２"
         Me.DataGridViewTextBoxColumn20.MinimumWidth = 6
         Me.DataGridViewTextBoxColumn20.Name = "DataGridViewTextBoxColumn20"
@@ -2362,9 +1855,9 @@ Partial Class SCA1
         '
         'DataGridViewTextBoxColumn21
         '
-        DataGridViewCellStyle20.BackColor = System.Drawing.Color.White
-        DataGridViewCellStyle20.ForeColor = System.Drawing.Color.Black
-        Me.DataGridViewTextBoxColumn21.DefaultCellStyle = DataGridViewCellStyle20
+        DataGridViewCellStyle15.BackColor = System.Drawing.Color.White
+        DataGridViewCellStyle15.ForeColor = System.Drawing.Color.Black
+        Me.DataGridViewTextBoxColumn21.DefaultCellStyle = DataGridViewCellStyle15
         Me.DataGridViewTextBoxColumn21.HeaderText = "３"
         Me.DataGridViewTextBoxColumn21.MinimumWidth = 6
         Me.DataGridViewTextBoxColumn21.Name = "DataGridViewTextBoxColumn21"
@@ -2373,12 +1866,12 @@ Partial Class SCA1
         '
         'DataGridViewTextBoxColumn22
         '
-        DataGridViewCellStyle21.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle21.BackColor = System.Drawing.Color.White
-        DataGridViewCellStyle21.ForeColor = System.Drawing.Color.Black
-        DataGridViewCellStyle21.Format = "d"
-        DataGridViewCellStyle21.NullValue = Nothing
-        Me.DataGridViewTextBoxColumn22.DefaultCellStyle = DataGridViewCellStyle21
+        DataGridViewCellStyle16.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle16.BackColor = System.Drawing.Color.White
+        DataGridViewCellStyle16.ForeColor = System.Drawing.Color.Black
+        DataGridViewCellStyle16.Format = "d"
+        DataGridViewCellStyle16.NullValue = Nothing
+        Me.DataGridViewTextBoxColumn22.DefaultCellStyle = DataGridViewCellStyle16
         Me.DataGridViewTextBoxColumn22.HeaderText = "４"
         Me.DataGridViewTextBoxColumn22.MinimumWidth = 6
         Me.DataGridViewTextBoxColumn22.Name = "DataGridViewTextBoxColumn22"
@@ -2394,8 +1887,8 @@ Partial Class SCA1
         '
         'Column40
         '
-        DataGridViewCellStyle22.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        Me.Column40.DefaultCellStyle = DataGridViewCellStyle22
+        DataGridViewCellStyle17.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        Me.Column40.DefaultCellStyle = DataGridViewCellStyle17
         Me.Column40.HeaderText = "６"
         Me.Column40.Name = "Column40"
         Me.Column40.ReadOnly = True
@@ -2403,8 +1896,8 @@ Partial Class SCA1
         '
         'Column41
         '
-        DataGridViewCellStyle23.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        Me.Column41.DefaultCellStyle = DataGridViewCellStyle23
+        DataGridViewCellStyle18.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        Me.Column41.DefaultCellStyle = DataGridViewCellStyle18
         Me.Column41.HeaderText = "７"
         Me.Column41.Name = "Column41"
         Me.Column41.ReadOnly = True
@@ -2497,14 +1990,14 @@ Partial Class SCA1
         Me.DGV2.AllowUserToResizeRows = False
         Me.DGV2.BackgroundColor = System.Drawing.Color.WhiteSmoke
         Me.DGV2.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.[Single]
-        DataGridViewCellStyle25.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle25.BackColor = System.Drawing.Color.LightGray
-        DataGridViewCellStyle25.Font = New System.Drawing.Font("MS UI Gothic", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        DataGridViewCellStyle25.ForeColor = System.Drawing.SystemColors.WindowText
-        DataGridViewCellStyle25.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle25.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        DataGridViewCellStyle25.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.DGV2.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle25
+        DataGridViewCellStyle20.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle20.BackColor = System.Drawing.Color.LightGray
+        DataGridViewCellStyle20.Font = New System.Drawing.Font("MS UI Gothic", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        DataGridViewCellStyle20.ForeColor = System.Drawing.SystemColors.WindowText
+        DataGridViewCellStyle20.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle20.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle20.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.DGV2.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle20
         Me.DGV2.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.DGV2.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.Column9, Me.DataGridViewTextBoxColumn1, Me.DataGridViewTextBoxColumn2, Me.Column22, Me.Column4, Me.Column7, Me.Column23, Me.督促通知日, Me.Column3, Me.Column13, Me.Column30})
         Me.DGV2.ImeMode = System.Windows.Forms.ImeMode.[On]
@@ -2540,10 +2033,10 @@ Partial Class SCA1
         '
         'DataGridViewTextBoxColumn2
         '
-        DataGridViewCellStyle26.BackColor = System.Drawing.Color.White
-        DataGridViewCellStyle26.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        DataGridViewCellStyle26.ForeColor = System.Drawing.Color.Black
-        Me.DataGridViewTextBoxColumn2.DefaultCellStyle = DataGridViewCellStyle26
+        DataGridViewCellStyle21.BackColor = System.Drawing.Color.White
+        DataGridViewCellStyle21.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        DataGridViewCellStyle21.ForeColor = System.Drawing.Color.Black
+        Me.DataGridViewTextBoxColumn2.DefaultCellStyle = DataGridViewCellStyle21
         Me.DataGridViewTextBoxColumn2.HeaderText = "相手"
         Me.DataGridViewTextBoxColumn2.MinimumWidth = 6
         Me.DataGridViewTextBoxColumn2.Name = "DataGridViewTextBoxColumn2"
@@ -2584,9 +2077,9 @@ Partial Class SCA1
         '
         '督促通知日
         '
-        DataGridViewCellStyle27.Format = "d"
-        DataGridViewCellStyle27.NullValue = Nothing
-        Me.督促通知日.DefaultCellStyle = DataGridViewCellStyle27
+        DataGridViewCellStyle22.Format = "d"
+        DataGridViewCellStyle22.NullValue = Nothing
+        Me.督促通知日.DefaultCellStyle = DataGridViewCellStyle22
         Me.督促通知日.HeaderText = "督促通知"
         Me.督促通知日.MinimumWidth = 6
         Me.督促通知日.Name = "督促通知日"
@@ -2635,21 +2128,6 @@ Partial Class SCA1
         Me.TB_FreeMemo.Size = New System.Drawing.Size(589, 93)
         Me.TB_FreeMemo.TabIndex = 1582
         Me.TB_FreeMemo.TabStop = False
-        '
-        'Button5
-        '
-        Me.Button5.BackColor = System.Drawing.Color.Gray
-        Me.Button5.FlatAppearance.BorderColor = System.Drawing.Color.Black
-        Me.Button5.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.Button5.ForeColor = System.Drawing.Color.White
-        Me.Button5.Location = New System.Drawing.Point(926, 309)
-        Me.Button5.Name = "Button5"
-        Me.Button5.Size = New System.Drawing.Size(87, 27)
-        Me.Button5.TabIndex = 1580
-        Me.Button5.TabStop = False
-        Me.Button5.Text = "疑似着信"
-        Me.Button5.UseVisualStyleBackColor = False
-        Me.Button5.Visible = False
         '
         'TB_Remarks
         '
@@ -2728,14 +2206,14 @@ Partial Class SCA1
         Me.DGV1.AllowUserToResizeRows = False
         Me.DGV1.BackgroundColor = System.Drawing.SystemColors.ControlLight
         Me.DGV1.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.[Single]
-        DataGridViewCellStyle28.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle28.BackColor = System.Drawing.Color.LightGray
-        DataGridViewCellStyle28.Font = New System.Drawing.Font("MS UI Gothic", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        DataGridViewCellStyle28.ForeColor = System.Drawing.SystemColors.WindowText
-        DataGridViewCellStyle28.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle28.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        DataGridViewCellStyle28.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.DGV1.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle28
+        DataGridViewCellStyle23.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle23.BackColor = System.Drawing.Color.LightGray
+        DataGridViewCellStyle23.Font = New System.Drawing.Font("MS UI Gothic", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        DataGridViewCellStyle23.ForeColor = System.Drawing.SystemColors.WindowText
+        DataGridViewCellStyle23.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle23.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle23.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.DGV1.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle23
         Me.DGV1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.DGV1.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.機構番号, Me.Column10, Me.Column2, Me.Column1, Me.DGV1督促通知日, Me.Column8, Me.Column6, Me.Column5})
         Me.DGV1.Location = New System.Drawing.Point(1, 24)
@@ -2761,8 +2239,8 @@ Partial Class SCA1
         '
         'Column10
         '
-        DataGridViewCellStyle29.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.Column10.DefaultCellStyle = DataGridViewCellStyle29
+        DataGridViewCellStyle24.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.Column10.DefaultCellStyle = DataGridViewCellStyle24
         Me.Column10.HeaderText = "債務者氏名"
         Me.Column10.MinimumWidth = 6
         Me.Column10.Name = "Column10"
@@ -2771,10 +2249,10 @@ Partial Class SCA1
         '
         'Column2
         '
-        DataGridViewCellStyle30.BackColor = System.Drawing.Color.White
-        DataGridViewCellStyle30.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        DataGridViewCellStyle30.ForeColor = System.Drawing.Color.Black
-        Me.Column2.DefaultCellStyle = DataGridViewCellStyle30
+        DataGridViewCellStyle25.BackColor = System.Drawing.Color.White
+        DataGridViewCellStyle25.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        DataGridViewCellStyle25.ForeColor = System.Drawing.Color.Black
+        Me.Column2.DefaultCellStyle = DataGridViewCellStyle25
         Me.Column2.HeaderText = "債務者ヨミ"
         Me.Column2.MinimumWidth = 6
         Me.Column2.Name = "Column2"
@@ -2783,12 +2261,12 @@ Partial Class SCA1
         '
         'Column1
         '
-        DataGridViewCellStyle31.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        DataGridViewCellStyle31.BackColor = System.Drawing.Color.White
-        DataGridViewCellStyle31.ForeColor = System.Drawing.Color.Black
-        DataGridViewCellStyle31.Format = "d"
-        DataGridViewCellStyle31.NullValue = Nothing
-        Me.Column1.DefaultCellStyle = DataGridViewCellStyle31
+        DataGridViewCellStyle26.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        DataGridViewCellStyle26.BackColor = System.Drawing.Color.White
+        DataGridViewCellStyle26.ForeColor = System.Drawing.Color.Black
+        DataGridViewCellStyle26.Format = "d"
+        DataGridViewCellStyle26.NullValue = Nothing
+        Me.Column1.DefaultCellStyle = DataGridViewCellStyle26
         Me.Column1.HeaderText = "残高更新日"
         Me.Column1.MinimumWidth = 6
         Me.Column1.Name = "Column1"
@@ -2797,10 +2275,10 @@ Partial Class SCA1
         '
         'DGV1督促通知日
         '
-        DataGridViewCellStyle32.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        DataGridViewCellStyle32.Format = "d"
-        DataGridViewCellStyle32.NullValue = Nothing
-        Me.DGV1督促通知日.DefaultCellStyle = DataGridViewCellStyle32
+        DataGridViewCellStyle27.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        DataGridViewCellStyle27.Format = "d"
+        DataGridViewCellStyle27.NullValue = Nothing
+        Me.DGV1督促通知日.DefaultCellStyle = DataGridViewCellStyle27
         Me.DGV1督促通知日.HeaderText = "生年月日"
         Me.DGV1督促通知日.MinimumWidth = 6
         Me.DGV1督促通知日.Name = "DGV1督促通知日"
@@ -2809,11 +2287,11 @@ Partial Class SCA1
         '
         'Column8
         '
-        DataGridViewCellStyle33.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        DataGridViewCellStyle33.ForeColor = System.Drawing.Color.Red
-        DataGridViewCellStyle33.Format = "N0"
-        DataGridViewCellStyle33.NullValue = "0"
-        Me.Column8.DefaultCellStyle = DataGridViewCellStyle33
+        DataGridViewCellStyle28.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        DataGridViewCellStyle28.ForeColor = System.Drawing.Color.Red
+        DataGridViewCellStyle28.Format = "N0"
+        DataGridViewCellStyle28.NullValue = "0"
+        Me.Column8.DefaultCellStyle = DataGridViewCellStyle28
         Me.Column8.HeaderText = "延滞額"
         Me.Column8.MinimumWidth = 6
         Me.Column8.Name = "Column8"
@@ -2887,8 +2365,6 @@ Partial Class SCA1
         Me.TAB_A1.Controls.Add(Me.Tab_2Record)
         Me.TAB_A1.Controls.Add(Me.Tab_6GA)
         Me.TAB_A1.Controls.Add(Me.Tab_4Dun)
-        Me.TAB_A1.Controls.Add(Me.Tab_3ToDo)
-        Me.TAB_A1.Controls.Add(Me.Tab_5Tell)
         Me.TAB_A1.ItemSize = New System.Drawing.Size(100, 16)
         Me.TAB_A1.Location = New System.Drawing.Point(0, 19)
         Me.TAB_A1.Name = "TAB_A1"
@@ -3005,14 +2481,14 @@ Partial Class SCA1
         Me.DGV_MR1.AllowUserToResizeRows = False
         Me.DGV_MR1.BackgroundColor = System.Drawing.Color.WhiteSmoke
         Me.DGV_MR1.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.[Single]
-        DataGridViewCellStyle34.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle34.BackColor = System.Drawing.Color.LightGray
-        DataGridViewCellStyle34.Font = New System.Drawing.Font("ＭＳ ゴシック", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        DataGridViewCellStyle34.ForeColor = System.Drawing.SystemColors.WindowText
-        DataGridViewCellStyle34.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle34.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        DataGridViewCellStyle34.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.DGV_MR1.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle34
+        DataGridViewCellStyle29.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle29.BackColor = System.Drawing.Color.LightGray
+        DataGridViewCellStyle29.Font = New System.Drawing.Font("ＭＳ ゴシック", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        DataGridViewCellStyle29.ForeColor = System.Drawing.SystemColors.WindowText
+        DataGridViewCellStyle29.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle29.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle29.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.DGV_MR1.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle29
         Me.DGV_MR1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.DGV_MR1.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.DataGridViewTextBoxColumn23, Me.DataGridViewTextBoxColumn24, Me.DataGridViewTextBoxColumn25, Me.DataGridViewTextBoxColumn26, Me.DataGridViewTextBoxColumn27, Me.DataGridViewTextBoxColumn28, Me.DataGridViewTextBoxColumn29, Me.DataGridViewTextBoxColumn30, Me.DataGridViewTextBoxColumn31, Me.DataGridViewTextBoxColumn32, Me.DataGridViewTextBoxColumn33, Me.DataGridViewTextBoxColumn34, Me.DataGridViewTextBoxColumn35, Me.DataGridViewTextBoxColumn36, Me.DataGridViewTextBoxColumn37, Me.DataGridViewTextBoxColumn38, Me.DataGridViewTextBoxColumn39, Me.DataGridViewTextBoxColumn40})
         Me.DGV_MR1.ImeMode = System.Windows.Forms.ImeMode.[On]
@@ -3071,10 +2547,10 @@ Partial Class SCA1
         '
         'DataGridViewTextBoxColumn28
         '
-        DataGridViewCellStyle35.BackColor = System.Drawing.Color.White
-        DataGridViewCellStyle35.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        DataGridViewCellStyle35.ForeColor = System.Drawing.Color.Black
-        Me.DataGridViewTextBoxColumn28.DefaultCellStyle = DataGridViewCellStyle35
+        DataGridViewCellStyle30.BackColor = System.Drawing.Color.White
+        DataGridViewCellStyle30.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        DataGridViewCellStyle30.ForeColor = System.Drawing.Color.Black
+        Me.DataGridViewTextBoxColumn28.DefaultCellStyle = DataGridViewCellStyle30
         Me.DataGridViewTextBoxColumn28.HeaderText = "主債務者名"
         Me.DataGridViewTextBoxColumn28.MinimumWidth = 6
         Me.DataGridViewTextBoxColumn28.Name = "DataGridViewTextBoxColumn28"
@@ -3123,9 +2599,9 @@ Partial Class SCA1
         '
         'DataGridViewTextBoxColumn34
         '
-        DataGridViewCellStyle36.Format = "d"
-        DataGridViewCellStyle36.NullValue = Nothing
-        Me.DataGridViewTextBoxColumn34.DefaultCellStyle = DataGridViewCellStyle36
+        DataGridViewCellStyle31.Format = "d"
+        DataGridViewCellStyle31.NullValue = Nothing
+        Me.DataGridViewTextBoxColumn34.DefaultCellStyle = DataGridViewCellStyle31
         Me.DataGridViewTextBoxColumn34.HeaderText = "審査結果"
         Me.DataGridViewTextBoxColumn34.MinimumWidth = 6
         Me.DataGridViewTextBoxColumn34.Name = "DataGridViewTextBoxColumn34"
@@ -3294,108 +2770,6 @@ Partial Class SCA1
         Me.Button19.Text = "検 索"
         Me.Button19.UseVisualStyleBackColor = False
         '
-        'Tab_5Tell
-        '
-        Me.Tab_5Tell.BackColor = System.Drawing.Color.FromArgb(CType(CType(192, Byte), Integer), CType(CType(192, Byte), Integer), CType(CType(255, Byte), Integer))
-        Me.Tab_5Tell.Controls.Add(Me.CB_NOTICETELL)
-        Me.Tab_5Tell.Controls.Add(Me.Button16)
-        Me.Tab_5Tell.Controls.Add(Me.DGV8)
-        Me.Tab_5Tell.Location = New System.Drawing.Point(4, 20)
-        Me.Tab_5Tell.Name = "Tab_5Tell"
-        Me.Tab_5Tell.Padding = New System.Windows.Forms.Padding(3)
-        Me.Tab_5Tell.Size = New System.Drawing.Size(1132, 682)
-        Me.Tab_5Tell.TabIndex = 4
-        Me.Tab_5Tell.Text = "着信履歴"
-        '
-        'CB_NOTICETELL
-        '
-        Me.CB_NOTICETELL.AutoSize = True
-        Me.CB_NOTICETELL.Checked = True
-        Me.CB_NOTICETELL.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.CB_NOTICETELL.Location = New System.Drawing.Point(510, 52)
-        Me.CB_NOTICETELL.Name = "CB_NOTICETELL"
-        Me.CB_NOTICETELL.Size = New System.Drawing.Size(123, 16)
-        Me.CB_NOTICETELL.TabIndex = 1774
-        Me.CB_NOTICETELL.Text = "受話ポップアップ表示"
-        Me.CB_NOTICETELL.UseVisualStyleBackColor = True
-        '
-        'Button16
-        '
-        Me.Button16.BackColor = System.Drawing.Color.SteelBlue
-        Me.Button16.FlatAppearance.BorderColor = System.Drawing.Color.Black
-        Me.Button16.Font = New System.Drawing.Font("メイリオ", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.Button16.ForeColor = System.Drawing.Color.White
-        Me.Button16.Location = New System.Drawing.Point(510, 6)
-        Me.Button16.Name = "Button16"
-        Me.Button16.Size = New System.Drawing.Size(149, 40)
-        Me.Button16.TabIndex = 1753
-        Me.Button16.TabStop = False
-        Me.Button16.Text = "受信履歴を更新"
-        Me.Button16.UseVisualStyleBackColor = False
-        '
-        'DGV8
-        '
-        Me.DGV8.AllowUserToAddRows = False
-        Me.DGV8.AllowUserToDeleteRows = False
-        Me.DGV8.AllowUserToResizeColumns = False
-        Me.DGV8.AllowUserToResizeRows = False
-        Me.DGV8.BackgroundColor = System.Drawing.SystemColors.ControlLight
-        Me.DGV8.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.[Single]
-        DataGridViewCellStyle37.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle37.BackColor = System.Drawing.Color.LightGray
-        DataGridViewCellStyle37.Font = New System.Drawing.Font("MS UI Gothic", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        DataGridViewCellStyle37.ForeColor = System.Drawing.SystemColors.WindowText
-        DataGridViewCellStyle37.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle37.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        DataGridViewCellStyle37.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.DGV8.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle37
-        Me.DGV8.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.DGV8.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.DataGridViewTextBoxColumn16, Me.DataGridViewTextBoxColumn18, Me.Column27, Me.Column28})
-        Me.DGV8.Location = New System.Drawing.Point(0, 0)
-        Me.DGV8.MultiSelect = False
-        Me.DGV8.Name = "DGV8"
-        Me.DGV8.ReadOnly = True
-        Me.DGV8.RowHeadersVisible = False
-        Me.DGV8.RowHeadersWidth = 51
-        Me.DGV8.RowTemplate.Height = 21
-        Me.DGV8.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.DGV8.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.DGV8.Size = New System.Drawing.Size(504, 350)
-        Me.DGV8.TabIndex = 1181
-        Me.DGV8.TabStop = False
-        '
-        'DataGridViewTextBoxColumn16
-        '
-        Me.DataGridViewTextBoxColumn16.HeaderText = "着信日時"
-        Me.DataGridViewTextBoxColumn16.MinimumWidth = 6
-        Me.DataGridViewTextBoxColumn16.Name = "DataGridViewTextBoxColumn16"
-        Me.DataGridViewTextBoxColumn16.ReadOnly = True
-        Me.DataGridViewTextBoxColumn16.Width = 120
-        '
-        'DataGridViewTextBoxColumn18
-        '
-        DataGridViewCellStyle38.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.DataGridViewTextBoxColumn18.DefaultCellStyle = DataGridViewCellStyle38
-        Me.DataGridViewTextBoxColumn18.HeaderText = "電話番号"
-        Me.DataGridViewTextBoxColumn18.MinimumWidth = 6
-        Me.DataGridViewTextBoxColumn18.Name = "DataGridViewTextBoxColumn18"
-        Me.DataGridViewTextBoxColumn18.ReadOnly = True
-        Me.DataGridViewTextBoxColumn18.Width = 120
-        '
-        'Column27
-        '
-        Me.Column27.HeaderText = "債権番号"
-        Me.Column27.Name = "Column27"
-        Me.Column27.ReadOnly = True
-        Me.Column27.Width = 120
-        '
-        'Column28
-        '
-        Me.Column28.HeaderText = "債務者名"
-        Me.Column28.Name = "Column28"
-        Me.Column28.ReadOnly = True
-        Me.Column28.Width = 140
-        '
         'CreatorExpress1
         '
         Me.CreatorExpress1.RefAttrMode = True
@@ -3485,10 +2859,6 @@ Partial Class SCA1
         Me.GroupBox1.PerformLayout()
         CType(Me.NUD_DunA1, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.DGV6, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.Tab_3ToDo.ResumeLayout(False)
-        Me.Tab_3ToDo.PerformLayout()
-        Me.PanelMenu.ResumeLayout(False)
-        CType(Me.DGV3, System.ComponentModel.ISupportInitialize).EndInit()
         Me.Tab_2Record.ResumeLayout(False)
         Me.Tab_2Record.PerformLayout()
         CType(Me.DGV5, System.ComponentModel.ISupportInitialize).EndInit()
@@ -3504,9 +2874,6 @@ Partial Class SCA1
         Me.Tab_6GA.ResumeLayout(False)
         Me.Tab_6GA.PerformLayout()
         CType(Me.DGV_MR1, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.Tab_5Tell.ResumeLayout(False)
-        Me.Tab_5Tell.PerformLayout()
-        CType(Me.DGV8, System.ComponentModel.ISupportInitialize).EndInit()
         Me.MenuStrip1.ResumeLayout(False)
         Me.MenuStrip1.PerformLayout()
         Me.ResumeLayout(False)
@@ -3523,38 +2890,6 @@ Partial Class SCA1
     Friend WithEvents L_UPDMsg As Label
     Friend WithEvents Tab_4Dun As TabPage
     Friend WithEvents DGV4 As DataGridView
-    Friend WithEvents Tab_3ToDo As TabPage
-    Friend WithEvents BT_A1_PROG As Button
-    Friend WithEvents L_STS_Task As Label
-    Friend WithEvents BT_TaskSearch As Button
-    Friend WithEvents TB_TaskSeach As TextBox
-    Friend WithEvents TB_TaskContext As TextBox
-    Friend WithEvents L_TITLE As Label
-    Friend WithEvents Button2 As Button
-    Friend WithEvents PanelMenu As Panel
-    Friend WithEvents Label13 As Label
-    Friend WithEvents Label9 As Label
-    Friend WithEvents CB_Limit As ComboBox
-    Friend WithEvents Label12 As Label
-    Friend WithEvents CMB_A1 As ComboBox
-    Friend WithEvents Label11 As Label
-    Friend WithEvents Label10 As Label
-    Friend WithEvents TV_A1 As TreeView
-    Friend WithEvents CLB_Group As CheckedListBox
-    Friend WithEvents CLB_Progress As CheckedListBox
-    Friend WithEvents BT_A1_DEL As Button
-    Friend WithEvents BT_A1_EDIT As Button
-    Friend WithEvents BT_A1_ADD As Button
-    Friend WithEvents DGV3 As DataGridView
-    Friend WithEvents DGVTask_No As DataGridViewTextBoxColumn
-    Friend WithEvents DGVTask_分類リスト As DataGridViewTextBoxColumn
-    Friend WithEvents DGVTask_分類進捗 As DataGridViewTextBoxColumn
-    Friend WithEvents DGVTask_分類ジャンル As DataGridViewTextBoxColumn
-    Friend WithEvents DGVTask_期限 As DataGridViewTextBoxColumn
-    Friend WithEvents DGVTask_タスク As DataGridViewTextBoxColumn
-    Friend WithEvents DGVTask_担当 As DataGridViewTextBoxColumn
-    Friend WithEvents DGVTask_添付 As DataGridViewTextBoxColumn
-    Friend WithEvents DGVTask_作成日 As DataGridViewTextBoxColumn
     Friend WithEvents Tab_2Record As TabPage
     Friend WithEvents Button7 As Button
     Friend WithEvents BT_RecE2 As Button
@@ -3580,7 +2915,6 @@ Partial Class SCA1
     Friend WithEvents TB_FreeMemo As TextBox
     Friend WithEvents BT_B2 As Button
     Friend WithEvents DGV2 As DataGridView
-    Friend WithEvents Button5 As Button
     Friend WithEvents TB_Remarks As TextBox
     Friend WithEvents BT_B1 As Button
     Friend WithEvents BT_B3 As Button
@@ -3691,21 +3025,12 @@ Partial Class SCA1
     Friend WithEvents Column36 As DataGridViewTextBoxColumn
     Friend WithEvents Column37 As DataGridViewTextBoxColumn
     Friend WithEvents CreatorExpress1 As AdvanceSoftware.ExcelCreator.Xlsx.CreatorExpress
-    Friend WithEvents Tab_5Tell As TabPage
-    Friend WithEvents DGV8 As DataGridView
-    Friend WithEvents DataGridViewTextBoxColumn16 As DataGridViewTextBoxColumn
-    Friend WithEvents DataGridViewTextBoxColumn18 As DataGridViewTextBoxColumn
-    Friend WithEvents Column27 As DataGridViewTextBoxColumn
-    Friend WithEvents Column28 As DataGridViewTextBoxColumn
     Friend WithEvents CB_AUTOUPD As CheckBox
-    Friend WithEvents Button16 As Button
-    Friend WithEvents CB_NOTICETELL As CheckBox
     Friend WithEvents Column26 As DataGridViewTextBoxColumn
     Friend WithEvents DataGridViewTextBoxColumn11 As DataGridViewTextBoxColumn
     Friend WithEvents DataGridViewTextBoxColumn12 As DataGridViewTextBoxColumn
     Friend WithEvents DTP_DunA4 As DateTimePicker
     Friend WithEvents Label52 As Label
-    Friend WithEvents Button17 As Button
     Friend WithEvents DGV9 As DataGridView
     Friend WithEvents L_JUNIN2 As Label
     Friend WithEvents L_JUNIN1 As Label

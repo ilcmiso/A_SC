@@ -1,10 +1,9 @@
 ﻿Public Class SCA_SetUserName
 
     Private ReadOnly log As New Log
-    Private ReadOnly xml As New XmlMng
 
     Private Sub SCA_SetUserName_Load(sender As Object, e As EventArgs) Handles Me.Load
-        TB_UserName.Text = xml.GetUserName
+        TB_UserName.Text = SCA1.xml.GetUserName
         TB_UserName.Select()
     End Sub
 
@@ -13,7 +12,7 @@
             MsgBox($"空欄は設定できません。{vbCrLf}ご自身の名前を設定してください。")
             Exit Sub
         End If
-        xml.SetUserName(TB_UserName.Text)
+        SCA1.xml.SetUserName(TB_UserName.Text)
         MsgBox("ユーザー名を設定しました。")
         Me.Close()
     End Sub

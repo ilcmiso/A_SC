@@ -237,18 +237,6 @@
     <Compile Include="01_Form\11_債権管理画面\SCA1_SelectInfo.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="01_Form\13_Schedule\SCE_S2_INPUT.Designer.vb">
-      <DependentUpon>SCE_S2_INPUT.vb</DependentUpon>
-    </Compile>
-    <Compile Include="01_Form\13_Schedule\SCE_S2_INPUT.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="01_Form\13_Schedule\SCE_S1.designer.vb">
-      <DependentUpon>SCE_S1.vb</DependentUpon>
-    </Compile>
-    <Compile Include="01_Form\13_Schedule\SCE_S1.vb">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="01_Form\32_総務部\SCGA_OVIEW.designer.vb">
       <DependentUpon>SCGA_OVIEW.vb</DependentUpon>
     </Compile>
@@ -290,12 +278,6 @@
     <Compile Include="01_Form\11_債権管理画面\SCA1_S3_Search.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="01_Form\12_ToDo\SCA1_S3.designer.vb">
-      <DependentUpon>SCA1_S3.vb</DependentUpon>
-    </Compile>
-    <Compile Include="01_Form\12_ToDo\SCA1_S3.vb">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="01_Form\22_交渉記録\SCD1.designer.vb">
       <DependentUpon>SCD1.vb</DependentUpon>
     </Compile>
@@ -324,12 +306,6 @@
       <DependentUpon>SC.vb</DependentUpon>
     </Compile>
     <Compile Include="01_Form\01_タイトル\SC.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="01_Form\11_債権管理画面\SCA1_S1.designer.vb">
-      <DependentUpon>SCA1_S1.vb</DependentUpon>
-    </Compile>
-    <Compile Include="01_Form\11_債権管理画面\SCA1_S1.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="01_Form\11_債権管理画面\SCA1.designer.vb">
@@ -409,9 +385,6 @@
     <EmbeddedResource Include="01_Form\11_債権管理画面\SCA1_SelectInfo.resx">
       <DependentUpon>SCA1_SelectInfo.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="01_Form\13_Schedule\SCE_S1.resx">
-      <DependentUpon>SCE_S1.vb</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="01_Form\11_債権管理画面\SCA1_S5_ExcOut.resx">
       <DependentUpon>SCA1_S5_ExcOut.vb</DependentUpon>
     </EmbeddedResource>
@@ -424,12 +397,6 @@
     <EmbeddedResource Include="01_Form\11_債権管理画面\SCA1_S3_Search.resx">
       <DependentUpon>SCA1_S3_Search.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="01_Form\12_ToDo\SCA1_S3.resx">
-      <DependentUpon>SCA1_S3.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="01_Form\13_Schedule\SCE_S2_INPUT.resx">
-      <DependentUpon>SCE_S2_INPUT.vb</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="01_Form\22_交渉記録\SCD1.resx">
       <DependentUpon>SCD1.vb</DependentUpon>
     </EmbeddedResource>
@@ -438,9 +405,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="01_Form\01_タイトル\SC.resx">
       <DependentUpon>SC.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="01_Form\11_債権管理画面\SCA1_S1.resx">
-      <DependentUpon>SCA1_S1.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="01_Form\11_債権管理画面\SCA1.resx">
       <DependentUpon>SCA1.vb</DependentUpon>
