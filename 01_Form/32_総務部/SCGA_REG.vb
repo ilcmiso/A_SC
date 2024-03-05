@@ -18,6 +18,10 @@
     Private Sub FLS_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         ownForm = DirectCast(Me.Owner, SCA1)
         MRType = ownForm.CB_MRLIST.SelectedIndex
+        ShowDGV()
+    End Sub
+
+    Private Sub ShowDGV()
         cmn.SetDoubleBufferDGV(DGV_REG1)
         L_REGTITLE.Text = $"{ownForm.CB_MRLIST.SelectedItem} の 登録"
         ' UserListのユーザー名を配列に設定
@@ -162,6 +166,23 @@
         ownForm.db.ExeSQLInsUpd(Sqldb.TID.MR, commandText)
         ownForm.db.ExeSQL(Sqldb.TID.MR)
         MsgBox("登録しました。")
+
+        ' 追加後、発送届けが基本セットになるため、発送届けが必要か確認するダイアログ表示
+        If ownForm.ActiveControl.Name = BTADD Then
+            If MRType < 5 Then
+                Dim r As Integer
+                r = MessageBox.Show("併せて「郵便発送簿」を追加しますか？",
+                            "ご確認ください",
+                            MessageBoxButtons.YesNo,
+                            MessageBoxIcon.Question)
+                If r = vbYes Then
+                    ' 追加の郵便発送簿を作成
+                    AddPostSend()
+                    Exit Sub
+                End If
+            End If
+        End If
+
         Me.Close()
     End Sub
 
@@ -367,6 +388,74 @@
                 End If
             End If
         Next
+    End Sub
+
+    ' DGV上のオブジェクトを削除
+    Private Sub RemoveControlsFromDGV(dgv As DataGridView)
+        ' コントロールリストを作成して削除対象を一時的に保持します。
+        ' 直接削除するとコレクションを変更しながらイテレートすることになり、エラーの原因になるためです。
+        Dim controlsToRemove As New List(Of Control)()
+
+        ' DataGridView内のすべてのコントロールを検査
+        For Each ctrl As Control In dgv.Controls
+            ' コントロールがDateTimePicker、ComboBox、またはNumericUpDownの場合、リストに追加
+            If TypeOf ctrl Is DateTimePicker OrElse TypeOf ctrl Is ComboBox OrElse TypeOf ctrl Is NumericUpDown Then
+                controlsToRemove.Add(ctrl)
+            End If
+        Next
+
+        ' 削除対象のコントロールをDataGridViewから削除
+        For Each ctrlToRemove In controlsToRemove
+            dgv.Controls.Remove(ctrlToRemove)
+            ctrlToRemove.Dispose() ' コントロールのリソースを解放
+        Next
+    End Sub
+
+    ' 追加の郵便発送簿実行
+    Private Sub AddPostSend()
+        Dim beforeType As Integer = MRType
+        MRType = 5
+        ownForm.CB_MRLIST.SelectedIndex = MRType
+
+        ' 「内容」の入力文字列を取得
+        Dim dr As DataRow() = ownForm.db.OrgDataTable(Sqldb.TID.MRM).Select($"C01 = '{MRType}' And C03 = '内容'")
+        Dim contentWords As String() = dr(0)(4).ToString.Split(","c)
+
+        ' 郵便発送簿の入力内容へ流用するため、現在の登録画面の内容を保持しておく
+        Dim flatType As String = "フラット"
+        For Each row As DataGridViewRow In DGV_REG1.Rows
+            If row.Cells(0).Value IsNot Nothing AndAlso row.Cells(0).Value.ToString() = "ローン種類" Then
+                flatType = row.Cells(1).Value
+            End If
+        Next
+
+        ' 追加画面を再構成するためにオブジェクト削除して表示
+        RemoveControlsFromDGV(DGV_REG1)
+        ShowDGV()
+
+        ' 内容
+        Select Case beforeType
+            Case 0  ' 団信弁済
+                DGV_REG1(1, 6).Value = contentWords(0)
+                SetValueDGV("内容", contentWords(0))
+            Case 1  ' 一部繰り上げ返済
+                DGV_REG1(1, 6).Value = contentWords(1)
+                SetValueDGV("内容", contentWords(1))
+            Case 2  ' 完済管理
+                DGV_REG1(1, 6).Value = contentWords(0)
+                SetValueDGV("内容", contentWords(0))
+            Case 3  ' 契約条件変更
+                DGV_REG1(1, 6).Value = contentWords(2)
+                SetValueDGV("内容", contentWords(2))
+            Case 4  ' 口座変更
+                DGV_REG1(1, 6).Value = contentWords(5)
+                SetValueDGV("内容", contentWords(5))
+        End Select
+
+        'ローン種類
+        DGV_REG1(1, 7).Value = flatType
+        SetValueDGV("ローン種類", flatType)
+
     End Sub
 
     ' ショートカット F1

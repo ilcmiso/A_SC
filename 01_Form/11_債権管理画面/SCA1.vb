@@ -1893,9 +1893,9 @@ Public Class SCA1
         oview = New SCGA_OVIEW
         CB_MRLIST.Items.AddRange(sccmn.MRITEMLIST)
         CB_MRLIST.SelectedIndex = 0
-        DTP_MRST.Value = Today.AddDays(-7)
+        Dim firstDayOfMonth As DateTime = New DateTime(DateTime.Now.Year, DateTime.Now.Month, 1)
+        DTP_MRST.Value = firstDayOfMonth
         ShowDGVMR()
-
 
         DivMode(xml.GetDiv)
     End Sub
@@ -2067,6 +2067,7 @@ Public Class SCA1
         Dim selectedPerson As String = If(CB_Person.SelectedItem IsNot Nothing, CB_Person.SelectedItem.ToString(), String.Empty)
         Dim startDate As Date = DTP_MRST.Value.Date
         Dim endDate As Date = DTP_MRED.Value.Date
+        Dim searchHit As Integer = 0
 
         ' 一旦すべての行を非表示にする
         For Each row As DataGridViewRow In DGV_MR1.Rows
@@ -2101,6 +2102,7 @@ Public Class SCA1
 
             ' 条件に一致する行を表示
             row.Visible = True
+            searchHit += 1
 
             ' 行を選択中にする
             If DGV_MR1.CurrentCell Is Nothing And row.Cells(2).Visible Then DGV_MR1.CurrentCell = row.Cells(2)
@@ -2113,6 +2115,7 @@ Public Class SCA1
                 End If
             End If
         Next
+        L_MRSearchHit.Text = $"{searchHit} 件 表示中"
     End Sub
 
 
@@ -2131,6 +2134,57 @@ Public Class SCA1
 
         ' 一致したデータの表示
         FilterMRSearch("", TargetNo)
+    End Sub
+
+    ' Excel全出力ボタン
+    Private Sub Button5_Click(sender As Object, e As EventArgs) Handles Button5.Click
+        MRExcelOutputAll()
+    End Sub
+    ' 表示出力ボタン
+    Private Sub Button2_Click_2(sender As Object, e As EventArgs) Handles Button2.Click
+        MRExcelOutput()
+    End Sub
+
+    Private Sub MRExcelOutput()
+        Dim filePath As String = cmn.DialogSaveFile($"申請物管理_{CB_MRLIST.Text}.xlsx")
+        If filePath = String.Empty Then Exit Sub
+        Dim excelManager As New ExcelManager(filePath)
+        excelManager.ExportDGVToExcel(DGV_MR1)
+        excelManager.SaveAndClose()
+        excelManager.OpenFile()
+    End Sub
+
+    Private Sub MRExcelOutputAll()
+        Dim filePath As String = cmn.DialogSaveFile("申請物管理一覧.xlsx")
+        If filePath = String.Empty Then Exit Sub
+        Dim excelManager As New ExcelManager(filePath)
+
+        Dim dt As DataTable = db.OrgDataTable(Sqldb.TID.MRM) ' 仮定のDataTable取得
+
+        ' C01の値ごとにフィルタリングし、各シートに出力
+        For i As Integer = 0 To 6
+            Dim outSheetName As String = i.ToString()
+            ' C01の値に基づいてDataTableからデータをフィルタリング
+            Dim filteredData As DataTable = dt.Clone() ' スキーマのコピー
+            Dim rows() As DataRow = dt.Select("C01 = '" & i & "'", "C01, C02 ASC")
+            For Each row As DataRow In rows
+                filteredData.ImportRow(row)
+            Next
+
+            ' 出力データを横向きに準備（C01とC02は除外し、C03のみを出力）
+            Dim outData As New List(Of List(Of String)) From {New List(Of String)}
+            For Each dRow As DataRow In filteredData.Rows
+                ' 最初のリストにC03の値を追加して、横にデータを展開する
+                outData(0).Add(dRow("C03").ToString())
+            Next
+
+            ' Excelにシート毎に出力（A1セルから右にデータを展開）
+            excelManager.ExportToExcel(outData, outSheetName)
+        Next
+        ' Excelファイルを保存して閉じる
+        excelManager.DeleteSheet("Sheet1")
+        excelManager.SaveAndClose()
+        excelManager.OpenFile()
     End Sub
 
 
@@ -2174,6 +2228,7 @@ Public Class SCA1
         fm.ShowDialog()
         fm.Dispose()
     End Sub
+
 
 #End Region
 End Class

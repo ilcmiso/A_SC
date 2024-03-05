@@ -265,6 +265,9 @@ Partial Class SCA1
         Me.総務課ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.表示ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripMenuItem2 = New System.Windows.Forms.ToolStripMenuItem()
+        Me.Button2 = New System.Windows.Forms.Button()
+        Me.Button5 = New System.Windows.Forms.Button()
+        Me.L_MRSearchHit = New System.Windows.Forms.Label()
         Me.CMenu_DGV3.SuspendLayout()
         Me.Tab_4Dun.SuspendLayout()
         CType(Me.DGV4, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -2377,6 +2380,9 @@ Partial Class SCA1
         'Tab_6GA
         '
         Me.Tab_6GA.BackColor = System.Drawing.Color.LightBlue
+        Me.Tab_6GA.Controls.Add(Me.L_MRSearchHit)
+        Me.Tab_6GA.Controls.Add(Me.Button5)
+        Me.Tab_6GA.Controls.Add(Me.Button2)
         Me.Tab_6GA.Controls.Add(Me.Label7)
         Me.Tab_6GA.Controls.Add(Me.CB_MRRangeAll)
         Me.Tab_6GA.Controls.Add(Me.Label3)
@@ -2834,6 +2840,45 @@ Partial Class SCA1
         Me.ToolStripMenuItem2.Size = New System.Drawing.Size(146, 22)
         Me.ToolStripMenuItem2.Text = "ユーザー名設定"
         '
+        'Button2
+        '
+        Me.Button2.BackColor = System.Drawing.Color.MediumAquamarine
+        Me.Button2.FlatAppearance.BorderColor = System.Drawing.Color.Black
+        Me.Button2.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.Button2.ForeColor = System.Drawing.Color.White
+        Me.Button2.Location = New System.Drawing.Point(8, 405)
+        Me.Button2.Name = "Button2"
+        Me.Button2.Size = New System.Drawing.Size(92, 27)
+        Me.Button2.TabIndex = 1792
+        Me.Button2.Text = "表示出力"
+        Me.Button2.UseVisualStyleBackColor = False
+        '
+        'Button5
+        '
+        Me.Button5.BackColor = System.Drawing.Color.MediumAquamarine
+        Me.Button5.FlatAppearance.BorderColor = System.Drawing.Color.Black
+        Me.Button5.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.Button5.ForeColor = System.Drawing.Color.White
+        Me.Button5.Location = New System.Drawing.Point(106, 405)
+        Me.Button5.Name = "Button5"
+        Me.Button5.Size = New System.Drawing.Size(92, 27)
+        Me.Button5.TabIndex = 1793
+        Me.Button5.Text = "Excel全出力"
+        Me.Button5.UseVisualStyleBackColor = False
+        Me.Button5.Visible = False
+        '
+        'L_MRSearchHit
+        '
+        Me.L_MRSearchHit.AutoSize = True
+        Me.L_MRSearchHit.BackColor = System.Drawing.Color.LightBlue
+        Me.L_MRSearchHit.Font = New System.Drawing.Font("メイリオ", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.L_MRSearchHit.ForeColor = System.Drawing.Color.Blue
+        Me.L_MRSearchHit.Location = New System.Drawing.Point(234, 78)
+        Me.L_MRSearchHit.Name = "L_MRSearchHit"
+        Me.L_MRSearchHit.Size = New System.Drawing.Size(56, 18)
+        Me.L_MRSearchHit.TabIndex = 1794
+        Me.L_MRSearchHit.Text = "検索件数"
+        '
         'SCA1
         '
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None
@@ -3091,4 +3136,7 @@ Partial Class SCA1
     Friend WithEvents Column39 As DataGridViewTextBoxColumn
     Friend WithEvents Column40 As DataGridViewTextBoxColumn
     Friend WithEvents Column41 As DataGridViewTextBoxColumn
+    Friend WithEvents Button2 As Button
+    Friend WithEvents Button5 As Button
+    Friend WithEvents L_MRSearchHit As Label
 End Class
