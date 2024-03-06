@@ -35,8 +35,6 @@ Public Class SCA1
     ' フリーメモ変更前バッファ(変更されたか検知したい)
     Private BeforeFreeTxt As String = ""
     Private BeforeAddTel As String = ""
-    ' タスク
-    Private Const NODE_ALL = "node00"                               ' 全体ノードの名称
     ' 外付けフォーム
     Private SearchForm As SCA1_S3_Search = Nothing                  ' 検索オプションフォーム
     Public AddTelForm As SCA1_S4_TEL = Nothing                      ' 電話追加フォーム
@@ -1889,7 +1887,9 @@ Public Class SCA1
 #End Region
 
 #Region "申請物管理(MR)"
+    Private mrcmn As New SCMRcommon
     Private Sub MRInit()
+        mrcmn.GetHolidayDate()
         oview = New SCGA_OVIEW
         CB_MRLIST.Items.AddRange(sccmn.MRITEMLIST)
         CB_MRLIST.SelectedIndex = 0
@@ -1950,61 +1950,13 @@ Public Class SCA1
 
     Public Sub ShowDGVMR() Handles CB_MRLIST.SelectedIndexChanged
         ' コンボボックスの選択されたインデックスを取得
-        InitDGVInfo(DGV_MR1, Sqldb.TID.MRM, CB_MRLIST.SelectedIndex)
-        LoadDGVInfo(DGV_MR1, Sqldb.TID.MR, CB_MRLIST.SelectedIndex)
+        mrcmn.InitDGVInfo(DGV_MR1, Sqldb.TID.MRM, CB_MRLIST.SelectedIndex)
+        mrcmn.LoadDGVInfo(DGV_MR1, Sqldb.TID.MR, CB_MRLIST.SelectedIndex)
         InitComboBoxMRParson()  ' 担当コンボボックス
         FilterMRSearch(TB_MRSearch.Text)
-    End Sub
 
-    Public Sub InitDGVInfo(dgv As DataGridView, tid As Integer, index As Integer)
-        ' SQLiteからデータを取得
-        Dim dr As DataRow() = db.OrgDataTable(tid).Select($"C01 = {index}")
-
-        ' DGVを初期化
-        dgv.Columns.Clear()
-
-        ' DataRowをソート（C02値により昇順）
-        Array.Sort(dr, Function(x, y) x("C02").CompareTo(y("C02")))
-
-        ' DGVにデータをセット
-        For Each row As DataRow In dr
-            Dim columnName As String = row("C03").ToString()
-            Dim columnWidthStr As String = row("C04").ToString()
-            Dim columnWidth As Integer
-
-            If String.IsNullOrEmpty(columnWidthStr) Then
-                columnWidth = 60 ' デフォルト値
-            Else
-                columnWidth = Integer.Parse(columnWidthStr)
-            End If
-
-            Dim newColumn As New DataGridViewTextBoxColumn()
-            newColumn.Name = columnName
-            newColumn.HeaderText = columnName
-            newColumn.Width = columnWidth
-            newColumn.Visible = columnWidth <> 0
-
-            dgv.Columns.Add(newColumn)
-        Next
-    End Sub
-
-    Public Sub LoadDGVInfo(dgv As DataGridView, tid As Integer, category As String)
-        ' SQLiteからデータを取得
-        Dim dr As DataRow() = db.OrgDataTable(Sqldb.TID.MR).Select($"C02 = '{category}'")
-
-        ' DGVを初期化
-        dgv.Rows.Clear()
-
-        ' DGVのカラム数に応じてデータを表示
-        For Each row As DataRow In dr
-            Dim newRow As New DataGridViewRow()
-            For i As Integer = 0 To dgv.ColumnCount - 1
-                Dim cell As New DataGridViewTextBoxCell()
-                cell.Value = row($"C{i + 1:D2}")
-                newRow.Cells.Add(cell)
-            Next
-            dgv.Rows.Add(newRow)
-        Next
+        mrcmn.PaymentDateColor()       ' 完済日が5～13日の間は色付け
+        mrcmn.HighlightCancelledRows(DGV_MR1)
     End Sub
 
     ' 追加・編集ボタン
