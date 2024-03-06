@@ -147,4 +147,11 @@
         Next
     End Sub
 
+    ' カラム名に完済日が含まれているか
+    Public Function IsColumnsPaymentDate(dgv As DataGridView) As Boolean
+        Dim columnIndex As Integer = FindColumnIndex(dgv, "完済日")
+        If columnIndex = -1 Then Return False
+        Return True
+    End Function
+
 End Class

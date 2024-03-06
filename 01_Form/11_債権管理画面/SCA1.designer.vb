@@ -222,6 +222,9 @@ Partial Class SCA1
         Me.Button1 = New System.Windows.Forms.Button()
         Me.TAB_A1 = New System.Windows.Forms.TabControl()
         Me.Tab_6GA = New System.Windows.Forms.TabPage()
+        Me.L_MRSearchHit = New System.Windows.Forms.Label()
+        Me.Button5 = New System.Windows.Forms.Button()
+        Me.Button2 = New System.Windows.Forms.Button()
         Me.Label7 = New System.Windows.Forms.Label()
         Me.CB_MRRangeAll = New System.Windows.Forms.CheckBox()
         Me.Label3 = New System.Windows.Forms.Label()
@@ -265,9 +268,8 @@ Partial Class SCA1
         Me.総務課ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.表示ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripMenuItem2 = New System.Windows.Forms.ToolStripMenuItem()
-        Me.Button2 = New System.Windows.Forms.Button()
-        Me.Button5 = New System.Windows.Forms.Button()
-        Me.L_MRSearchHit = New System.Windows.Forms.Label()
+        Me.Label8 = New System.Windows.Forms.Label()
+        Me.TB_MRPaymentDate = New System.Windows.Forms.TextBox()
         Me.CMenu_DGV3.SuspendLayout()
         Me.Tab_4Dun.SuspendLayout()
         CType(Me.DGV4, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -2380,6 +2382,8 @@ Partial Class SCA1
         'Tab_6GA
         '
         Me.Tab_6GA.BackColor = System.Drawing.Color.LightBlue
+        Me.Tab_6GA.Controls.Add(Me.TB_MRPaymentDate)
+        Me.Tab_6GA.Controls.Add(Me.Label8)
         Me.Tab_6GA.Controls.Add(Me.L_MRSearchHit)
         Me.Tab_6GA.Controls.Add(Me.Button5)
         Me.Tab_6GA.Controls.Add(Me.Button2)
@@ -2405,6 +2409,45 @@ Partial Class SCA1
         Me.Tab_6GA.Size = New System.Drawing.Size(1132, 682)
         Me.Tab_6GA.TabIndex = 5
         Me.Tab_6GA.Text = "申請物管理"
+        '
+        'L_MRSearchHit
+        '
+        Me.L_MRSearchHit.AutoSize = True
+        Me.L_MRSearchHit.BackColor = System.Drawing.Color.LightBlue
+        Me.L_MRSearchHit.Font = New System.Drawing.Font("メイリオ", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.L_MRSearchHit.ForeColor = System.Drawing.Color.Blue
+        Me.L_MRSearchHit.Location = New System.Drawing.Point(234, 78)
+        Me.L_MRSearchHit.Name = "L_MRSearchHit"
+        Me.L_MRSearchHit.Size = New System.Drawing.Size(56, 18)
+        Me.L_MRSearchHit.TabIndex = 1794
+        Me.L_MRSearchHit.Text = "検索件数"
+        '
+        'Button5
+        '
+        Me.Button5.BackColor = System.Drawing.Color.MediumAquamarine
+        Me.Button5.FlatAppearance.BorderColor = System.Drawing.Color.Black
+        Me.Button5.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.Button5.ForeColor = System.Drawing.Color.White
+        Me.Button5.Location = New System.Drawing.Point(106, 405)
+        Me.Button5.Name = "Button5"
+        Me.Button5.Size = New System.Drawing.Size(92, 27)
+        Me.Button5.TabIndex = 1793
+        Me.Button5.Text = "Excel全出力"
+        Me.Button5.UseVisualStyleBackColor = False
+        Me.Button5.Visible = False
+        '
+        'Button2
+        '
+        Me.Button2.BackColor = System.Drawing.Color.MediumAquamarine
+        Me.Button2.FlatAppearance.BorderColor = System.Drawing.Color.Black
+        Me.Button2.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.Button2.ForeColor = System.Drawing.Color.White
+        Me.Button2.Location = New System.Drawing.Point(8, 405)
+        Me.Button2.Name = "Button2"
+        Me.Button2.Size = New System.Drawing.Size(92, 27)
+        Me.Button2.TabIndex = 1792
+        Me.Button2.Text = "表示出力"
+        Me.Button2.UseVisualStyleBackColor = False
         '
         'Label7
         '
@@ -2476,7 +2519,7 @@ Partial Class SCA1
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(234, 20)
         Me.Label4.TabIndex = 1786
-        Me.Label4.Text = "表示期間"
+        Me.Label4.Text = "表示期間(受付日)"
         Me.Label4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'DGV_MR1
@@ -2840,44 +2883,27 @@ Partial Class SCA1
         Me.ToolStripMenuItem2.Size = New System.Drawing.Size(146, 22)
         Me.ToolStripMenuItem2.Text = "ユーザー名設定"
         '
-        'Button2
+        'Label8
         '
-        Me.Button2.BackColor = System.Drawing.Color.MediumAquamarine
-        Me.Button2.FlatAppearance.BorderColor = System.Drawing.Color.Black
-        Me.Button2.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.Button2.ForeColor = System.Drawing.Color.White
-        Me.Button2.Location = New System.Drawing.Point(8, 405)
-        Me.Button2.Name = "Button2"
-        Me.Button2.Size = New System.Drawing.Size(92, 27)
-        Me.Button2.TabIndex = 1792
-        Me.Button2.Text = "表示出力"
-        Me.Button2.UseVisualStyleBackColor = False
+        Me.Label8.BackColor = System.Drawing.Color.SteelBlue
+        Me.Label8.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.Label8.Font = New System.Drawing.Font("メイリオ", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.Label8.ForeColor = System.Drawing.Color.White
+        Me.Label8.Location = New System.Drawing.Point(620, 9)
+        Me.Label8.Name = "Label8"
+        Me.Label8.Size = New System.Drawing.Size(104, 20)
+        Me.Label8.TabIndex = 1798
+        Me.Label8.Text = "完済日"
+        Me.Label8.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
-        'Button5
+        'TB_MRPaymentDate
         '
-        Me.Button5.BackColor = System.Drawing.Color.MediumAquamarine
-        Me.Button5.FlatAppearance.BorderColor = System.Drawing.Color.Black
-        Me.Button5.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.Button5.ForeColor = System.Drawing.Color.White
-        Me.Button5.Location = New System.Drawing.Point(106, 405)
-        Me.Button5.Name = "Button5"
-        Me.Button5.Size = New System.Drawing.Size(92, 27)
-        Me.Button5.TabIndex = 1793
-        Me.Button5.Text = "Excel全出力"
-        Me.Button5.UseVisualStyleBackColor = False
-        Me.Button5.Visible = False
-        '
-        'L_MRSearchHit
-        '
-        Me.L_MRSearchHit.AutoSize = True
-        Me.L_MRSearchHit.BackColor = System.Drawing.Color.LightBlue
-        Me.L_MRSearchHit.Font = New System.Drawing.Font("メイリオ", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.L_MRSearchHit.ForeColor = System.Drawing.Color.Blue
-        Me.L_MRSearchHit.Location = New System.Drawing.Point(234, 78)
-        Me.L_MRSearchHit.Name = "L_MRSearchHit"
-        Me.L_MRSearchHit.Size = New System.Drawing.Size(56, 18)
-        Me.L_MRSearchHit.TabIndex = 1794
-        Me.L_MRSearchHit.Text = "検索件数"
+        Me.TB_MRPaymentDate.BackColor = System.Drawing.Color.White
+        Me.TB_MRPaymentDate.Font = New System.Drawing.Font("MS UI Gothic", 11.25!)
+        Me.TB_MRPaymentDate.Location = New System.Drawing.Point(620, 29)
+        Me.TB_MRPaymentDate.Name = "TB_MRPaymentDate"
+        Me.TB_MRPaymentDate.Size = New System.Drawing.Size(104, 22)
+        Me.TB_MRPaymentDate.TabIndex = 1799
         '
         'SCA1
         '
@@ -3139,4 +3165,6 @@ Partial Class SCA1
     Friend WithEvents Button2 As Button
     Friend WithEvents Button5 As Button
     Friend WithEvents L_MRSearchHit As Label
+    Friend WithEvents Label8 As Label
+    Friend WithEvents TB_MRPaymentDate As TextBox
 End Class

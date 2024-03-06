@@ -282,6 +282,18 @@ Public Class Common
         End If
     End Function
 
+    ' 指定されたカラム名に対応するDataGridViewのカラムインデックスを取得する
+    ' カラムインデックス。見つからない場合は-1。
+    Public Function GetColumnIndexByName(dgv As DataGridView, columnName As String) As Integer
+        For i As Integer = 0 To dgv.Columns.Count - 1
+            If dgv.Columns(i).Name.Equals(columnName, StringComparison.OrdinalIgnoreCase) Then
+                Return i
+            End If
+        Next
+        Return -1 ' カラムが見つからない場合
+    End Function
+
+
     ' プログレスバー表示
     Public Sub StartPBar(progressCount As Integer)
         SCA_ProgressBar.Instance.StartProgress(progressCount)

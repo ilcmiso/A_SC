@@ -1896,6 +1896,7 @@ Public Class SCA1
         Dim firstDayOfMonth As DateTime = New DateTime(DateTime.Now.Year, DateTime.Now.Month, 1)
         DTP_MRST.Value = firstDayOfMonth
         ShowDGVMR()
+        TB_MRPaymentDate.Text = Today.Date.ToString("yyyy/MM")
 
         DivMode(xml.GetDiv)
     End Sub
@@ -1953,10 +1954,13 @@ Public Class SCA1
         mrcmn.InitDGVInfo(DGV_MR1, Sqldb.TID.MRM, CB_MRLIST.SelectedIndex)
         mrcmn.LoadDGVInfo(DGV_MR1, Sqldb.TID.MR, CB_MRLIST.SelectedIndex)
         InitComboBoxMRParson()  ' 担当コンボボックス
+        ' 完済日フィルタを完済日のカラムがあるときだけ有効
+        TB_MRPaymentDate.Enabled = mrcmn.IsColumnsPaymentDate(DGV_MR1)
+
         FilterMRSearch(TB_MRSearch.Text)
 
-        mrcmn.PaymentDateColor()       ' 完済日が5～13日の間は色付け
-        mrcmn.HighlightCancelledRows(DGV_MR1)
+        mrcmn.PaymentDateColor()                ' 完済日が5～13日の間は色付け
+        mrcmn.HighlightCancelledRows(DGV_MR1)   ' キャンセル日の色付け
     End Sub
 
     ' 追加・編集ボタン
@@ -2052,6 +2056,14 @@ Public Class SCA1
             ' 検索文字列が含まれていなければ次の行へ
             If Not containsSearchText Then Continue For
 
+            ' 完済日文字列の検索
+            Dim columnsIdx As Integer = cmn.GetColumnIndexByName(DGV_MR1, "完済日")
+            If columnsIdx >= 0 Then
+                If Not row.Cells(columnsIdx).Value.ToString().ToLower().Contains(TB_MRPaymentDate.Text) Then
+                    Continue For
+                End If
+            End If
+
             ' 条件に一致する行を表示
             row.Visible = True
             searchHit += 1
@@ -2141,7 +2153,7 @@ Public Class SCA1
 
 
     ' 検索欄
-    Private Sub TB_MRSearch_TextChanged(sender As Object, e As EventArgs) Handles TB_MRSearch.TextChanged
+    Private Sub TB_MRSearch_TextChanged(sender As Object, e As EventArgs) Handles TB_MRSearch.TextChanged, TB_MRPaymentDate.TextChanged
         FilterMRSearch(TB_MRSearch.Text)
     End Sub
     ' 開始・終了期間
