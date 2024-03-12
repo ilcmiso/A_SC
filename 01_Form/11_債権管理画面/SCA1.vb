@@ -15,7 +15,6 @@ Public Class SCA1
     Private ReadOnly exc As New CExcel
     Public ReadOnly db As New Sqldb
     Private oview As SCGA_OVIEW
-    Private thSC As SCThread
     Private CallerFunc = ""
     Public xml As New XmlMng
 
@@ -42,7 +41,6 @@ Public Class SCA1
     ' イベントハンドラーロック 記録一覧チェックリストボックス
     Private LockEventHandler_CLB As Boolean = False
     'Private LockEventHandler_LCSum As Boolean = False               ' 延滞損害金の表示
-    Private MyDBUpdate As Boolean = False                            ' 自分がDB更新したフラグ
     Private PIItemList As String()                                   ' 物件情報の大項目
     ' スレッド
     Private ReadOnly Thread_Entry As Thread = Nothing
@@ -58,16 +56,14 @@ Public Class SCA1
         Dim loadTime = Date.Now
         Me.Text += " - " & xml.GetCPath
         CB_AUTOUPD.Checked = xml.GetAutoUpd
-        fwatchers = New List(Of FileWatcher)
 
-        FPATH_TEL = db.CurrentPath_SV & Common.DIR_TEL & Common.FILE_TEL                     ' 着信ログまでのフルパス生成
         ' 顧客情報DB(FKSC.DB3,ASSIST.DB3)の最新確認 古ければサーバからダウンロード
-        cmn.StartPBar([Enum].GetValues(GetType(Sqldb.TID)).Length + 6)
-
         CheckUpdateCDB()
 
+        ' 追加電話番号の吹き出しフォーム初期設定
         InitForms()
 
+        cmn.StartPBar([Enum].GetValues(GetType(Sqldb.TID)).Length + 6)
         cmn.UpdPBar("顧客情報のファイルダウンロード中")
         ' DGV表示設定
         db.DBFileDL(Sqldb.TID.SCD)
@@ -75,21 +71,17 @@ Public Class SCA1
         db.UpdateOrigDT_ASsist()
         ShowDGVList(DGV1)
         ShowDGVList(DGV2)
-        'ShowDGVList(DGV5)           ' 交渉記録
         ShowDGVList(DGV9)
-
         cmn.UpdPBar("最終設定中")
-        ' タブ 記録一覧の初期設定
-        CheckedListBoxInit()
 
+        CheckedListBoxInit()        ' タブ 記録一覧の初期設定
         SetToolTips()               ' ツールチップの設定
         MRInit()                    ' 申請物の初期設定
+        DunInit()                   ' 督促管理の初期設定
         ' DGVちらつき防止
         cmn.SetDoubleBufferDGV(DGV1, DGV2, DGV4, DGV5, DGV6, DGV7, DGV9, DGV_MR1, DGV_MNG)
-        DunInit()                   ' 督促管理の初期設定
-        ' スレッド生成
-        'ThreadInit()
         ' ファイル監視開始
+        fwatchers = New List(Of FileWatcher)
         FWatchingStart()
 
         ' 物件情報初期設定
@@ -106,22 +98,22 @@ Public Class SCA1
     End Sub
 
     Private Sub SCA1_Shown(sender As Object, e As EventArgs) Handles Me.Shown
-        ' 着信ログ、DBファイル監視開始
-        StartWatching()
-
         ' イベントハンドラ設定
         AddHandler DGV1.CellEnter, AddressOf DGV1_CellEnter
-
-        SearchOptionInit()          ' 検索オプション
-
+        SearchOptionInit()          ' 検索オプションフォーム初期設定
         SC.Visible = False
     End Sub
 
     ' 監視 new 
     Private Sub FWatchingStart()
         Dim fileSettings As List(Of FileSetting) = New List(Of FileSetting) From {
-            New FileSetting($"{cmn.CurrentPath}{Common.DIR_DB3}{Sqldb.DB_MNGREQ}", AddressOf CBWatcherMNGREQ),
-            New FileSetting($"{cmn.CurrentPath}{Common.DIR_DB3}{Sqldb.DB_MRITEM}", AddressOf CBWatcherMRITEM)
+            New FileSetting($"{cmn.CurrentPath}{Common.DIR_DB3}{Sqldb.DB_FKSCLOG}", AddressOf CBWatcherUpdSCD),
+            New FileSetting($"{cmn.CurrentPath}{Common.DIR_UPD}{Sqldb.DB_FKSC}", AddressOf CBWatcherUpdFKSC),
+            New FileSetting($"{cmn.CurrentPath}{Common.DIR_UPD}{Sqldb.DB_FKSCPI}", AddressOf CBWatcherUpdFKSC),
+            New FileSetting($"{cmn.CurrentPath}{Common.DIR_UPD}{Sqldb.DB_FKSCFPI}", AddressOf CBWatcherUpdFKSC),
+            New FileSetting($"{cmn.CurrentPath}{Common.DIR_UPD}{Common.EXE_NAME}", AddressOf CBWatcherUpdEXE),
+            New FileSetting($"{cmn.CurrentPath}{Common.DIR_DB3}{Sqldb.DB_MNGREQ}", AddressOf CBWatcherUpdMR),
+            New FileSetting($"{cmn.CurrentPath}{Common.DIR_DB3}{Sqldb.DB_MRITEM}", AddressOf CBWatcherUpdMRM)
         }
 
         For Each setting In fileSettings
@@ -139,12 +131,60 @@ Public Class SCA1
     End Sub
 
     ' コールバックIF
-    Sub CBWatcherMNGREQ()
+    Sub CBWatcherUpdSCD()
         If Me.InvokeRequired Then
             ' 非メインスレッド処理
-            log.cLog("[CB][Watcher] MngRequest")
+            log.cLog("[CB][Watcher] Upd SCD")
+            db.DBFileFDL(Sqldb.TID.SCD)                     ' ファイル強制ダウンロード
+            db.UpdateOrigDT(Sqldb.TID.SCD)
+            db.UpdateOrigDT(Sqldb.TID.SCR)
+            Me.Invoke(New MethodInvoker(AddressOf CBWatcherUpdSCD))
+        Else
+            ' メインスレッド処理
+            If CB_AUTOUPD.Checked Then
+                cmn.StartPBar(3)
+                cmn.UpdPBar("交渉記録の更新がありました")
+                ShowDGVList(DGV2)
+                ShowDGVList(DGV5)
+                ShowDunLB()
+                cmn.EndPBar()
+            End If
+        End If
+    End Sub
+
+    Sub CBWatcherUpdFKSC()
+        If Me.InvokeRequired Then
+            ' 非メインスレッド処理
+            log.cLog("[CB][Watcher] Upd FKSC")
+            Me.Invoke(New MethodInvoker(AddressOf CBWatcherUpdFKSC))
+        Else
+            ' メインスレッド処理
+            L_UPDMsg.Visible = True
+        End If
+    End Sub
+
+    Sub CBWatcherUpdFPI()
+        log.cLog("[CB][Watcher] Upd FPI")
+        db.UpdateOrigDT(Sqldb.TID.FPI)
+    End Sub
+
+    Sub CBWatcherUpdEXE()
+        If Me.InvokeRequired Then
+            ' 非メインスレッド処理
+            log.cLog("[CB][Watcher] Upd EXE")
+            Me.Invoke(New MethodInvoker(AddressOf CBWatcherUpdEXE))
+        Else
+            ' メインスレッド処理
+            L_UPDMsg.Visible = True
+        End If
+    End Sub
+
+    Sub CBWatcherUpdMR()
+        If Me.InvokeRequired Then
+            ' 非メインスレッド処理
+            log.cLog("[CB][Watcher] Upd MR")
             db.UpdateOrigDT(Sqldb.TID.MR)
-            Me.Invoke(New MethodInvoker(AddressOf CBWatcherMNGREQ))
+            Me.Invoke(New MethodInvoker(AddressOf CBWatcherUpdMR))
         Else
             ' メインスレッド処理
             oview.ShowOVIEW()
@@ -152,10 +192,13 @@ Public Class SCA1
         End If
     End Sub
 
-    Sub CBWatcherMRITEM()
-        log.cLog("[CB][Watcher] MRItem")
+    Private Const Msg As String = "[CB][Watcher] Upd MRM"
+
+    Sub CBWatcherUpdMRM()
+        log.cLog(Msg)
         db.UpdateOrigDT(Sqldb.TID.MRM)
     End Sub
+
 
     Private Sub FLS_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
         FWatchingEnd()
@@ -233,14 +276,12 @@ Public Class SCA1
 
         ' DGV2の指定行を削除
         Cursor.Current = Cursors.WaitCursor             ' マウスカーソルを砂時計に
-        'MyDBUpdate = True
         db.ExeSQL(Sqldb.TID.SCD, "Delete From FKSCD Where FKD01 = '" & id & "'")
         ExUpdateButton()
     End Sub
 
     ' 更新ボタン DGV1
     Private Sub ExUpdateButton() Handles Button1.Click
-        'Cursor.Current = Cursors.WaitCursor             ' マウスカーソルを砂時計に
         cmn.StartPBar(7)
         cmn.UpdPBar("顧客情報ダウンロード中")
         db.DBFileFDL(Sqldb.TID.SCD)                     ' ファイル強制ダウンロード
@@ -348,34 +389,6 @@ Public Class SCA1
             Case Keys.F3
             Case Keys.F4
         End Select
-    End Sub
-
-#End Region
-
-#Region "Thread"
-    Private Sub ThreadInit()
-        thSC = New SCThread(Me)
-        thSC.Init()
-    End Sub
-
-    ' アプリ更新通知
-    Public Sub NoticeUpdateApp(result As Integer)
-        log.cLog("EventCB: アプリ更新通知 result: " & result)
-        L_UPDMsg.Visible = True
-    End Sub
-
-    ' DB更新通知 SCD
-    Public Sub NoticeUpdateDB_SCD(result As Integer)
-        log.cLog("EventCB: DB-SCD更新通知result: " & result)
-        ShowDGVList(DGV2)
-        ShowDGVList(DGV4)
-        ShowDGVList(DGV5)
-    End Sub
-
-    ' DB更新通知 PI
-    Public Sub NoticeUpdateDB_PI(result As Integer)
-        log.cLog("EventCB: DB-PI更新通知result: " & result)
-        ShowDGVList(DGV7)
     End Sub
 
 #End Region
@@ -799,130 +812,6 @@ Public Class SCA1
         tt1.SetToolTip(TB_SearchInput, "「債権番号」「債務者名」「連帯債務者名」「各電話番号」から検索できます。")   ' ツールチップ
         tt1.SetToolTip(BT_B1, "左の表(債務者一覧)から、追加したい債務者を複数選択して同時に追加できます。" & vbCrLf &
                               "同時に選択するには、Ctrlキーを押しながら左クリックします。")     ' ツールチップ
-    End Sub
-#End Region
-
-#Region "ファイル監視関連"
-    ' ファイル監視準備 開始
-    '   以下の2つの方法でファイルを監視する。
-    '   1: FileSystemWacher = 監視APIだけどsamba非対応だから環境によっては検出できない
-    '   2: 非同期タスク(200ms周期)でタイムスタンプを監視して検出 (sambaだったとき用) ちょっと遅い
-    '  どっちも検出するパターンはあるが、同じイベントは2度通知されないようにしてある
-    Private Watcher As FileSystemWatcher
-    Private Sub StartWatching()
-        Try
-            ' 監視するファイルがなければ空ファイルを作成
-            If Not File.Exists(FPATH_TEL) Then
-                Using fs As FileStream = File.Create(FPATH_TEL)
-                End Using
-            End If
-            ' 監視機能②  周期監視による監視     タイムラグあるけどsambaも対応    対象：着信ログ、DB更新、TaskDB更新
-            PoolingFiles()
-        Catch ex As Exception
-            ' 監視ファイルが無い等の理由で監視できない
-        End Try
-    End Sub
-
-    ' 監視機能② ポーリング処理
-    Private Sub PoolingFiles()
-        ' 監視対象一覧             監視識別子      監視ファイルパス(*付きは複数ファイル)
-        '{POLLING_ID_SCD, db.CurrentPath_SV & Common.DIR_LOG & Log.LOGNAME_DB & "_*"},     ' ログ A_SC_DB_*.
-        Dim PList(,) As String = {{POLLING_ID_TEL, FPATH_TEL},                                                      ' ログ ILC_SCTEL.log
-                                  {POLLING_ID_SCD, db.CurrentPath_SV & Common.DIR_LOG & Log.LOGNAME_DB & "_*"},     ' A_SC_DB.log
-                                  {POLLING_ID_TASK, db.CurrentPath_SV & Common.DIR_LOG & Log.LOGNAME_TASK & "_*"},  ' ログ A_SC_Task_*
-                                  {POLLING_ID_CUDB, db.CurrentPath_SV & Common.DIR_UPD & Sqldb.DB_FKSC},            ' DB   FKSC.DB3
-                                  {POLLING_ID_ASC, db.CurrentPath_SV & Common.DIR_UPD & Common.EXE_NAME}}           ' EXE  A_SC.exe
-        ' {POLLING_ID_SCD, db.CurrentPath_SV & Common.DIR_DB3 & Sqldb.DB_FKSCLOG},          ' DB FKSC_LOG.DB3
-        Const PL_ID As Integer = 0
-        Const PL_FILE As Integer = 1
-
-        ' 監視対象一覧分のタイマー生成
-        Dim LastTime(PList.GetLength(0) - 1) As String      ' 最終更新時刻(ファイル更新時に更新)
-
-        ' 監視タスク起動 非同期
-        Dim task2 As Task = Task.Run(
-                Sub()
-                    ' 周期監視
-                    Dim firstCycle As Boolean = True        ' 一周目は更新実行せずタイムスタンプだけ更新
-                    PoolingStart = True
-                    While PoolingStart
-                        For n = 0 To PList.GetLength(0) - 1
-                            Dim updateFlag As Boolean = False               ' 更新フラグ
-                            Dim filePath As String = PList(n, PL_FILE)      ' 監視対象ファイルフルパス
-                            ' 監視対象パスに存在するファイルを全て取得
-                            Dim fileList As String() = Nothing
-                            Try
-                                ' たまにネットワークアドレスにアクセスできないエラーが出る？からそのときはスルーするためのtry
-                                fileList = Directory.GetFileSystemEntries(Path.GetDirectoryName(filePath), Path.GetFileName(filePath))
-                            Catch ex As Exception
-                                Continue For
-                            End Try
-                            For Each f As String In fileList
-                                Dim fTime As String = File.GetLastWriteTime(f)             ' タイムスタンプ取得
-                                'log.DBGLOG("#" & f & "    : " & fTime & ",   lt : " & LastTime(n))
-                                If LastTime(n) < fTime Then
-                                    ' ファイル更新を検出
-                                    If EditForm IsNot Nothing Then
-                                        If EditForm.Visible Then Continue For                   ' 交渉記録の編集中は更新しない
-                                    End If
-
-                                    log.cLog("cycle - FUPD検出:" & PList(n, PL_ID))
-                                    updateFlag = True
-                                    LastTime(n) = fTime
-                                End If
-                            Next
-
-                            If firstCycle Then Continue For      ' 初回はファイル更新時刻の初期設定のために必ず更新が発生する、ただし更新はしない
-                            'If MyDBUpdate Then Continue For      ' 自分自身のDB更新だったら更新しない
-                            If Not updateFlag Then Continue For
-
-                            log.cLog("cycle - 実行:" & PList(n, PL_ID))
-                            Invoke(New delegate_PoolingCallBack(AddressOf PoolingCallBack), PList(n, PL_ID))
-                            updateFlag = False
-                            MyDBUpdate = False
-                        Next
-                        firstCycle = False
-                        Threading.Thread.Sleep(POLLING_CYCLE)
-                    End While
-                End Sub
-            )
-    End Sub
-
-    ' 監視機能② イベント受信 (Pooling)                     
-    Private Sub PoolingCallBack(id As String)
-        log.cLog("Pooling 検出: " & id)
-        Select Case id
-            Case POLLING_ID_SCD     ' SCD DB更新
-                Invoke(New MethodInvoker(AddressOf UpdateDB_SCD))          ' SCD更新
-            Case POLLING_ID_CUDB    ' 顧客DB更新
-                Invoke(New MethodInvoker(AddressOf DownloadCustomerDB))    ' 顧客DBのダウンロード更新
-            Case POLLING_ID_ASC     ' A_SC本体の更新
-                Invoke(New MethodInvoker(AddressOf NoticeUpdate_ASC))      ' A_SC更新
-        End Select
-    End Sub
-
-    ' 他PCでDB更新を通知
-    Private Sub UpdateDB_SCD()
-        log.cLog("-- UpdateDB_SCD")
-        ' L_UPD.Visible = True
-
-        ' 自動更新チェックがONの場合のみ自動更新
-        If CB_AUTOUPD.Checked Then
-            ExUpdateButton()
-        End If
-
-    End Sub
-
-    ' 顧客DBの更新の検出
-    Private Sub DownloadCustomerDB()
-        log.cLog(" -- DownloadCustomerDB")
-        L_UPDMsg.Visible = True
-    End Sub
-
-    ' A_SC本体の更新の検出
-    Private Sub NoticeUpdate_ASC()
-        log.cLog(" -- NoticeUpdate_ASC")
-        L_UPDMsg.Visible = True
     End Sub
 #End Region
 

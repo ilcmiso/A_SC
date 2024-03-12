@@ -251,7 +251,6 @@
     </Compile>
     <Compile Include="80_SCcommon\SCcommon.vb" />
     <Compile Include="80_SCcommon\SCMRcommon.vb" />
-    <Compile Include="80_SCcommon\SCThread.vb" />
     <Compile Include="90_common\ExcelManager.vb" />
     <Compile Include="90_common\FileWatcher.vb" />
     <Compile Include="90_common\ILCNetDrive.vb" />
