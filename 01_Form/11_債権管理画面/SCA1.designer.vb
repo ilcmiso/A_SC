@@ -54,6 +54,12 @@ Partial Class SCA1
         Dim DataGridViewCellStyle29 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle30 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle31 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle32 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle33 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle34 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle35 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle36 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle37 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(SCA1))
         Me.PBXX = New System.Windows.Forms.Button()
         Me.tt1 = New System.Windows.Forms.ToolTip(Me.components)
@@ -222,6 +228,8 @@ Partial Class SCA1
         Me.Button1 = New System.Windows.Forms.Button()
         Me.TAB_A1 = New System.Windows.Forms.TabControl()
         Me.Tab_6GA = New System.Windows.Forms.TabPage()
+        Me.TB_MRPaymentDate = New System.Windows.Forms.TextBox()
+        Me.Label8 = New System.Windows.Forms.Label()
         Me.L_MRSearchHit = New System.Windows.Forms.Label()
         Me.Button5 = New System.Windows.Forms.Button()
         Me.Button2 = New System.Windows.Forms.Button()
@@ -268,8 +276,20 @@ Partial Class SCA1
         Me.総務課ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.表示ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripMenuItem2 = New System.Windows.Forms.ToolStripMenuItem()
-        Me.Label8 = New System.Windows.Forms.Label()
-        Me.TB_MRPaymentDate = New System.Windows.Forms.TextBox()
+        Me.Tab_3Mng = New System.Windows.Forms.TabPage()
+        Me.DGV_MNG = New System.Windows.Forms.DataGridView()
+        Me.TextBox1 = New System.Windows.Forms.TextBox()
+        Me.Button16 = New System.Windows.Forms.Button()
+        Me.Column27 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.DataGridViewTextBoxColumn16 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.DataGridViewTextBoxColumn18 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.DataGridViewTextBoxColumn41 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.DataGridViewTextBoxColumn42 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.DataGridViewTextBoxColumn45 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.DataGridViewTextBoxColumn46 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.DataGridViewTextBoxColumn44 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.DataGridViewTextBoxColumn43 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Button17 = New System.Windows.Forms.Button()
         Me.CMenu_DGV3.SuspendLayout()
         Me.Tab_4Dun.SuspendLayout()
         CType(Me.DGV4, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -289,6 +309,8 @@ Partial Class SCA1
         Me.Tab_6GA.SuspendLayout()
         CType(Me.DGV_MR1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.MenuStrip1.SuspendLayout()
+        Me.Tab_3Mng.SuspendLayout()
+        CType(Me.DGV_MNG, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'PBXX
@@ -1262,9 +1284,11 @@ Partial Class SCA1
         '
         'TB_RecA1
         '
-        Me.TB_RecA1.BackColor = System.Drawing.Color.Azure
+        Me.TB_RecA1.BackColor = System.Drawing.Color.White
+        Me.TB_RecA1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.TB_RecA1.Font = New System.Drawing.Font("MS UI Gothic", 11.25!)
-        Me.TB_RecA1.Location = New System.Drawing.Point(58, 2)
+        Me.TB_RecA1.ForeColor = System.Drawing.Color.Black
+        Me.TB_RecA1.Location = New System.Drawing.Point(56, 3)
         Me.TB_RecA1.Name = "TB_RecA1"
         Me.TB_RecA1.Size = New System.Drawing.Size(170, 22)
         Me.TB_RecA1.TabIndex = 1597
@@ -1342,7 +1366,7 @@ Partial Class SCA1
         Me.Button4.FlatStyle = System.Windows.Forms.FlatStyle.Popup
         Me.Button4.Font = New System.Drawing.Font("メイリオ", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.Button4.ForeColor = System.Drawing.Color.White
-        Me.Button4.Location = New System.Drawing.Point(3, 2)
+        Me.Button4.Location = New System.Drawing.Point(1, 3)
         Me.Button4.Name = "Button4"
         Me.Button4.Size = New System.Drawing.Size(56, 22)
         Me.Button4.TabIndex = 1598
@@ -1562,6 +1586,7 @@ Partial Class SCA1
         '
         'PAN_A
         '
+        Me.PAN_A.Controls.Add(Me.Button17)
         Me.PAN_A.Controls.Add(Me.DGV7)
         Me.PAN_A.Controls.Add(Me.DTP_PI1)
         Me.PAN_A.Controls.Add(Me.BT_PI2)
@@ -2370,6 +2395,7 @@ Partial Class SCA1
         Me.TAB_A1.Controls.Add(Me.Tab_2Record)
         Me.TAB_A1.Controls.Add(Me.Tab_6GA)
         Me.TAB_A1.Controls.Add(Me.Tab_4Dun)
+        Me.TAB_A1.Controls.Add(Me.Tab_3Mng)
         Me.TAB_A1.ItemSize = New System.Drawing.Size(100, 16)
         Me.TAB_A1.Location = New System.Drawing.Point(0, 19)
         Me.TAB_A1.Name = "TAB_A1"
@@ -2409,6 +2435,28 @@ Partial Class SCA1
         Me.Tab_6GA.Size = New System.Drawing.Size(1132, 682)
         Me.Tab_6GA.TabIndex = 5
         Me.Tab_6GA.Text = "申請物管理"
+        '
+        'TB_MRPaymentDate
+        '
+        Me.TB_MRPaymentDate.BackColor = System.Drawing.Color.White
+        Me.TB_MRPaymentDate.Font = New System.Drawing.Font("MS UI Gothic", 11.25!)
+        Me.TB_MRPaymentDate.Location = New System.Drawing.Point(620, 29)
+        Me.TB_MRPaymentDate.Name = "TB_MRPaymentDate"
+        Me.TB_MRPaymentDate.Size = New System.Drawing.Size(104, 22)
+        Me.TB_MRPaymentDate.TabIndex = 1799
+        '
+        'Label8
+        '
+        Me.Label8.BackColor = System.Drawing.Color.SteelBlue
+        Me.Label8.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.Label8.Font = New System.Drawing.Font("メイリオ", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.Label8.ForeColor = System.Drawing.Color.White
+        Me.Label8.Location = New System.Drawing.Point(620, 9)
+        Me.Label8.Name = "Label8"
+        Me.Label8.Size = New System.Drawing.Size(104, 20)
+        Me.Label8.TabIndex = 1798
+        Me.Label8.Text = "完済日"
+        Me.Label8.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'L_MRSearchHit
         '
@@ -2861,13 +2909,13 @@ Partial Class SCA1
         Me.債権管理部ToolStripMenuItem.Checked = True
         Me.債権管理部ToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked
         Me.債権管理部ToolStripMenuItem.Name = "債権管理部ToolStripMenuItem"
-        Me.債権管理部ToolStripMenuItem.Size = New System.Drawing.Size(134, 22)
+        Me.債権管理部ToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
         Me.債権管理部ToolStripMenuItem.Text = "債権管理部"
         '
         '総務課ToolStripMenuItem
         '
         Me.総務課ToolStripMenuItem.Name = "総務課ToolStripMenuItem"
-        Me.総務課ToolStripMenuItem.Size = New System.Drawing.Size(134, 22)
+        Me.総務課ToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
         Me.総務課ToolStripMenuItem.Text = "総務課"
         '
         '表示ToolStripMenuItem
@@ -2883,27 +2931,178 @@ Partial Class SCA1
         Me.ToolStripMenuItem2.Size = New System.Drawing.Size(146, 22)
         Me.ToolStripMenuItem2.Text = "ユーザー名設定"
         '
-        'Label8
+        'Tab_3Mng
         '
-        Me.Label8.BackColor = System.Drawing.Color.SteelBlue
-        Me.Label8.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.Label8.Font = New System.Drawing.Font("メイリオ", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.Label8.ForeColor = System.Drawing.Color.White
-        Me.Label8.Location = New System.Drawing.Point(620, 9)
-        Me.Label8.Name = "Label8"
-        Me.Label8.Size = New System.Drawing.Size(104, 20)
-        Me.Label8.TabIndex = 1798
-        Me.Label8.Text = "完済日"
-        Me.Label8.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        Me.Tab_3Mng.BackColor = System.Drawing.Color.Beige
+        Me.Tab_3Mng.Controls.Add(Me.TextBox1)
+        Me.Tab_3Mng.Controls.Add(Me.Button16)
+        Me.Tab_3Mng.Controls.Add(Me.DGV_MNG)
+        Me.Tab_3Mng.Location = New System.Drawing.Point(4, 20)
+        Me.Tab_3Mng.Name = "Tab_3Mng"
+        Me.Tab_3Mng.Padding = New System.Windows.Forms.Padding(3)
+        Me.Tab_3Mng.Size = New System.Drawing.Size(1132, 682)
+        Me.Tab_3Mng.TabIndex = 6
+        Me.Tab_3Mng.Text = "管理表"
         '
-        'TB_MRPaymentDate
+        'DGV_MNG
         '
-        Me.TB_MRPaymentDate.BackColor = System.Drawing.Color.White
-        Me.TB_MRPaymentDate.Font = New System.Drawing.Font("MS UI Gothic", 11.25!)
-        Me.TB_MRPaymentDate.Location = New System.Drawing.Point(620, 29)
-        Me.TB_MRPaymentDate.Name = "TB_MRPaymentDate"
-        Me.TB_MRPaymentDate.Size = New System.Drawing.Size(104, 22)
-        Me.TB_MRPaymentDate.TabIndex = 1799
+        Me.DGV_MNG.AllowUserToAddRows = False
+        Me.DGV_MNG.AllowUserToDeleteRows = False
+        Me.DGV_MNG.AllowUserToResizeColumns = False
+        Me.DGV_MNG.AllowUserToResizeRows = False
+        Me.DGV_MNG.BackgroundColor = System.Drawing.SystemColors.ControlLight
+        Me.DGV_MNG.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.[Single]
+        DataGridViewCellStyle32.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle32.BackColor = System.Drawing.Color.LightGray
+        DataGridViewCellStyle32.Font = New System.Drawing.Font("MS UI Gothic", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        DataGridViewCellStyle32.ForeColor = System.Drawing.SystemColors.WindowText
+        DataGridViewCellStyle32.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle32.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle32.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.DGV_MNG.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle32
+        Me.DGV_MNG.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
+        Me.DGV_MNG.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.Column27, Me.DataGridViewTextBoxColumn16, Me.DataGridViewTextBoxColumn18, Me.DataGridViewTextBoxColumn41, Me.DataGridViewTextBoxColumn42, Me.DataGridViewTextBoxColumn45, Me.DataGridViewTextBoxColumn46, Me.DataGridViewTextBoxColumn44, Me.DataGridViewTextBoxColumn43})
+        Me.DGV_MNG.Location = New System.Drawing.Point(1, 24)
+        Me.DGV_MNG.MultiSelect = False
+        Me.DGV_MNG.Name = "DGV_MNG"
+        Me.DGV_MNG.ReadOnly = True
+        Me.DGV_MNG.RowHeadersVisible = False
+        Me.DGV_MNG.RowHeadersWidth = 51
+        Me.DGV_MNG.RowTemplate.Height = 21
+        Me.DGV_MNG.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
+        Me.DGV_MNG.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
+        Me.DGV_MNG.Size = New System.Drawing.Size(1132, 408)
+        Me.DGV_MNG.TabIndex = 1181
+        Me.DGV_MNG.TabStop = False
+        '
+        'TextBox1
+        '
+        Me.TextBox1.BackColor = System.Drawing.Color.White
+        Me.TextBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.TextBox1.Font = New System.Drawing.Font("MS UI Gothic", 11.25!)
+        Me.TextBox1.Location = New System.Drawing.Point(56, 3)
+        Me.TextBox1.Name = "TextBox1"
+        Me.TextBox1.Size = New System.Drawing.Size(170, 22)
+        Me.TextBox1.TabIndex = 1599
+        '
+        'Button16
+        '
+        Me.Button16.BackColor = System.Drawing.Color.CornflowerBlue
+        Me.Button16.FlatAppearance.BorderColor = System.Drawing.Color.Black
+        Me.Button16.FlatStyle = System.Windows.Forms.FlatStyle.Popup
+        Me.Button16.Font = New System.Drawing.Font("メイリオ", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.Button16.ForeColor = System.Drawing.Color.White
+        Me.Button16.Location = New System.Drawing.Point(1, 3)
+        Me.Button16.Name = "Button16"
+        Me.Button16.Size = New System.Drawing.Size(56, 22)
+        Me.Button16.TabIndex = 1600
+        Me.Button16.Text = "検 索"
+        Me.Button16.UseVisualStyleBackColor = False
+        '
+        'Column27
+        '
+        Me.Column27.HeaderText = "No"
+        Me.Column27.Name = "Column27"
+        Me.Column27.ReadOnly = True
+        Me.Column27.Width = 45
+        '
+        'DataGridViewTextBoxColumn16
+        '
+        Me.DataGridViewTextBoxColumn16.HeaderText = "債権番号"
+        Me.DataGridViewTextBoxColumn16.MinimumWidth = 6
+        Me.DataGridViewTextBoxColumn16.Name = "DataGridViewTextBoxColumn16"
+        Me.DataGridViewTextBoxColumn16.ReadOnly = True
+        Me.DataGridViewTextBoxColumn16.Width = 105
+        '
+        'DataGridViewTextBoxColumn18
+        '
+        DataGridViewCellStyle33.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.DataGridViewTextBoxColumn18.DefaultCellStyle = DataGridViewCellStyle33
+        Me.DataGridViewTextBoxColumn18.HeaderText = "債務者氏名"
+        Me.DataGridViewTextBoxColumn18.MinimumWidth = 6
+        Me.DataGridViewTextBoxColumn18.Name = "DataGridViewTextBoxColumn18"
+        Me.DataGridViewTextBoxColumn18.ReadOnly = True
+        Me.DataGridViewTextBoxColumn18.Width = 120
+        '
+        'DataGridViewTextBoxColumn41
+        '
+        DataGridViewCellStyle34.BackColor = System.Drawing.Color.White
+        DataGridViewCellStyle34.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        DataGridViewCellStyle34.ForeColor = System.Drawing.Color.Black
+        Me.DataGridViewTextBoxColumn41.DefaultCellStyle = DataGridViewCellStyle34
+        Me.DataGridViewTextBoxColumn41.HeaderText = "内容"
+        Me.DataGridViewTextBoxColumn41.MinimumWidth = 6
+        Me.DataGridViewTextBoxColumn41.Name = "DataGridViewTextBoxColumn41"
+        Me.DataGridViewTextBoxColumn41.ReadOnly = True
+        '
+        'DataGridViewTextBoxColumn42
+        '
+        DataGridViewCellStyle35.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        DataGridViewCellStyle35.BackColor = System.Drawing.Color.White
+        DataGridViewCellStyle35.ForeColor = System.Drawing.Color.Black
+        DataGridViewCellStyle35.Format = "d"
+        DataGridViewCellStyle35.NullValue = Nothing
+        Me.DataGridViewTextBoxColumn42.DefaultCellStyle = DataGridViewCellStyle35
+        Me.DataGridViewTextBoxColumn42.HeaderText = "担当者"
+        Me.DataGridViewTextBoxColumn42.MinimumWidth = 6
+        Me.DataGridViewTextBoxColumn42.Name = "DataGridViewTextBoxColumn42"
+        Me.DataGridViewTextBoxColumn42.ReadOnly = True
+        Me.DataGridViewTextBoxColumn42.Width = 80
+        '
+        'DataGridViewTextBoxColumn45
+        '
+        Me.DataGridViewTextBoxColumn45.HeaderText = "ステータス"
+        Me.DataGridViewTextBoxColumn45.MinimumWidth = 6
+        Me.DataGridViewTextBoxColumn45.Name = "DataGridViewTextBoxColumn45"
+        Me.DataGridViewTextBoxColumn45.ReadOnly = True
+        Me.DataGridViewTextBoxColumn45.Width = 80
+        '
+        'DataGridViewTextBoxColumn46
+        '
+        Me.DataGridViewTextBoxColumn46.HeaderText = "概要"
+        Me.DataGridViewTextBoxColumn46.MinimumWidth = 6
+        Me.DataGridViewTextBoxColumn46.Name = "DataGridViewTextBoxColumn46"
+        Me.DataGridViewTextBoxColumn46.ReadOnly = True
+        Me.DataGridViewTextBoxColumn46.Width = 350
+        '
+        'DataGridViewTextBoxColumn44
+        '
+        DataGridViewCellStyle36.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        DataGridViewCellStyle36.ForeColor = System.Drawing.Color.Red
+        DataGridViewCellStyle36.Format = "N0"
+        DataGridViewCellStyle36.NullValue = "0"
+        Me.DataGridViewTextBoxColumn44.DefaultCellStyle = DataGridViewCellStyle36
+        Me.DataGridViewTextBoxColumn44.HeaderText = "次回対応日"
+        Me.DataGridViewTextBoxColumn44.MinimumWidth = 6
+        Me.DataGridViewTextBoxColumn44.Name = "DataGridViewTextBoxColumn44"
+        Me.DataGridViewTextBoxColumn44.ReadOnly = True
+        Me.DataGridViewTextBoxColumn44.Width = 90
+        '
+        'DataGridViewTextBoxColumn43
+        '
+        DataGridViewCellStyle37.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        DataGridViewCellStyle37.Format = "d"
+        DataGridViewCellStyle37.NullValue = Nothing
+        Me.DataGridViewTextBoxColumn43.DefaultCellStyle = DataGridViewCellStyle37
+        Me.DataGridViewTextBoxColumn43.HeaderText = "最終対応日"
+        Me.DataGridViewTextBoxColumn43.MinimumWidth = 6
+        Me.DataGridViewTextBoxColumn43.Name = "DataGridViewTextBoxColumn43"
+        Me.DataGridViewTextBoxColumn43.ReadOnly = True
+        Me.DataGridViewTextBoxColumn43.Width = 90
+        '
+        'Button17
+        '
+        Me.Button17.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
+        Me.Button17.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None
+        Me.Button17.Font = New System.Drawing.Font("メイリオ", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.Button17.ForeColor = System.Drawing.Color.RoyalBlue
+        Me.Button17.Location = New System.Drawing.Point(465, 50)
+        Me.Button17.Name = "Button17"
+        Me.Button17.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.Button17.Size = New System.Drawing.Size(31, 28)
+        Me.Button17.TabIndex = 1769
+        Me.Button17.Text = "1"
+        Me.Button17.UseVisualStyleBackColor = False
         '
         'SCA1
         '
@@ -2947,6 +3146,9 @@ Partial Class SCA1
         CType(Me.DGV_MR1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.MenuStrip1.ResumeLayout(False)
         Me.MenuStrip1.PerformLayout()
+        Me.Tab_3Mng.ResumeLayout(False)
+        Me.Tab_3Mng.PerformLayout()
+        CType(Me.DGV_MNG, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -3167,4 +3369,18 @@ Partial Class SCA1
     Friend WithEvents L_MRSearchHit As Label
     Friend WithEvents Label8 As Label
     Friend WithEvents TB_MRPaymentDate As TextBox
+    Friend WithEvents Tab_3Mng As TabPage
+    Friend WithEvents DGV_MNG As DataGridView
+    Friend WithEvents TextBox1 As TextBox
+    Friend WithEvents Button16 As Button
+    Friend WithEvents Column27 As DataGridViewTextBoxColumn
+    Friend WithEvents DataGridViewTextBoxColumn16 As DataGridViewTextBoxColumn
+    Friend WithEvents DataGridViewTextBoxColumn18 As DataGridViewTextBoxColumn
+    Friend WithEvents DataGridViewTextBoxColumn41 As DataGridViewTextBoxColumn
+    Friend WithEvents DataGridViewTextBoxColumn42 As DataGridViewTextBoxColumn
+    Friend WithEvents DataGridViewTextBoxColumn45 As DataGridViewTextBoxColumn
+    Friend WithEvents DataGridViewTextBoxColumn46 As DataGridViewTextBoxColumn
+    Friend WithEvents DataGridViewTextBoxColumn44 As DataGridViewTextBoxColumn
+    Friend WithEvents DataGridViewTextBoxColumn43 As DataGridViewTextBoxColumn
+    Friend WithEvents Button17 As Button
 End Class

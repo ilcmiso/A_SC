@@ -45,7 +45,8 @@ Public Class SCC1_S1_MNG
         Dim commandNames As String() = {
             "SC.exeのタイムスタンプ更新",
             "追加電話番号の検索ハイフン無しFKR06初期設定",
-            "db3ファイル新規作成 (Value値)"
+            "db3ファイル新規作成 (Value値)",
+            "PINFO DB移管"
             }
         ListBox2.Items.Clear()
         For Each cl In commandNames
@@ -115,6 +116,9 @@ Public Class SCC1_S1_MNG
                         End If
                     End Try
                 End Using
+
+            Case 3
+                db.DataTransferFPINFO()
 
         End Select
 

@@ -85,7 +85,7 @@ Public Class SCA1
         SetToolTips()               ' ツールチップの設定
         MRInit()                    ' 申請物の初期設定
         ' DGVちらつき防止
-        cmn.SetDoubleBufferDGV(DGV1, DGV2, DGV4, DGV5, DGV6, DGV7, DGV9)
+        cmn.SetDoubleBufferDGV(DGV1, DGV2, DGV4, DGV5, DGV6, DGV7, DGV9, DGV_MR1, DGV_MNG)
         DunInit()                   ' 督促管理の初期設定
         ' スレッド生成
         'ThreadInit()

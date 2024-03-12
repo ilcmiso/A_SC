@@ -16,6 +16,7 @@ Public Class Sqldb
     Public Const DB_FKSC As String = "FKSC.db3"
     Public Const DB_FKSCLOG As String = "FKSC_LOG.db3"
     Public Const DB_FKSCPI As String = "FKSC_PINFO.db3"
+    Public Const DB_FKSCFPI As String = "FKSC_FPINFO.db3"
     Public Const DB_FKSCASSIST As String = "FKSC_ASSIST.db3"
     Public Const DB_AUTOCALL As String = "FKSC_AutoCall.db3"
     Public Const DB_MNGREQ As String = "FKGA_MngRequest.db3"
@@ -46,6 +47,7 @@ Public Class Sqldb
         {DB_FKSCLOG, TBL_FKSCREM, 6, "FKR", DBSV, True},
         {DB_FKSCLOG, TBL_FKSCD, 17, "FKD", DBSV, True},
         {DB_FKSCPI, TBL_STANDARD, 11, "C", DBSV, True},
+        {DB_FKSCFPI, TBL_STANDARD, 4, "C", DBSV, True},
         {DB_FKSCPI, TBL_ITEM, 5, "C", DBSV, True},
         {DB_FKSCASSIST, TBL_STANDARD, 28, "C", DBLO, True},
         {DB_AUTOCALL, TBL_STANDARD, 4, "C", DBSV, True},
@@ -60,6 +62,7 @@ Public Class Sqldb
         SCR          ' FKSCREM
         SCD          ' FKSCD
         PI           ' PINFO
+        FPI          ' FPINFO 融資物件情報
         PIM          ' PINFO MASTER(ITEM)
         SCAS         ' ASSIST
         AC           ' AutoCall
@@ -581,5 +584,44 @@ Public Class Sqldb
         End If
         Return num
     End Function
+
+    ' 旧DBから新DBへデータ移行する。 PINFO->FPINFO
+    Public Sub DataTransferFPINFO()
+        ' 現在のデータベースデータを取得
+        Dim dt As DataTable = GetSelect(TID.PI, "SELECT * FROM TBL")
+        If dt.Rows.Count = 0 Then Exit Sub
+
+        Cursor.Current = Cursors.WaitCursor             ' マウスカーソルを砂時計に
+        ' もとのデータを一旦削除
+        DeleteAllData(TID.FPI)
+
+        ' 新たなデータベースに書き換えるため変換
+        For Each row As DataRow In dt.Rows
+            Dim cosNumber As String = row("C01").ToString()
+
+            ' C02からC11までのカラムに対する処理
+            For i As Integer = 2 To 11
+                Dim columnData As String = row($"C{i:D2}")
+
+                If Not String.IsNullOrEmpty(columnData) Then
+                    Dim items As String() = columnData.Split(New Char() {"`"c}, StringSplitOptions.RemoveEmptyEntries)
+                    For itemIndex As Integer = 0 To items.Length - 1
+                        Dim item As String = items(itemIndex)
+                        ' データベースに書き込み用のデータを準備
+                        Dim writeData As String() = {cosNumber,                              ' 顧客番号
+                                                     $"{i - 2:D2}",                          ' ItemType 0はじまり
+                                                     $"{(itemIndex):D2}",                    ' ItemIndex
+                                                     item}                                   ' ItemValue
+                        ' 新たなデータベースに書き込み
+                        ExeSQLInsert(TID.FPI, writeData)
+                    Next
+                End If
+            Next
+        Next
+        ExeSQL(TID.FPI)
+        MsgBox("移管完了")
+    End Sub
+
+
 
 End Class
