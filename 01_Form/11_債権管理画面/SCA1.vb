@@ -79,7 +79,7 @@ Public Class SCA1
         MRInit()                    ' 申請物の初期設定
         DunInit()                   ' 督促管理の初期設定
         ' DGVちらつき防止
-        cmn.SetDoubleBufferDGV(DGV1, DGV2, DGV4, DGV5, DGV6, DGV7, DGV9, DGV_MR1, DGV_MNG)
+        cmn.SetDoubleBufferDGV(DGV1, DGV2, DGV4, DGV5, DGV6, DGV7, DGV9, DGV_MR1, DGV_FPMNG)
         ' ファイル監視開始
         fwatchers = New List(Of FileWatcher)
         FWatchingStart()
@@ -91,6 +91,9 @@ Public Class SCA1
             DGV_PIMENU(0, nnn).Value = PIItemList(nnn)
         Next
 
+        ' 一時的に管理表タブを非表示にする
+        Dim tabPageToRemove As TabPage = TAB_A1.TabPages("Tab_3Mng")
+        TAB_A1.TabPages.Remove(tabPageToRemove)
         ' 解像度が小さいPCは、左端に寄せる (横幅1600px未満なら左寄せ)
         If Screen.PrimaryScreen.Bounds.Width < 1600 Then Me.Left = 0
         cmn.EndPBar()

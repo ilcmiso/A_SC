@@ -350,6 +350,10 @@
         AddHandler comboBox.SelectedIndexChanged, Sub(sender, e)
                                                       dgv(colIndex, rowIndex).Value = comboBox.SelectedItem
                                                   End Sub
+        ' テキストが変更されたときもDGVのセルに反映
+        AddHandler comboBox.TextChanged, Sub(sender, e)
+                                             dgv(colIndex, rowIndex).Value = comboBox.Text
+                                         End Sub
         ' DataGridViewに追加
         dgv.Controls.Add(comboBox)
     End Sub
@@ -365,6 +369,8 @@
         numericUpDown.TextAlign = LeftRightAlignment.Right
         numericUpDown.UpDownAlign = LeftRightAlignment.Left
         numericUpDown.Font = New Font(DGV_REG1.Font.FontFamily, 10, FontStyle.Regular)
+        numericUpDown.Minimum = 0
+        numericUpDown.Maximum = 100000000
 
         ' 値変更時にDataGridViewのセルに反映
         AddHandler numericUpDown.ValueChanged, Sub(sender, e)

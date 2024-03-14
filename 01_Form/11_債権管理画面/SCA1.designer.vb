@@ -63,10 +63,6 @@ Partial Class SCA1
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(SCA1))
         Me.PBXX = New System.Windows.Forms.Button()
         Me.tt1 = New System.Windows.Forms.ToolTip(Me.components)
-        Me.CMenu_DGV3 = New System.Windows.Forms.ContextMenuStrip(Me.components)
-        Me.完了ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.menuItem_Comp = New System.Windows.Forms.ToolStripMenuItem()
-        Me.menuItem_NotComp = New System.Windows.Forms.ToolStripMenuItem()
         Me.L_UPDMsg = New System.Windows.Forms.Label()
         Me.Tab_4Dun = New System.Windows.Forms.TabPage()
         Me.Button18 = New System.Windows.Forms.Button()
@@ -166,6 +162,7 @@ Partial Class SCA1
         Me.TB_ADDRESS3 = New System.Windows.Forms.TextBox()
         Me.L_STS = New System.Windows.Forms.Label()
         Me.PAN_A = New System.Windows.Forms.Panel()
+        Me.Button17 = New System.Windows.Forms.Button()
         Me.DGV7 = New System.Windows.Forms.DataGridView()
         Me.Column26 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.DataGridViewTextBoxColumn11 = New System.Windows.Forms.DataGridViewTextBoxColumn()
@@ -267,19 +264,10 @@ Partial Class SCA1
         Me.TB_MRSearch = New System.Windows.Forms.TextBox()
         Me.Label6 = New System.Windows.Forms.Label()
         Me.Button19 = New System.Windows.Forms.Button()
-        Me.CreatorExpress1 = New AdvanceSoftware.ExcelCreator.Xlsx.CreatorExpress(Me.components)
-        Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
-        Me.データ読み込みToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.機能ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.画面モードToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.債権管理部ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.総務課ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.表示ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ToolStripMenuItem2 = New System.Windows.Forms.ToolStripMenuItem()
         Me.Tab_3Mng = New System.Windows.Forms.TabPage()
-        Me.DGV_MNG = New System.Windows.Forms.DataGridView()
         Me.TextBox1 = New System.Windows.Forms.TextBox()
         Me.Button16 = New System.Windows.Forms.Button()
+        Me.DGV_FPMNG = New System.Windows.Forms.DataGridView()
         Me.Column27 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.DataGridViewTextBoxColumn16 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.DataGridViewTextBoxColumn18 = New System.Windows.Forms.DataGridViewTextBoxColumn()
@@ -289,8 +277,15 @@ Partial Class SCA1
         Me.DataGridViewTextBoxColumn46 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.DataGridViewTextBoxColumn44 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.DataGridViewTextBoxColumn43 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Button17 = New System.Windows.Forms.Button()
-        Me.CMenu_DGV3.SuspendLayout()
+        Me.CreatorExpress1 = New AdvanceSoftware.ExcelCreator.Xlsx.CreatorExpress(Me.components)
+        Me.データ読み込みToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.機能ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.画面モードToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.債権管理部ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.総務課ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.表示ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripMenuItem2 = New System.Windows.Forms.ToolStripMenuItem()
+        Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
         Me.Tab_4Dun.SuspendLayout()
         CType(Me.DGV4, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.GroupBox1.SuspendLayout()
@@ -308,9 +303,9 @@ Partial Class SCA1
         Me.TAB_A1.SuspendLayout()
         Me.Tab_6GA.SuspendLayout()
         CType(Me.DGV_MR1, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.MenuStrip1.SuspendLayout()
         Me.Tab_3Mng.SuspendLayout()
-        CType(Me.DGV_MNG, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.DGV_FPMNG, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.MenuStrip1.SuspendLayout()
         Me.SuspendLayout()
         '
         'PBXX
@@ -331,32 +326,6 @@ Partial Class SCA1
         Me.tt1.AutoPopDelay = 10000
         Me.tt1.InitialDelay = 300
         Me.tt1.ReshowDelay = 40
-        '
-        'CMenu_DGV3
-        '
-        Me.CMenu_DGV3.ImageScalingSize = New System.Drawing.Size(20, 20)
-        Me.CMenu_DGV3.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.完了ToolStripMenuItem})
-        Me.CMenu_DGV3.Name = "CMenu_DGV3"
-        Me.CMenu_DGV3.Size = New System.Drawing.Size(99, 26)
-        '
-        '完了ToolStripMenuItem
-        '
-        Me.完了ToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.menuItem_Comp, Me.menuItem_NotComp})
-        Me.完了ToolStripMenuItem.Name = "完了ToolStripMenuItem"
-        Me.完了ToolStripMenuItem.Size = New System.Drawing.Size(98, 22)
-        Me.完了ToolStripMenuItem.Text = "進捗"
-        '
-        'menuItem_Comp
-        '
-        Me.menuItem_Comp.Name = "menuItem_Comp"
-        Me.menuItem_Comp.Size = New System.Drawing.Size(110, 22)
-        Me.menuItem_Comp.Text = "完了"
-        '
-        'menuItem_NotComp
-        '
-        Me.menuItem_NotComp.Name = "menuItem_NotComp"
-        Me.menuItem_NotComp.Size = New System.Drawing.Size(110, 22)
-        Me.menuItem_NotComp.Text = "未完了"
         '
         'L_UPDMsg
         '
@@ -1599,6 +1568,20 @@ Partial Class SCA1
         Me.PAN_A.Name = "PAN_A"
         Me.PAN_A.Size = New System.Drawing.Size(517, 330)
         Me.PAN_A.TabIndex = 1778
+        '
+        'Button17
+        '
+        Me.Button17.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
+        Me.Button17.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None
+        Me.Button17.Font = New System.Drawing.Font("メイリオ", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.Button17.ForeColor = System.Drawing.Color.RoyalBlue
+        Me.Button17.Location = New System.Drawing.Point(465, 50)
+        Me.Button17.Name = "Button17"
+        Me.Button17.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.Button17.Size = New System.Drawing.Size(31, 28)
+        Me.Button17.TabIndex = 1769
+        Me.Button17.Text = "1"
+        Me.Button17.UseVisualStyleBackColor = False
         '
         'DGV7
         '
@@ -2867,113 +2850,18 @@ Partial Class SCA1
         Me.Button19.Text = "検 索"
         Me.Button19.UseVisualStyleBackColor = False
         '
-        'CreatorExpress1
-        '
-        Me.CreatorExpress1.RefAttrMode = True
-        Me.CreatorExpress1.TemporaryPath = ""
-        '
-        'MenuStrip1
-        '
-        Me.MenuStrip1.Font = New System.Drawing.Font("Yu Gothic UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.データ読み込みToolStripMenuItem, Me.画面モードToolStripMenuItem, Me.表示ToolStripMenuItem})
-        Me.MenuStrip1.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.Flow
-        Me.MenuStrip1.Location = New System.Drawing.Point(0, 0)
-        Me.MenuStrip1.Name = "MenuStrip1"
-        Me.MenuStrip1.Padding = New System.Windows.Forms.Padding(6, 0, 0, 0)
-        Me.MenuStrip1.Size = New System.Drawing.Size(1139, 19)
-        Me.MenuStrip1.TabIndex = 1574
-        Me.MenuStrip1.Text = "MenuStrip1"
-        '
-        'データ読み込みToolStripMenuItem
-        '
-        Me.データ読み込みToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.機能ToolStripMenuItem})
-        Me.データ読み込みToolStripMenuItem.Name = "データ読み込みToolStripMenuItem"
-        Me.データ読み込みToolStripMenuItem.Size = New System.Drawing.Size(43, 19)
-        Me.データ読み込みToolStripMenuItem.Text = "機能"
-        '
-        '機能ToolStripMenuItem
-        '
-        Me.機能ToolStripMenuItem.Name = "機能ToolStripMenuItem"
-        Me.機能ToolStripMenuItem.Size = New System.Drawing.Size(164, 22)
-        Me.機能ToolStripMenuItem.Text = "F35データ読み込み"
-        '
-        '画面モードToolStripMenuItem
-        '
-        Me.画面モードToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.債権管理部ToolStripMenuItem, Me.総務課ToolStripMenuItem})
-        Me.画面モードToolStripMenuItem.Name = "画面モードToolStripMenuItem"
-        Me.画面モードToolStripMenuItem.Size = New System.Drawing.Size(68, 19)
-        Me.画面モードToolStripMenuItem.Text = "画面モード"
-        '
-        '債権管理部ToolStripMenuItem
-        '
-        Me.債権管理部ToolStripMenuItem.Checked = True
-        Me.債権管理部ToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.債権管理部ToolStripMenuItem.Name = "債権管理部ToolStripMenuItem"
-        Me.債権管理部ToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
-        Me.債権管理部ToolStripMenuItem.Text = "債権管理部"
-        '
-        '総務課ToolStripMenuItem
-        '
-        Me.総務課ToolStripMenuItem.Name = "総務課ToolStripMenuItem"
-        Me.総務課ToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
-        Me.総務課ToolStripMenuItem.Text = "総務課"
-        '
-        '表示ToolStripMenuItem
-        '
-        Me.表示ToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripMenuItem2})
-        Me.表示ToolStripMenuItem.Name = "表示ToolStripMenuItem"
-        Me.表示ToolStripMenuItem.Size = New System.Drawing.Size(43, 19)
-        Me.表示ToolStripMenuItem.Text = "設定"
-        '
-        'ToolStripMenuItem2
-        '
-        Me.ToolStripMenuItem2.Name = "ToolStripMenuItem2"
-        Me.ToolStripMenuItem2.Size = New System.Drawing.Size(146, 22)
-        Me.ToolStripMenuItem2.Text = "ユーザー名設定"
-        '
         'Tab_3Mng
         '
         Me.Tab_3Mng.BackColor = System.Drawing.Color.Beige
         Me.Tab_3Mng.Controls.Add(Me.TextBox1)
         Me.Tab_3Mng.Controls.Add(Me.Button16)
-        Me.Tab_3Mng.Controls.Add(Me.DGV_MNG)
+        Me.Tab_3Mng.Controls.Add(Me.DGV_FPMNG)
         Me.Tab_3Mng.Location = New System.Drawing.Point(4, 20)
         Me.Tab_3Mng.Name = "Tab_3Mng"
         Me.Tab_3Mng.Padding = New System.Windows.Forms.Padding(3)
         Me.Tab_3Mng.Size = New System.Drawing.Size(1132, 682)
         Me.Tab_3Mng.TabIndex = 6
         Me.Tab_3Mng.Text = "管理表"
-        '
-        'DGV_MNG
-        '
-        Me.DGV_MNG.AllowUserToAddRows = False
-        Me.DGV_MNG.AllowUserToDeleteRows = False
-        Me.DGV_MNG.AllowUserToResizeColumns = False
-        Me.DGV_MNG.AllowUserToResizeRows = False
-        Me.DGV_MNG.BackgroundColor = System.Drawing.SystemColors.ControlLight
-        Me.DGV_MNG.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.[Single]
-        DataGridViewCellStyle32.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle32.BackColor = System.Drawing.Color.LightGray
-        DataGridViewCellStyle32.Font = New System.Drawing.Font("MS UI Gothic", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        DataGridViewCellStyle32.ForeColor = System.Drawing.SystemColors.WindowText
-        DataGridViewCellStyle32.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle32.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        DataGridViewCellStyle32.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.DGV_MNG.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle32
-        Me.DGV_MNG.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.DGV_MNG.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.Column27, Me.DataGridViewTextBoxColumn16, Me.DataGridViewTextBoxColumn18, Me.DataGridViewTextBoxColumn41, Me.DataGridViewTextBoxColumn42, Me.DataGridViewTextBoxColumn45, Me.DataGridViewTextBoxColumn46, Me.DataGridViewTextBoxColumn44, Me.DataGridViewTextBoxColumn43})
-        Me.DGV_MNG.Location = New System.Drawing.Point(1, 24)
-        Me.DGV_MNG.MultiSelect = False
-        Me.DGV_MNG.Name = "DGV_MNG"
-        Me.DGV_MNG.ReadOnly = True
-        Me.DGV_MNG.RowHeadersVisible = False
-        Me.DGV_MNG.RowHeadersWidth = 51
-        Me.DGV_MNG.RowTemplate.Height = 21
-        Me.DGV_MNG.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.DGV_MNG.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.DGV_MNG.Size = New System.Drawing.Size(1132, 408)
-        Me.DGV_MNG.TabIndex = 1181
-        Me.DGV_MNG.TabStop = False
         '
         'TextBox1
         '
@@ -2998,6 +2886,37 @@ Partial Class SCA1
         Me.Button16.TabIndex = 1600
         Me.Button16.Text = "検 索"
         Me.Button16.UseVisualStyleBackColor = False
+        '
+        'DGV_FPMNG
+        '
+        Me.DGV_FPMNG.AllowUserToAddRows = False
+        Me.DGV_FPMNG.AllowUserToDeleteRows = False
+        Me.DGV_FPMNG.AllowUserToResizeColumns = False
+        Me.DGV_FPMNG.AllowUserToResizeRows = False
+        Me.DGV_FPMNG.BackgroundColor = System.Drawing.SystemColors.ControlLight
+        Me.DGV_FPMNG.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.[Single]
+        DataGridViewCellStyle32.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle32.BackColor = System.Drawing.Color.LightGray
+        DataGridViewCellStyle32.Font = New System.Drawing.Font("MS UI Gothic", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        DataGridViewCellStyle32.ForeColor = System.Drawing.SystemColors.WindowText
+        DataGridViewCellStyle32.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle32.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle32.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.DGV_FPMNG.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle32
+        Me.DGV_FPMNG.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
+        Me.DGV_FPMNG.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.Column27, Me.DataGridViewTextBoxColumn16, Me.DataGridViewTextBoxColumn18, Me.DataGridViewTextBoxColumn41, Me.DataGridViewTextBoxColumn42, Me.DataGridViewTextBoxColumn45, Me.DataGridViewTextBoxColumn46, Me.DataGridViewTextBoxColumn44, Me.DataGridViewTextBoxColumn43})
+        Me.DGV_FPMNG.Location = New System.Drawing.Point(1, 24)
+        Me.DGV_FPMNG.MultiSelect = False
+        Me.DGV_FPMNG.Name = "DGV_FPMNG"
+        Me.DGV_FPMNG.ReadOnly = True
+        Me.DGV_FPMNG.RowHeadersVisible = False
+        Me.DGV_FPMNG.RowHeadersWidth = 51
+        Me.DGV_FPMNG.RowTemplate.Height = 21
+        Me.DGV_FPMNG.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
+        Me.DGV_FPMNG.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
+        Me.DGV_FPMNG.Size = New System.Drawing.Size(1132, 408)
+        Me.DGV_FPMNG.TabIndex = 1181
+        Me.DGV_FPMNG.TabStop = False
         '
         'Column27
         '
@@ -3090,19 +3009,69 @@ Partial Class SCA1
         Me.DataGridViewTextBoxColumn43.ReadOnly = True
         Me.DataGridViewTextBoxColumn43.Width = 90
         '
-        'Button17
+        'CreatorExpress1
         '
-        Me.Button17.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
-        Me.Button17.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None
-        Me.Button17.Font = New System.Drawing.Font("メイリオ", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.Button17.ForeColor = System.Drawing.Color.RoyalBlue
-        Me.Button17.Location = New System.Drawing.Point(465, 50)
-        Me.Button17.Name = "Button17"
-        Me.Button17.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.Button17.Size = New System.Drawing.Size(31, 28)
-        Me.Button17.TabIndex = 1769
-        Me.Button17.Text = "1"
-        Me.Button17.UseVisualStyleBackColor = False
+        Me.CreatorExpress1.RefAttrMode = True
+        Me.CreatorExpress1.TemporaryPath = ""
+        '
+        'データ読み込みToolStripMenuItem
+        '
+        Me.データ読み込みToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.機能ToolStripMenuItem})
+        Me.データ読み込みToolStripMenuItem.Name = "データ読み込みToolStripMenuItem"
+        Me.データ読み込みToolStripMenuItem.Size = New System.Drawing.Size(43, 19)
+        Me.データ読み込みToolStripMenuItem.Text = "機能"
+        '
+        '機能ToolStripMenuItem
+        '
+        Me.機能ToolStripMenuItem.Name = "機能ToolStripMenuItem"
+        Me.機能ToolStripMenuItem.Size = New System.Drawing.Size(164, 22)
+        Me.機能ToolStripMenuItem.Text = "F35データ読み込み"
+        '
+        '画面モードToolStripMenuItem
+        '
+        Me.画面モードToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.債権管理部ToolStripMenuItem, Me.総務課ToolStripMenuItem})
+        Me.画面モードToolStripMenuItem.Name = "画面モードToolStripMenuItem"
+        Me.画面モードToolStripMenuItem.Size = New System.Drawing.Size(68, 19)
+        Me.画面モードToolStripMenuItem.Text = "画面モード"
+        '
+        '債権管理部ToolStripMenuItem
+        '
+        Me.債権管理部ToolStripMenuItem.Checked = True
+        Me.債権管理部ToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.債権管理部ToolStripMenuItem.Name = "債権管理部ToolStripMenuItem"
+        Me.債権管理部ToolStripMenuItem.Size = New System.Drawing.Size(134, 22)
+        Me.債権管理部ToolStripMenuItem.Text = "債権管理部"
+        '
+        '総務課ToolStripMenuItem
+        '
+        Me.総務課ToolStripMenuItem.Name = "総務課ToolStripMenuItem"
+        Me.総務課ToolStripMenuItem.Size = New System.Drawing.Size(134, 22)
+        Me.総務課ToolStripMenuItem.Text = "総務課"
+        '
+        '表示ToolStripMenuItem
+        '
+        Me.表示ToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripMenuItem2})
+        Me.表示ToolStripMenuItem.Name = "表示ToolStripMenuItem"
+        Me.表示ToolStripMenuItem.Size = New System.Drawing.Size(43, 19)
+        Me.表示ToolStripMenuItem.Text = "設定"
+        '
+        'ToolStripMenuItem2
+        '
+        Me.ToolStripMenuItem2.Name = "ToolStripMenuItem2"
+        Me.ToolStripMenuItem2.Size = New System.Drawing.Size(146, 22)
+        Me.ToolStripMenuItem2.Text = "ユーザー名設定"
+        '
+        'MenuStrip1
+        '
+        Me.MenuStrip1.Font = New System.Drawing.Font("Yu Gothic UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.データ読み込みToolStripMenuItem, Me.画面モードToolStripMenuItem, Me.表示ToolStripMenuItem})
+        Me.MenuStrip1.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.Flow
+        Me.MenuStrip1.Location = New System.Drawing.Point(0, 0)
+        Me.MenuStrip1.Name = "MenuStrip1"
+        Me.MenuStrip1.Padding = New System.Windows.Forms.Padding(6, 0, 0, 0)
+        Me.MenuStrip1.Size = New System.Drawing.Size(1139, 19)
+        Me.MenuStrip1.TabIndex = 1574
+        Me.MenuStrip1.Text = "MenuStrip1"
         '
         'SCA1
         '
@@ -3121,7 +3090,6 @@ Partial Class SCA1
         Me.Name = "SCA1"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "顧客管理"
-        Me.CMenu_DGV3.ResumeLayout(False)
         Me.Tab_4Dun.ResumeLayout(False)
         Me.Tab_4Dun.PerformLayout()
         CType(Me.DGV4, System.ComponentModel.ISupportInitialize).EndInit()
@@ -3144,11 +3112,11 @@ Partial Class SCA1
         Me.Tab_6GA.ResumeLayout(False)
         Me.Tab_6GA.PerformLayout()
         CType(Me.DGV_MR1, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.MenuStrip1.ResumeLayout(False)
-        Me.MenuStrip1.PerformLayout()
         Me.Tab_3Mng.ResumeLayout(False)
         Me.Tab_3Mng.PerformLayout()
-        CType(Me.DGV_MNG, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.DGV_FPMNG, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.MenuStrip1.ResumeLayout(False)
+        Me.MenuStrip1.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -3156,10 +3124,6 @@ Partial Class SCA1
 
     Friend WithEvents PBXX As Button
     Friend WithEvents tt1 As ToolTip
-    Friend WithEvents CMenu_DGV3 As ContextMenuStrip
-    Friend WithEvents 完了ToolStripMenuItem As ToolStripMenuItem
-    Friend WithEvents menuItem_Comp As ToolStripMenuItem
-    Friend WithEvents menuItem_NotComp As ToolStripMenuItem
     Friend WithEvents L_UPDMsg As Label
     Friend WithEvents Tab_4Dun As TabPage
     Friend WithEvents DGV4 As DataGridView
@@ -3312,11 +3276,6 @@ Partial Class SCA1
     Friend WithEvents Label2 As Label
     Friend WithEvents CB_A7 As ComboBox
     Friend WithEvents Button18 As Button
-    Friend WithEvents MenuStrip1 As MenuStrip
-    Friend WithEvents 表示ToolStripMenuItem As ToolStripMenuItem
-    Friend WithEvents ToolStripMenuItem2 As ToolStripMenuItem
-    Friend WithEvents データ読み込みToolStripMenuItem As ToolStripMenuItem
-    Friend WithEvents 機能ToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents Tab_6GA As TabPage
     Friend WithEvents CB_MRLIST As ComboBox
     Friend WithEvents TextBox2 As TextBox
@@ -3346,9 +3305,6 @@ Partial Class SCA1
     Friend WithEvents BT_MRDel As Button
     Friend WithEvents BT_MREdit As Button
     Friend WithEvents PAN_A As Panel
-    Friend WithEvents 画面モードToolStripMenuItem As ToolStripMenuItem
-    Friend WithEvents 債権管理部ToolStripMenuItem As ToolStripMenuItem
-    Friend WithEvents 総務課ToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents CB_Person As ComboBox
     Friend WithEvents CB_MRRangeAll As CheckBox
     Friend WithEvents Label3 As Label
@@ -3370,7 +3326,7 @@ Partial Class SCA1
     Friend WithEvents Label8 As Label
     Friend WithEvents TB_MRPaymentDate As TextBox
     Friend WithEvents Tab_3Mng As TabPage
-    Friend WithEvents DGV_MNG As DataGridView
+    Friend WithEvents DGV_FPMNG As DataGridView
     Friend WithEvents TextBox1 As TextBox
     Friend WithEvents Button16 As Button
     Friend WithEvents Column27 As DataGridViewTextBoxColumn
@@ -3383,4 +3339,12 @@ Partial Class SCA1
     Friend WithEvents DataGridViewTextBoxColumn44 As DataGridViewTextBoxColumn
     Friend WithEvents DataGridViewTextBoxColumn43 As DataGridViewTextBoxColumn
     Friend WithEvents Button17 As Button
+    Friend WithEvents データ読み込みToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents 機能ToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents 画面モードToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents 債権管理部ToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents 総務課ToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents 表示ToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents ToolStripMenuItem2 As ToolStripMenuItem
+    Friend WithEvents MenuStrip1 As MenuStrip
 End Class
