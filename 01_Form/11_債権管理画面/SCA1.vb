@@ -280,7 +280,7 @@ Public Class SCA1
         ' DGV2の指定行を削除
         Cursor.Current = Cursors.WaitCursor             ' マウスカーソルを砂時計に
         db.ExeSQL(Sqldb.TID.SCD, "Delete From FKSCD Where FKD01 = '" & id & "'")
-        ExUpdateButton()
+        'ExUpdateButton()
     End Sub
 
     ' 更新ボタン DGV1
