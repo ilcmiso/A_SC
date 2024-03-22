@@ -87,6 +87,7 @@ Public Class Sqldb
 
     Public OrgDataTable(DBTbl.GetLength(0) - 1) As DataTable               ' 各DBテーブルのマスターテーブル
     Public OrgDataTablePlusAssist As DataTable                                  ' FKSC+Assist のマスターテーブル
+    Public DTLastUpdateTime(DBTbl.GetLength(0) - 1) As DateTime            ' 各DBテーブルの最終更新日
     Private ReadOnly svCon(DBTbl.GetLength(0) - 1) As SQLiteConnection     ' サーバーコネクション
     Private ReadOnly svCmd(DBTbl.GetLength(0) - 1) As SQLiteCommand
     Private ReadOnly loCon(DBTbl.GetLength(0) - 1) As SQLiteConnection     ' ローカルコネクション
@@ -424,6 +425,7 @@ Public Class Sqldb
         log.cLog($"UpdateOrigDT:{[Enum].GetName(GetType(TID), tid)}")
         cmn.UpdPBar("顧客情報の構築中")
         OrgDataTable(tid) = ReadOrgDtSelect(tid)
+        DTLastUpdateTime(tid) = Now     ' 最終更新日を設定
     End Sub
 
     ' オリジナルDT(アシスト)の更新 FKSC+AssistのDataTableを作成
@@ -642,6 +644,14 @@ Public Class Sqldb
         Cursor.Current = Cursors.Default             ' マウスカーソルを元に戻す
     End Sub
 
+    ' データベースの最終更新日を確認して、更新直後ならキャッシュがなくLINQを使用したほうが処理速度が早いことを利用するための判定。
+    ' Return : True  更新直後ではなくキャッシュあり
+    '          False 更新直後　※DB更新から1秒未満
+    Public Function CheckDBUpdateCache(tid As Integer) As Boolean
+        Dim uptimeDiff As Double = (DateTime.Now - DTLastUpdateTime(tid)).TotalSeconds
+        log.cLog($" uptimeDiff({tid}) : {uptimeDiff >= 1} {uptimeDiff}")
+        Return uptimeDiff >= 1
+    End Function
 
 
 End Class

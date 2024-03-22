@@ -41,6 +41,7 @@ Public Class SCA1
     ' イベントハンドラーロック 記録一覧チェックリストボックス
     Private LockEventHandler_CLB As Boolean = False
     'Private LockEventHandler_LCSum As Boolean = False               ' 延滞損害金の表示
+    Private MyDBUpdate As Boolean = False                            ' 自分がDB更新したフラグ
     Private PIItemList As String()                                   ' 物件情報の大項目
     ' スレッド
     Private ReadOnly Thread_Entry As Thread = Nothing
@@ -80,9 +81,9 @@ Public Class SCA1
         DunInit()                   ' 督促管理の初期設定
         ' DGVちらつき防止
         cmn.SetDoubleBufferDGV(DGV1, DGV2, DGV4, DGV5, DGV6, DGV7, DGV9, DGV_MR1, DGV_FPMNG)
-        ' ファイル監視開始
-        fwatchers = New List(Of FileWatcher)
-        FWatchingStart()
+        ' ファイル監視開始 ※ファイル監視によるDB更新を行うと排他競合がおこりアプリが強制終了してしまう問題があるので一旦行わない
+        'fwatchers = New List(Of FileWatcher)
+        'FWatchingStart()
 
         ' 物件情報初期設定
         PIItemList = {"基本物件情報", "任売", "競売①", "競売②", "再生・破産①", "再生・破産②", "再生・破産③", "差押①", "差押②", "差押③"}
@@ -101,6 +102,9 @@ Public Class SCA1
     End Sub
 
     Private Sub SCA1_Shown(sender As Object, e As EventArgs) Handles Me.Shown
+        ' 着信ログ、DBファイル監視開始
+        StartWatching()
+
         ' イベントハンドラ設定
         AddHandler DGV1.CellEnter, AddressOf DGV1_CellEnter
         SearchOptionInit()          ' 検索オプションフォーム初期設定
@@ -204,7 +208,7 @@ Public Class SCA1
 
 
     Private Sub FLS_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
-        FWatchingEnd()
+        'FWatchingEnd()
         'thSC.Dispose()
         xml.SetAutoUpd(CB_AUTOUPD.Checked)
     End Sub
@@ -280,7 +284,7 @@ Public Class SCA1
         ' DGV2の指定行を削除
         Cursor.Current = Cursors.WaitCursor             ' マウスカーソルを砂時計に
         db.ExeSQL(Sqldb.TID.SCD, "Delete From FKSCD Where FKD01 = '" & id & "'")
-        'ExUpdateButton()
+        ExUpdateButton()
     End Sub
 
     ' 更新ボタン DGV1
@@ -396,6 +400,29 @@ Public Class SCA1
 
 #End Region
 
+#Region "Thread"
+    ' アプリ更新通知
+    Public Sub NoticeUpdateApp(result As Integer)
+        log.cLog("EventCB: アプリ更新通知 result: " & result)
+        L_UPDMsg.Visible = True
+    End Sub
+
+    ' DB更新通知 SCD
+    Public Sub NoticeUpdateDB_SCD(result As Integer)
+        log.cLog("EventCB: DB-SCD更新通知result: " & result)
+        ShowDGVList(DGV2)
+        ShowDGVList(DGV4)
+        ShowDGVList(DGV5)
+    End Sub
+
+    ' DB更新通知 PI
+    Public Sub NoticeUpdateDB_PI(result As Integer)
+        log.cLog("EventCB: DB-PI更新通知result: " & result)
+        ShowDGVList(DGV7)
+    End Sub
+
+#End Region
+
 #Region "表示"
     ' 各DGVの表示
     Private Sub ShowDGVList(dgv As DataGridView)
@@ -436,7 +463,14 @@ Public Class SCA1
                 bindID = 1
                 ' DGV1の選択した顧客の交渉記録をフィルタ表示
                 If DGV1.Rows.Count > 0 Then
-                    Dim dr As DataRow() = db.OrgDataTable(Sqldb.TID.SCD).Select("FKD02 = '" & DGV1.CurrentRow.Cells(0).Value & "'")
+                    Dim dr As DataRow() = Nothing
+                    If db.CheckDBUpdateCache(Sqldb.TID.SCD) Then
+                        dr = db.OrgDataTable(Sqldb.TID.SCD).Select("FKD02 = '" & DGV1.CurrentRow.Cells(0).Value & "'")
+                    Else
+                        Dim query = From row In db.OrgDataTable(Sqldb.TID.SCD).AsEnumerable()
+                                    Where row.Field(Of String)("FKD02") = DGV1.CurrentRow.Cells(0).Value.ToString()
+                        dr = query.ToArray()
+                    End If
                     If dr.Length > 0 Then dt = dr.CopyToDataTable
                 End If
             'Case dgv Is DGV3                                ' ## タスクタブ リスト
@@ -815,6 +849,122 @@ Public Class SCA1
         tt1.SetToolTip(TB_SearchInput, "「債権番号」「債務者名」「連帯債務者名」「各電話番号」から検索できます。")   ' ツールチップ
         tt1.SetToolTip(BT_B1, "左の表(債務者一覧)から、追加したい債務者を複数選択して同時に追加できます。" & vbCrLf &
                               "同時に選択するには、Ctrlキーを押しながら左クリックします。")     ' ツールチップ
+    End Sub
+#End Region
+
+#Region "ファイル監視関連"
+    ' ファイル監視準備 開始
+    '   以下の2つの方法でファイルを監視する。
+    '   1: FileSystemWacher = 監視APIだけどsamba非対応だから環境によっては検出できない
+    '   2: 非同期タスク(200ms周期)でタイムスタンプを監視して検出 (sambaだったとき用) ちょっと遅い
+    '  どっちも検出するパターンはあるが、同じイベントは2度通知されないようにしてある
+    Private Watcher As FileSystemWatcher
+    Private Sub StartWatching()
+        Try
+            ' 監視機能②  周期監視による監視     タイムラグあるけどsambaも対応    対象：着信ログ、DB更新、TaskDB更新
+            PoolingFiles()
+        Catch ex As Exception
+            ' 監視ファイルが無い等の理由で監視できない
+            MsgBox("エラーにより自動更新が出来ていない可能性があります。")
+        End Try
+    End Sub
+
+    ' 監視機能② ポーリング処理
+    Private Sub PoolingFiles()
+        ' 監視対象一覧             監視識別子      監視ファイルパス(*付きは複数ファイル)
+        Dim PList(,) As String = {{POLLING_ID_CUDB, db.CurrentPath_SV & Common.DIR_UPD & Sqldb.DB_FKSC},           ' DB   FKSC.DB3
+                                  {POLLING_ID_ASC, db.CurrentPath_SV & Common.DIR_UPD & Common.EXE_NAME},          ' EXE  A_SC.exe
+                                  {POLLING_ID_SCD, db.CurrentPath_SV & Common.DIR_DB3 & Sqldb.DB_FKSCLOG}}         ' FKSC.LOG.db3
+        Const PL_ID As Integer = 0
+        Const PL_FILE As Integer = 1
+
+        ' 監視対象一覧分のタイマー生成
+        Dim LastTime(PList.GetLength(0) - 1) As String      ' 最終更新時刻(ファイル更新時に更新)
+
+        ' 監視タスク起動 非同期
+        Dim task2 As Task = Task.Run(
+                Sub()
+                    ' 周期監視
+                    Dim firstCycle As Boolean = True        ' 一周目は更新実行せずタイムスタンプだけ更新
+                    PoolingStart = True
+                    While PoolingStart
+                        For n = 0 To PList.GetLength(0) - 1
+                            Dim updateFlag As Boolean = False               ' 更新フラグ
+                            Dim filePath As String = PList(n, PL_FILE)      ' 監視対象ファイルフルパス
+                            ' 監視対象パスに存在するファイルを全て取得
+                            Dim fileList As String() = Nothing
+                            Try
+                                ' たまにネットワークアドレスにアクセスできないエラーが出る？からそのときはスルーするためのtry
+                                fileList = Directory.GetFileSystemEntries(Path.GetDirectoryName(filePath), Path.GetFileName(filePath))
+                            Catch ex As Exception
+                                Continue For
+                            End Try
+                            For Each f As String In fileList
+                                Dim fTime As String = File.GetLastWriteTime(f)             ' タイムスタンプ取得
+                                'log.cLog($"[cycle] {f} : {fTime} == lastTime {LastTime(n)}")
+                                If LastTime(n) < fTime Then
+                                    ' ファイル更新を検出
+                                    If EditForm IsNot Nothing Then
+                                        If EditForm.Visible Then Continue For                   ' 交渉記録の編集中は更新しない
+                                    End If
+
+                                    log.cLog("cycle - FUPD検出:" & PList(n, PL_ID))
+                                    updateFlag = True
+                                    LastTime(n) = fTime
+                                End If
+                            Next
+
+                            If firstCycle Then Continue For      ' 初回はファイル更新時刻の初期設定のために必ず更新が発生する、ただし更新はしない
+                            'If MyDBUpdate Then Continue For      ' 自分自身のDB更新だったら更新しない
+                            If Not updateFlag Then Continue For
+
+                            log.cLog("cycle - 実行:" & PList(n, PL_ID))
+                            Invoke(New delegate_PoolingCallBack(AddressOf PoolingCallBack), PList(n, PL_ID))
+                            updateFlag = False
+                            MyDBUpdate = False
+                        Next
+                        firstCycle = False
+                        Thread.Sleep(POLLING_CYCLE)
+                    End While
+                End Sub
+            )
+    End Sub
+
+    ' 監視機能② イベント受信 (Pooling)                     
+    Private Sub PoolingCallBack(id As String)
+        log.cLog("Pooling 検出: " & id)
+        Select Case id
+            Case POLLING_ID_SCD     ' SCD DB更新
+                Invoke(New MethodInvoker(AddressOf UpdateDB_SCD))          ' SCD更新
+            Case POLLING_ID_CUDB    ' 顧客DB更新
+                Invoke(New MethodInvoker(AddressOf DownloadCustomerDB))    ' 顧客DBのダウンロード更新
+            Case POLLING_ID_ASC     ' A_SC本体の更新
+                Invoke(New MethodInvoker(AddressOf NoticeUpdate_ASC))      ' A_SC更新
+        End Select
+    End Sub
+
+    ' 他PCでDB更新を通知
+    Private Sub UpdateDB_SCD()
+        log.cLog("-- UpdateDB_SCD")
+        ' L_UPD.Visible = True
+
+        ' 自動更新チェックがONの場合のみ自動更新
+        If CB_AUTOUPD.Checked Then
+            ExUpdateButton()
+        End If
+
+    End Sub
+
+    ' 顧客DBの更新の検出
+    Private Sub DownloadCustomerDB()
+        log.cLog(" -- DownloadCustomerDB")
+        L_UPDMsg.Visible = True
+    End Sub
+
+    ' A_SC本体の更新の検出
+    Private Sub NoticeUpdate_ASC()
+        log.cLog(" -- NoticeUpdate_ASC")
+        L_UPDMsg.Visible = True
     End Sub
 #End Region
 
