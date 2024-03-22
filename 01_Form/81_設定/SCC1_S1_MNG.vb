@@ -78,7 +78,7 @@ Public Class SCC1_S1_MNG
                 log.cLog(dt.Rows.Count)
                 For n = 0 To dt.Rows.Count - 1
                     cmd = String.Format("Update FKSCREM Set FKR06 = '{0}' Where FKR01 = '{1}'", dt.Rows(n)(1).ToString.Replace("-", ""), dt.Rows(n)(0))
-                    db.AddSQL(cmd)
+                    db.AddSQL(Sqldb.TID.SCR, cmd)
                 Next
                 log.cLog(dt.Rows.Count)
                 db.ExeSQL(Sqldb.TID.SCR)

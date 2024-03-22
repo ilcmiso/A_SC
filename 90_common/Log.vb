@@ -60,12 +60,14 @@ Public Class Log
         End Try
 
         Dim filePath As String = CurrentPath & Common.DIR_LOG & file & "_" & My.Computer.Name & EXTENSION_LOG       ' ファイルパス  \\xxx\Log\[File_Name]_[User_Name].log
-
-        Using sw As StreamWriter = New StreamWriter(filePath, True, Encoding.GetEncoding("shift_jis"))
-            Dim sf As New StackFrame(2)
-            sw.WriteLine(DateTime.Now.ToString("[" & Tag & "] yyyy/MM/dd HH:mm:ss:fff # ") & My.Computer.Name.PadRight(15) & " ## " & SC.SCVer & " [" & sf.GetMethod.Name & "] " & msg)
-            If Tag = TagE Then sw.WriteLine("# TRACE #" & vbCrLf & Environment.StackTrace)                                  ' ERR時はバックトレース出力
-        End Using
+        Try
+            Using sw As StreamWriter = New StreamWriter(filePath, True, Encoding.GetEncoding("shift_jis"))
+                Dim sf As New StackFrame(2)
+                sw.WriteLine(DateTime.Now.ToString("[" & Tag & "] yyyy/MM/dd HH:mm:ss:fff # ") & My.Computer.Name.PadRight(15) & " ## " & SC.SCVer & " [" & sf.GetMethod.Name & "] " & msg)
+                If Tag = TagE Then sw.WriteLine("# TRACE #" & vbCrLf & Environment.StackTrace)                                  ' ERR時はバックトレース出力
+            End Using
+        Catch ex As Exception
+        End Try
     End Sub
 
     ' デバッグログ(Console)

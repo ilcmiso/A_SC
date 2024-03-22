@@ -226,7 +226,7 @@ Public Class SCE_S2
                                         TB_A10.Text & "','" &               ' 送付先住所
                                         TB_A11.Text & "','" &               ' 送付先名前
                                         CB_A9.Text & "')"                   ' 発送種別
-        SCA1.db.AddSQL(SqlCmd)
+        SCA1.db.AddSQL(Sqldb.TID.SCD, SqlCmd)
     End Sub
 
     ' 顧客選択

@@ -168,7 +168,7 @@ Public Class SCA1
 
     Sub CBWatcherUpdFPI()
         log.cLog("[CB][Watcher] Upd FPI")
-        db.UpdateOrigDT(Sqldb.TID.FPI)
+        db.UpdateOrigDT(Sqldb.TID.FPIB)
     End Sub
 
     Sub CBWatcherUpdEXE()
@@ -987,7 +987,7 @@ Public Class SCA1
         Dim sqlCmd As String
         For n = 0 To DGV5.SelectedRows.Count - 1
             sqlCmd = "Delete From FKSCD Where FKD01 = '" & DGV5.SelectedRows(n).Cells(0).Value & "'"
-            db.AddSQL(sqlCmd)
+            db.AddSQL(Sqldb.TID.SCD, sqlCmd)
         Next
         db.ExeSQL(Sqldb.TID.SCD)
         ShowDGVList(DGV5)
@@ -1291,7 +1291,7 @@ Public Class SCA1
             Dim Name1 As String = DGV6.Rows(n).Cells(2).Value
             Dim Name2 As String = DGV6.Rows(n).Cells(3).Value
             ' 読み込みデータをDB新規登録
-            db.AddSQL("Insert Into FKSCD Values('" & dNowM & n & "', '" &                                       ' ユニーク番号
+            db.AddSQL(Sqldb.TID.SCD, "Insert Into FKSCD Values('" & dNowM & n & "', '" &                        ' ユニーク番号
                                                      DGV6.Rows(n).Cells(0).Value & "', '" &                     ' 顧客番号
                                                      DTP_DunA1.Value.ToString("yyyy/MM/dd 00:00") & "', '" &    ' 日時 (督促日で記録したいと要望があったので督促日の00:00)
                                                      "契約者（本人）" & "', '" &                                ' 相手
@@ -1316,7 +1316,7 @@ Public Class SCA1
             If CB_DunA7.SelectedIndex = 0 And DGV6.Rows(n).Cells(7).Value = DGV6.Rows(n).Cells(8).Value Then Continue For
 
             ' 別住所の連帯債務者単独のDB新規登録
-            db.AddSQL("Insert Into FKSCD Values('" & dNowM & n & "R', '" &                                  ' ユニーク番号 +R
+            db.AddSQL(Sqldb.TID.SCD, "Insert Into FKSCD Values('" & dNowM & n & "R', '" &                       ' ユニーク番号 +R
                                                      DGV6.Rows(n).Cells(0).Value & "', '" &                     ' 顧客番号
                                                      DTP_DunA1.Value.ToString("yyyy/MM/dd 00:00") & "', '" &    ' 日時 (督促日で記録したいと要望があったので督促日の00:00)
                                                      "連帯債務者" & "', '" &                                    ' 相手
@@ -1374,7 +1374,7 @@ Public Class SCA1
         Dim sqlCmd As String
         For n = 0 To DGV4.Rows.Count - 1
             sqlCmd = "Delete From FKSCD Where FKD01 = '" & DGV4(0, n).Value & "'"
-            db.AddSQL(sqlCmd)
+            db.AddSQL(Sqldb.TID.SCD, sqlCmd)
         Next
         Cursor.Current = Cursors.WaitCursor             ' マウスカーソルを砂時計に
         db.ExeSQL(Sqldb.TID.SCD)

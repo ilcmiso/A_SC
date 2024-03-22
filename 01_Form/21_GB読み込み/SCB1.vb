@@ -602,11 +602,11 @@ Public Class SCB1
             If dt.Rows.Count > 0 Then
                 ' 既存の行をアップデート
                 Dim updateCommand As String = $"UPDATE TBL SET C02='{row("延滞元利金（累計）").ToString()}', C03='{row("延滞損害金（累計）").ToString()}', C04='{row("延滞損害金単価（今後）").ToString()}' WHERE C01='{C01Value}'"
-                db.AddSQL(updateCommand)
+                db.AddSQL(Sqldb.TID.AC, updateCommand)
             Else
                 ' 新しい行を挿入
                 Dim insertCommand As String = $"INSERT INTO TBL (C01, C02, C03, C04) VALUES ('{C01Value}', '{row("延滞元利金（累計）").ToString()}', '{row("延滞損害金（累計）").ToString()}', '{row("延滞損害金単価（今後）").ToString()}')"
-                db.AddSQL(insertCommand)
+                db.AddSQL(Sqldb.TID.AC, insertCommand)
             End If
         Next
         db.ExeSQL(Sqldb.TID.AC)

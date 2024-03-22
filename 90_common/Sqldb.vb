@@ -27,15 +27,16 @@ Public Class Sqldb
     Public Const TBL_FKSC As String = "FKSC"
     Public Const TBL_FKSCREM As String = "FKSCREM"
     Public Const TBL_FKSCD As String = "FKSCD"
-    Public Const TBL_TODO As String = "TODO"
     Public Const TBL_ITEM As String = "ITEM"
     Public Const TBL_STANDARD As String = "TBL"
+    Public Const TBL_VALUES As String = "VAL"
     ' DB保管場所の識別子
     Private Const DBLO As Integer = 0       ' ローカルに保管
     Private Const DBSV As Integer = 1       ' サーバーに保管
 
-    ' テスト用通信ラグ
-    Private Const LAGTEST_DELAY As Integer = 0
+    ' リトライ回数、間隔
+    Private Const RETRYCNT = 50
+    Private Const RETRYDELAY = 200
 
     Private ReadOnly RegIDList As List(Of String)      ' 連続登録用 顧客IDリスト  連続登録時の同じ顧客IDを多重Insert防止
 
@@ -47,7 +48,8 @@ Public Class Sqldb
         {DB_FKSCLOG, TBL_FKSCREM, 6, "FKR", DBSV, True},
         {DB_FKSCLOG, TBL_FKSCD, 17, "FKD", DBSV, True},
         {DB_FKSCPI, TBL_STANDARD, 11, "C", DBSV, True},
-        {DB_FKSCFPI, TBL_STANDARD, 4, "C", DBSV, True},
+        {DB_FKSCFPI, TBL_STANDARD, 15, "C", DBSV, True},
+        {DB_FKSCFPI, TBL_VALUES, 34, "C", DBSV, True},
         {DB_FKSCPI, TBL_ITEM, 5, "C", DBSV, True},
         {DB_FKSCASSIST, TBL_STANDARD, 28, "C", DBLO, True},
         {DB_AUTOCALL, TBL_STANDARD, 4, "C", DBSV, True},
@@ -62,7 +64,8 @@ Public Class Sqldb
         SCR          ' FKSCREM
         SCD          ' FKSCD
         PI           ' PINFO
-        FPI          ' FPINFO 融資物件情報
+        FPIB         ' FPINFO 融資物件 基本情報
+        FPIV         ' FPINFO 融資物件 付随情報
         PIM          ' PINFO MASTER(ITEM)
         SCAS         ' ASSIST
         AC           ' AutoCall
@@ -88,7 +91,7 @@ Public Class Sqldb
     Private ReadOnly svCmd(DBTbl.GetLength(0) - 1) As SQLiteCommand
     Private ReadOnly loCon(DBTbl.GetLength(0) - 1) As SQLiteConnection     ' ローカルコネクション
     Private ReadOnly loCmd(DBTbl.GetLength(0) - 1) As SQLiteCommand
-    Private cmdl As List(Of String)
+    Private cmdl() As List(Of String)
 
 
     ' コンストラクタ(初期化設定)
@@ -111,6 +114,13 @@ Public Class Sqldb
             svCmd(n).Connection = svCon(n)
             loCmd(n).Connection = loCon(n)
         Next
+
+        Dim typeCount As Integer = [Enum].GetValues(GetType(TID)).Length
+        ReDim cmdl(typeCount - 1)
+        For i As Integer = 0 To typeCount - 1
+            cmdl(i) = New List(Of String)()
+        Next
+
         ' ColumnsInit()
         CreateDBFiles()         ' DBファイルの新規作成
     End Sub
@@ -192,7 +202,7 @@ Public Class Sqldb
     '          複数 AddSQL(Sqldb.DBSC, "Insert ..")
     '               SQLExe(Sqldb.DBSC)
     Public Function ExeSQL(TableID As Integer, SqlCmd As String) As Boolean
-        AddSQL(SqlCmd)
+        AddSQL(TableID, SqlCmd)
         Dim ret As Boolean
         If DBTbl(TableID, DBID.DBSTRG) = DBLO Then
             ret = CommonSQLExe(TableID, loCon(TableID), loCmd(TableID))
@@ -212,13 +222,13 @@ Public Class Sqldb
     End Function
     Private Function CommonSQLExe(TableID As Integer, con As SQLiteConnection, cmd As SQLiteCommand) As Boolean
         'mtx.Lock(Mutex.MTX_LOCK_W, TableID)
-        If cmdl Is Nothing Then Return False
+        If cmdl(TableID) Is Nothing Then Return False
         Dim ret As Boolean = True
         DBFileDL(TableID)
         Try
             con.Open()
             cmd.Transaction = con.BeginTransaction()            ' トランザクション開始
-            For Each c In cmdl
+            For Each c In cmdl(TableID)
                 cmd.CommandText = c
                 cmd.ExecuteNonQuery()
             Next
@@ -226,7 +236,7 @@ Public Class Sqldb
             Select Case TableID
                 Case TID.PI
                 Case Else
-                    log.D(Log.DB, cmdl)                                 ' DBログ書き込み => DB変更通知になる
+                    log.D(Log.DB, cmdl(TableID))                                 ' DBログ書き込み => DB変更通知になる
             End Select
             log.cLog($"SQLExe: [{[Enum].GetName(GetType(TID), TableID)}]{cmd.CommandText}")
         Catch ex As Exception
@@ -236,7 +246,7 @@ Public Class Sqldb
             MsgBox("DB書き込みで異常が見つかりました。" & vbCrLf & ex.Message)
         End Try
         con.Close()
-        cmdl.Clear()
+        cmdl(TableID).Clear()
         RegIDList.Clear()
         'DBFileUP(TableID)
         'mtx.UnLock(TableID)
@@ -245,9 +255,8 @@ Public Class Sqldb
     End Function
 
     ' SQLコマンド用リスト追加IF
-    Public Sub AddSQL(SqlCmd As String)
-        If cmdl Is Nothing Then cmdl = New List(Of String)     ' cmdlが未生成ならNew
-        cmdl.Add(SqlCmd)
+    Public Sub AddSQL(TableID As Integer, SqlCmd As String)
+        cmdl(TableID).Add(SqlCmd)
     End Sub
 
     ' DBファイルダウンロード
@@ -267,18 +276,22 @@ Public Class Sqldb
     Public Sub DBFileFDL(TableID As Integer)
         Dim svPath = CurrentPath_SV & Common.DIR_DB3 & DBTbl(TableID, DBID.DBNAME)
         Dim loPath = CurrentPath_LO & DBTbl(TableID, DBID.DBNAME)
-        log.TimerST()
-        If Not File.Exists(svPath) Then Exit Sub  ' ファイルがサーバーになければ終了
+        If Not File.Exists(svPath) Then
+            log.cLog($"DBFileFDL: ファイルが見つからない -> {svPath}")
+            Exit Sub  ' ファイルがサーバーになければ終了
+        End If
         File.Copy(svPath, loPath, True)
         log.cLog("DB-DL Comp: " & loPath)
-        'log.TimerED("DBFileFDL:" & loPath)
     End Sub
 
     ' DBファイルアップロード
     Public Sub DBFileUP(TableID As Integer)
         Dim svPath = CurrentPath_SV & Common.DIR_DB3 & DBTbl(TableID, DBID.DBNAME)
         Dim loPath = CurrentPath_LO & DBTbl(TableID, DBID.DBNAME)
-        If Not File.Exists(loPath) Then Exit Sub  ' ファイルがローカルになければ終了
+        If Not File.Exists(loPath) Then
+            log.cLog($"DBFileUP: ファイルが見つからない -> {loPath}")
+            Exit Sub  ' ファイルがローカルになければ終了
+        End If
         If File.GetLastWriteTime(svPath) <> File.GetLastWriteTime(loPath) Then
             File.Copy(loPath, svPath, True)       ' 更新時刻が異なればダウンロード
             log.cLog("Sqldb:DB-UP: " & svPath)
@@ -290,7 +303,6 @@ Public Class Sqldb
         Return ReadOrgDtSelect(TableID, "Select * From " & DBTbl(TableID, DBID.TABLE))
     End Function
     Public Function ReadOrgDtSelect(TableID As Integer, WhereCmd As String) As DataTable
-        Const RETRYCNT As Integer = 20
 
         'mtx.Lock(Mutex.MTX_LOCK_R, TableID)
         DBFileDL(TableID)                               ' ローカルを最新にする
@@ -336,7 +348,7 @@ Public Class Sqldb
             End Try
             ' まれに競合更新？でcmd.ExexuteReaderでException発生するので、その場合にはリトライ
             If dtr IsNot Nothing Then Exit For
-            Threading.Thread.Sleep(50)
+            Threading.Thread.Sleep(RETRYDELAY)
         Next
         If dtr IsNot Nothing Then
             If Not dtr.IsClosed Then dtr.Close()
@@ -375,7 +387,6 @@ Public Class Sqldb
 
     ' 汎用SQL文結果取得
     Public Function GetSelect(TableID As Integer, SqlCmd As String) As DataTable
-        Const RETRYCNT As Integer = 20
         'mtx.Lock(Mutex.MTX_LOCK_R, TableID)
         Dim con As SQLiteConnection = loCon(TableID)
         Dim cmd As SQLiteCommand = loCmd(TableID)
@@ -384,7 +395,6 @@ Public Class Sqldb
         DBFileDL(TableID)
         For cnt = 1 To RETRYCNT
             Try
-                Threading.Thread.Sleep(LAGTEST_DELAY)
                 con.Open()
                 cmd.CommandText = SqlCmd
                 dtr = cmd.ExecuteReader                                  ' SQL結果取得
@@ -394,7 +404,7 @@ Public Class Sqldb
             End Try
             ' まれに競合更新？でcmd.ExexuteReaderでException発生するので、その場合にはリトライ
             If dtr IsNot Nothing Then Exit For
-            Threading.Thread.Sleep(50)
+            Threading.Thread.Sleep(RETRYDELAY)
         Next
         If dtr IsNot Nothing Then
             If Not dtr.IsClosed Then dtr.Close()
@@ -494,7 +504,7 @@ Public Class Sqldb
 
     ' DB最適化
     Public Function SQLReflesh(TableID As Integer)
-        mtx.Lock(Mutex.MTX_LOCK_W, TableID)
+        'mtx.Lock(Mutex.MTX_LOCK_W, TableID)
         Dim con As SQLiteConnection = svCon(TableID)
         Dim cmd As SQLiteCommand = svCmd(TableID)
         Dim ret As Boolean = True
@@ -506,7 +516,7 @@ Public Class Sqldb
             MsgBox("DB書き込みで異常が見つかりました。" & vbCrLf & ex.Message)
         End Try
         con.Close()
-        mtx.UnLock(TableID)
+        'mtx.UnLock(TableID)
         Return ret
     End Function
 
@@ -542,7 +552,7 @@ Public Class Sqldb
             RegIDList.Add(cid)
         End If
         'ExeSQL(TableID, cmd)
-        AddSQL(cmd)
+        AddSQL(TableID, cmd)
         Return True
     End Function
     ' 簡易Insert/Update (List型)
@@ -565,7 +575,7 @@ Public Class Sqldb
             arg += ",''"        ' 引数がDB数より少ない場合は空白を付与
         Next
         cmd = $"Insert Into [{DBTbl(TableID, DBID.TABLE)}] Values({arg})"
-        AddSQL(cmd)
+        AddSQL(TableID, cmd)
         Return True
     End Function
 
@@ -593,33 +603,43 @@ Public Class Sqldb
 
         Cursor.Current = Cursors.WaitCursor             ' マウスカーソルを砂時計に
         ' もとのデータを一旦削除
-        DeleteAllData(TID.FPI)
+        DeleteAllData(TID.FPIB)  ' テーブル1のデータを削除
+        DeleteAllData(TID.FPIV)  ' テーブル2のデータを削除
+
+        ' テーブル1のIDカウンタ
+        Dim TBLIndex As Integer = 1
+        Dim ValIndex As Integer = 1
 
         ' 新たなデータベースに書き換えるため変換
         For Each row As DataRow In dt.Rows
+            ' C01取得
             Dim cosNumber As String = row("C01").ToString()
+            ' C02の値を抽出して、'`'で分割
+            Dim itemsC02 As String() = row("C02").ToString().Split("`"c)
 
-            ' C02からC11までのカラムに対する処理
-            For i As Integer = 2 To 11
+            ' テーブル1にデータを挿入
+            Dim tblArr As String() = {TBLIndex.ToString, cosNumber.ToString}.Concat(itemsC02).ToArray
+            Dim value As String = $"'{String.Join("','", tblArr)}'"
+            ExeSQLInsert(TID.FPIB, tblArr)
+
+            ' C03からC11までのカラムに対する処理（テーブル2にデータを挿入）
+            For i As Integer = 3 To 11
                 Dim columnData As String = row($"C{i:D2}")
 
                 If Not String.IsNullOrEmpty(columnData) Then
-                    Dim items As String() = columnData.Split(New Char() {"`"c}, StringSplitOptions.RemoveEmptyEntries)
-                    For itemIndex As Integer = 0 To items.Length - 1
-                        Dim item As String = items(itemIndex)
-                        ' データベースに書き込み用のデータを準備
-                        Dim writeData As String() = {cosNumber,                              ' 顧客番号
-                                                     $"{i - 2:D2}",                          ' ItemType 0はじまり
-                                                     $"{(itemIndex):D2}",                    ' ItemIndex
-                                                     item}                                   ' ItemValue
-                        ' 新たなデータベースに書き込み
-                        ExeSQLInsert(TID.FPI, writeData)
-                    Next
+                    Dim items As String() = columnData.Split(New Char() {"`"c})
+                    ' テーブル2にデータを挿入
+                    tblArr = {ValIndex.ToString, TBLIndex.ToString, (i - 3).ToString}.Concat(items).ToArray
+                    ExeSQLInsert(TID.FPIV, tblArr)
+                    ValIndex += 1
                 End If
             Next
+            TBLIndex += 1
         Next
-        ExeSQL(TID.FPI)
+        ExeSQL(TID.FPIB)
+        ExeSQL(TID.FPIV)
         MsgBox("移管完了")
+        Cursor.Current = Cursors.Default             ' マウスカーソルを元に戻す
     End Sub
 
 
