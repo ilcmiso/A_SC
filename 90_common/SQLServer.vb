@@ -1,7 +1,8 @@
 ﻿Imports System.Data.SQLite
 Imports System.IO
+Imports System.Data.SqlClient
 
-Public Class Sqldb
+Public Class SQLServer
     Private ReadOnly log As New Log
     Private ReadOnly mtx As New Mutex
     Private ReadOnly cmn As New Common
@@ -24,19 +25,19 @@ Public Class Sqldb
     Public Const DB_USERLIST As String = "MNG_UserList.db3"
     Public Const DB_OVERTAX As String = "FKSC_OverTax.db3"
     ' テーブル名
-    Public Const TBL_FKSC As String = "FKSC"
-    Public Const TBL_FKSCREM As String = "FKSCREM"
-    Public Const TBL_FKSCD As String = "FKSCD"
-    Public Const TBL_ITEM As String = "ITEM"
+    Public Const TBL_FKSC As String = "TBL"
+    Public Const TBL_FKSCREM As String = "TBL"
+    Public Const TBL_FKSCD As String = "TBL"
+    Public Const TBL_ITEM As String = "TBL"
     Public Const TBL_STANDARD As String = "TBL"
-    Public Const TBL_VALUES As String = "VAL"
+    Public Const TBL_VALUES As String = "TBL"
     ' DB保管場所の識別子
     Private Const DBLO As Integer = 0       ' ローカルに保管
     Private Const DBSV As Integer = 1       ' サーバーに保管
 
     ' リトライ回数、間隔
     Private Const RETRYCNT = 50
-    Private Const RETRYDELAY = 200
+    Private Const RETRYDELAY = 100
 
     Private ReadOnly RegIDList As List(Of String)      ' 連続登録用 顧客IDリスト  連続登録時の同じ顧客IDを多重Insert防止
 
@@ -71,7 +72,7 @@ Public Class Sqldb
         AC           ' AutoCall
         MR           ' MngRequest 申請物管理
         MRM          ' MngRequest(ITEM)
-        USER         ' UserList
+        ULIST        ' UserList
         OTAX         ' OverTax
     End Enum
 
@@ -93,15 +94,25 @@ Public Class Sqldb
     Private ReadOnly loCon(DBTbl.GetLength(0) - 1) As SQLiteConnection     ' ローカルコネクション
     Private ReadOnly loCmd(DBTbl.GetLength(0) - 1) As SQLiteCommand
     Private cmdl() As List(Of String)
+    Private connectionString As String
 
 
     ' コンストラクタ(初期化設定)
     Sub New()
-        Dim xml As New xmlMng
+        Dim xml As New XmlMng
         RegIDList = New List(Of String)
         CurrentPath_SV = xml.GetCPath()                             ' サーバーパスをconfigから取得
         Dim DBCSPath = CurrentPath_SV & Common.DIR_DB3
         If DBCSPath.StartsWith("\\") Then DBCSPath = "\\" & DBCSPath        ' ConnectingStringには、\\で始まるアドレスにエスケープ対策で\\を追加する ex \\192 → \\\\192
+
+        ' SQL Server設定
+        Dim serverName = "MISO"
+        'Dim serverName = "MISO-NOTE\ILCSERVER"
+        Dim dbName = "TestDB"
+        Dim userName = "fls"
+        Dim password = "flsuser"
+        'connectionString = $"Server={serverName};Database={dbName};User Id={userName};Password={password};"
+        connectionString = $"Server={serverName};Database={dbName};Integrated Security=True;"
 
         ' 各DBの接続パス初期設定
         For n = 0 To DBTbl.GetLength(0) - 1
@@ -124,6 +135,7 @@ Public Class Sqldb
 
         ' ColumnsInit()
         CreateDBFiles()         ' DBファイルの新規作成
+
     End Sub
 
     ' 新規DBファイルの生成  既にある場合は何もしない
@@ -202,13 +214,15 @@ Public Class Sqldb
     ' [使い方] 単体 SQLExe(Sqldb.DBSC, "Update FKL ..")  
     '          複数 AddSQL(Sqldb.DBSC, "Insert ..")
     '               SQLExe(Sqldb.DBSC)
-    Public Function ExeSQL(TableID As Integer, SqlCmd As String) As Boolean
+    Public Function ExeSQL(TableID As Sqldb.TID, SqlCmd As String) As Boolean
         AddSQL(TableID, SqlCmd)
         Dim ret As Boolean
         If DBTbl(TableID, DBID.DBSTRG) = DBLO Then
-            ret = CommonSQLExe(TableID, loCon(TableID), loCmd(TableID))
+            'ret = CommonSQLExe(TableID, loCon(TableID), loCmd(TableID))
+            ret = ExeSQLServer(TableID)
         Else
-            ret = CommonSQLExe(TableID, svCon(TableID), svCmd(TableID))
+            'ret = CommonSQLExe(TableID, svCon(TableID), svCmd(TableID))
+            ret = ExeSQLServer(TableID)
         End If
         Return ret
     End Function
@@ -254,9 +268,29 @@ Public Class Sqldb
         'DBFileDL(TableID)
         Return ret
     End Function
+    Function ExeSQLServer(TableID As Integer) As Boolean
+        If cmdl(TableID) Is Nothing Then Return False
+        Using connection As New SqlConnection(connectionString)
+            Try
+                connection.Open()
+                For Each c In cmdl(TableID)
+                    Using command As New SqlCommand(c, connection)
+                        ' SQLコマンドを実行
+                        command.ExecuteNonQuery()
+                    End Using
+                Next
+            Catch ex As Exception
+                log.D(Log.ERR, $"ExeSQLServer({TableID}) : cmdl(0) {cmdl(TableID)(0)}{vbCrLf}{ex.Message}")
+            End Try
+        End Using
+        Return True
+    End Function
 
     ' SQLコマンド用リスト追加IF
-    Public Sub AddSQL(TableID As Integer, SqlCmd As String)
+    Public Sub AddSQL(TableID As Sqldb.TID, SqlCmd As String)
+        SqlCmd = cmn.RegReplace(SqlCmd, " TBL ", $" {TableID.ToString} ")
+        SqlCmd = cmn.RegReplace(SqlCmd, " FKSCD ", $" {TableID.ToString} ")
+        SqlCmd = cmn.RegReplace(SqlCmd, " SCD ", $" {TableID.ToString} ")
         cmdl(TableID).Add(SqlCmd)
     End Sub
 
@@ -300,63 +334,77 @@ Public Class Sqldb
     End Sub
 
     ' SQL SELECTでDB読み込み
-    Public Function ReadOrgDtSelect(TableID As Integer) As DataTable
-        Return ReadOrgDtSelect(TableID, "Select * From " & DBTbl(TableID, DBID.TABLE))
+    Public Function ReadOrgDtSelect(TableID As TID) As DataTable
+        Return ReadOrgDtSelect(TableID, "Select * From " & TableID.ToString)
+        'Return ReadOrgDtSelect(TableID, "Select * From " & DBTbl(TableID, DBID.TABLE))
     End Function
-    Public Function ReadOrgDtSelect(TableID As Integer, WhereCmd As String) As DataTable
-
-        'mtx.Lock(Mutex.MTX_LOCK_R, TableID)
-        DBFileDL(TableID)                               ' ローカルを最新にする
-        Dim con As SQLiteConnection = loCon(TableID)
-        Dim cmd As SQLiteCommand = loCmd(TableID)
-        Dim dt As DataTable = New DataTable()
-        Dim dtr As SQLiteDataReader = Nothing
-        Dim SqlCmd = WhereCmd
-        For cnt = 1 To RETRYCNT
+    Public Function ReadOrgDtSelect(TableID As TID, WhereCmd As String) As DataTable
+        Dim resultTable As New DataTable()
+        Using connection As New SqlConnection(connectionString)
             Try
-                con.Open()
-                cmd.CommandText = SqlCmd
-                dtr = cmd.ExecuteReader                                  ' SQL結果取得
-
-                ' Loadだと遅いから手動で結果を読み込み
-                ' DataTableに列設定
-                For c As Integer = 1 To DBTbl(TableID, DBID.CNUM)
-                    Dim typ As Type = Type.GetType("System.String")
-                    Dim clmName As String = DBTbl(TableID, DBID.CTAG) & c.ToString("00")
-                    If clmName = "FK55" Then typ = Type.GetType("System.Decimal")       ' 延滞合計額(FK55)はDGVでソートする為にDecimal型に
-                    dt.Columns.Add(clmName, typ)
-                Next
-
-                ' 取得したSelect結果をDataTableに設定
-                log.TimerST()
-                If dtr.HasRows Then
-                    Dim idx As Integer = 0
-                    Dim dr As DataRow
-                    While dtr.Read()
-                        dr = dt.NewRow()
-                        For n = 0 To dtr.FieldCount - 1
-                            dr(n) = dtr.Item(n)
-                        Next
-                        If TableID = TID.SC Then dr(dtr.FieldCount - 2) = idx       ' FKSCにだけ、FK69にDataTableのIndex値を入れる(検索を早くするため)
-                        idx += 1
-                        dt.Rows.Add(dr)
-                    End While
-                End If
-                'dt.Load(dtr)                                             ' DataTableに読み込み
+                Dim adapter As New SqlDataAdapter(WhereCmd, connection)
+                adapter.Fill(resultTable)
             Catch ex As Exception
-                log.cLog(":::dtr3 " & (dtr Is Nothing))
-                log.D(Log.ERR, String.Format("{0}{1}TableID[{2}] {3}", ex.Message, vbCrLf, TableID, SqlCmd))
+                ' 例外処理。実際のアプリケーションでは、エラーログへの記録など適切なエラー処理を行う
+                log.D(Log.ERR, $"ReadOrgDtSelect({TableID}) : {WhereCmd}{vbCrLf}{ex.Message}")
             End Try
-            ' まれに競合更新？でcmd.ExexuteReaderでException発生するので、その場合にはリトライ
-            If dtr IsNot Nothing Then Exit For
-            Threading.Thread.Sleep(RETRYDELAY)
-        Next
-        If dtr IsNot Nothing Then
-            If Not dtr.IsClosed Then dtr.Close()
-        End If
-        con.Close()
+        End Using
+        Return resultTable
+
+        'WhereCmd = "Select * From " & DBTbl(TableID, DBID.TABLE)
+
+        ''mtx.Lock(Mutex.MTX_LOCK_R, TableID)
+        'DBFileDL(TableID)                               ' ローカルを最新にする
+        'Dim con As SQLiteConnection = loCon(TableID)
+        'Dim cmd As SQLiteCommand = loCmd(TableID)
+        'Dim dt As DataTable = New DataTable()
+        'Dim dtr As SQLiteDataReader = Nothing
+        'Dim SqlCmd = WhereCmd
+        'For cnt = 1 To RETRYCNT
+        '    Try
+        '        con.Open()
+        '        cmd.CommandText = SqlCmd
+        '        dtr = cmd.ExecuteReader                                  ' SQL結果取得
+
+        '        ' Loadだと遅いから手動で結果を読み込み
+        '        ' DataTableに列設定
+        '        For c As Integer = 1 To DBTbl(TableID, DBID.CNUM)
+        '            Dim typ As Type = Type.GetType("System.String")
+        '            Dim clmName As String = DBTbl(TableID, DBID.CTAG) & c.ToString("00")
+        '            If clmName = "FK55" Then typ = Type.GetType("System.Decimal")       ' 延滞合計額(FK55)はDGVでソートする為にDecimal型に
+        '            dt.Columns.Add(clmName, typ)
+        '        Next
+
+        '        ' 取得したSelect結果をDataTableに設定
+        '        log.TimerST()
+        '        If dtr.HasRows Then
+        '            Dim idx As Integer = 0
+        '            Dim dr As DataRow
+        '            While dtr.Read()
+        '                dr = dt.NewRow()
+        '                For n = 0 To dtr.FieldCount - 1
+        '                    dr(n) = dtr.Item(n)
+        '                Next
+        '                If TableID = TID.SC Then dr(dtr.FieldCount - 2) = idx       ' FKSCにだけ、FK69にDataTableのIndex値を入れる(検索を早くするため)
+        '                idx += 1
+        '                dt.Rows.Add(dr)
+        '            End While
+        '        End If
+        '        'dt.Load(dtr)                                             ' DataTableに読み込み
+        '    Catch ex As Exception
+        '        log.cLog(":::dtr3 " & (dtr Is Nothing))
+        '        log.D(Log.ERR, String.Format("{0}{1}TableID[{2}] {3}", ex.Message, vbCrLf, TableID, SqlCmd))
+        '    End Try
+        '    ' まれに競合更新？でcmd.ExexuteReaderでException発生するので、その場合にはリトライ
+        '    If dtr IsNot Nothing Then Exit For
+        '    Threading.Thread.Sleep(RETRYDELAY)
+        'Next
+        'If dtr IsNot Nothing Then
+        '    If Not dtr.IsClosed Then dtr.Close()
+        'End If
+        'con.Close()
         'mtx.UnLock(TableID)
-        Return dt
+        'Return dt
     End Function
 
     ' FKSCREMに指定した機構番号が存在する場合True
@@ -440,7 +488,7 @@ Public Class Sqldb
             Dim dupRows As DataRow() = fk02dt.Select(String.Format("FK02 = '{0}'", aRow.Item(1)))
             If dupRows.Length > 0 Then
                 ' 既に存在する  必要項目だけ追加する
-                Dim idx As Integer = dupRows(0).Item(1)
+                Dim idx As Integer = cmn.Int(dupRows(0).Item(1))
                 With dt.Rows(idx)
                     .Item(2) = "3"              ' ローン識別子 1=FKのみ 2=アシストのみ 3=FK,アシスト
                     .Item(8) = aRow.Item(11)   ' アシスト 証券番号
@@ -566,7 +614,7 @@ Public Class Sqldb
     Public Function ExeSQLInsert(TableID As Integer, ParamArray args As String()) As Boolean
         If args.Length = 0 Then Return False
         Dim cid As String = args(0)
-        Dim arg As String 
+        Dim arg As String
         Dim cmd As String
         If cid = "" Then Return False
 
@@ -612,8 +660,6 @@ Public Class Sqldb
         Dim TBLIndex As Integer = 1
         Dim ValIndex As Integer = 1
 
-        UpdateOrigDT(TID.SC)
-
         ' 新たなデータベースに書き換えるため変換
         For Each row As DataRow In dt.Rows
             ' C01取得
@@ -621,13 +667,8 @@ Public Class Sqldb
             ' C02の値を抽出して、'`'で分割
             Dim itemsC02 As String() = row("C02").ToString().Split("`"c)
 
-            Dim cosName As String = ""
-            Dim cosDt As DataRow() = OrgDataTable(TID.SC).Select($"FK02 = '{cosNumber}'")
-            If cosDt.Length > 0 Then
-                cosName = cosDt(0)(9)
-            End If
-            ' FPIBにデータを挿入
-            Dim tblArr As String() = {TBLIndex.ToString, cosNumber.ToString, cosName}.Concat(itemsC02).ToArray
+            ' テーブル1にデータを挿入
+            Dim tblArr As String() = {TBLIndex.ToString, cosNumber.ToString}.Concat(itemsC02).ToArray
             Dim value As String = $"'{String.Join("','", tblArr)}'"
             ExeSQLInsert(TID.FPIB, tblArr)
 
@@ -637,20 +678,10 @@ Public Class Sqldb
 
                 If Not String.IsNullOrEmpty(columnData) Then
                     Dim items As String() = columnData.Split(New Char() {"`"c})
-                    ' itemsが空だったら登録しない
-                    Dim allEmpty As Boolean = True
-                    For Each item As String In items
-                        If item.Length <> 0 Then
-                            allEmpty = False
-                            Exit For
-                        End If
-                    Next
                     ' テーブル2にデータを挿入
-                    If Not allEmpty Then
-                        tblArr = {ValIndex.ToString, TBLIndex.ToString, (i - 3).ToString}.Concat(items).ToArray
-                        ExeSQLInsert(TID.FPIV, tblArr)
-                        ValIndex += 1
-                    End If
+                    tblArr = {ValIndex.ToString, TBLIndex.ToString, (i - 3).ToString}.Concat(items).ToArray
+                    ExeSQLInsert(TID.FPIV, tblArr)
+                    ValIndex += 1
                 End If
             Next
             TBLIndex += 1

@@ -1,6 +1,7 @@
 ﻿Imports System.IO
 Imports System.Text
 Imports System.Threading
+Imports A_SC.Common
 Imports DocumentFormat.OpenXml.Office2010.Excel
 Imports DocumentFormat.OpenXml.Wordprocessing
 
@@ -73,6 +74,7 @@ Public Class SCA1
         ShowDGVList(DGV1)
         ShowDGVList(DGV2)
         ShowDGVList(DGV9)
+        ShowDGVList_FPMNG()
         cmn.UpdPBar("最終設定中")
 
         CheckedListBoxInit()        ' タブ 記録一覧の初期設定
@@ -93,8 +95,9 @@ Public Class SCA1
         Next
 
         ' 一時的に管理表タブを非表示にする
-        Dim tabPageToRemove As TabPage = TAB_A1.TabPages("Tab_3Mng")
-        TAB_A1.TabPages.Remove(tabPageToRemove)
+        'Dim tabPageToRemove As TabPage = TAB_A1.TabPages("Tab_3Mng")
+        'TAB_A1.TabPages.Remove(tabPageToRemove)
+
         ' 解像度が小さいPCは、左端に寄せる (横幅1600px未満なら左寄せ)
         If Screen.PrimaryScreen.Bounds.Width < 1600 Then Me.Left = 0
         cmn.EndPBar()
@@ -394,7 +397,19 @@ Public Class SCA1
                 cmn.OpenCurrentDir()
             Case Keys.F2
             Case Keys.F3
+                ShowDGVList_FPMNG()
             Case Keys.F4
+                'Dim dt As DataTable
+                'Dim ss = New SQLServer
+
+                ' 全てのDBを読み込み、SQL ServerにInsertする
+                'For Each value As Sqldb.TID In [Enum].GetValues(GetType(Sqldb.TID))
+                '    Console.WriteLine(value.ToString & " = " & value.ToString("D"))
+                '    dt = db.GetSelect(value, $"SELECT * FROM {db.DBTbl(value, Sqldb.DBID.TABLE)}")
+                '    ss.ExeInsertDataTable(dt, value.ToString)
+                'Next
+
+
         End Select
     End Sub
 
@@ -1580,6 +1595,17 @@ Public Class SCA1
         MsgBox("編集を確定しました。")
     End Sub
 
+    Private Sub BT_FPMNG_JUMP_Click(sender As Object, e As EventArgs) Handles BT_FPMNG_JUMP.Click
+        If DGV_FPMNG.Rows.Count = 0 Then Exit Sub
+        Cursor.Current = Cursors.WaitCursor             ' マウスカーソルを砂時計に
+        ShowSelectUser(DGV_FPMNG.CurrentRow.Cells(1).Value)
+    End Sub
+
+    ' Excel出力
+    Private Sub BT_FPMNG_OutExcel_Click(sender As Object, e As EventArgs) Handles BT_FPMNG_OutExcel.Click
+        cmn.ExcelOutputDGV($"融資物件一覧.xlsx", DGV_FPMNG)
+    End Sub
+
     ' 入力データをDBに更新
     Private Sub UpdatePIDB()
         Dim dgv As DataGridView = DGV7
@@ -1926,6 +1952,66 @@ Public Class SCA1
         L_STS.Text = str
     End Sub
 
+    Private Sub ShowDGVList_FPMNG()
+        log.TimerST()
+
+        ' DataTableを取得
+        Dim dtFPIV As DataTable = db.OrgDataTable(Sqldb.TID.FPIV)
+        Dim dtFPIB As DataTable = db.OrgDataTable(Sqldb.TID.FPIB)
+        Dim dgv As DataGridView = DGV_FPMNG
+
+        ' DGVの行をクリア
+        dgv.Rows.Clear()
+
+        ' dtFPIVの行数分だけDGVの行数を追加
+        For i As Integer = 0 To dtFPIV.Rows.Count - 1
+            ' 新しい行をDGVに追加
+            Dim rowIndex As Integer = dgv.Rows.Add()
+            Dim currentRow As DataGridViewRow = dgv.Rows(rowIndex)
+
+            ' dtFPIVのデータをDGVに設定
+            With dtFPIV.Rows(i)
+                currentRow.Cells(0).Value = If(.Table.Columns.Contains("C01"), .Item("C01"), DBNull.Value)
+                currentRow.Cells(3).Value = If(.Table.Columns.Contains("C03"), sccmn.FPITEMLIST(cmn.Int(.Item("C03"))), DBNull.Value)
+                currentRow.Cells(4).Value = If(.Table.Columns.Contains("C04"), .Item("C04"), DBNull.Value)
+                currentRow.Cells(5).Value = If(.Table.Columns.Contains("C05"), .Item("C05"), DBNull.Value)
+                currentRow.Cells(6).Value = If(.Table.Columns.Contains("C06"), .Item("C06"), DBNull.Value)
+                currentRow.Cells(7).Value = If(.Table.Columns.Contains("C07"), .Item("C07"), DBNull.Value)
+                currentRow.Cells(8).Value = If(.Table.Columns.Contains("C08"), .Item("C08"), DBNull.Value)
+
+                ' dtFPIVのC02をインデックスとしてdtFPIBのデータを検索
+                Dim matchingRow = dtFPIB.Select("C01 = '" & .Item("C02").ToString() & "'").FirstOrDefault()
+                If matchingRow IsNot Nothing Then
+                    ' 一致するdtFPIBのレコードがあれば、DGVにC02とC03の値を設定
+                    currentRow.Cells(1).Value = matchingRow("C02")
+                    currentRow.Cells(2).Value = matchingRow("C03")
+                End If
+            End With
+        Next
+
+        log.TimerED("ShowDGVList:FPMNG")
+    End Sub
+
+    Private Sub TB_FPMNG_Search_TextChanged(sender As Object, e As KeyPressEventArgs) Handles TB_FPMNG_Search.KeyPress
+        If e.KeyChar = ChrW(Keys.Enter) Then
+            FilterDGVByKeyword(DGV_FPMNG, TB_FPMNG_Search.Text)
+        End If
+    End Sub
+
+    Private Sub FilterDGVByKeyword(dgv As DataGridView, words As String)
+        dgv.CurrentCell = Nothing ' 現在のセル選択をクリア
+        For Each row As DataGridViewRow In dgv.Rows
+            row.Visible = False ' 一旦すべての行を非表示にする
+            For Each cell As DataGridViewCell In row.Cells
+                If cell.Value IsNot Nothing AndAlso cell.Value.ToString().ToLower().Contains(words.ToLower()) Then
+                    row.Visible = True ' キーワードが含まれている行を表示
+                    Exit For ' 一つのセルでキーワードが見つかれば、その行は表示する
+                End If
+            Next
+        Next
+    End Sub
+
+
 #End Region
 
 #Region "申請物管理(MR)"
@@ -2148,16 +2234,7 @@ Public Class SCA1
     End Sub
     ' 表示出力ボタン
     Private Sub Button2_Click_2(sender As Object, e As EventArgs) Handles Button2.Click
-        MRExcelOutput()
-    End Sub
-
-    Private Sub MRExcelOutput()
-        Dim filePath As String = cmn.DialogSaveFile($"申請物管理_{CB_MRLIST.Text}.xlsx")
-        If filePath = String.Empty Then Exit Sub
-        Dim excelManager As New ExcelManager(filePath)
-        excelManager.ExportDGVToExcel(DGV_MR1)
-        excelManager.SaveAndClose()
-        excelManager.OpenFile()
+        cmn.ExcelOutputDGV($"申請物管理_{CB_MRLIST.Text}.xlsx", DGV_MR1)
     End Sub
 
     Private Sub MRExcelOutputAll()
@@ -2234,7 +2311,6 @@ Public Class SCA1
         fm.ShowDialog()
         fm.Dispose()
     End Sub
-
 
 #End Region
 End Class

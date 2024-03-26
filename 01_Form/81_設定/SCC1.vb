@@ -100,7 +100,7 @@ Public Class SCC1
                    TextBox1.Text & " が見つかりません。" & vbCrLf &
                    "正しい場所を設定しないと着信を検出できません。", MessageBoxIcon.Warning)
         End If
-
+        xml.GetXml()
         xml.xmlData.CPath1 = TextBox1.Text
         xml.xmlData.CPath2 = TextBox2.Text
         If RadioButton1.Checked Then xml.xmlData.CPathSW = 1

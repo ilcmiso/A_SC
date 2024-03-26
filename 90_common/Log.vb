@@ -1,7 +1,5 @@
 ﻿Imports System.IO
 Imports System.Text
-Imports System.Windows.Interop
-Imports DocumentFormat.OpenXml.Office2010.Excel
 
 Public Class Log
     ' タグ
@@ -33,7 +31,6 @@ Public Class Log
 
     Private ReadOnly CurrentPath As String
     Private ReadOnly xml As New XmlMng
-    Private DebugSr As StreamWriter = Nothing
 
     Sub New()
         CurrentPath = xml.GetCPath()
@@ -73,10 +70,10 @@ Public Class Log
     ' デバッグログ(Console)
     Public Sub cLog(msg As String)
         Dim tim As String = Date.Now.ToString("yyyy/MM/dd/HH:mm:ss.fff")
-        If xml.GetDebugMode() Then
+        If SC.DEBUG_MODE Then
             Using sr As StreamWriter = New StreamWriter(SC.CurrentAppPath & "DebugLog.log", True, Encoding.Default)
                 Try
-                    sr.WriteLine(tim & " # " & msg)
+                    sr.WriteLine($"{tim} # {msg}")
                 Catch ex As Exception
                 End Try
             End Using

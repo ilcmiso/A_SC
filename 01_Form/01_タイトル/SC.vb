@@ -4,13 +4,13 @@ Imports System.Text
 Public Class SC
 
 #Region " Open Close "
-    Public Const SCVer As String = "2403C"                         ' A_SC バージョン
+    Public Const SCVer As String = "2403D"                         ' A_SC バージョン
     ' 起動アプリパス
     Public ReadOnly CurrentAppPath As String = Path.GetDirectoryName(Reflection.Assembly.GetExecutingAssembly().Location) & "\"
-
     Private ReadOnly HISTORY As String = CurrentAppPath & "History.txt"
     Private log As Log
     Private vup As Verup
+    Public DEBUG_MODE = False
 
     Private Sub ME_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
@@ -114,13 +114,16 @@ Public Class SC
 
     ' ショートカット F1
     Private Sub Button1_KeyDown(sender As Object, e As KeyEventArgs) Handles Button1.KeyDown
-        If e.KeyCode = Keys.F1 Then
-            Dim cmn As New Common
-            cmn.OpenCurrentDir()
-        End If
+        Select Case e.KeyCode
+            Case Keys.F1
+                Dim cmn As New Common
+                cmn.OpenCurrentDir()
+            Case Keys.F9
+                DEBUG_MODE = True
+                MsgBox($"デバッグモード:{DEBUG_MODE}")
+                Process.Start(CurrentAppPath & "DebugLog.log")
+        End Select
     End Sub
-
-
 #End Region
 
 End Class

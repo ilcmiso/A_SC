@@ -293,6 +293,15 @@ Public Class Common
         Return -1 ' カラムが見つからない場合
     End Function
 
+    ' DGV表示中の項目をExcelに出力
+    Public Sub ExcelOutputDGV(filePath As String, dgv As DataGridView)
+        Dim path As String = DialogSaveFile(filePath)
+        If path = String.Empty Then Exit Sub
+        Dim excelManager As New ExcelManager(path)
+        excelManager.ExportDGVToExcel(dgv)
+        excelManager.SaveAndClose()
+        excelManager.OpenFile()
+    End Sub
 
     ' プログレスバー表示
     Public Sub StartPBar(progressCount As Integer)
