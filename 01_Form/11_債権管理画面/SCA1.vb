@@ -553,7 +553,7 @@ Public Class SCA1
                     dgv(1, 5).Value = cInfo.Item(17)                                 ' 勤務先
                     dgv(3, 1).Value = cInfo.Item(13)                                 ' TEL1
                     dgv(3, 2).Value = cInfo.Item(11)                                 ' 生年月日
-                    dgv(3, 3).Value = cmn.SetValueDefault(sccmn.GetGroupCredit(cInfo.Item(20)), "") ' 団信加入サイン
+                    dgv(3, 3).Value = sccmn.GetGroupCredit(cmn.SetValueDefault(cInfo.Item(20))) ' 団信加入サイン
                     dgv(3, 5).Value = cInfo.Item(18)                                 ' 勤務先TEL1
                     ' 連帯債務者
                     dgv(1, 6).Value = cInfo.Item(30)                                 ' ヨミカナ
@@ -563,7 +563,7 @@ Public Class SCA1
                     dgv(1, 10).Value = cInfo.Item(37)                                ' 勤務先
                     dgv(3, 6).Value = cInfo.Item(33)                                 ' TEL1
                     dgv(3, 7).Value = cInfo.Item(31)                                 ' 生年月日
-                    dgv(3, 8).Value = cmn.SetValueDefault(sccmn.GetGroupCredit(cInfo.Item(40)), "") ' 団信加入サイン
+                    dgv(3, 8).Value = sccmn.GetGroupCredit(cmn.SetValueDefault(cInfo.Item(40))) ' 団信加入サイン
 
                     dgv(3, 10).Value = cInfo.Item(38)                                ' 勤務先TEL1
                     ' 証券番号(アシスト)
