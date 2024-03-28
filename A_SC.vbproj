@@ -256,12 +256,6 @@
     <Compile Include="90_common\ILCNetDrive.vb" />
     <Compile Include="90_common\SQLServer.vb" />
     <Compile Include="ApplicationEvents.vb" />
-    <Compile Include="01_Form\11_債権管理画面\SCA1_S5_ExcOut.designer.vb">
-      <DependentUpon>SCA1_S5_ExcOut.vb</DependentUpon>
-    </Compile>
-    <Compile Include="01_Form\11_債権管理画面\SCA1_S5_ExcOut.vb">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="01_Form\11_債権管理画面\SCA1_S6_Calendar.designer.vb">
       <DependentUpon>SCA1_S6_Calendar.vb</DependentUpon>
     </Compile>
@@ -346,12 +340,6 @@
     <Compile Include="90_common\Verup.vb" />
     <Compile Include="90_common\XmlMng.vb" />
     <Compile Include="Settings.vb" />
-    <Compile Include="VBReport_Form\VBR_PI.designer.vb">
-      <DependentUpon>VBR_PI.vb</DependentUpon>
-    </Compile>
-    <Compile Include="VBReport_Form\VBR_PI.vb">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="VBReport_Form\VBR_Send.designer.vb">
       <DependentUpon>VBR_Send.vb</DependentUpon>
     </Compile>
@@ -386,9 +374,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="01_Form\11_債権管理画面\SCA1_SelectInfo.resx">
       <DependentUpon>SCA1_SelectInfo.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="01_Form\11_債権管理画面\SCA1_S5_ExcOut.resx">
-      <DependentUpon>SCA1_S5_ExcOut.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="01_Form\11_債権管理画面\SCA1_S6_Calendar.resx">
       <DependentUpon>SCA1_S6_Calendar.vb</DependentUpon>
@@ -431,9 +416,6 @@
       <CustomToolNamespace>My.Resources</CustomToolNamespace>
       <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.vb</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="VBReport_Form\VBR_PI.resx">
-      <DependentUpon>VBR_PI.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="VBReport_Form\VBR_Send.resx">
       <DependentUpon>VBR_Send.vb</DependentUpon>

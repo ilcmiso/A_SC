@@ -1,32 +1,24 @@
 ﻿Imports System.IO
 Imports System.Text
 Imports System.Threading
-Imports A_SC.Common
-Imports DocumentFormat.OpenXml.Office2010.Excel
-Imports DocumentFormat.OpenXml.Wordprocessing
+Imports DocumentFormat.OpenXml.Spreadsheet
 
 Public Class SCA1
 
 #Region "定義"
-    Public CID As String = ""                       ' 顧客番号(機構番号)
     Public addSW                                    ' 追加/編集ボタンの識別子(SCA1_S2で判別)
+    Private FPPageNo As Integer                     ' 物件情報のページ数
     Private ReadOnly cmn As New Common
     Private ReadOnly sccmn As New SCcommon
     Private ReadOnly log As New Log
     Private ReadOnly exc As New CExcel
     Public ReadOnly db As New Sqldb
     Private oview As SCGA_OVIEW
-    Private CallerFunc = ""
     Public xml As New XmlMng
 
-    ' 着信
-    Private ReadOnly TEL_HEADLEN As Integer = 17                    ' 着信ファイルのヘッダ文字数     ※yyyy/MM/dd HH:mm-
-    Public FPATH_TEL As String                                      ' 着信ログファイルのフルパス   C:\xxx\TELLOG\ILC_SCTEL.log   SCC1でも使用する
     ' 監視
     Private PoolingStart As Boolean = False                         ' 監視フラグ
-    Private Const POLLING_ID_TEL As String = "TEL"                  ' 着信イベントの識別子
     Private Const POLLING_ID_SCD As String = "SCD更新"              ' DB(SCD)更新イベントの識別子
-    Private Const POLLING_ID_TASK As String = "タスク更新"          ' タスク更新イベントの識別子
     Private Const POLLING_ID_CUDB As String = "顧客DB更新"          ' 顧客DB更新イベントの識別子
     Private Const POLLING_ID_ASC As String = "A_SC本体"             ' A_SC更新イベントの識別子
     Private Const POLLING_CYCLE As Integer = 500                    ' イベント監視周期(ms)
@@ -34,16 +26,12 @@ Public Class SCA1
     Private fwatchers As List(Of FileWatcher)
     ' フリーメモ変更前バッファ(変更されたか検知したい)
     Private BeforeFreeTxt As String = ""
-    Private BeforeAddTel As String = ""
     ' 外付けフォーム
     Private SearchForm As SCA1_S3_Search = Nothing                  ' 検索オプションフォーム
     Public AddTelForm As SCA1_S4_TEL = Nothing                      ' 電話追加フォーム
     Public EditForm As SCE_S2 = Nothing                           ' 交渉記録フォーム
     ' イベントハンドラーロック 記録一覧チェックリストボックス
     Private LockEventHandler_CLB As Boolean = False
-    'Private LockEventHandler_LCSum As Boolean = False               ' 延滞損害金の表示
-    Private MyDBUpdate As Boolean = False                            ' 自分がDB更新したフラグ
-    Private PIItemList As String()                                   ' 物件情報の大項目
     ' スレッド
     Private ReadOnly Thread_Entry As Thread = Nothing
     ' デリゲート
@@ -74,25 +62,19 @@ Public Class SCA1
         ShowDGVList(DGV1)
         ShowDGVList(DGV2)
         ShowDGVList(DGV9)
-        ShowDGVList_FPMNG()
+        ShowDGV_FPMNG()
         cmn.UpdPBar("最終設定中")
 
         CheckedListBoxInit()        ' タブ 記録一覧の初期設定
         SetToolTips()               ' ツールチップの設定
         MRInit()                    ' 申請物の初期設定
         DunInit()                   ' 督促管理の初期設定
+        FPINFOInit()                ' 物件情報管理の初期設定
         ' DGVちらつき防止
-        cmn.SetDoubleBufferDGV(DGV1, DGV2, DGV4, DGV5, DGV6, DGV7, DGV9, DGV_MR1, DGV_FPMNG)
+        cmn.SetDoubleBufferDGV(DGV1, DGV2, DGV4, DGV5, DGV6, DGV_FPLIST, DGV9, DGV_MR1, DGV_FPMNG)
         ' ファイル監視開始 ※ファイル監視によるDB更新を行うと排他競合がおこりアプリが強制終了してしまう問題があるので一旦行わない
         'fwatchers = New List(Of FileWatcher)
         'FWatchingStart()
-
-        ' 物件情報初期設定
-        PIItemList = {"基本物件情報", "任売", "競売①", "競売②", "再生・破産①", "再生・破産②", "再生・破産③", "差押①", "差押②", "差押③"}
-        For nnn = 0 To PIItemList.Length - 1
-            DGV_PIMENU.Rows.Add()
-            DGV_PIMENU(0, nnn).Value = PIItemList(nnn)
-        Next
 
         ' 一時的に管理表タブを非表示にする
         'Dim tabPageToRemove As TabPage = TAB_A1.TabPages("Tab_3Mng")
@@ -104,7 +86,7 @@ Public Class SCA1
         log.cLog("--- Load完了: " & (Date.Now - loadTime).ToString("ss\.fff"))
     End Sub
 
-    Private Sub SCA1_Shown(sender As Object, e As EventArgs) Handles Me.Shown
+    Private Sub SCA1_Shown(sender As Object, e As EventArgs) Handles MyBase.Shown
         ' 着信ログ、DBファイル監視開始
         StartWatching()
 
@@ -175,7 +157,7 @@ Public Class SCA1
 
     Sub CBWatcherUpdFPI()
         log.cLog("[CB][Watcher] Upd FPI")
-        db.UpdateOrigDT(Sqldb.TID.FPIB)
+        db.UpdateOrigDT(Sqldb.TID.FPCOS)
     End Sub
 
     Sub CBWatcherUpdEXE()
@@ -231,7 +213,7 @@ Public Class SCA1
     ' DGV選択時の表示
     Private Sub DGV1_ClickShow()
         ShowDGVList(DGV2)                               ' 交渉記録
-        ShowDGVList(DGV7)                               ' 物件情報
+        ShowDGV_FPLIST()                                ' 物件情報
         ShowDGVList(DGV9)                               ' 顧客詳細情報
 
         ShowAssignee()                                  ' 物件情報の受任者マークの表示設定
@@ -246,7 +228,7 @@ Public Class SCA1
     End Sub
 
     ' 追加ボタン 編集ボタン
-    Private Sub Button2_Click(sender As Object, e As EventArgs) Handles BT_B1.Click, BT_B2.Click
+    Private Sub Button2_Click(sender As Object, e As EventArgs) Handles BT_B2.Click, BT_B1.Click
         If DGV1.RowCount = 0 Then Exit Sub
 
         ' 編集ボタンが押下された場合
@@ -380,14 +362,14 @@ Public Class SCA1
 
     ' 物件情報の日付設定ボタン、DTP
     Private Sub DateTimePicker1_ValueChanged(sender As Object, e As EventArgs) Handles DTP_PI1.ValueChanged, BT_PI3.Click
-        If DGV7.CurrentCell.ColumnIndex <> 2 Then Exit Sub
-        DGV7.CurrentCell.Value = DTP_PI1.Value.ToString("yyyy/MM/dd")
+        If DGV_FPLIST.CurrentCell.ColumnIndex <> 2 Then Exit Sub
+        DGV_FPLIST.CurrentCell.Value = DTP_PI1.Value.ToString("yyyy/MM/dd")
     End Sub
 
     ' 物件情報の日付空白設定
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles BT_PI2.Click
-        If DGV7.CurrentCell.ColumnIndex <> 2 Then Exit Sub
-        DGV7.CurrentCell.Value = ""
+        If DGV_FPLIST.CurrentCell.ColumnIndex <> 2 Then Exit Sub
+        DGV_FPLIST.CurrentCell.Value = ""
     End Sub
 
     ' ショートカット F1
@@ -397,7 +379,6 @@ Public Class SCA1
                 cmn.OpenCurrentDir()
             Case Keys.F2
             Case Keys.F3
-                ShowDGVList_FPMNG()
             Case Keys.F4
                 'Dim dt As DataTable
                 'Dim ss = New SQLServer
@@ -433,7 +414,7 @@ Public Class SCA1
     ' DB更新通知 PI
     Public Sub NoticeUpdateDB_PI(result As Integer)
         log.cLog("EventCB: DB-PI更新通知result: " & result)
-        ShowDGVList(DGV7)
+        ShowDGV_FPLIST(GetFPPage())
     End Sub
 
 #End Region
@@ -445,12 +426,6 @@ Public Class SCA1
     End Sub
     Private Sub ShowDGVList(dgv As DataGridView, FilterWord As String)
         cmn.UpdPBar("顧客情報の表示中")
-        ' コーラー関数を保持
-        Dim st As New StackTrace()
-        Dim caller1 As Reflection.MethodBase = st.GetFrame(1).GetMethod()
-        Dim caller2 As Reflection.MethodBase = st.GetFrame(2).GetMethod()
-        CallerFunc = caller1.Name & " <- " & caller2.Name
-
         Dim idx As Integer = 0
         Dim dt As DataTable = Nothing
         Dim bindID As Integer
@@ -510,23 +485,7 @@ Public Class SCA1
             Case dgv Is DGV6                                ' ## 督促リスト
                 bindID = 5
                 dt = GetDunCosDataTable()
-            Case dgv Is DGV7                                ' 物件情報
-                ' ダミー顧客選択では物件情報を非表示
-                If DGV1.Rows.Count = 0 Then
-                    BT_PI4FIX.Enabled = False
-                    DGV7.Enabled = False
-                    Exit Sub
-                End If
-                If DGV1.CurrentRow.Cells(0).Value = Common.DUMMY_NO Then
-                    BT_PI4FIX.Enabled = False
-                    DGV7.Enabled = False
-                    Exit Sub
-                End If
-                DGV7.Enabled = True
-                BT_PI4FIX.Enabled = True
-                bindID = 6
-                dt = db.GetSelect(Sqldb.TID.PIM, "Select C02, C03, C04, C05 From ITEM Where C01 = '" & DGV_PIMENU.CurrentRow.Index & "' Order By C02")
-
+            'Case dgv Is DGV7                                
             'Case dgv Is DGV8           
 
             Case dgv Is DGV9    ' 顧客詳細情報表示
@@ -627,7 +586,7 @@ Public Class SCA1
                 End If
 
                 SearchColor(TB_SearchInput.Text)
-                log.TimerED("ShowDGVList End:" & dgv.Name & " - CallBack: " & CallerFunc)
+                log.TimerED("ShowDGVList End:" & dgv.Name)
                 Exit Sub
 
             Case Else
@@ -663,17 +622,12 @@ Public Class SCA1
             Case dgv Is DGV5
                 DGV5_CellClick()
                 L_STS_Rec.Text = " ( " & DGV5.Rows.Count & " / " & db.OrgDataTable(Sqldb.TID.SCD).Rows.Count & " ) 件 表示中"
-            Case dgv Is DGV7
-                ReadPIDB()
-                PIItemColoring()
-                ' ユーザーソート禁止
-                For Each c As DataGridViewColumn In dgv.Columns
-                    c.SortMode = DataGridViewColumnSortMode.NotSortable
-                Next c
+                'Case dgv Is DGV7
+
             Case Else
         End Select
 
-        log.TimerED("ShowDGVList End:" & dgv.Name & " - CallBack: " & CallerFunc)
+        log.TimerED("ShowDGVList End:" & dgv.Name)
     End Sub
 
     ' Bind列の設定
@@ -930,13 +884,11 @@ Public Class SCA1
                             Next
 
                             If firstCycle Then Continue For      ' 初回はファイル更新時刻の初期設定のために必ず更新が発生する、ただし更新はしない
-                            'If MyDBUpdate Then Continue For      ' 自分自身のDB更新だったら更新しない
                             If Not updateFlag Then Continue For
 
                             log.cLog("cycle - 実行:" & PList(n, PL_ID))
                             Invoke(New delegate_PoolingCallBack(AddressOf PoolingCallBack), PList(n, PL_ID))
                             updateFlag = False
-                            MyDBUpdate = False
                         Next
                         firstCycle = False
                         Thread.Sleep(POLLING_CYCLE)
@@ -1069,6 +1021,10 @@ Public Class SCA1
 
     ' 指定した加入者情報を表示する DGV1
     Public Sub ShowSelectUser(cid As String)
+        ShowSelectUser(cid, 0)
+    End Sub
+    ' itemIndexは物件情報の大項目番号
+    Public Sub ShowSelectUser(cid As String, itemIndex As Integer)
         ' フィルタかけられて、DGVに非表示になっていたら予め解除しておく
         Dim dt As DataTable = CType(DGV1.DataSource, DataTable)
         If dt.Select("[FK02] = '" & cid & "'").Length = 0 Then
@@ -1076,10 +1032,16 @@ Public Class SCA1
             ShowDGVList(DGV1, "")
         End If
 
+        DGV_PIMENU(0, itemIndex).Selected = True
+
         ' 検索して表示
         For Each row As DataGridViewRow In DGV1.Rows
-            If row.Cells(0).Value = cid Then DGV1.CurrentCell = DGV1(1, row.Index) : Exit For
+            If row.Cells(0).Value = cid Then
+                DGV1(1, row.Index).Selected = True
+                Exit For
+            End If
         Next
+
         TAB_A1.SelectedTab = Tab_1SC
     End Sub
 
@@ -1580,25 +1542,102 @@ Public Class SCA1
     Private Const PI_OFFSET_X As Integer = 2
     Private Const PI_OFFSET_Y As Integer = 2
 
+    ' 物件情報初期設定
+    Private Sub FPINFOInit()
+        For n = 0 To sccmn.FPITEMLIST.Length - 1
+            DGV_PIMENU.Rows.Add()
+            DGV_PIMENU(0, n).Value = sccmn.FPITEMLIST(n)
+        Next
+
+        CB_FPPerson.Items.Add("(全表示)")
+        CB_FPStatus.Items.Add("(全表示)")
+        CB_FPLIST.Items.Add("(全表示)")
+        CB_FPLIST.Items.AddRange(sccmn.FPITEMLIST)
+        CB_FPLIST.SelectedIndex = 0
+        CB_FPPerson.SelectedIndex = 0
+        CB_FPStatus.SelectedIndex = 0
+        Dim firstDayOfMonth As DateTime = New DateTime(DateTime.Now.Year, DateTime.Now.Month, 1)
+        DTP_FPST.Value = firstDayOfMonth
+    End Sub
+
+    ' 物件情報の入力欄を表示
+    Private Sub ShowDGV_FPLIST()
+        ShowDGV_FPLIST(0)
+    End Sub
+    Private Sub ShowDGV_FPLIST(pageIndex As Integer)
+        log.TimerST()
+        ' ダミー顧客選択では物件情報を非表示
+        If DGV1.Rows.Count = 0 OrElse (DGV1.CurrentRow IsNot Nothing AndAlso DGV1.CurrentRow.Cells(0).Value = Common.DUMMY_NO) Then
+            BT_FPSave.Enabled = False
+            DGV_FPLIST.Enabled = False
+            Exit Sub
+        End If
+        Dim ccid As String = DGV1.CurrentRow.Cells(0).Value
+        Dim piIndex As Integer = DGV_PIMENU.CurrentRow.Index
+        Dim keyId As Integer = db.GetFPCOSKeyId(ccid)
+
+        DGV_FPLIST.Enabled = True
+        BT_FPSave.Enabled = True
+
+        ' 小項目名をDBから取得して設定
+        Dim dt As DataTable = db.GetSelect(Sqldb.TID.FPITEM, $"SELECT {cmn.GetColumnsStr(2, 5)} FROM {db.GetTable(Sqldb.TID.FPITEM)} WHERE C01 = '{DGV_PIMENU.CurrentRow.Index:00}' Order By C02")
+        BindDGVList(DGV_FPLIST, dt, 6)
+        DGV_FPLIST.AutoGenerateColumns = False
+        DGV_FPLIST.DataSource = dt
+
+        Dim dt2 As DataTable
+        If piIndex = 0 Then
+            ' 基本情報の表示
+            dt2 = db.GetSelect(Sqldb.TID.FPCOS, $"SELECT {cmn.GetColumnsStr(4, 15)} FROM {db.DBTbl(Sqldb.TID.FPCOS, Sqldb.DBID.TABLE)} WHERE C02 = '{ccid}'")
+            SetFPPage(0, 0)   ' ページボタン非表示
+        Else
+            ' 基本情報以外の表示
+            dt2 = db.GetSelect(Sqldb.TID.FPDATA, $"SELECT {cmn.GetColumnsStr(5, 35)} FROM {db.DBTbl(Sqldb.TID.FPDATA, Sqldb.DBID.TABLE)} WHERE C03 = '{keyId}' AND C04 = '{piIndex - 1}' ORDER BY C01")
+            SetFPPage(pageIndex, dt2.Rows.Count)
+        End If
+
+        ' 値をDGVに設定
+        ' データが無い、もしくはNew PageのときはDBが未保存なので値設定を行わない
+        If dt2.Rows.Count > 0 AndAlso dt2.Rows.Count > pageIndex Then
+            For n = 0 To DGV_FPLIST.Rows.Count - 1
+                DGV_FPLIST.Rows(n).Cells(2).Value = dt2.Rows(GetFPPage())(n)
+            Next
+        End If
+        ' セルの色設定
+        ColorSetFPLIST()
+
+        ' ユーザーソート禁止
+        For Each c As DataGridViewColumn In DGV_FPLIST.Columns
+            c.SortMode = DataGridViewColumnSortMode.NotSortable
+        Next c
+        log.TimerED("ShowDGV_FPLIST")
+    End Sub
+
     Private Sub DGV_PIMENU_SelectionChanged(sender As Object, e As EventArgs) Handles DGV_PIMENU.SelectionChanged
-        ShowDGVList(DGV7)
+        ShowDGV_FPLIST()
     End Sub
 
-    ' 確定ボタン（なくても良さそうなら削除）
-    Private Sub Button9_Click(sender As Object, e As EventArgs) Handles BT_PI4FIX.Click
-        DGV7.EndEdit()
-        DGV7.CurrentCell = DGV7(1, 0)
-        UpdatePIDB()
-        PIItemColoring()    ' 物件データの項目名カラーリング
+    ' 保存ボタン
+    Private Sub BT_FPSave_Click(sender As Object, e As EventArgs) Handles BT_FPSave.Click
+        cmn.StartPBar(2)
+        DGV_FPLIST.EndEdit()
+        DGV_FPLIST.CurrentCell = DGV_FPLIST(1, 0)
+        cmn.UpdPBar("保存中")
+        UpdateFPLIST()
         ShowAssignee()      ' 受任マークの表示
-        ShowDGVList(DGV7)
-        MsgBox("編集を確定しました。")
+        ShowDGV_FPLIST(GetFPPage())
+        ShowDGV_FPMNG()
+        HintSet($"物件情報を保存しました。 {DGV9(1, 2).Value}様 [{DGV_PIMENU.CurrentRow.Cells(0).Value}]")
+        cmn.EndPBar()
     End Sub
 
-    Private Sub BT_FPMNG_JUMP_Click(sender As Object, e As EventArgs) Handles BT_FPMNG_JUMP.Click
+    ' ジャンプボタン
+    Private Sub BT_FPMNG_JUMP_Click(sender As Object, e As DataGridViewCellEventArgs) Handles DGV_FPMNG.CellDoubleClick, BT_FPMNG_JUMP.Click
         If DGV_FPMNG.Rows.Count = 0 Then Exit Sub
+        If e.RowIndex < 0 Then Exit Sub
         Cursor.Current = Cursors.WaitCursor             ' マウスカーソルを砂時計に
-        ShowSelectUser(DGV_FPMNG.CurrentRow.Cells(1).Value)
+        ' 該当する物件情報を表示
+        ShowSelectUser(DGV_FPMNG.CurrentRow.Cells(2).Value, Array.IndexOf(sccmn.FPITEMLIST, DGV_FPMNG.CurrentRow.Cells(4).Value))
     End Sub
 
     ' Excel出力
@@ -1606,224 +1645,168 @@ Public Class SCA1
         cmn.ExcelOutputDGV($"融資物件一覧.xlsx", DGV_FPMNG)
     End Sub
 
-    ' 入力データをDBに更新
-    Private Sub UpdatePIDB()
-        Dim dgv As DataGridView = DGV7
+    ' ページボタン
+    Private Sub BT_FP_PAGE_Click(sender As Object, e As EventArgs) Handles BT_FP_PAGE.Click
+        If DGV1.Rows.Count = 0 Then Exit Sub
+        Dim piIndex As Integer = DGV_PIMENU.CurrentRow.Index
+        If piIndex = 0 Then Exit Sub
         Dim ccid As String = DGV1.CurrentRow.Cells(0).Value
-        Dim clmName As String = "C" & (DGV_PIMENU.CurrentRow.Index + 2).ToString("D2")
-        Dim regText As String = ""
-        Dim cmd As String = ""
-        For n = 0 To dgv.Rows.Count - 1
-            regText += String.Format("{0}`", dgv(2, n).Value)
-        Next
-        log.cLog("[UpdatePIDB] regText:" & regText)
+        Dim keyId As Integer = db.GetFPCOSKeyId(ccid)
 
-        ' 該当顧客1名の物件情報データを検索or取得して、新規登録or更新
-        Dim dt As DataTable = db.GetSelect(Sqldb.TID.PI, "Select * From " & db.DBTbl(Sqldb.TID.PI, Sqldb.DBID.TABLE) & " Where C01 = '" & ccid & "'")
-        If dt.Rows.Count = 0 Then
-            ' 存在しないので新規登録
-            ' 新規登録時に、PIM(マスター)を参照して各物件情報の項目数分の区切り文字 ` を入れておく。区切りがないとExcel出力できない
-            cmd = String.Format("Insert Into [TBL] Values('{0}',", ccid)
-            Dim dtm As DataTable = db.GetSelect(Sqldb.TID.PIM, "Select C01 From ITEM  Order By C01, C02")           ' マスター項目を取得して各項目の数を取得する
-            Dim cMax As Integer = dtm.Compute("MAX(C01)", Nothing)                                                  ' C01の最大値を取得
-            For n = 0 To cMax
-                Dim prep As New String(Common.PARTITION, dtm.Select("C01 = '" & n & "'").Length)                    ' 項目(C02)の数だけパーティション記号 ` をつける
-                cmd += String.Format("'{0}',", prep)
-            Next
-            cmd = RegularExpressions.Regex.Replace(cmd, ",$", "")  ' 末尾の , を削除
-            cmd += ");"        ' 未使用のC09,C10分
-            log.cLog("[UpdatePIDB] 新規登録 cmd: " & cmd)
-        End If
-        ' (新規作成後に)更新
-        cmd += String.Format("Update [TBL] Set {0} = '{1}' Where C01 = '{2}';", clmName, regText, ccid)
-        log.cLog("[UpdatePIDB] 更新 cmd: " & cmd)
-        db.ExeSQL(Sqldb.TID.PI, cmd)
+        ' 基本情報以外の表示
+        Dim dt As DataTable = db.GetSelect(Sqldb.TID.FPDATA, $"SELECT C01 FROM {db.GetTable(Sqldb.TID.FPDATA)} WHERE C03 = '{keyId}' AND C04 = '{piIndex - 1}' ORDER BY C01")
+        Dim maxPageCount As Integer = dt.Rows.Count
+
+        Select Case GetFPPage()
+            Case (maxPageCount - 1)
+                ' 最大値を超える新規ページの作成
+                SetFPPage(GetFPPage() + 1, maxPageCount)
+                ' 新規登録用の白紙画面を表示
+                For n = 0 To DGV_FPLIST.Rows.Count - 1
+                    DGV_FPLIST(2, n).Value = ""
+                Next
+
+            Case maxPageCount
+                ' 新規登録画面から1ページ目に戻る
+                ShowDGV_FPLIST(0)
+
+            Case Else
+                ' 通常のカウントアップ
+                ShowDGV_FPLIST(GetFPPage() + 1)
+        End Select
     End Sub
 
-    ' 入力値を読み込む
-    Private Sub ReadPIDB()
-        Dim ccid As String = DGV1.CurrentRow.Cells(0).Value
-        ' 入力値をDBから読み出す
-        Dim dt As DataTable = db.GetSelect(Sqldb.TID.PI, "Select * From " & db.DBTbl(Sqldb.TID.PI, Sqldb.DBID.TABLE) & " Where C01 = '" & ccid & "'")
-        If dt.Rows.Count = 1 Then
-            Dim words As String() = dt.Rows(0).Item(DGV_PIMENU.CurrentRow.Index + 1).ToString.Split("`")
-            ReDim Preserve words(UBound(words) - 1)                             ' words末尾の余白を-2削除
-            For n = 0 To words.Length - 1
-                ' DataTableにBindさせるには以下のコードを使う。 bind設定に C4 を追加することで設定完了
-                ' ただしBindさせると入力値欄でnullを設定するとエラーが発生してしまうので、暫定でDGVに直書きしている。
-                'dt.Rows(n).Item(3) = words(n)          
-                DGV7.Rows(n).Cells(2).Value = words(n)      'DGV直書き (DGVソートが出来なくなる)
-                ' log.cLog(String.Format("[ReadPIDB]  words({0}): {1}", n, words(n)))
-            Next
-        End If
+    ' 入力データをDBに更新
+    Private Sub UpdateFPLIST()
+        Dim dgv As DataGridView = DGV_FPLIST
+        Dim cid As String = DGV1.CurrentRow.Cells(0).Value
+        Dim keyId As Long
+        Dim piIndex As String = DGV_PIMENU.CurrentRow.Index
+        Dim dt As DataTable
+        Dim cmd As String
 
-        DGV7.Columns(2).DefaultCellStyle.BackColor = System.Drawing.Color.White                            ' 予め背景色を白に設定
+        ' 基本情報があるか確認
+        keyId = db.GetFPCOSKeyId(cid)
+        If keyId < 0 Then
+            ' 基本情報(FPCOS)の新規登録
+            Dim cName As String = ""
+            Dim dr As DataRow() = db.OrgDataTablePlusAssist.Select($"FK02 = {cid}")
+            If dr.Length > 0 Then
+                cName = dr(0)(9)  ' 顧客名を取得
+            End If
+            cmd = $"INSERT INTO {db.GetTable(Sqldb.TID.FPCOS)} (C02, C03) VALUES ('{cid}', '{cName}');"
+            log.cLog($"FPCOS : {cmd}")
+            keyId = db.ExeSQL(Sqldb.TID.FPCOS, cmd)
+        End If
+        log.cLog($"keyId : {keyId}")
+
+        ' 選択中の大項目
+        Select Case piIndex
+            Case 0
+                ' 基本情報が編集されたので、基本情報(FPCOS)の更新
+                Dim regData As String = $"C02 = '{cid}',"
+                For n = 0 To dgv.Rows.Count - 1
+                    regData += $"C{(n + 4):00} = '{dgv(2, n).Value}',"
+                Next
+                regData = cmn.DelLastChar(regData)    ' 末尾のカンマを削除
+                cmd = $"UPDATE {db.GetTable(Sqldb.TID.FPCOS)} SET {regData} WHERE C02 = '{cid}';"
+                log.cLog($"FPCOS : {cmd}")
+                db.ExeSQL(Sqldb.TID.FPCOS, cmd)
+
+            Case Else
+                ' データ部があるか確認
+                dt = db.GetSelect(Sqldb.TID.FPDATA, $"SELECT C01 FROM {db.GetTable(Sqldb.TID.FPDATA)} WHERE C03 = '{keyId}' AND C04 = '{piIndex - 1}' ORDER BY C01")
+                ' データがない、もしくは、新規ページ作成の場合はInsert
+                If dt.Rows.Count = 0 Or (GetFPPage() + 1) > dt.Rows.Count Then
+                    ' データ部(FPDATA)の新規登録 C02～C04 + 項目数
+                    Dim itemCnt As Integer = dgv.Rows.Count
+                    Dim regData As String = $"'{Now:yyyy/MM/dd HH:mm}','{keyId}','{piIndex - 1}',"
+                    For n = 0 To dgv.Rows.Count - 1
+                        regData += $"'{dgv(2, n).Value}',"
+                    Next
+                    regData = cmn.DelLastChar(regData)    ' 末尾のカンマを削除
+                    cmd = $"INSERT INTO {db.GetTable(Sqldb.TID.FPDATA)} ({cmn.GetColumnsStr(2, itemCnt + 4)}) VALUES ({regData});"
+                Else
+
+                    ' データ部(FPDATA)の更新
+                    Dim regData As String = ""
+                    Dim isEmpty As Boolean = True
+                    Dim recordId As Integer = dt.Rows(GetFPPage())(0)
+                    For n = 0 To dgv.Rows.Count - 1
+                        If Not String.IsNullOrWhiteSpace(Convert.ToString(dgv(2, n).Value)) Then isEmpty = False    ' データ無しか確認
+                        regData += $"C{(n + 5):00} = '{dgv(2, n).Value}',"
+                    Next
+                    regData = cmn.DelLastChar(regData)    ' 末尾のカンマを削除
+                    If isEmpty Then
+                        ' 全てデータ無しの場合はレコード削除
+                        ' 複数レコードある場合は、先頭からページ数分の該当レコードが削除対象となる
+                        cmd = $"DELETE FROM {db.GetTable(Sqldb.TID.FPDATA)} WHERE C01 = '{recordId}';"
+                    Else
+                        cmd = $"UPDATE {db.GetTable(Sqldb.TID.FPDATA)} SET {regData} WHERE C01 = '{recordId}';"
+                    End If
+                End If
+                log.cLog($"FPDATA : {cmd}")
+                db.ExeSQL(Sqldb.TID.FPDATA, cmd)
+        End Select
+    End Sub
+
+    ' 物件情報のページ操作
+    Private Sub SetFPPage(actIndex As Integer, maxCount As Integer)
+        FPPageNo = actIndex
+        log.cLog($"Page:{FPPageNo}")
+        BT_FP_PAGE.Visible = (maxCount > 0)
+        If (actIndex + 1) > maxCount Then
+            BT_FP_PAGE.Text = $"New Page"
+        Else
+            BT_FP_PAGE.Text = $"Page {actIndex + 1} / {maxCount}"
+        End If
+    End Sub
+    Private Function GetFPPage() As Integer
+        Return FPPageNo
+    End Function
+
+    Private Sub ColorSetFPLIST()
+        Dim ccid As String = DGV1.CurrentRow.Cells(0).Value
+        Dim keyId As Integer = db.GetFPCOSKeyId(ccid)
+        Dim piIndex As Integer = DGV_PIMENU.CurrentRow.Index
+
+        ' 予め背景色を白に設定
+        DGV_FPLIST.Columns(2).DefaultCellStyle.BackColor = System.Drawing.Color.White
         ' 各項目ごとの初期セッティング
-        Select Case DGV_PIMENU.CurrentRow.Index
+        Select Case piIndex
             Case 0
                 ' 基本物件情報の「先頭1,2,3番目の項目」はフラット35情報を表示（編集不可能）
                 If db.OrgDataTablePlusAssist.Select("[FK02] = '" & ccid & "'").Length = 0 Then Exit Sub
                 Dim tdt As DataTable = db.OrgDataTablePlusAssist.Select("[FK02] = '" & ccid & "'").CopyToDataTable
-                If Not tdt.Rows.Count = 1 Then Exit Sub  ' データがない場合は読み込みしないで終了
-                DGV7(2, 0).Value = tdt.Rows(0).Item(63).ToString
-                DGV7(2, 1).Value = tdt.Rows(0).Item(64).ToString
-                DGV7(2, 2).Value = tdt.Rows(0).Item(65).ToString
+                DGV_FPLIST(2, 0).Value = tdt.Rows(0).Item(63).ToString
+                DGV_FPLIST(2, 1).Value = tdt.Rows(0).Item(64).ToString
+                DGV_FPLIST(2, 2).Value = tdt.Rows(0).Item(65).ToString
 
                 ' 上3段のセルを編集不可・カラーリング
-                DGV7(2, 0).ReadOnly = True
-                DGV7(2, 1).ReadOnly = True
-                DGV7(2, 2).ReadOnly = True
-                DGV7(2, 0).Style.BackColor = System.Drawing.Color.LightSalmon
-                DGV7(2, 1).Style.BackColor = System.Drawing.Color.LightSalmon
-                DGV7(2, 2).Style.BackColor = System.Drawing.Color.LightSalmon
-
-            Case 4, 5, 6
+                Dim targetCells As DataGridViewCell() = {DGV_FPLIST(2, 0), DGV_FPLIST(2, 1), DGV_FPLIST(2, 2)}
+                For Each cell In targetCells
+                    cell.ReadOnly = True
+                    cell.Style.BackColor = System.Drawing.Color.LightSalmon
+                Next
+            Case 3 ' 破産
                 ' 再生・破産のカラーリング
-                DGV7(1, 0).Style.BackColor = System.Drawing.Color.DeepSkyBlue
-                DGV7(1, 1).Style.BackColor = System.Drawing.Color.DeepSkyBlue
-                DGV7(1, 9).Style.BackColor = System.Drawing.Color.Pink
-                DGV7(1, 17).Style.BackColor = System.Drawing.Color.Pink
-                DGV7(1, 18).Style.BackColor = System.Drawing.Color.Pink
+                DGV_FPLIST(1, 25).Style.BackColor = System.Drawing.Color.Pink
+            Case 4 ' 再生
+                DGV_FPLIST(1, 5).Style.BackColor = System.Drawing.Color.DeepSkyBlue
+                DGV_FPLIST(1, 6).Style.BackColor = System.Drawing.Color.DeepSkyBlue
+                DGV_FPLIST(1, 7).Style.BackColor = System.Drawing.Color.Pink
+                DGV_FPLIST(1, 21).Style.BackColor = System.Drawing.Color.Pink
         End Select
 
-    End Sub
+        ' PIMENUのカラーリング
+        For piRow = 0 To DGV_PIMENU.Rows.Count - 1
+            DGV_PIMENU.Rows(piRow).DefaultCellStyle.BackColor = System.Drawing.Color.White      ' 初期値の白色に設定
 
-    ' Excel出力
-    Private Sub Button9_Click_1(sender As Object, e As EventArgs) Handles BT_PI5OUT.Click
-        Cursor.Current = Cursors.WaitCursor             ' マウスカーソルを砂時計に
-        Dim f As New SCA1_S5_ExcOut
-        f.ShowDialog()
-        f.Dispose()
-        Exit Sub
-    End Sub
-
-    ' Excel 読込ボタン
-    Private Sub BT_PI6READ_Click(sender As Object, e As EventArgs) Handles BT_PI6READ.Click
-        Dim fpath As String = cmn.DialogReadFile("A_SC物件情報.xlsx")
-        If fpath <> "" Then
-            ReadPIExcel(fpath)
-        End If
-    End Sub
-
-    Private Sub DGV7_DragEnter(sender As Object, e As DragEventArgs) Handles DGV7.DragEnter
-        If e.Data.GetDataPresent(DataFormats.FileDrop) Then
-            'ドラッグされたデータ形式を調べ、ファイルのときはコピーとする
-            e.Effect = DragDropEffects.Copy
-        Else
-            'ファイル以外は受け付けない
-            e.Effect = DragDropEffects.None
-        End If
-    End Sub
-
-    Private Sub DGV7_DragDrop(sender As Object, e As DragEventArgs) Handles DGV7.DragDrop
-        'ドロップされたすべてのファイル名を取得する
-        Dim dFile As String() = CType(e.Data.GetData(DataFormats.FileDrop, False), String())
-        If Path.GetExtension(dFile(0)) <> ".xlsx" Then
-            MsgBox("エクセルファイル(拡張子が.xlsx)ではないので読み込めません。")
-            Exit Sub
-        End If
-        ReadPIExcel(dFile(0))
-    End Sub
-
-    ' 物件情報エクセルファイルの読み込み
-    Private Sub ReadPIExcel(fname As String)
-        Cursor.Current = Cursors.WaitCursor             ' マウスカーソルを砂時計に
-        db.UpdateOrigDT(Sqldb.TID.PI)
-
-        Dim rData As String(,) = exc.ReadExc(fname, "Sheet1")         ' エクセルデータ取得
-        If rData Is Nothing Then Exit Sub
-        Dim maxCol As Integer = rData.GetLength(0)                    ' 最大列数(列)
-        Dim maxRow As Integer = rData.GetLength(1)                    ' 最大行数(行)
-        Dim cosCnt As Integer = maxRow - 3                            ' 顧客数
-
-        Dim r As Integer = MessageBox.Show(cosCnt & "件分の物件情報を読み込みます。", "ご確認ください", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
-        If r = vbNo Then Exit Sub
-
-        ' Excel1列目を右側に、大項目(基本物件情報など)を検索してリストボックスと名称が一致したら、各顧客分の読み込みを実行する
-        ' 読み込む小項目の数は、次の大項目が見つかるまでの空白の個数。（もし項目数オーバーの場合はエラー通知）
-        ' リストボックスに見つからない大項目だった場合は、ユーザーに項目名が変わったことを告げる
-
-        ' 1行目の大項目名だけ抽出
-        Dim itemList As New List(Of String)
-        For idx = 0 To maxCol - 1 - PI_OFFSET_X
-            If rData(idx + PI_OFFSET_X, 0) <> "" Then itemList.Add(rData(idx + PI_OFFSET_X, 0))
-        Next
-
-        Dim cmd As String = ""
-        Dim insCnt As Integer = 0
-        Dim updCnt As Integer = 0
-        ' 顧客毎に読み込む
-        For cosNum = 0 To cosCnt - 1
-            Dim readExcelIdx As Integer = 0                                 ' Excel読み取り位置(Columun)
-            Dim ccid As String = rData(0, cosNum + PI_OFFSET_Y)             ' 顧客番号取得
-            Dim cmdArr(11) As String                                        ' SQLコマンドのデータ部  要素数 10 はPIテーブル数
-            If ccid = "" Then Continue For                                  ' 念の為顧客番号が空白ならスキップ
-
-            ' コマンドのフォーマット部を作成
-            If db.OrgDataTable(Sqldb.TID.PI).Select("[C01] = '" & ccid & "'").Length = 0 Then
-                ' 該当顧客番号が存在しないので新規登録
-                cmd += "Insert Into TBL Values('{0}','{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}','{9}','{10}');"
-                insCnt += 1
-            Else
-                ' 該当顧客番号が既に存在するので更新登録
-                cmd += "Update TBL Set C02='{1}',C03='{2}',C04='{3}',C05='{4}',C06='{5}',C07='{6}',C08='{7}',C09='{8}',C10='{9}',C11='{10}' " &
-                       "Where C01='{0}';"
-                updCnt += 1
+            ' 値が設定されている項目のみ色付け
+            If db.GetSelect(Sqldb.TID.FPDATA, $"Select C04 From {db.DBTbl(Sqldb.TID.FPDATA, Sqldb.DBID.TABLE)} Where C03 = '{keyId}' And C04 = '{piRow - 1}'").Rows.Count > 0 Then
+                DGV_PIMENU.Rows(piRow).DefaultCellStyle.BackColor = System.Drawing.Color.Orange
             End If
-
-            ' 大項目毎に読み込む
-            Dim itemIdxL As Integer
-            For itemNum = 0 To itemList.Count - 1
-                itemIdxL = Array.IndexOf(PIItemList, itemList(itemNum))
-                If itemIdxL < 0 Then
-                    ' 大項目名がリストボックスに見当たらない。(項目名が変わった可能性)
-                    MsgBox("読み込んだエクセルの項目が変わっている可能性があります。" & vbCrLf &
-                           "以下の項目が物件情報に見当たらないため、読み込みを中止します。" & vbCrLf & vbCrLf & itemList(itemNum))
-                    Exit Sub
-                End If
-
-                Dim itemCntS As Integer = db.OrgDataTable(Sqldb.TID.PIM).Select("[C01] = '" & itemIdxL & "'").Length          ' 項目名マスタDBから、指定大項目に該当する小項目数を取得
-                For idx = 0 To itemCntS - 1
-                    cmdArr(itemIdxL) += rData(readExcelIdx + idx + PI_OFFSET_X, cosNum + PI_OFFSET_Y) & "`"
-                Next idx
-                readExcelIdx += itemCntS
-            Next itemNum
-
-            ' コマンドのデータ部を作成
-            cmd = String.Format(cmd,
-                            ccid,                          ' 01 顧客番号
-                            cmdArr(0),                     ' 02 物件情報
-                            cmdArr(1),                     ' 03 任売情報 
-                            cmdArr(2),                     ' 04 競売情報1 
-                            cmdArr(3),                     ' 05 競売情報2 
-                            cmdArr(4),                     ' 06 個人再生・破産情報1
-                            cmdArr(5),                     ' 07 個人再生・破産情報2
-                            cmdArr(6),                     ' 08 個人再生・破産情報3
-                            cmdArr(7),                     ' 09 差押1 
-                            cmdArr(8),                     ' 10 差押2
-                            cmdArr(9))                     ' 11 差押3
-        Next cosNum
-        cmd = cmn.RegReplace(cmd, "C[0-9][0-9]='`*'[,]", "")         ' Excelの値がない部分は上書き(空白)しない。「C09=''」 の文言を置換削除
-        cmd = cmn.RegReplace(cmd, ",Where", " Where")               ' 上の置換で、「,Where」となる場合SQL構文エラーになるのでカンマを取り除く
-        db.ExeSQL(Sqldb.TID.PI, cmd)
-        Console.WriteLine("cmd:" & cmd)
-        ShowDGVList(DGV7)
-        MsgBox("読み込み完了")
-    End Sub
-
-    ' 物件情報の項目が存在する場合にカラーリング
-    Private Sub PIItemColoring()
-        For n = 0 To DGV_PIMENU.Rows.Count - 1
-            DGV_PIMENU.Rows(n).DefaultCellStyle.BackColor = System.Drawing.Color.White
         Next
-        If DGV1.Rows.Count = 0 Then Exit Sub
-        If DGV1.CurrentRow.Cells(0).Value = "" Then Exit Sub
-        Dim dt As DataTable = db.GetSelect(Sqldb.TID.PI, "Select C02, C03, C04, C05, C06, C07, C08, C09, C10, C11 From TBL Where C01 = '" & DGV1.CurrentRow.Cells(0).Value & "'")
-        If dt.Rows.Count = 1 Then
-            For n = 0 To DGV_PIMENU.Rows.Count - 1
-                If cmn.RegReplace(dt.Rows(0).Item(n), Common.PARTITION, "").Length > 0 Then DGV_PIMENU.Rows(n).DefaultCellStyle.BackColor = System.Drawing.Color.Orange
-            Next
-        End If
     End Sub
 
     ' 記録一覧 表示期間変更イベント
@@ -1842,7 +1825,6 @@ Public Class SCA1
     ' 受任者条件 : 再生・破産の受任日が設定されている
     Private Sub ShowAssignee()
         If DGV1.Rows.Count = 0 Then Exit Sub
-        log.cLog("ShowAssignee 受任マーク設定")
 
         Dim cid As String = DGV1.CurrentRow.Cells(0).Value
         ' 受任条件に一致していたら受任ONに設定
@@ -1855,45 +1837,38 @@ Public Class SCA1
     ' [cid]   顧客番号
     ' [cName] 主債務者名 or 連帯債務者名
     Public Function GetAssignee(cid As String, cName As String) As Boolean
-        Dim itemIdx1() As Integer = {6, 7, 8}       ' 大項目番号
-        Dim NameIdx As Integer = 0                  ' 該当者名識別番号
-        Dim OnIdx As Integer = 1                    ' 受任者ONにする条件の識別番号
-        Dim OffIdx() As Integer = {9, 17, 18}       ' 受任者OFFにする条件の識別番号
-
         If cName.Length = 0 Then Return False       ' 顧客名がない場合は無条件で非受任者
 
-        ' 大項目番号リストを全てチェック
-        '   受任者は主債務者と連帯債務者の場合があるので、複数個の情報があっても全て有効。
-        ' 　同じ該当者に、受任ON 受任OFFが混在してた場合は、受任ONが優先。
-        For num = 0 To itemIdx1.Length - 1
-            ' 大項目番号の情報取得
-            Dim col As String = "C" & (itemIdx1(num)).ToString("00")
-            Dim dt As DataTable = db.GetSelect(Sqldb.TID.PI, String.Format("Select {0} From TBL Where C01 = '{1}'", col, cid))
-            If dt.Rows.Count = 0 Then Continue For
+        Dim keyId As Integer = db.GetFPCOSKeyId(cid)
+        Dim regName As String
+        ' 再生(3)の登録情報を取得
+        Dim dtReg As DataTable = db.GetSelect(Sqldb.TID.FPDATA, $"SELECT C10, C11, C12, C26 FROM {db.GetTable(Sqldb.TID.FPDATA)} WHERE C03 = '{keyId}' AND C04 = '3'")
+        If dtReg.Rows.Count = 0 Then Return False  ' 再生項目が登録されていなければ、受任OFF
 
-            ' 小項目ごとの情報取得
-            Dim words As String() = dt.Rows(0).Item(0).ToString.Split("`")
+        ' 再生の該当者名(C10)が設定無し、受任OFF
+        If dtReg(0)(0).Length = 0 Then Return False
+        regName = dtReg(0)(0)
+        ' 再生の受任日(C11)が設定無し、受任OFF
+        If dtReg(0)(1).Length = 0 Then Return False
 
-            ' 該当者名が設定されてなければ受任ONにしない
-            If words(NameIdx).Length = 0 Then Continue For
-            ' 受任日が設定されてなければ受任ONにしない
-            If words(OnIdx).Length = 0 Then Continue For
+        ' 再生の辞任日(C12)が設定あり、受任OFF
+        If dtReg(0)(2).Length > 0 Then Return False
+        ' 再生の認可確定日(C26)が設定あり、受任OFF
+        If dtReg(0)(3).Length > 0 Then Return False
 
-            ' 受任OFFの項目に設定されているものがあれば受任ONにしない
-            Dim offNum = 0
-            While (offNum <= OffIdx.Length - 1)
-                If words(OffIdx(offNum)).Length > 0 Then Continue For
-                offNum += 1
-            End While
+        ' 破産(4)の登録情報を取得
+        Dim dtDel As DataTable = db.GetSelect(Sqldb.TID.FPDATA, $"SELECT C30 FROM {db.GetTable(Sqldb.TID.FPDATA)} WHERE C03 = '{keyId}' AND C04 = '4'")
+        If dtDel.Rows.Count > 0 Then
+            ' 破産の免責確定日(C30)が設定あり、受任OFF
+            If dtDel(0)(0).Length > 0 Then Return False
+        End If
 
-            ' 該当者名に主債務者名、もしくは連帯債務者のcNameが含まれていれば受任者ON
-            ' カタカナを半角→全角、スペース(空白)を削除　して、該当者名に含まれているか比較
-            If cmn.RegReplace(StrConv(words(NameIdx), VbStrConv.Wide), "　", "").IndexOf(cmn.RegReplace(cName, "　", "")) >= 0 Then
-                ' 受任者を返却
-                Return True
-            End If
-        Next
-
+        ' 該当者名に主債務者名、もしくは連帯債務者のcNameが含まれていれば受任者ON
+        ' カタカナを半角→全角、スペース(空白)を削除　して、該当者名に含まれているか比較
+        If cmn.RegReplace(StrConv(regName, VbStrConv.Wide), "　", "").IndexOf(cmn.RegReplace(cName, "　", "")) >= 0 Then
+            ' 受任者を返却
+            Return True
+        End If
         Return False
     End Function
 
@@ -1912,38 +1887,34 @@ Public Class SCA1
     End Sub
 
     ' 受任ボタン
-    Private Sub L_JUNIN1_Click(sender As Object, e As EventArgs) Handles L_JUNIN1.Click, L_JUNIN2.Click
+    Private Sub L_JUNIN1_Click(sender As Object, e As EventArgs) Handles L_JUNIN2.Click, L_JUNIN1.Click
         If DGV1.Rows.Count = 0 Then Exit Sub
         If DGV1.CurrentRow.Cells(0).Value = Common.DUMMY_NO Then Exit Sub
         Dim eBt As Label = CType(sender, Label)
-
-        ShowDGVList(DGV7)
         HintSet("必要事項を入力して、編集確定ボタンを押してください。")
 
-        ' 再生・破産1～3以外を選択してたら再生・破産1を選択中にする
-        Select Case DGV_PIMENU.CurrentRow.Index
-            Case 4, 5, 6
-            Case Else : DGV_PIMENU(0, 4).Selected = True : ShowDGVList(DGV7)
-        End Select
+        If DGV_PIMENU.CurrentRow.Index <> 4 Then
+            DGV_PIMENU(0, 4).Selected = True
+            ShowDGV_FPLIST(0)
+        Else
+        End If
 
         Select Case eBt.ForeColor
-            Case System.Drawing.Color.Gray       ' 受任ON
+            Case System.Drawing.Color.Gray       ' 受任ONにする
+                If DGV_FPLIST(2, 6).Value = "" Then
+                    DGV_FPLIST(2, 6).Value = Today.ToString("yyyy/MM/dd")       ' 受任日が空欄なら今日の日付を設定
+                End If
 
-                If DGV7(2, 1).Value = "" Then DGV7(2, 1).Value = Today.ToString("yyyy/MM/dd")       ' 受任日が空欄なら今日の日付を設定
-                DGV7(2, 2).Selected = True
-                DGV7.BeginEdit(True)
-
+                ' 該当者名の設定
                 Select Case eBt.Name
                     Case "L_JUNIN1"             ' 主債務者
-                        DGV7(2, 0).Value = DGV9(1, 2).Value
+                        DGV_FPLIST(2, 5).Value = DGV9(1, 2).Value
                     Case Else                   ' 連帯債務者
-                        DGV7(2, 0).Value = DGV9(1, 7).Value
+                        DGV_FPLIST(2, 5).Value = DGV9(1, 7).Value
                 End Select
                 MsgBox(String.Format("受任に設定します。{0}必要事項(青い項目)を入力して確定してください。{0}赤い項目に入力がある場合は、入力情報を削除することで受任状態になります。", vbCrLf))
 
-            Case System.Drawing.Color.Black        ' 受任OFF
-                DGV7(2, 2).Selected = True
-
+            Case System.Drawing.Color.Black        ' 受任OFFにする
                 MsgBox(String.Format("受任を解除します。{0}必要事項(赤い項目)のいずれかに入力して確定してください。", vbCrLf))
         End Select
     End Sub
@@ -1952,65 +1923,106 @@ Public Class SCA1
         L_STS.Text = str
     End Sub
 
-    Private Sub ShowDGVList_FPMNG()
+    Private Sub ShowDGV_FPMNG()
         log.TimerST()
-
-        ' DataTableを取得
-        Dim dtFPIV As DataTable = db.OrgDataTable(Sqldb.TID.FPIV)
-        Dim dtFPIB As DataTable = db.OrgDataTable(Sqldb.TID.FPIB)
+        Dim dtFPCOS As DataTable = db.GetSelect(Sqldb.TID.FPCOS, $"SELECT * FROM {db.GetTable(Sqldb.TID.FPCOS)}")
+        Dim dtFPDATA As DataTable = db.GetSelect(Sqldb.TID.FPDATA, $"SELECT * FROM {db.GetTable(Sqldb.TID.FPDATA)}")
         Dim dgv As DataGridView = DGV_FPMNG
 
         ' DGVの行をクリア
         dgv.Rows.Clear()
-
-        ' dtFPIVの行数分だけDGVの行数を追加
-        For i As Integer = 0 To dtFPIV.Rows.Count - 1
+        ' dtFPDATAの行数分だけDGVの行数を追加
+        For i As Integer = 0 To dtFPDATA.Rows.Count - 1
             ' 新しい行をDGVに追加
             Dim rowIndex As Integer = dgv.Rows.Add()
             Dim currentRow As DataGridViewRow = dgv.Rows(rowIndex)
 
-            ' dtFPIVのデータをDGVに設定
-            With dtFPIV.Rows(i)
-                currentRow.Cells(0).Value = If(.Table.Columns.Contains("C01"), .Item("C01"), DBNull.Value)
-                currentRow.Cells(3).Value = If(.Table.Columns.Contains("C03"), sccmn.FPITEMLIST(cmn.Int(.Item("C03"))), DBNull.Value)
-                currentRow.Cells(4).Value = If(.Table.Columns.Contains("C04"), .Item("C04"), DBNull.Value)
-                currentRow.Cells(5).Value = If(.Table.Columns.Contains("C05"), .Item("C05"), DBNull.Value)
-                currentRow.Cells(6).Value = If(.Table.Columns.Contains("C06"), .Item("C06"), DBNull.Value)
-                currentRow.Cells(7).Value = If(.Table.Columns.Contains("C07"), .Item("C07"), DBNull.Value)
-                currentRow.Cells(8).Value = If(.Table.Columns.Contains("C08"), .Item("C08"), DBNull.Value)
+            ' dtFPDATAのデータをDGVに設定
+            With dtFPDATA.Rows(i)
+                currentRow.Cells(0).Value = If(.Table.Columns.Contains("C01"), .Item("C01"), DBNull.Value)                                  ' No
+                currentRow.Cells(1).Value = If(.Table.Columns.Contains("C02"), .Item("C02"), DBNull.Value)                                  ' 登録日時
+                currentRow.Cells(4).Value = If(.Table.Columns.Contains("C04"), sccmn.FPITEMLIST(cmn.Int(.Item("C04")) + 1), DBNull.Value)   ' 内容
+                currentRow.Cells(5).Value = If(.Table.Columns.Contains("C05"), .Item("C05"), DBNull.Value)                                  ' 担当者
+                currentRow.Cells(6).Value = If(.Table.Columns.Contains("C06"), .Item("C06"), DBNull.Value)                                  ' ステータス
+                currentRow.Cells(7).Value = If(.Table.Columns.Contains("C07"), .Item("C07"), DBNull.Value)                                  ' 概要
+                currentRow.Cells(8).Value = If(.Table.Columns.Contains("C08"), .Item("C08"), DBNull.Value)                                  ' 次回対応日
+                currentRow.Cells(9).Value = If(.Table.Columns.Contains("C09"), .Item("C09"), DBNull.Value)                                  ' 最終対応日
 
-                ' dtFPIVのC02をインデックスとしてdtFPIBのデータを検索
-                Dim matchingRow = dtFPIB.Select("C01 = '" & .Item("C02").ToString() & "'").FirstOrDefault()
+                ' FPDATAのC03をインデックスとしてFPCOSのデータを検索
+                Dim matchingRow = dtFPCOS.Select("C01 = '" & .Item("C03").ToString() & "'").FirstOrDefault()
                 If matchingRow IsNot Nothing Then
-                    ' 一致するdtFPIBのレコードがあれば、DGVにC02とC03の値を設定
-                    currentRow.Cells(1).Value = matchingRow("C02")
-                    currentRow.Cells(2).Value = matchingRow("C03")
+                    ' 一致するdtFPCOSのレコードがあれば、DGVにC02とC03の値を設定
+                    currentRow.Cells(2).Value = matchingRow("C02")                  ' 債権番号
+                    currentRow.Cells(3).Value = matchingRow("C03")                  ' 債権者指名
                 End If
             End With
         Next
+        FilterDGV_FPMNG(DGV_FPMNG, TB_FPMNG_Search.Text)
+        dgv.Sort(dgv.Columns(1), ComponentModel.ListSortDirection.Descending)
 
-        log.TimerED("ShowDGVList:FPMNG")
+        If dgv.Rows.Count > 0 Then
+            dgv.ClearSelection() ' 既存の選択をクリア
+            For Each row As DataGridViewRow In dgv.Rows
+                If row.Visible Then
+                    dgv.CurrentCell = row.Cells(0) ' 可視の行の最初のセルを現在のセルに設定
+                    Exit For
+                End If
+            Next
+        End If
+        log.TimerED("ShowDGV_FPMNG")
     End Sub
 
     Private Sub TB_FPMNG_Search_TextChanged(sender As Object, e As KeyPressEventArgs) Handles TB_FPMNG_Search.KeyPress
         If e.KeyChar = ChrW(Keys.Enter) Then
-            FilterDGVByKeyword(DGV_FPMNG, TB_FPMNG_Search.Text)
+            ShowDGV_FPMNG()
         End If
     End Sub
 
-    Private Sub FilterDGVByKeyword(dgv As DataGridView, words As String)
+    ' フィルタ内容変更契機
+    Private Sub CB_FPLIST_SelectedIndexChanged(sender As Object, e As EventArgs) Handles DTP_FPST.CloseUp, DTP_FPED.CloseUp, CB_FPRangeAll.CheckedChanged, CB_FPPerson.SelectedIndexChanged, CB_FPLIST.SelectedIndexChanged
+        ShowDGV_FPMNG()
+    End Sub
+
+    ' FPMNG 管理表フィルタ
+    Private Sub FilterDGV_FPMNG(dgv As DataGridView, words As String)
         dgv.CurrentCell = Nothing ' 現在のセル選択をクリア
+        Dim startDate As Date = DTP_FPST.Value.Date
+        ' 終了日の時間を23:59に設定
+        Dim endDate As Date = DTP_FPED.Value.Date.AddHours(23).AddMinutes(59)
+        Dim filterByDate As Boolean = Not CB_FPRangeAll.Checked
+
         For Each row As DataGridViewRow In dgv.Rows
             row.Visible = False ' 一旦すべての行を非表示にする
+            Dim keywordMatch As Boolean = False
             For Each cell As DataGridViewCell In row.Cells
                 If cell.Value IsNot Nothing AndAlso cell.Value.ToString().ToLower().Contains(words.ToLower()) Then
-                    row.Visible = True ' キーワードが含まれている行を表示
+                    keywordMatch = True ' キーワードが含まれている行を表示
                     Exit For ' 一つのセルでキーワードが見つかれば、その行は表示する
                 End If
             Next
+
+            ' C05列に対するフィルタリング
+            Dim c05Match As Boolean = (CB_FPLIST.SelectedIndex <= 0 OrElse row.Cells("C05").Value.ToString().Equals(CB_FPLIST.SelectedItem.ToString()))
+
+            ' C02列（日付）に対するフィルタリング
+            Dim c02Match As Boolean = True
+            If filterByDate Then
+                Dim rowDate As Date = Date.ParseExact(row.Cells("C02").Value.ToString(), "yyyy/MM/dd HH:mm", System.Globalization.CultureInfo.InvariantCulture)
+                c02Match = (rowDate >= startDate AndAlso rowDate <= endDate)
+            End If
+
+            ' C06列に対するフィルタリング
+            Dim c06Match As Boolean = (CB_FPPerson.SelectedIndex <= 0 OrElse row.Cells("C06").Value.ToString().Equals(CB_FPPerson.SelectedItem.ToString()))
+
+            ' C07列に対するフィルタリング
+            Dim c07Match As Boolean = (CB_FPStatus.SelectedIndex <= 0 OrElse row.Cells("C07").Value.ToString().Equals(CB_FPStatus.SelectedItem.ToString()))
+
+            ' 全ての条件が真の場合のみ行を表示
+            If keywordMatch AndAlso c05Match AndAlso c02Match AndAlso c06Match AndAlso c07Match Then
+                row.Visible = True
+            End If
         Next
     End Sub
-
 
 #End Region
 
@@ -2092,7 +2104,7 @@ Public Class SCA1
     End Sub
 
     ' 追加・編集ボタン
-    Private Sub Button20_Click(sender As Object, e As EventArgs) Handles BT_MRAdd.Click, BT_MREdit.Click
+    Private Sub Button20_Click(sender As Object, e As EventArgs) Handles BT_MREdit.Click, BT_MRAdd.Click
         ' 何も選択せず編集ボタンを押していたら起動させない
         If sender.Text Is BT_MREdit.Text And DGV_MR1.CurrentRow Is Nothing Then
             Exit Sub

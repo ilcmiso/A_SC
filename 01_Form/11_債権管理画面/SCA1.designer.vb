@@ -60,6 +60,7 @@ Partial Class SCA1
         Dim DataGridViewCellStyle35 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle36 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle37 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle38 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(SCA1))
         Me.PBXX = New System.Windows.Forms.Button()
         Me.tt1 = New System.Windows.Forms.ToolTip(Me.components)
@@ -162,17 +163,15 @@ Partial Class SCA1
         Me.TB_ADDRESS3 = New System.Windows.Forms.TextBox()
         Me.L_STS = New System.Windows.Forms.Label()
         Me.PAN_A = New System.Windows.Forms.Panel()
-        Me.Button17 = New System.Windows.Forms.Button()
-        Me.DGV7 = New System.Windows.Forms.DataGridView()
+        Me.BT_FP_PAGE = New System.Windows.Forms.Button()
+        Me.DGV_FPLIST = New System.Windows.Forms.DataGridView()
         Me.Column26 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.DataGridViewTextBoxColumn11 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.DataGridViewTextBoxColumn12 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.DTP_PI1 = New System.Windows.Forms.DateTimePicker()
         Me.BT_PI2 = New System.Windows.Forms.Button()
         Me.BT_PI3 = New System.Windows.Forms.Button()
-        Me.BT_PI4FIX = New System.Windows.Forms.Button()
-        Me.BT_PI5OUT = New System.Windows.Forms.Button()
-        Me.BT_PI6READ = New System.Windows.Forms.Button()
+        Me.BT_FPSave = New System.Windows.Forms.Button()
         Me.DGV_PIMENU = New System.Windows.Forms.DataGridView()
         Me.DataGridViewTextBoxColumn17 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.L_JUNIN2 = New System.Windows.Forms.Label()
@@ -265,6 +264,17 @@ Partial Class SCA1
         Me.Label6 = New System.Windows.Forms.Label()
         Me.Button19 = New System.Windows.Forms.Button()
         Me.Tab_3Mng = New System.Windows.Forms.TabPage()
+        Me.CB_FPStatus = New System.Windows.Forms.ComboBox()
+        Me.Label13 = New System.Windows.Forms.Label()
+        Me.Label12 = New System.Windows.Forms.Label()
+        Me.CB_FPLIST = New System.Windows.Forms.ComboBox()
+        Me.CB_FPRangeAll = New System.Windows.Forms.CheckBox()
+        Me.Label9 = New System.Windows.Forms.Label()
+        Me.DTP_FPED = New System.Windows.Forms.DateTimePicker()
+        Me.DTP_FPST = New System.Windows.Forms.DateTimePicker()
+        Me.Label10 = New System.Windows.Forms.Label()
+        Me.CB_FPPerson = New System.Windows.Forms.ComboBox()
+        Me.Label11 = New System.Windows.Forms.Label()
         Me.BT_FPMNG_OutExcel = New System.Windows.Forms.Button()
         Me.BT_FPMNG_JUMP = New System.Windows.Forms.Button()
         Me.TB_FPMNG_Search = New System.Windows.Forms.TextBox()
@@ -276,9 +286,10 @@ Partial Class SCA1
         Me.C04 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.C05 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.C06 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.C10 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.C09 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.C07 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.C08 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.C09 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.CreatorExpress1 = New AdvanceSoftware.ExcelCreator.Xlsx.CreatorExpress(Me.components)
         Me.データ読み込みToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.機能ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -297,7 +308,7 @@ Partial Class SCA1
         CType(Me.DGV5, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Tab_1SC.SuspendLayout()
         Me.PAN_A.SuspendLayout()
-        CType(Me.DGV7, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.DGV_FPLIST, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.DGV_PIMENU, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.DGV9, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.DGV2, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -1557,43 +1568,42 @@ Partial Class SCA1
         '
         'PAN_A
         '
-        Me.PAN_A.Controls.Add(Me.Button17)
-        Me.PAN_A.Controls.Add(Me.DGV7)
+        Me.PAN_A.Controls.Add(Me.BT_FP_PAGE)
+        Me.PAN_A.Controls.Add(Me.DGV_FPLIST)
         Me.PAN_A.Controls.Add(Me.DTP_PI1)
         Me.PAN_A.Controls.Add(Me.BT_PI2)
         Me.PAN_A.Controls.Add(Me.BT_PI3)
-        Me.PAN_A.Controls.Add(Me.BT_PI4FIX)
-        Me.PAN_A.Controls.Add(Me.BT_PI5OUT)
-        Me.PAN_A.Controls.Add(Me.BT_PI6READ)
+        Me.PAN_A.Controls.Add(Me.BT_FPSave)
         Me.PAN_A.Controls.Add(Me.DGV_PIMENU)
         Me.PAN_A.Location = New System.Drawing.Point(1, 308)
         Me.PAN_A.Name = "PAN_A"
         Me.PAN_A.Size = New System.Drawing.Size(517, 330)
         Me.PAN_A.TabIndex = 1778
         '
-        'Button17
+        'BT_FP_PAGE
         '
-        Me.Button17.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
-        Me.Button17.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None
-        Me.Button17.Font = New System.Drawing.Font("メイリオ", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.Button17.ForeColor = System.Drawing.Color.RoyalBlue
-        Me.Button17.Location = New System.Drawing.Point(465, 50)
-        Me.Button17.Name = "Button17"
-        Me.Button17.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.Button17.Size = New System.Drawing.Size(31, 28)
-        Me.Button17.TabIndex = 1769
-        Me.Button17.Text = "1"
-        Me.Button17.UseVisualStyleBackColor = False
+        Me.BT_FP_PAGE.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
+        Me.BT_FP_PAGE.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None
+        Me.BT_FP_PAGE.Font = New System.Drawing.Font("メイリオ", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.BT_FP_PAGE.ForeColor = System.Drawing.Color.RoyalBlue
+        Me.BT_FP_PAGE.Location = New System.Drawing.Point(225, 16)
+        Me.BT_FP_PAGE.Name = "BT_FP_PAGE"
+        Me.BT_FP_PAGE.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.BT_FP_PAGE.Size = New System.Drawing.Size(91, 26)
+        Me.BT_FP_PAGE.TabIndex = 1769
+        Me.BT_FP_PAGE.Text = "Page 1 / 1"
+        Me.BT_FP_PAGE.UseVisualStyleBackColor = False
+        Me.BT_FP_PAGE.Visible = False
         '
-        'DGV7
+        'DGV_FPLIST
         '
-        Me.DGV7.AllowDrop = True
-        Me.DGV7.AllowUserToAddRows = False
-        Me.DGV7.AllowUserToDeleteRows = False
-        Me.DGV7.AllowUserToResizeColumns = False
-        Me.DGV7.AllowUserToResizeRows = False
-        Me.DGV7.BackgroundColor = System.Drawing.SystemColors.ControlLight
-        Me.DGV7.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.[Single]
+        Me.DGV_FPLIST.AllowDrop = True
+        Me.DGV_FPLIST.AllowUserToAddRows = False
+        Me.DGV_FPLIST.AllowUserToDeleteRows = False
+        Me.DGV_FPLIST.AllowUserToResizeColumns = False
+        Me.DGV_FPLIST.AllowUserToResizeRows = False
+        Me.DGV_FPLIST.BackgroundColor = System.Drawing.SystemColors.ControlLight
+        Me.DGV_FPLIST.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.[Single]
         DataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
         DataGridViewCellStyle8.BackColor = System.Drawing.Color.LightGray
         DataGridViewCellStyle8.Font = New System.Drawing.Font("MS UI Gothic", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
@@ -1601,21 +1611,21 @@ Partial Class SCA1
         DataGridViewCellStyle8.SelectionBackColor = System.Drawing.SystemColors.Highlight
         DataGridViewCellStyle8.SelectionForeColor = System.Drawing.SystemColors.HighlightText
         DataGridViewCellStyle8.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.DGV7.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle8
-        Me.DGV7.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.DGV7.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.Column26, Me.DataGridViewTextBoxColumn11, Me.DataGridViewTextBoxColumn12})
-        Me.DGV7.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter
-        Me.DGV7.Location = New System.Drawing.Point(91, 49)
-        Me.DGV7.MultiSelect = False
-        Me.DGV7.Name = "DGV7"
-        Me.DGV7.RowHeadersVisible = False
-        Me.DGV7.RowHeadersWidth = 51
-        Me.DGV7.RowTemplate.Height = 21
-        Me.DGV7.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.DGV7.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect
-        Me.DGV7.Size = New System.Drawing.Size(423, 280)
-        Me.DGV7.TabIndex = 1181
-        Me.DGV7.TabStop = False
+        Me.DGV_FPLIST.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle8
+        Me.DGV_FPLIST.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
+        Me.DGV_FPLIST.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.Column26, Me.DataGridViewTextBoxColumn11, Me.DataGridViewTextBoxColumn12})
+        Me.DGV_FPLIST.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter
+        Me.DGV_FPLIST.Location = New System.Drawing.Point(91, 49)
+        Me.DGV_FPLIST.MultiSelect = False
+        Me.DGV_FPLIST.Name = "DGV_FPLIST"
+        Me.DGV_FPLIST.RowHeadersVisible = False
+        Me.DGV_FPLIST.RowHeadersWidth = 51
+        Me.DGV_FPLIST.RowTemplate.Height = 21
+        Me.DGV_FPLIST.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
+        Me.DGV_FPLIST.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect
+        Me.DGV_FPLIST.Size = New System.Drawing.Size(423, 280)
+        Me.DGV_FPLIST.TabIndex = 1181
+        Me.DGV_FPLIST.TabStop = False
         '
         'Column26
         '
@@ -1672,44 +1682,18 @@ Partial Class SCA1
         Me.BT_PI3.Text = "日付を設定"
         Me.BT_PI3.UseVisualStyleBackColor = True
         '
-        'BT_PI4FIX
+        'BT_FPSave
         '
-        Me.BT_PI4FIX.BackColor = System.Drawing.Color.SteelBlue
-        Me.BT_PI4FIX.FlatAppearance.BorderColor = System.Drawing.Color.Black
-        Me.BT_PI4FIX.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.BT_PI4FIX.ForeColor = System.Drawing.Color.White
-        Me.BT_PI4FIX.Location = New System.Drawing.Point(7, 12)
-        Me.BT_PI4FIX.Name = "BT_PI4FIX"
-        Me.BT_PI4FIX.Size = New System.Drawing.Size(86, 31)
-        Me.BT_PI4FIX.TabIndex = 1611
-        Me.BT_PI4FIX.Text = "編集確定"
-        Me.BT_PI4FIX.UseVisualStyleBackColor = False
-        '
-        'BT_PI5OUT
-        '
-        Me.BT_PI5OUT.BackColor = System.Drawing.Color.MediumAquamarine
-        Me.BT_PI5OUT.FlatAppearance.BorderColor = System.Drawing.Color.Black
-        Me.BT_PI5OUT.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.BT_PI5OUT.ForeColor = System.Drawing.Color.White
-        Me.BT_PI5OUT.Location = New System.Drawing.Point(91, 12)
-        Me.BT_PI5OUT.Name = "BT_PI5OUT"
-        Me.BT_PI5OUT.Size = New System.Drawing.Size(86, 31)
-        Me.BT_PI5OUT.TabIndex = 1612
-        Me.BT_PI5OUT.Text = "Excel出力"
-        Me.BT_PI5OUT.UseVisualStyleBackColor = False
-        '
-        'BT_PI6READ
-        '
-        Me.BT_PI6READ.BackColor = System.Drawing.Color.MediumAquamarine
-        Me.BT_PI6READ.FlatAppearance.BorderColor = System.Drawing.Color.Black
-        Me.BT_PI6READ.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.BT_PI6READ.ForeColor = System.Drawing.Color.Teal
-        Me.BT_PI6READ.Location = New System.Drawing.Point(175, 12)
-        Me.BT_PI6READ.Name = "BT_PI6READ"
-        Me.BT_PI6READ.Size = New System.Drawing.Size(86, 31)
-        Me.BT_PI6READ.TabIndex = 1767
-        Me.BT_PI6READ.Text = "Excel読込"
-        Me.BT_PI6READ.UseVisualStyleBackColor = False
+        Me.BT_FPSave.BackColor = System.Drawing.Color.SteelBlue
+        Me.BT_FPSave.FlatAppearance.BorderColor = System.Drawing.Color.Black
+        Me.BT_FPSave.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.BT_FPSave.ForeColor = System.Drawing.Color.White
+        Me.BT_FPSave.Location = New System.Drawing.Point(2, 14)
+        Me.BT_FPSave.Name = "BT_FPSave"
+        Me.BT_FPSave.Size = New System.Drawing.Size(92, 29)
+        Me.BT_FPSave.TabIndex = 1611
+        Me.BT_FPSave.Text = "保存"
+        Me.BT_FPSave.UseVisualStyleBackColor = False
         '
         'DGV_PIMENU
         '
@@ -2855,6 +2839,17 @@ Partial Class SCA1
         'Tab_3Mng
         '
         Me.Tab_3Mng.BackColor = System.Drawing.Color.Beige
+        Me.Tab_3Mng.Controls.Add(Me.CB_FPStatus)
+        Me.Tab_3Mng.Controls.Add(Me.Label13)
+        Me.Tab_3Mng.Controls.Add(Me.Label12)
+        Me.Tab_3Mng.Controls.Add(Me.CB_FPLIST)
+        Me.Tab_3Mng.Controls.Add(Me.CB_FPRangeAll)
+        Me.Tab_3Mng.Controls.Add(Me.Label9)
+        Me.Tab_3Mng.Controls.Add(Me.DTP_FPED)
+        Me.Tab_3Mng.Controls.Add(Me.DTP_FPST)
+        Me.Tab_3Mng.Controls.Add(Me.Label10)
+        Me.Tab_3Mng.Controls.Add(Me.CB_FPPerson)
+        Me.Tab_3Mng.Controls.Add(Me.Label11)
         Me.Tab_3Mng.Controls.Add(Me.BT_FPMNG_OutExcel)
         Me.Tab_3Mng.Controls.Add(Me.BT_FPMNG_JUMP)
         Me.Tab_3Mng.Controls.Add(Me.TB_FPMNG_Search)
@@ -2867,13 +2862,146 @@ Partial Class SCA1
         Me.Tab_3Mng.TabIndex = 6
         Me.Tab_3Mng.Text = "管理表"
         '
+        'CB_FPStatus
+        '
+        Me.CB_FPStatus.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.CB_FPStatus.Font = New System.Drawing.Font("MS UI Gothic", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.CB_FPStatus.FormattingEnabled = True
+        Me.CB_FPStatus.ImeMode = System.Windows.Forms.ImeMode.Hiragana
+        Me.CB_FPStatus.Location = New System.Drawing.Point(500, 29)
+        Me.CB_FPStatus.Name = "CB_FPStatus"
+        Me.CB_FPStatus.Size = New System.Drawing.Size(120, 23)
+        Me.CB_FPStatus.TabIndex = 1804
+        '
+        'Label13
+        '
+        Me.Label13.BackColor = System.Drawing.Color.SteelBlue
+        Me.Label13.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.Label13.Font = New System.Drawing.Font("メイリオ", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.Label13.ForeColor = System.Drawing.Color.White
+        Me.Label13.Location = New System.Drawing.Point(500, 9)
+        Me.Label13.Name = "Label13"
+        Me.Label13.Size = New System.Drawing.Size(120, 20)
+        Me.Label13.TabIndex = 1803
+        Me.Label13.Text = "ステータス"
+        Me.Label13.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
+        'Label12
+        '
+        Me.Label12.BackColor = System.Drawing.Color.SteelBlue
+        Me.Label12.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.Label12.Font = New System.Drawing.Font("メイリオ", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.Label12.ForeColor = System.Drawing.Color.White
+        Me.Label12.Location = New System.Drawing.Point(248, 9)
+        Me.Label12.Name = "Label12"
+        Me.Label12.Size = New System.Drawing.Size(119, 20)
+        Me.Label12.TabIndex = 1802
+        Me.Label12.Text = "内容"
+        Me.Label12.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
+        'CB_FPLIST
+        '
+        Me.CB_FPLIST.BackColor = System.Drawing.Color.FromArgb(CType(CType(192, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
+        Me.CB_FPLIST.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.CB_FPLIST.Font = New System.Drawing.Font("MS UI Gothic", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.CB_FPLIST.FormattingEnabled = True
+        Me.CB_FPLIST.ImeMode = System.Windows.Forms.ImeMode.Hiragana
+        Me.CB_FPLIST.Location = New System.Drawing.Point(247, 29)
+        Me.CB_FPLIST.Name = "CB_FPLIST"
+        Me.CB_FPLIST.Size = New System.Drawing.Size(120, 23)
+        Me.CB_FPLIST.TabIndex = 1801
+        '
+        'CB_FPRangeAll
+        '
+        Me.CB_FPRangeAll.AutoSize = True
+        Me.CB_FPRangeAll.Location = New System.Drawing.Point(8, 56)
+        Me.CB_FPRangeAll.Name = "CB_FPRangeAll"
+        Me.CB_FPRangeAll.Size = New System.Drawing.Size(60, 16)
+        Me.CB_FPRangeAll.TabIndex = 1800
+        Me.CB_FPRangeAll.Text = "全期間"
+        Me.CB_FPRangeAll.UseVisualStyleBackColor = True
+        '
+        'Label9
+        '
+        Me.Label9.AutoSize = True
+        Me.Label9.Location = New System.Drawing.Point(118, 35)
+        Me.Label9.Name = "Label9"
+        Me.Label9.Size = New System.Drawing.Size(17, 12)
+        Me.Label9.TabIndex = 1799
+        Me.Label9.Text = "～"
+        '
+        'DTP_FPED
+        '
+        Me.DTP_FPED.CalendarFont = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.DTP_FPED.Font = New System.Drawing.Font("MS UI Gothic", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.DTP_FPED.Format = System.Windows.Forms.DateTimePickerFormat.[Short]
+        Me.DTP_FPED.ImeMode = System.Windows.Forms.ImeMode.Off
+        Me.DTP_FPED.Location = New System.Drawing.Point(138, 29)
+        Me.DTP_FPED.MaxDate = New Date(2100, 12, 31, 0, 0, 0, 0)
+        Me.DTP_FPED.MinDate = New Date(2000, 1, 1, 0, 0, 0, 0)
+        Me.DTP_FPED.Name = "DTP_FPED"
+        Me.DTP_FPED.Size = New System.Drawing.Size(104, 22)
+        Me.DTP_FPED.TabIndex = 1798
+        Me.DTP_FPED.TabStop = False
+        '
+        'DTP_FPST
+        '
+        Me.DTP_FPST.CalendarFont = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.DTP_FPST.Font = New System.Drawing.Font("MS UI Gothic", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.DTP_FPST.Format = System.Windows.Forms.DateTimePickerFormat.[Short]
+        Me.DTP_FPST.ImeMode = System.Windows.Forms.ImeMode.Off
+        Me.DTP_FPST.Location = New System.Drawing.Point(8, 29)
+        Me.DTP_FPST.MaxDate = New Date(2100, 12, 31, 0, 0, 0, 0)
+        Me.DTP_FPST.MinDate = New Date(2000, 1, 1, 0, 0, 0, 0)
+        Me.DTP_FPST.Name = "DTP_FPST"
+        Me.DTP_FPST.Size = New System.Drawing.Size(104, 22)
+        Me.DTP_FPST.TabIndex = 1797
+        Me.DTP_FPST.TabStop = False
+        '
+        'Label10
+        '
+        Me.Label10.BackColor = System.Drawing.Color.SteelBlue
+        Me.Label10.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.Label10.Font = New System.Drawing.Font("メイリオ", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.Label10.ForeColor = System.Drawing.Color.White
+        Me.Label10.Location = New System.Drawing.Point(8, 9)
+        Me.Label10.Name = "Label10"
+        Me.Label10.Size = New System.Drawing.Size(234, 20)
+        Me.Label10.TabIndex = 1796
+        Me.Label10.Text = "表示期間(登録日)"
+        Me.Label10.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
+        'CB_FPPerson
+        '
+        Me.CB_FPPerson.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.CB_FPPerson.Font = New System.Drawing.Font("MS UI Gothic", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.CB_FPPerson.FormattingEnabled = True
+        Me.CB_FPPerson.ImeMode = System.Windows.Forms.ImeMode.Hiragana
+        Me.CB_FPPerson.Location = New System.Drawing.Point(373, 29)
+        Me.CB_FPPerson.Name = "CB_FPPerson"
+        Me.CB_FPPerson.Size = New System.Drawing.Size(120, 23)
+        Me.CB_FPPerson.TabIndex = 1795
+        '
+        'Label11
+        '
+        Me.Label11.BackColor = System.Drawing.Color.SteelBlue
+        Me.Label11.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.Label11.Font = New System.Drawing.Font("メイリオ", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.Label11.ForeColor = System.Drawing.Color.White
+        Me.Label11.Location = New System.Drawing.Point(373, 9)
+        Me.Label11.Name = "Label11"
+        Me.Label11.Size = New System.Drawing.Size(120, 20)
+        Me.Label11.TabIndex = 1794
+        Me.Label11.Text = "担当者"
+        Me.Label11.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
         'BT_FPMNG_OutExcel
         '
         Me.BT_FPMNG_OutExcel.BackColor = System.Drawing.Color.MediumAquamarine
         Me.BT_FPMNG_OutExcel.FlatAppearance.BorderColor = System.Drawing.Color.Black
         Me.BT_FPMNG_OutExcel.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.BT_FPMNG_OutExcel.ForeColor = System.Drawing.Color.White
-        Me.BT_FPMNG_OutExcel.Location = New System.Drawing.Point(153, 438)
+        Me.BT_FPMNG_OutExcel.Location = New System.Drawing.Point(153, 512)
         Me.BT_FPMNG_OutExcel.Name = "BT_FPMNG_OutExcel"
         Me.BT_FPMNG_OutExcel.Size = New System.Drawing.Size(102, 27)
         Me.BT_FPMNG_OutExcel.TabIndex = 1793
@@ -2886,7 +3014,7 @@ Partial Class SCA1
         Me.BT_FPMNG_JUMP.FlatAppearance.BorderColor = System.Drawing.Color.Black
         Me.BT_FPMNG_JUMP.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Bold)
         Me.BT_FPMNG_JUMP.ForeColor = System.Drawing.Color.White
-        Me.BT_FPMNG_JUMP.Location = New System.Drawing.Point(3, 438)
+        Me.BT_FPMNG_JUMP.Location = New System.Drawing.Point(3, 512)
         Me.BT_FPMNG_JUMP.Name = "BT_FPMNG_JUMP"
         Me.BT_FPMNG_JUMP.Size = New System.Drawing.Size(144, 27)
         Me.BT_FPMNG_JUMP.TabIndex = 1752
@@ -2899,7 +3027,7 @@ Partial Class SCA1
         Me.TB_FPMNG_Search.BackColor = System.Drawing.Color.White
         Me.TB_FPMNG_Search.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.TB_FPMNG_Search.Font = New System.Drawing.Font("MS UI Gothic", 11.25!)
-        Me.TB_FPMNG_Search.Location = New System.Drawing.Point(56, 3)
+        Me.TB_FPMNG_Search.Location = New System.Drawing.Point(56, 77)
         Me.TB_FPMNG_Search.Name = "TB_FPMNG_Search"
         Me.TB_FPMNG_Search.Size = New System.Drawing.Size(170, 22)
         Me.TB_FPMNG_Search.TabIndex = 1599
@@ -2911,7 +3039,7 @@ Partial Class SCA1
         Me.Button16.FlatStyle = System.Windows.Forms.FlatStyle.Popup
         Me.Button16.Font = New System.Drawing.Font("メイリオ", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.Button16.ForeColor = System.Drawing.Color.White
-        Me.Button16.Location = New System.Drawing.Point(1, 3)
+        Me.Button16.Location = New System.Drawing.Point(1, 77)
         Me.Button16.Name = "Button16"
         Me.Button16.Size = New System.Drawing.Size(56, 22)
         Me.Button16.TabIndex = 1600
@@ -2935,8 +3063,8 @@ Partial Class SCA1
         DataGridViewCellStyle32.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
         Me.DGV_FPMNG.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle32
         Me.DGV_FPMNG.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.DGV_FPMNG.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.C01, Me.C02, Me.C03, Me.C04, Me.C05, Me.C06, Me.C07, Me.C08, Me.C09})
-        Me.DGV_FPMNG.Location = New System.Drawing.Point(0, 24)
+        Me.DGV_FPMNG.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.C01, Me.C02, Me.C03, Me.C04, Me.C05, Me.C06, Me.C10, Me.C09, Me.C07, Me.C08})
+        Me.DGV_FPMNG.Location = New System.Drawing.Point(0, 98)
         Me.DGV_FPMNG.MultiSelect = False
         Me.DGV_FPMNG.Name = "DGV_FPMNG"
         Me.DGV_FPMNG.ReadOnly = True
@@ -2951,94 +3079,100 @@ Partial Class SCA1
         '
         'C01
         '
+        DataGridViewCellStyle33.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        DataGridViewCellStyle33.Format = "N0"
+        DataGridViewCellStyle33.NullValue = Nothing
+        Me.C01.DefaultCellStyle = DataGridViewCellStyle33
         Me.C01.HeaderText = "No"
         Me.C01.Name = "C01"
         Me.C01.ReadOnly = True
-        Me.C01.Width = 45
+        Me.C01.Width = 40
         '
         'C02
         '
-        Me.C02.HeaderText = "債権番号"
-        Me.C02.MinimumWidth = 6
+        Me.C02.HeaderText = "登録日時"
         Me.C02.Name = "C02"
         Me.C02.ReadOnly = True
-        Me.C02.Width = 105
+        Me.C02.Width = 110
         '
         'C03
         '
-        DataGridViewCellStyle33.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.C03.DefaultCellStyle = DataGridViewCellStyle33
-        Me.C03.HeaderText = "債務者氏名"
+        Me.C03.HeaderText = "債権番号"
         Me.C03.MinimumWidth = 6
         Me.C03.Name = "C03"
         Me.C03.ReadOnly = True
-        Me.C03.Width = 120
+        Me.C03.Width = 105
         '
         'C04
         '
-        DataGridViewCellStyle34.BackColor = System.Drawing.Color.White
-        DataGridViewCellStyle34.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        DataGridViewCellStyle34.ForeColor = System.Drawing.Color.Black
+        DataGridViewCellStyle34.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
         Me.C04.DefaultCellStyle = DataGridViewCellStyle34
-        Me.C04.HeaderText = "内容"
+        Me.C04.HeaderText = "債務者氏名"
         Me.C04.MinimumWidth = 6
         Me.C04.Name = "C04"
         Me.C04.ReadOnly = True
+        Me.C04.Width = 120
         '
         'C05
         '
-        DataGridViewCellStyle35.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
         DataGridViewCellStyle35.BackColor = System.Drawing.Color.White
+        DataGridViewCellStyle35.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         DataGridViewCellStyle35.ForeColor = System.Drawing.Color.Black
-        DataGridViewCellStyle35.Format = "d"
-        DataGridViewCellStyle35.NullValue = Nothing
         Me.C05.DefaultCellStyle = DataGridViewCellStyle35
-        Me.C05.HeaderText = "担当者"
+        Me.C05.HeaderText = "内容"
         Me.C05.MinimumWidth = 6
         Me.C05.Name = "C05"
         Me.C05.ReadOnly = True
-        Me.C05.Width = 80
+        Me.C05.Width = 90
         '
         'C06
         '
-        Me.C06.HeaderText = "ステータス"
+        DataGridViewCellStyle36.BackColor = System.Drawing.Color.White
+        DataGridViewCellStyle36.ForeColor = System.Drawing.Color.Black
+        DataGridViewCellStyle36.NullValue = Nothing
+        Me.C06.DefaultCellStyle = DataGridViewCellStyle36
+        Me.C06.HeaderText = "担当者"
         Me.C06.MinimumWidth = 6
         Me.C06.Name = "C06"
         Me.C06.ReadOnly = True
         Me.C06.Width = 80
         '
-        'C07
+        'C10
         '
-        Me.C07.HeaderText = "概要"
-        Me.C07.MinimumWidth = 6
-        Me.C07.Name = "C07"
-        Me.C07.ReadOnly = True
-        Me.C07.Width = 350
-        '
-        'C08
-        '
-        DataGridViewCellStyle36.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        DataGridViewCellStyle36.ForeColor = System.Drawing.Color.Red
-        DataGridViewCellStyle36.Format = "N0"
-        DataGridViewCellStyle36.NullValue = "0"
-        Me.C08.DefaultCellStyle = DataGridViewCellStyle36
-        Me.C08.HeaderText = "次回対応日"
-        Me.C08.MinimumWidth = 6
-        Me.C08.Name = "C08"
-        Me.C08.ReadOnly = True
-        Me.C08.Width = 90
+        DataGridViewCellStyle37.NullValue = Nothing
+        Me.C10.DefaultCellStyle = DataGridViewCellStyle37
+        Me.C10.HeaderText = "最終対応日"
+        Me.C10.MinimumWidth = 6
+        Me.C10.Name = "C10"
+        Me.C10.ReadOnly = True
+        Me.C10.Width = 90
         '
         'C09
         '
-        DataGridViewCellStyle37.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        DataGridViewCellStyle37.Format = "d"
-        DataGridViewCellStyle37.NullValue = Nothing
-        Me.C09.DefaultCellStyle = DataGridViewCellStyle37
-        Me.C09.HeaderText = "最終対応日"
+        DataGridViewCellStyle38.ForeColor = System.Drawing.Color.Red
+        DataGridViewCellStyle38.NullValue = "0"
+        Me.C09.DefaultCellStyle = DataGridViewCellStyle38
+        Me.C09.HeaderText = "次回対応日"
         Me.C09.MinimumWidth = 6
         Me.C09.Name = "C09"
         Me.C09.ReadOnly = True
         Me.C09.Width = 90
+        '
+        'C07
+        '
+        Me.C07.HeaderText = "ステータス"
+        Me.C07.MinimumWidth = 6
+        Me.C07.Name = "C07"
+        Me.C07.ReadOnly = True
+        Me.C07.Width = 80
+        '
+        'C08
+        '
+        Me.C08.HeaderText = "概要"
+        Me.C08.MinimumWidth = 6
+        Me.C08.Name = "C08"
+        Me.C08.ReadOnly = True
+        Me.C08.Width = 305
         '
         'CreatorExpress1
         '
@@ -3134,7 +3268,7 @@ Partial Class SCA1
         Me.Tab_1SC.ResumeLayout(False)
         Me.Tab_1SC.PerformLayout()
         Me.PAN_A.ResumeLayout(False)
-        CType(Me.DGV7, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.DGV_FPLIST, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.DGV_PIMENU, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.DGV9, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.DGV2, System.ComponentModel.ISupportInitialize).EndInit()
@@ -3222,12 +3356,11 @@ Partial Class SCA1
     Friend WithEvents CB_DunA7 As ComboBox
     Friend WithEvents Label38 As Label
     Friend WithEvents Button8 As Button
-    Friend WithEvents DGV7 As DataGridView
+    Friend WithEvents DGV_FPLIST As DataGridView
     Friend WithEvents BT_PI3 As Button
     Friend WithEvents BT_PI2 As Button
     Friend WithEvents DTP_PI1 As DateTimePicker
-    Friend WithEvents BT_PI4FIX As Button
-    Friend WithEvents BT_PI5OUT As Button
+    Friend WithEvents BT_FPSave As Button
     Friend WithEvents Column38 As DataGridViewTextBoxColumn
     Friend WithEvents DataGridViewTextBoxColumn3 As DataGridViewTextBoxColumn
     Friend WithEvents DataGridViewTextBoxColumn4 As DataGridViewTextBoxColumn
@@ -3250,18 +3383,9 @@ Partial Class SCA1
     Friend WithEvents Label51 As Label
     Friend WithEvents CB_RecRNG As CheckBox
     Friend WithEvents CB_RecRe As CheckBox
-    Friend WithEvents BT_PI6READ As Button
     Friend WithEvents DGV_PIMENU As DataGridView
     Friend WithEvents DataGridViewTextBoxColumn17 As DataGridViewTextBoxColumn
     Friend WithEvents Button9 As Button
-    Friend WithEvents 機構番号 As DataGridViewTextBoxColumn
-    Friend WithEvents Column10 As DataGridViewTextBoxColumn
-    Friend WithEvents Column2 As DataGridViewTextBoxColumn
-    Friend WithEvents Column1 As DataGridViewTextBoxColumn
-    Friend WithEvents DGV1督促通知日 As DataGridViewTextBoxColumn
-    Friend WithEvents Column8 As DataGridViewTextBoxColumn
-    Friend WithEvents Column6 As DataGridViewTextBoxColumn
-    Friend WithEvents Column5 As DataGridViewTextBoxColumn
     Friend WithEvents Column9 As DataGridViewTextBoxColumn
     Friend WithEvents DataGridViewTextBoxColumn1 As DataGridViewTextBoxColumn
     Friend WithEvents DataGridViewTextBoxColumn2 As DataGridViewTextBoxColumn
@@ -3360,7 +3484,7 @@ Partial Class SCA1
     Friend WithEvents DGV_FPMNG As DataGridView
     Friend WithEvents TB_FPMNG_Search As TextBox
     Friend WithEvents Button16 As Button
-    Friend WithEvents Button17 As Button
+    Friend WithEvents BT_FP_PAGE As Button
     Friend WithEvents データ読み込みToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents 機能ToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents 画面モードToolStripMenuItem As ToolStripMenuItem
@@ -3369,15 +3493,35 @@ Partial Class SCA1
     Friend WithEvents 表示ToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents ToolStripMenuItem2 As ToolStripMenuItem
     Friend WithEvents MenuStrip1 As MenuStrip
+    Friend WithEvents BT_FPMNG_JUMP As Button
+    Friend WithEvents BT_FPMNG_OutExcel As Button
+    Friend WithEvents CB_FPRangeAll As CheckBox
+    Friend WithEvents Label9 As Label
+    Friend WithEvents DTP_FPED As DateTimePicker
+    Friend WithEvents DTP_FPST As DateTimePicker
+    Friend WithEvents Label10 As Label
+    Friend WithEvents CB_FPPerson As ComboBox
+    Friend WithEvents Label11 As Label
+    Friend WithEvents Label12 As Label
+    Friend WithEvents CB_FPLIST As ComboBox
+    Friend WithEvents CB_FPStatus As ComboBox
+    Friend WithEvents Label13 As Label
     Friend WithEvents C01 As DataGridViewTextBoxColumn
     Friend WithEvents C02 As DataGridViewTextBoxColumn
     Friend WithEvents C03 As DataGridViewTextBoxColumn
     Friend WithEvents C04 As DataGridViewTextBoxColumn
     Friend WithEvents C05 As DataGridViewTextBoxColumn
     Friend WithEvents C06 As DataGridViewTextBoxColumn
+    Friend WithEvents C10 As DataGridViewTextBoxColumn
+    Friend WithEvents C09 As DataGridViewTextBoxColumn
     Friend WithEvents C07 As DataGridViewTextBoxColumn
     Friend WithEvents C08 As DataGridViewTextBoxColumn
-    Friend WithEvents C09 As DataGridViewTextBoxColumn
-    Friend WithEvents BT_FPMNG_JUMP As Button
-    Friend WithEvents BT_FPMNG_OutExcel As Button
+    Friend WithEvents 機構番号 As DataGridViewTextBoxColumn
+    Friend WithEvents Column10 As DataGridViewTextBoxColumn
+    Friend WithEvents Column2 As DataGridViewTextBoxColumn
+    Friend WithEvents Column1 As DataGridViewTextBoxColumn
+    Friend WithEvents DGV1督促通知日 As DataGridViewTextBoxColumn
+    Friend WithEvents Column8 As DataGridViewTextBoxColumn
+    Friend WithEvents Column6 As DataGridViewTextBoxColumn
+    Friend WithEvents Column5 As DataGridViewTextBoxColumn
 End Class

@@ -303,6 +303,24 @@ Public Class Common
         excelManager.OpenFile()
     End Sub
 
+    ' Select文用のカラム名取得
+    Public Function GetColumnsStr(ByVal startIndex As Integer, ByVal endIndex As Integer) As String
+        Dim columns As New List(Of String)
+        For i As Integer = startIndex To endIndex
+            columns.Add($"C{i:00}")
+        Next
+        Return String.Join(", ", columns)
+    End Function
+
+    ' 文字列の末尾1文字を削除して返却
+    Public Function DelLastChar(word As String) As String
+        If word.Length > 0 Then
+            Return word.Substring(0, word.Length - 1)
+        Else
+            Return word
+        End If
+    End Function
+
     ' プログレスバー表示
     Public Sub StartPBar(progressCount As Integer)
         SCA_ProgressBar.Instance.StartProgress(progressCount)

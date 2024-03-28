@@ -1,5 +1,7 @@
 ﻿Imports System.Data.SQLite
 Imports System.IO
+Imports AdvanceSoftware.PDF.Drawing.EMF.Records
+Imports DocumentFormat.OpenXml.Bibliography
 
 Public Class Sqldb
     Private ReadOnly log As New Log
@@ -29,7 +31,7 @@ Public Class Sqldb
     Public Const TBL_FKSCD As String = "FKSCD"
     Public Const TBL_ITEM As String = "ITEM"
     Public Const TBL_STANDARD As String = "TBL"
-    Public Const TBL_VALUES As String = "VAL"
+    Public Const TBL_DATA As String = "DATA"
     ' DB保管場所の識別子
     Private Const DBLO As Integer = 0       ' ローカルに保管
     Private Const DBSV As Integer = 1       ' サーバーに保管
@@ -49,7 +51,9 @@ Public Class Sqldb
         {DB_FKSCLOG, TBL_FKSCD, 17, "FKD", DBSV, True},
         {DB_FKSCPI, TBL_STANDARD, 11, "C", DBSV, True},
         {DB_FKSCFPI, TBL_STANDARD, 15, "C", DBSV, True},
-        {DB_FKSCFPI, TBL_VALUES, 34, "C", DBSV, True},
+        {DB_FKSCFPI, TBL_DATA, 35, "C", DBSV, True},
+        {DB_FKSCFPI, "DATA2", 35, "C", DBSV, True},
+        {DB_FKSCFPI, TBL_ITEM, 5, "C", DBSV, True},
         {DB_FKSCPI, TBL_ITEM, 5, "C", DBSV, True},
         {DB_FKSCASSIST, TBL_STANDARD, 28, "C", DBLO, True},
         {DB_AUTOCALL, TBL_STANDARD, 4, "C", DBSV, True},
@@ -64,8 +68,10 @@ Public Class Sqldb
         SCR          ' FKSCREM
         SCD          ' FKSCD
         PI           ' PINFO
-        FPIB         ' FPINFO 融資物件 基本情報
-        FPIV         ' FPINFO 融資物件 付随情報
+        FPCOS        ' FPINFO 融資物件 顧客情報
+        FPDATA       ' FPINFO 融資物件 登録情報
+        FPDATA2      ' FPINFO 融資物件 登録情報
+        FPITEM       ' FPINFO ITEM
         PIM          ' PINFO MASTER(ITEM)
         SCAS         ' ASSIST
         AC           ' AutoCall
@@ -97,7 +103,7 @@ Public Class Sqldb
 
     ' コンストラクタ(初期化設定)
     Sub New()
-        Dim xml As New xmlMng
+        Dim xml As New XmlMng
         RegIDList = New List(Of String)
         CurrentPath_SV = xml.GetCPath()                             ' サーバーパスをconfigから取得
         Dim DBCSPath = CurrentPath_SV & Common.DIR_DB3
@@ -202,9 +208,9 @@ Public Class Sqldb
     ' [使い方] 単体 SQLExe(Sqldb.DBSC, "Update FKL ..")  
     '          複数 AddSQL(Sqldb.DBSC, "Insert ..")
     '               SQLExe(Sqldb.DBSC)
-    Public Function ExeSQL(TableID As Integer, SqlCmd As String) As Boolean
+    Public Function ExeSQL(TableID As Integer, SqlCmd As String) As Long
         AddSQL(TableID, SqlCmd)
-        Dim ret As Boolean
+        Dim ret As Long
         If DBTbl(TableID, DBID.DBSTRG) = DBLO Then
             ret = CommonSQLExe(TableID, loCon(TableID), loCmd(TableID))
         Else
@@ -212,8 +218,8 @@ Public Class Sqldb
         End If
         Return ret
     End Function
-    Public Function ExeSQL(TableID As Integer) As Boolean
-        Dim ret As Boolean
+    Public Function ExeSQL(TableID As Integer) As Long
+        Dim ret As Long
         If DBTbl(TableID, DBID.DBSTRG) = DBLO Then
             ret = CommonSQLExe(TableID, loCon(TableID), loCmd(TableID))
         Else
@@ -221,17 +227,23 @@ Public Class Sqldb
         End If
         Return ret
     End Function
-    Private Function CommonSQLExe(TableID As Integer, con As SQLiteConnection, cmd As SQLiteCommand) As Boolean
+    Private Function CommonSQLExe(TableID As Integer, con As SQLiteConnection, cmd As SQLiteCommand) As Long
         'mtx.Lock(Mutex.MTX_LOCK_W, TableID)
-        If cmdl(TableID) Is Nothing Then Return False
-        Dim ret As Boolean = True
+        If cmdl(TableID) Is Nothing Then Return -1
+        Dim newId As Long = -1 ' 失敗した場合に返す値
         DBFileDL(TableID)
         Try
             con.Open()
             cmd.Transaction = con.BeginTransaction()            ' トランザクション開始
             For Each c In cmdl(TableID)
                 cmd.CommandText = c
+                log.cLog($"SQLExe: [{[Enum].GetName(GetType(TID), TableID)}] {c}")
                 cmd.ExecuteNonQuery()
+                ' INSERT文の後にlast_insert_rowid()を実行
+                If c.ToUpper.StartsWith("INSERT") Then
+                    cmd.CommandText = "SELECT last_insert_rowid()"
+                    newId = Convert.ToInt64(cmd.ExecuteScalar())
+                End If
             Next
             cmd.Transaction.Commit()                            ' トランザクション終了
             Select Case TableID
@@ -239,10 +251,9 @@ Public Class Sqldb
                 Case Else
                     log.D(Log.DB, cmdl(TableID))                                 ' DBログ書き込み => DB変更通知になる
             End Select
-            log.cLog($"SQLExe: [{[Enum].GetName(GetType(TID), TableID)}]{cmd.CommandText}")
         Catch ex As Exception
             log.D(Log.ERR, ex.Message & vbCrLf & cmd.CommandText)
-            ret = False
+            newId = -1
             cmd.Transaction.Rollback()
             MsgBox("DB書き込みで異常が見つかりました。" & vbCrLf & ex.Message)
         End Try
@@ -252,8 +263,9 @@ Public Class Sqldb
         'DBFileUP(TableID)
         'mtx.UnLock(TableID)
         'DBFileDL(TableID)
-        Return ret
+        Return newId
     End Function
+
 
     ' SQLコマンド用リスト追加IF
     Public Sub AddSQL(TableID As Integer, SqlCmd As String)
@@ -566,7 +578,7 @@ Public Class Sqldb
     Public Function ExeSQLInsert(TableID As Integer, ParamArray args As String()) As Boolean
         If args.Length = 0 Then Return False
         Dim cid As String = args(0)
-        Dim arg As String 
+        Dim arg As String
         Dim cmd As String
         If cid = "" Then Return False
 
@@ -605,8 +617,8 @@ Public Class Sqldb
 
         Cursor.Current = Cursors.WaitCursor             ' マウスカーソルを砂時計に
         ' もとのデータを一旦削除
-        DeleteAllData(TID.FPIB)  ' テーブル1のデータを削除
-        DeleteAllData(TID.FPIV)  ' テーブル2のデータを削除
+        DeleteAllData(TID.FPCOS)  ' テーブル1のデータを削除
+        DeleteAllData(TID.FPDATA)  ' テーブル2のデータを削除
 
         ' テーブル1のIDカウンタ
         Dim TBLIndex As Integer = 1
@@ -626,10 +638,10 @@ Public Class Sqldb
             If cosDt.Length > 0 Then
                 cosName = cosDt(0)(9)
             End If
-            ' FPIBにデータを挿入
+            ' FPCOSにデータを挿入
             Dim tblArr As String() = {TBLIndex.ToString, cosNumber.ToString, cosName}.Concat(itemsC02).ToArray
             Dim value As String = $"'{String.Join("','", tblArr)}'"
-            ExeSQLInsert(TID.FPIB, tblArr)
+            ExeSQLInsert(TID.FPCOS, tblArr)
 
             ' C03からC11までのカラムに対する処理（テーブル2にデータを挿入）
             For i As Integer = 3 To 11
@@ -645,20 +657,85 @@ Public Class Sqldb
                             Exit For
                         End If
                     Next
-                    ' テーブル2にデータを挿入
+                    ' FPDATAにデータを挿入
                     If Not allEmpty Then
-                        tblArr = {ValIndex.ToString, TBLIndex.ToString, (i - 3).ToString}.Concat(items).ToArray
-                        ExeSQLInsert(TID.FPIV, tblArr)
+                        tblArr = {ValIndex.ToString, Today.ToString("yyyy/MM/dd 00:00"), TBLIndex.ToString, (i - 3).ToString}.Concat(items).ToArray
+                        ExeSQLInsert(TID.FPDATA, tblArr)
                         ValIndex += 1
                     End If
                 End If
             Next
             TBLIndex += 1
         Next
-        ExeSQL(TID.FPIB)
-        ExeSQL(TID.FPIV)
-        MsgBox("移管完了")
-        Cursor.Current = Cursors.Default             ' マウスカーソルを元に戻す
+        ExeSQL(TID.FPCOS)
+        ExeSQL(TID.FPDATA)
+    End Sub
+
+    ' データ移行後の項目間調整
+    Public Sub DataTransferFPINFO2()
+        Dim dtOld As DataTable = GetSelect(TID.PI, $"SELECT * FROM TBL")
+        Dim dtCos As DataTable = GetSelect(TID.FPCOS, $"SELECT * FROM {GetTable(TID.FPCOS)}")
+        Dim dtDat As DataTable = GetSelect(TID.FPDATA, $"SELECT * FROM {GetTable(TID.FPDATA)}")
+        Dim cmd As String
+        Dim regSet As String = ""
+        Cursor.Current = Cursors.WaitCursor             ' マウスカーソルを砂時計に
+
+        ' FPCOS
+        Dim clearColumnsCos As Integer() = {7, 14, 15}
+        For Each clm In clearColumnsCos
+            regSet += $"C{clm:00} = '',"
+        Next
+        regSet = cmn.DelLastChar(regSet)    ' 末尾カラム削除
+        cmd = $"UPDATE {GetTable(Sqldb.TID.FPCOS)} SET {regSet};"
+        ExeSQL(TID.FPCOS, cmd)
+
+        ' FPDATA
+        cmd = ""
+        Dim changeList As New List(Of Integer())
+        changeList.Add({3, 0, 0, 0, 0, 1, 2, 4, 8, 0, 11, 15, 16})                                   ' 任売
+        changeList.Add({11, 0, 0, 0, 0, 1, 4, 5, 0, 2, 7, 8, 9, 12, 13, 10})                         ' 競売1
+        changeList.Add({11, 0, 0, 0, 0, 1, 4, 5, 0, 2, 7, 8, 9, 12, 13, 10})                         ' 競売2
+        changeList.Add({0, 0, 0, 0, 0, 1, 2, 19, 0, 11, 12, 13, 14, 15, 0, 0, 8, 9, 16, 0, 0, 10})   ' 破産(再生1)
+        changeList.Add({0, 0, 0, 0, 0, 1, 2, 19, 0, 11, 12, 13, 14, 15, 0, 0, 8, 9, 16, 0, 0, 10})   ' 破産(再生2)
+        changeList.Add({0, 0, 0, 0, 0, 1, 2, 19, 0, 11, 12, 13, 14, 15, 0, 0, 8, 9, 16, 0, 0, 10})   ' 破産(再生3)
+        changeList.Add({0, 0, 0, 0, 0, 1, 3, 4, 5, 9, 0})                                            ' 差押
+        changeList.Add({0, 0, 0, 0, 0, 1, 3, 4, 5, 9, 0})                                            ' 差押
+        changeList.Add({0, 0, 0, 0, 0, 1, 3, 4, 5, 9, 0})                                            ' 差押
+
+        ' 旧タイプ(任売,競売1) から 新タイプ(任売,競売,破産)に移行するための、新タイプ置き換えIndex
+        Dim SetType As Integer() = {0, 1, 1, 3, 3, 3, 4, 4, 4}
+
+        Dim dt As DataTable
+        Dim regData As String
+        Dim keyId As String
+        For type = 0 To changeList.Count - 1
+            ' 大項目ごとにデータ取得
+            dt = GetSelect(TID.FPDATA, $"SELECT * FROM {GetTable(TID.FPDATA)} WHERE C04 = '{type}' ORDER BY C01")
+            For record = 0 To dt.Rows.Count - 1
+                keyId = dt.Rows(record)(2)
+                ' 登録日時、顧客キー、大項目種別を設定
+                regData = $"'{Today:yyyy/MM/dd 00:00}','{keyId}','{SetType(type)}',"
+
+                For c = 0 To changeList(type).Count - 1
+                    Dim idx As Integer = changeList(type)(c)
+                    If idx = 0 Then
+                        regData += "'',"
+                    Else
+                        regData += $"'{dt.Rows(record)(idx + 3)}',"
+                    End If
+                Next
+                regData = cmn.DelLastChar(regData)    ' 末尾カラム削除
+                cmd += $"INSERT INTO {GetTable(Sqldb.TID.FPDATA2)} ({cmn.GetColumnsStr(2, changeList(type).Count + 4)}) VALUES ({regData});"
+            Next
+        Next
+
+        ' 移管調整の実行
+        ExeSQL(TID.FPDATA2, cmd)
+        ' 後処理
+        ExeSQL(TID.FPDATA, $"ALTER TABLE {GetTable(TID.FPDATA)} RENAME TO DATA_OLD;")
+        ExeSQL(TID.FPDATA, $"ALTER TABLE {GetTable(TID.FPDATA2)} RENAME TO {GetTable(TID.FPDATA)};")
+        ExeSQL(TID.FPDATA, $"ALTER TABLE DATA_OLD RENAME TO {GetTable(TID.FPDATA2)};")
+        ExeSQL(TID.FPDATA, $"DELETE FROM {GetTable(TID.FPDATA2)}")
     End Sub
 
     ' データベースの最終更新日を確認して、更新直後ならキャッシュがなくLINQを使用したほうが処理速度が早いことを利用するための判定。
@@ -670,5 +747,19 @@ Public Class Sqldb
         Return uptimeDiff >= 1
     End Function
 
+    ' 物件情報(FPIB) 顧客番号からの顧客キーを取得
+    Public Function GetFPCOSKeyId(cid As String) As Integer
+        Dim dt As DataTable = GetSelect(Sqldb.TID.FPCOS, $"Select C01 From {DBTbl(Sqldb.TID.FPCOS, Sqldb.DBID.TABLE)} Where C02 = '{cid}'")
+        Dim ret As Integer = -1
+        If dt.Rows.Count = 1 Then
+            ret = dt.Rows(0)(0)
+        End If
+        Return ret
+    End Function
+
+    ' TIDからテーブル名取得
+    Public Function GetTable(tid As TID) As String
+        Return DBTbl(tid, Sqldb.DBID.TABLE)
+    End Function
 
 End Class

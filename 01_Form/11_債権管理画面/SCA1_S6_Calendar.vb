@@ -10,10 +10,10 @@
     End Sub
 
     Private Sub DateTimePicker1_ValueChanged(sender As Object, e As EventArgs) Handles DateTimePicker1.ValueChanged, Button2.Click
-        OwnerForm.DGV7.CurrentCell.Value = DateTimePicker1.Value.ToString("yyyy/MM/dd")
+        OwnerForm.DGV_FPLIST.CurrentCell.Value = DateTimePicker1.Value.ToString("yyyy/MM/dd")
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
-        OwnerForm.DGV7.CurrentCell.Value = ""
+        OwnerForm.DGV_FPLIST.CurrentCell.Value = ""
     End Sub
 End Class

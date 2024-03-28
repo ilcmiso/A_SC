@@ -43,10 +43,10 @@ Public Class SCC1_S1_MNG
     ' コマンドリスト生成
     Private Sub InitCommandList()
         Dim commandNames As String() = {
-            "SC.exeのタイムスタンプ更新",
-            "追加電話番号の検索ハイフン無しFKR06初期設定",
+            "サーバーのSC.exeのタイムスタンプ更新",
             "db3ファイル新規作成 (Value値)",
-            "PINFO DB移管"
+            "PINFO DB移管",
+            "PINFO 移管後の変換"
             }
         ListBox2.Items.Clear()
         For Each cl In commandNames
@@ -72,18 +72,6 @@ Public Class SCC1_S1_MNG
                 If IO.File.Exists(svFilePath) Then IO.File.SetLastWriteTime(svFilePath, DateTime.Now)
 
             Case 1
-                ' 追加電話番号の検索ハイフン無しFKR06初期設定
-                Dim dt As DataTable = db.GetSelect(Sqldb.TID.SCR, "Select FKR01, FKR05 From FKSCREM Where FKR05 <> ''")
-                Dim cmd As String
-                log.cLog(dt.Rows.Count)
-                For n = 0 To dt.Rows.Count - 1
-                    cmd = String.Format("Update FKSCREM Set FKR06 = '{0}' Where FKR01 = '{1}'", dt.Rows(n)(1).ToString.Replace("-", ""), dt.Rows(n)(0))
-                    db.AddSQL(Sqldb.TID.SCR, cmd)
-                Next
-                log.cLog(dt.Rows.Count)
-                db.ExeSQL(Sqldb.TID.SCR)
-
-            Case 2
                 Dim fileName As String = $"{Environment.GetFolderPath(Environment.SpecialFolder.Desktop)}\{TextBox1.Text}.db3"
                 Dim columnCount As Integer = NumericUpDown1.Value
 
@@ -117,10 +105,14 @@ Public Class SCC1_S1_MNG
                     End Try
                 End Using
 
-            Case 3
+            Case 2
                 db.DataTransferFPINFO()
 
+            Case 3
+                db.DataTransferFPINFO2()
+
         End Select
+        MsgBox("完了")
 
     End Sub
 
