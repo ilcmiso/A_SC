@@ -19,6 +19,7 @@ Public Class SCA1
     ' 監視
     Private PoolingStart As Boolean = False                         ' 監視フラグ
     Private Const POLLING_ID_SCD As String = "SCD更新"              ' DB(SCD)更新イベントの識別子
+    Private Const POLLING_ID_FP As String = "物件情報更新"
     Private Const POLLING_ID_CUDB As String = "顧客DB更新"          ' 顧客DB更新イベントの識別子
     Private Const POLLING_ID_ASC As String = "A_SC本体"             ' A_SC更新イベントの識別子
     Private Const POLLING_CYCLE As Integer = 500                    ' イベント監視周期(ms)
@@ -843,6 +844,7 @@ Public Class SCA1
         ' 監視対象一覧             監視識別子      監視ファイルパス(*付きは複数ファイル)
         Dim PList(,) As String = {{POLLING_ID_CUDB, db.CurrentPath_SV & Common.DIR_UPD & Sqldb.DB_FKSC},           ' DB   FKSC.DB3
                                   {POLLING_ID_ASC, db.CurrentPath_SV & Common.DIR_UPD & Common.EXE_NAME},          ' EXE  A_SC.exe
+                                  {POLLING_ID_FP, db.CurrentPath_SV & Common.DIR_DB3 & Sqldb.DB_FKSCFPI},          ' FPINFO.db3
                                   {POLLING_ID_SCD, db.CurrentPath_SV & Common.DIR_DB3 & Sqldb.DB_FKSCLOG}}         ' FKSC.LOG.db3
         Const PL_ID As Integer = 0
         Const PL_FILE As Integer = 1
@@ -903,6 +905,8 @@ Public Class SCA1
         Select Case id
             Case POLLING_ID_SCD     ' SCD DB更新
                 Invoke(New MethodInvoker(AddressOf UpdateDB_SCD))          ' SCD更新
+            Case POLLING_ID_FP     ' FP DB更新
+                Invoke(New MethodInvoker(AddressOf UpdateDB_FP))           ' FP更新
             Case POLLING_ID_CUDB    ' 顧客DB更新
                 Invoke(New MethodInvoker(AddressOf DownloadCustomerDB))    ' 顧客DBのダウンロード更新
             Case POLLING_ID_ASC     ' A_SC本体の更新
@@ -919,7 +923,13 @@ Public Class SCA1
         If CB_AUTOUPD.Checked Then
             ExUpdateButton()
         End If
+    End Sub
 
+    ' FPDB更新を通知
+    Private Sub UpdateDB_FP()
+        log.cLog("-- UpdateDB_FP")
+        ShowDGV_FPLIST()
+        ShowDGV_FPMNG()
     End Sub
 
     ' 顧客DBの更新の検出

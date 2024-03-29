@@ -1586,7 +1586,7 @@ Partial Class SCA1
         Me.BT_FP_PAGE.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None
         Me.BT_FP_PAGE.Font = New System.Drawing.Font("メイリオ", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.BT_FP_PAGE.ForeColor = System.Drawing.Color.RoyalBlue
-        Me.BT_FP_PAGE.Location = New System.Drawing.Point(225, 16)
+        Me.BT_FP_PAGE.Location = New System.Drawing.Point(230, 19)
         Me.BT_FP_PAGE.Name = "BT_FP_PAGE"
         Me.BT_FP_PAGE.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.BT_FP_PAGE.Size = New System.Drawing.Size(91, 26)

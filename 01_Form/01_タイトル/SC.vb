@@ -114,14 +114,18 @@ Public Class SC
 
     ' ショートカット F1
     Private Sub Button1_KeyDown(sender As Object, e As KeyEventArgs) Handles Button1.KeyDown
+        Static debugcnt As Integer
         Select Case e.KeyCode
             Case Keys.F1
                 Dim cmn As New Common
                 cmn.OpenCurrentDir()
             Case Keys.F9
-                DEBUG_MODE = True
-                MsgBox($"デバッグモード:{DEBUG_MODE}")
-                Process.Start(CurrentAppPath & "DebugLog.log")
+                debugcnt += 1
+                If debugcnt > 5 Then
+                    DEBUG_MODE = Not DEBUG_MODE
+                    MsgBox($"デバッグモード:{DEBUG_MODE}")
+                    If DEBUG_MODE Then Process.Start(CurrentAppPath & "DebugLog.log")
+                End If
         End Select
     End Sub
 #End Region
