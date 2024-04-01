@@ -46,7 +46,7 @@ Public Class ExcelManager
 
     End Sub
 
-    ' 表示中のDGVをExcelに出力する（非表示列は出力しない）
+    ' 表示中のDGVをExcelに出力する（非表示列・非表示行は出力しない）
     Public Sub ExportDGVToExcel(dgv As DataGridView)
         Dim data As New List(Of List(Of String))
         Dim visibleColumnIndexes As New List(Of Integer) ' 表示されているカラムのインデックスを保持するリスト
@@ -61,9 +61,9 @@ Public Class ExcelManager
         Next
         data.Add(columnNames) ' 表示されているカラム名をリストの最初の要素として追加
 
-        ' 各行のデータを取得（表示されているカラムのみ）
+        ' 各行のデータを取得（表示されているカラムのみ、非表示の行は無視）
         For Each row As DataGridViewRow In dgv.Rows
-            If Not row.IsNewRow Then ' 新しい行でないことを確認
+            If Not row.IsNewRow AndAlso row.Visible Then ' 新しい行でなく、行が表示されていることを確認
                 Dim rowList As New List(Of String)
                 For Each index As Integer In visibleColumnIndexes ' 表示されているカラムのインデックスに従ってデータを追加
                     Dim cell As DataGridViewCell = row.Cells(index)
@@ -72,7 +72,6 @@ Public Class ExcelManager
                 data.Add(rowList)
             End If
         Next
-
         ExportToExcel(data, "Sheet1")
     End Sub
 

@@ -2,6 +2,7 @@
 Imports System.Text
 Imports System.IO
 Imports System.Text.RegularExpressions
+Imports Microsoft.SqlServer
 
 Public Class Common
     ' ディレクトリ名
@@ -320,6 +321,30 @@ Public Class Common
             Return word
         End If
     End Function
+
+    ' コンボボックスに指定したDGVの行のユニーク文字列を設定する
+    Public Sub SetComboBoxUniqueDGVItems(dgv As DataGridView, columnName As String, ByRef cbox As ComboBox, topItemName As String)
+        Dim personSet As New HashSet(Of String)
+
+        ' DataGridViewの各行を走査
+        For Each row As DataGridViewRow In dgv.Rows
+            If Not row.IsNewRow Then
+                ' 指定列の値を取得。HashSetに追加することで重複を除外
+                Dim words As String = row.Cells(columnName).Value.ToString()
+                If Not String.IsNullOrWhiteSpace(words) Then
+                    personSet.Add(words)
+                End If
+            End If
+        Next
+
+        ' コンボボックスに設定
+        cbox.Items.Clear()
+        If topItemName IsNot Nothing Then cbox.Items.Add(topItemName)
+        For Each person In personSet
+            cbox.Items.Add(person)
+        Next
+        cbox.SelectedIndex = 0
+    End Sub
 
     ' プログレスバー表示
     Public Sub StartPBar(progressCount As Integer)

@@ -196,6 +196,7 @@ Public Class SCA1
     Private Sub FLS_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
         'FWatchingEnd()
         'thSC.Dispose()
+        PoolingStart = False
         xml.SetAutoUpd(CB_AUTOUPD.Checked)
     End Sub
 
@@ -889,7 +890,9 @@ Public Class SCA1
                             If Not updateFlag Then Continue For
 
                             log.cLog("cycle - 実行:" & PList(n, PL_ID))
-                            Invoke(New delegate_PoolingCallBack(AddressOf PoolingCallBack), PList(n, PL_ID))
+                            If Me.IsHandleCreated Then
+                                Me.Invoke(New delegate_PoolingCallBack(AddressOf PoolingCallBack), PList(n, PL_ID))
+                            End If
                             updateFlag = False
                         Next
                         firstCycle = False
@@ -1559,15 +1562,22 @@ Public Class SCA1
             DGV_PIMENU(0, n).Value = sccmn.FPITEMLIST(n)
         Next
 
-        CB_FPPerson.Items.Add("(全表示)")
-        CB_FPStatus.Items.Add("(全表示)")
-        CB_FPLIST.Items.Add("(全表示)")
-        CB_FPLIST.Items.AddRange(sccmn.FPITEMLIST)
-        CB_FPLIST.SelectedIndex = 0
-        CB_FPPerson.SelectedIndex = 0
-        CB_FPStatus.SelectedIndex = 0
+        ' 各コンボボックス設定
+        cmn.SetComboBoxUniqueDGVItems(DGV_FPMNG, "C05", CB_FPLIST, "(全表示)")     ' 内容
+        cmn.SetComboBoxUniqueDGVItems(DGV_FPMNG, "C06", CB_FPPerson, "(全表示)")   ' 担当者
+        cmn.SetComboBoxUniqueDGVItems(DGV_FPMNG, "C08", CB_FPStatus, "(全表示)")   ' ステータス
         Dim firstDayOfMonth As DateTime = New DateTime(DateTime.Now.Year, DateTime.Now.Month, 1)
         DTP_FPST.Value = firstDayOfMonth
+        RegEventHandlerFP()
+    End Sub
+
+    Private Sub RegEventHandlerFP()
+        AddHandler DTP_FPST.CloseUp, AddressOf ShowDGV_FPMNG
+        AddHandler DTP_FPED.CloseUp, AddressOf ShowDGV_FPMNG
+        AddHandler CB_FPRangeAll.CheckedChanged, AddressOf ShowDGV_FPMNG
+        AddHandler CB_FPPerson.SelectedIndexChanged, AddressOf ShowDGV_FPMNG
+        AddHandler CB_FPLIST.SelectedIndexChanged, AddressOf ShowDGV_FPMNG
+        AddHandler Button1.Click, AddressOf Button1_Click
     End Sub
 
     ' 物件情報の入力欄を表示
@@ -1800,6 +1810,7 @@ Public Class SCA1
                 Next
             Case 3 ' 破産
                 ' 再生・破産のカラーリング
+                DGV_FPLIST(1, 7).Style.BackColor = System.Drawing.Color.Pink
                 DGV_FPLIST(1, 25).Style.BackColor = System.Drawing.Color.Pink
             Case 4 ' 再生
                 DGV_FPLIST(1, 5).Style.BackColor = System.Drawing.Color.DeepSkyBlue
@@ -1866,11 +1877,13 @@ Public Class SCA1
         ' 再生の認可確定日(C26)が設定あり、受任OFF
         If dtReg(0)(3).Length > 0 Then Return False
 
-        ' 破産(4)の登録情報を取得
-        Dim dtDel As DataTable = db.GetSelect(Sqldb.TID.FPDATA, $"SELECT C30 FROM {db.GetTable(Sqldb.TID.FPDATA)} WHERE C03 = '{keyId}' AND C04 = '4'")
+        ' 破産(2)の登録情報を取得
+        Dim dtDel As DataTable = db.GetSelect(Sqldb.TID.FPDATA, $"SELECT C12, C30 FROM {db.GetTable(Sqldb.TID.FPDATA)} WHERE C03 = '{keyId}' AND C04 = '2'")
         If dtDel.Rows.Count > 0 Then
-            ' 破産の免責確定日(C30)が設定あり、受任OFF
+            ' 破産の辞任日(C12)が設定あり、受任OFF
             If dtDel(0)(0).Length > 0 Then Return False
+            ' 破産の免責確定日(C30)が設定あり、受任OFF
+            If dtDel(0)(1).Length > 0 Then Return False
         End If
 
         ' 該当者名に主債務者名、もしくは連帯債務者のcNameが含まれていれば受任者ON
@@ -1968,7 +1981,7 @@ Public Class SCA1
             End With
         Next
         FilterDGV_FPMNG(DGV_FPMNG, TB_FPMNG_Search.Text)
-        dgv.Sort(dgv.Columns(1), ComponentModel.ListSortDirection.Descending)
+        dgv.Sort(dgv.Columns(7), ComponentModel.ListSortDirection.Descending)
 
         If dgv.Rows.Count > 0 Then
             dgv.ClearSelection() ' 既存の選択をクリア
@@ -1988,11 +2001,6 @@ Public Class SCA1
         End If
     End Sub
 
-    ' フィルタ内容変更契機
-    Private Sub CB_FPLIST_SelectedIndexChanged(sender As Object, e As EventArgs) Handles DTP_FPST.CloseUp, DTP_FPED.CloseUp, CB_FPRangeAll.CheckedChanged, CB_FPPerson.SelectedIndexChanged, CB_FPLIST.SelectedIndexChanged
-        ShowDGV_FPMNG()
-    End Sub
-
     ' FPMNG 管理表フィルタ
     Private Sub FilterDGV_FPMNG(dgv As DataGridView, words As String)
         dgv.CurrentCell = Nothing ' 現在のセル選択をクリア
@@ -2000,6 +2008,7 @@ Public Class SCA1
         ' 終了日の時間を23:59に設定
         Dim endDate As Date = DTP_FPED.Value.Date.AddHours(23).AddMinutes(59)
         Dim filterByDate As Boolean = Not CB_FPRangeAll.Checked
+        Dim searchHit As Integer = 0
 
         For Each row As DataGridViewRow In dgv.Rows
             row.Visible = False ' 一旦すべての行を非表示にする
@@ -2030,8 +2039,10 @@ Public Class SCA1
             ' 全ての条件が真の場合のみ行を表示
             If keywordMatch AndAlso c05Match AndAlso c02Match AndAlso c06Match AndAlso c07Match Then
                 row.Visible = True
+                searchHit += 1
             End If
         Next
+        L_FPSearchHit.Text = $"{searchHit} 件 表示中"
     End Sub
 
 #End Region
@@ -2047,6 +2058,7 @@ Public Class SCA1
         DTP_MRST.Value = firstDayOfMonth
         ShowDGVMR()
         TB_MRPaymentDate.Text = Today.Date.ToString("yyyy/MM")
+        cmn.SetComboBoxUniqueDGVItems(DGV_MR1, "担当者", CB_Person, "(全表示)")   ' 担当コンボボックス設定
 
         DivMode(xml.GetDiv)
     End Sub
@@ -2103,7 +2115,6 @@ Public Class SCA1
         ' コンボボックスの選択されたインデックスを取得
         mrcmn.InitDGVInfo(DGV_MR1, Sqldb.TID.MRM, CB_MRLIST.SelectedIndex)
         mrcmn.LoadDGVInfo(DGV_MR1, Sqldb.TID.MR, CB_MRLIST.SelectedIndex)
-        InitComboBoxMRParson()  ' 担当コンボボックス
         ' 完済日フィルタを完済日のカラムがあるときだけ有効
         TB_MRPaymentDate.Enabled = mrcmn.IsColumnsPaymentDate(DGV_MR1)
 
@@ -2139,29 +2150,6 @@ Public Class SCA1
         Cursor.Current = Cursors.WaitCursor             ' マウスカーソルを砂時計に
         db.ExeSQL(Sqldb.TID.MR, $"Delete From TBL Where C01 = '{DGV_MR1.CurrentRow.Cells(0).Value}'")
         ShowDGVMR()
-    End Sub
-
-    ' 担当者コンボボックスの生成
-    Private Sub InitComboBoxMRParson()
-        Dim personSet As New HashSet(Of String)
-
-        ' DataGridViewの各行を走査
-        For Each row As DataGridViewRow In DGV_MR1.Rows
-            If Not row.IsNewRow Then
-                ' "担当者" 列の値を取得 (列名が正しく設定されていることが前提)
-                Dim person As String = row.Cells("担当者").Value.ToString()
-                ' HashSetに追加することで重複を除外
-                personSet.Add(person)
-            End If
-        Next
-
-        ' コンボボックスに設定
-        CB_Person.Items.Clear()
-        CB_Person.Items.Add("(全表示)")
-        For Each person In personSet
-            CB_Person.Items.Add(person)
-        Next
-        CB_Person.SelectedIndex = 0
     End Sub
 
     Private Sub FilterMRSearch(word As String)
