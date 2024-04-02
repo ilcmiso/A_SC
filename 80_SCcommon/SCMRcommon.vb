@@ -111,19 +111,18 @@
     End Sub
 
     ' 申請物管理DGVの行データ作成
-    Public Sub LoadDGVInfo(dgv As DataGridView, tid As Integer, category As String)
+    Public Sub LoadDGVInfo(dgv As DataGridView, tid As Sqldb.TID, category As String)
         ' SQLiteからデータを取得
-        Dim dr As DataRow() = SCA1.db.OrgDataTable(Sqldb.TID.MR).Select($"C02 = '{category}'")
-
+        Dim dt As DataTable = SCA1.db.GetSelect(tid, $"SELECT * FROM {SCA1.db.GetTable(tid)} WHERE C02 = '{category}'")
         ' DGVを初期化
         dgv.Rows.Clear()
 
         ' DGVのカラム数に応じてデータを表示
-        For Each row As DataRow In dr
+        For row = 0 To dt.Rows.Count - 1
             Dim newRow As New DataGridViewRow()
             For i As Integer = 0 To dgv.ColumnCount - 1
                 Dim cell As New DataGridViewTextBoxCell()
-                cell.Value = row($"C{i + 1:D2}")
+                cell.Value = dt.Rows(row)($"C{i + 1:D2}")
                 newRow.Cells.Add(cell)
             Next
             dgv.Rows.Add(newRow)

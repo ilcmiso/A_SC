@@ -41,19 +41,11 @@
                     If ownForm.DGV1.CurrentRow.Cells(0).Value <> Common.DUMMY_NO Then
                         SetValueDGV("顧客番号", ownForm.DGV1.CurrentRow.Cells(0).Value)
                         SetValueDGV("主債務者名", ownForm.DGV1.CurrentRow.Cells(1).Value)
+                        SetValueDGV("債務者", ownForm.DGV1.CurrentRow.Cells(1).Value)
                     End If
                 End If
 
                 Select Case MRType
-                    Case 0
-                        SetValueDGV("相続人代表者", ownForm.DGV9(1, 7).Value)
-                        If ownForm.DGV9(1, 7).Value <> "" Then
-                            SetValueDGV("続柄", "配偶者")
-                        End If
-                    Case 4
-                        If ownForm.DGV1.CurrentRow.Cells(0).Value <> Common.DUMMY_NO Then
-                            SetValueDGV("フリガナ", ownForm.DGV1.CurrentRow.Cells(2).Value)
-                        End If
                     Case 5
                         ' UserListにあるユーザー名をコンボボックスのItemsに設定
                         SetComboBoxItemsDGV("再鑑者", userList)
@@ -165,24 +157,22 @@
 
         ownForm.db.ExeSQLInsUpd(Sqldb.TID.MR, commandText)
         ownForm.db.ExeSQL(Sqldb.TID.MR)
-        MsgBox("登録しました。")
 
         ' 追加後、発送届けが基本セットになるため、発送届けが必要か確認するダイアログ表示
-        If ownForm.ActiveControl.Name = BTADD Then
-            If MRType < 5 Then
-                Dim r As Integer
-                r = MessageBox.Show("併せて「郵便発送簿」を追加しますか？",
-                            "ご確認ください",
-                            MessageBoxButtons.YesNo,
-                            MessageBoxIcon.Question)
-                If r = vbYes Then
-                    ' 追加の郵便発送簿を作成
-                    AddPostSend()
-                    Exit Sub
-                End If
+        If ownForm.ActiveControl.Name = BTADD AndAlso MRType < 5 Then
+            Dim r As Integer
+            r = MessageBox.Show($"登録しました。{vbCrLf}併せて「郵便発送簿」を追加しますか？",
+                                "ご確認ください",
+                                MessageBoxButtons.YesNo,
+                                MessageBoxIcon.Question)
+            If r = vbYes Then
+                ' 追加の郵便発送簿を作成
+                AddPostSend()
+                Exit Sub
             End If
+        Else
+            MsgBox("登録しました。")
         End If
-
         Me.Close()
     End Sub
 
@@ -316,7 +306,6 @@
                                      End Sub
         AddHandler dtPicker.Leave, Sub(sender, e)
                                        DGV_REG1.Focus()
-                                       log.cLog("Cocus")
                                    End Sub
 
         ' DataGridViewに追加

@@ -20,6 +20,7 @@ Public Class SCA1
     Private PoolingStart As Boolean = False                         ' 監視フラグ
     Private Const POLLING_ID_SCD As String = "SCD更新"              ' DB(SCD)更新イベントの識別子
     Private Const POLLING_ID_FP As String = "物件情報更新"
+    Private Const POLLING_ID_MR As String = "申請物管理更新"
     Private Const POLLING_ID_CUDB As String = "顧客DB更新"          ' 顧客DB更新イベントの識別子
     Private Const POLLING_ID_ASC As String = "A_SC本体"             ' A_SC更新イベントの識別子
     Private Const POLLING_CYCLE As Integer = 500                    ' イベント監視周期(ms)
@@ -499,6 +500,11 @@ Public Class SCA1
                 Dim cid As String = DGV1.CurrentRow.Cells(0).Value
                 TB_FreeMemo.Text = ""
 
+                ' 契約内容ラベル初期化
+                L_TYPE_F.Visible = False
+                L_TYPE_A.Visible = False
+                L_TYPE_H.Visible = False
+
                 ' 選択中の顧客番号を顧客DBから取得
                 Dim cDr As DataRow() = db.OrgDataTablePlusAssist.Select(String.Format("FK02 = '{0}'", cid))
                 If cDr.Count >= 1 Then
@@ -529,7 +535,11 @@ Public Class SCA1
                     dgv(3, 10).Value = cInfo.Item(38)                                ' 勤務先TEL1
                     ' 証券番号(アシスト)
                     Dim dr As DataRow() = db.OrgDataTable(Sqldb.TID.SCAS).Select(String.Format("C02 = '{0}'", cid))
-                    If dr.Length > 0 Then dgv(3, 0).Value = dr(0).Item(11)
+                    If dr.Length > 0 AndAlso dr(0).Item(11).ToString.Length > 0 Then
+                        dgv(3, 0).Value = dr(0).Item(11)
+                        ' 証券番号の先頭が6なら保証型とする
+                        If dr(0)(11)(0) = "6" Then L_TYPE_H.Visible = True
+                    End If
 
                     dgv(1, 11).Value = cmn.SetValueDefault(cInfo.Item(63), "")       ' 住居サイン
                     dgv(3, 11).Value = cmn.SetValueDefault(cInfo.Item(64), "")       ' 物件郵便番号
@@ -548,6 +558,7 @@ Public Class SCA1
                     Dim repmo As Integer = cmn.Int(cInfo.Item(49))
                     If cInfo.Item(48) IsNot DBNull.Value Then repmo += cmn.Int(cInfo.Item(48))
                     If cInfo.Item(2) = "1" Or cInfo.Item(2) = "3" Then
+                        L_TYPE_F.Visible = True
                         dgv(5, 0).Value = "フラット35"
                         dgv(5, 1).Value = cInfo.Item(3)                               ' 金消契約日
                         dgv(5, 2).Value = cmn.Int(cInfo.Item(55)).ToString("#,0")     ' 貸付金額
@@ -562,6 +573,7 @@ Public Class SCA1
                         dgv(5, 11).Value = cInfo.Item(57)                             ' 完済日
                     End If
                     If cInfo.Item(2) = "2" Or cInfo.Item(2) = "3" Then
+                        L_TYPE_A.Visible = True
                         dgv(6, 0).Value = "アシスト"
                         Dim dtime As DateTime
                         If DateTime.TryParse(cInfo.Item(58), dtime) Then              ' 前リソースが償還回数だった名残りで、日付の場合だけ金消契約日として表示する
@@ -846,12 +858,13 @@ Public Class SCA1
         Dim PList(,) As String = {{POLLING_ID_CUDB, db.CurrentPath_SV & Common.DIR_UPD & Sqldb.DB_FKSC},           ' DB   FKSC.DB3
                                   {POLLING_ID_ASC, db.CurrentPath_SV & Common.DIR_UPD & Common.EXE_NAME},          ' EXE  A_SC.exe
                                   {POLLING_ID_FP, db.CurrentPath_SV & Common.DIR_DB3 & Sqldb.DB_FKSCFPI},          ' FPINFO.db3
+                                  {POLLING_ID_MR, db.CurrentPath_SV & Common.DIR_DB3 & Sqldb.DB_MNGREQ},           ' MRReq.db3
                                   {POLLING_ID_SCD, db.CurrentPath_SV & Common.DIR_DB3 & Sqldb.DB_FKSCLOG}}         ' FKSC.LOG.db3
         Const PL_ID As Integer = 0
         Const PL_FILE As Integer = 1
 
         ' 監視対象一覧分のタイマー生成
-        Dim LastTime(PList.GetLength(0) - 1) As String      ' 最終更新時刻(ファイル更新時に更新)
+        Dim LastTime(PList.GetLength(0) - 1) As DateTime      ' 最終更新時刻(ファイル更新時に更新)
 
         ' 監視タスク起動 非同期
         Dim task2 As Task = Task.Run(
@@ -872,8 +885,8 @@ Public Class SCA1
                                 Continue For
                             End Try
                             For Each f As String In fileList
-                                Dim fTime As String = File.GetLastWriteTime(f)             ' タイムスタンプ取得
-                                'log.cLog($"[cycle] {f} : {fTime} == lastTime {LastTime(n)}")
+                                Dim fTime As DateTime = File.GetLastWriteTime(f)             ' タイムスタンプ取得
+                                'log.cLog($"[cycle] {f} : {fTime:HH:mm:ss} == lastTime {LastTime(n):HH:mm:ss}")
                                 If LastTime(n) < fTime Then
                                     ' ファイル更新を検出
                                     If EditForm IsNot Nothing Then
@@ -910,6 +923,8 @@ Public Class SCA1
                 Invoke(New MethodInvoker(AddressOf UpdateDB_SCD))          ' SCD更新
             Case POLLING_ID_FP     ' FP DB更新
                 Invoke(New MethodInvoker(AddressOf UpdateDB_FP))           ' FP更新
+            Case POLLING_ID_MR     ' MR DB更新
+                Invoke(New MethodInvoker(AddressOf UpdateDB_MR))           ' MR更新
             Case POLLING_ID_CUDB    ' 顧客DB更新
                 Invoke(New MethodInvoker(AddressOf DownloadCustomerDB))    ' 顧客DBのダウンロード更新
             Case POLLING_ID_ASC     ' A_SC本体の更新
@@ -933,6 +948,12 @@ Public Class SCA1
         log.cLog("-- UpdateDB_FP")
         ShowDGV_FPLIST()
         ShowDGV_FPMNG()
+    End Sub
+
+    ' FPDB更新を通知
+    Private Sub UpdateDB_MR()
+        log.cLog("-- UpdateDB_MR")
+        ShowDGVMR()
     End Sub
 
     ' 顧客DBの更新の検出

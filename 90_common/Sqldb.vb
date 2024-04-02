@@ -57,7 +57,7 @@ Public Class Sqldb
         {DB_FKSCPI, TBL_ITEM, 5, "C", DBSV, True},
         {DB_FKSCASSIST, TBL_STANDARD, 28, "C", DBLO, True},
         {DB_AUTOCALL, TBL_STANDARD, 4, "C", DBSV, True},
-        {DB_MNGREQ, TBL_STANDARD, 20, "C", DBSV, True},
+        {DB_MNGREQ, TBL_STANDARD, 21, "C", DBSV, True},
         {DB_MRITEM, TBL_STANDARD, 5, "C", DBSV, True},
         {DB_USERLIST, TBL_STANDARD, 5, "C", DBSV, True},
         {DB_OVERTAX, TBL_STANDARD, 103, "C", DBSV, True}
@@ -738,6 +738,122 @@ Public Class Sqldb
         ExeSQL(TID.FPDATA, $"DELETE FROM {GetTable(TID.FPDATA2)}")
     End Sub
 
+    Public Sub DataTranceferMR()
+        Dim setdata As New List(Of String())
+        setdata.Add(New String() {0, "00", "登録番号", 0, ""})
+        setdata.Add(New String() {0, "01", "カテゴリ", 0, ""})
+        setdata.Add(New String() {0, "02", "番号", 50, ""})
+        setdata.Add(New String() {0, "03", "受付日", 82, "Cal:"})
+        setdata.Add(New String() {0, "04", "担当者", 65, ",*"})
+        setdata.Add(New String() {0, "05", "顧客番号", 100, ""})
+        setdata.Add(New String() {0, "06", "債務者", 85, ""})
+        setdata.Add(New String() {0, "07", "A団信加入", 70, "無,有"})
+        setdata.Add(New String() {0, "08", "F新旧", 50, "新団信,旧団信"})
+        setdata.Add(New String() {0, "09", "F届出内容", 70, "死亡,高度障害,３大疾病,身体障害,介護"})
+        setdata.Add(New String() {0, "10", "F審査状況", 110, "案内送付(返送待ち),機構登録・書類送付,確認中(機構連絡有),審査終了"})
+        setdata.Add(New String() {0, "11", "F審査完了日", 82, "Cal:Blank"})
+        setdata.Add(New String() {0, "12", "F審査結果", 70, "審査待ち,弁済決定,任意売却済,支払不可"})
+        setdata.Add(New String() {0, "13", "F完済日", 82, "Cal:Blank"})
+        setdata.Add(New String() {0, "14", "A届出内容", 70, "死亡,高度障害,リビ"})
+        setdata.Add(New String() {0, "15", "A審査状況", 150, "案内送付(必要書類返送待ち),あいおい審査依頼,調査：確認中(あいおい連絡有),審査終了"})
+        setdata.Add(New String() {0, "16", "A審査完了日", 82, "Cal:Blank"})
+        setdata.Add(New String() {0, "17", "A審査結果", 70, "審査待ち,弁済決定,任意売却済,支払不可"})
+        setdata.Add(New String() {0, "18", "A完済日", 82, "Cal:Blank"})
+        setdata.Add(New String() {0, "19", "A団信返金", 70, "有,無"})
+        setdata.Add(New String() {0, "20", "備考", 90, ""})
+        setdata.Add(New String() {1, "00", "登録番号", 0, ""})
+        setdata.Add(New String() {1, "01", "カテゴリ", 0, ""})
+        setdata.Add(New String() {1, "02", "番号", 50, ""})
+        setdata.Add(New String() {1, "03", "受付日", 82, "Cal:"})
+        setdata.Add(New String() {1, "04", "顧客番号", 100, ""})
+        setdata.Add(New String() {1, "05", "債務者", 85, ""})
+        setdata.Add(New String() {1, "06", "ローン種類", 90, "フラット,アシスト,新保証型,旧保証型,バックアップ,FKローン"})
+        setdata.Add(New String() {1, "07", "実施年月", 80, ",1月,2月,3月,4月,5月,6月,7月,8月,9月,10月,11月,12月"})
+        setdata.Add(New String() {1, "08", "繰上金額(万円)", 100, "NUM"})
+        setdata.Add(New String() {1, "09", "翌月完済<Aのみ入力>", 130, ",翌日完済有"})
+        setdata.Add(New String() {1, "10", "申請書返却(登録)日", 120, "Cal:Blank"})
+        setdata.Add(New String() {1, "11", "キャンセル日", 110, "Cal:Blank"})
+        setdata.Add(New String() {2, "00", "登録番号", 0, ""})
+        setdata.Add(New String() {2, "01", "カテゴリ", 0, ""})
+        setdata.Add(New String() {2, "02", "番号", 50, ""})
+        setdata.Add(New String() {2, "03", "受付日", 82, "Cal:"})
+        setdata.Add(New String() {2, "04", "担当者", 60, ",*"})
+        setdata.Add(New String() {2, "05", "顧客番号", 100, ""})
+        setdata.Add(New String() {2, "06", "債務者", 85, ""})
+        setdata.Add(New String() {2, "07", "ローン種類", 82, "フラット,アシスト,新保証型,旧保証型,バックアップ,FKローン"})
+        setdata.Add(New String() {2, "08", "アシスト同時完済", 120, "無,有,完済済"})
+        setdata.Add(New String() {2, "09", "実行日", 82, "Cal:"})
+        setdata.Add(New String() {2, "10", "完済日", 82, "Cal:"})
+        setdata.Add(New String() {2, "11", "完済資金", 70, "借換,売却,自己資金,満期完済,団信弁済,FF(S)借換"})
+        setdata.Add(New String() {2, "12", "抹消受取", 120, "郵送,司来店スイング),司来店(大阪 営業所),司来店(神戸 営業所),司来店(名古屋 営業所),司来店(仙台 営業所),司来店(柏 営業所),司来店(千葉 営業所),司来店(札幌 営業所),司来店(宇都宮 営業所),司来店(福岡 営業所),司来店(高崎 営業所),司来店(広島 営業所),司来店(高松 営業所),司来店(郡山 営業所),司来店(熊本 営業所),司来店(京都 営業所),司来店(新潟 営業所),司来店(静岡 営業所),司来店(沖縄 営業所),司来店(大宮 営業所),司来店(相模原 営業所),司来店(世田谷 営業所),司来店(吉祥寺 営業所),司来店(横浜 営業所),司来店(所沢 営業所),司来店(銀座 営業所),本人来店(大阪 営業所),本人来店(神戸 営業所),本人来店(名古屋 営業所),本人来店(仙台 営業所),本人来店(柏 営業所),本人来店(千葉 営業所),本人来店(札幌 営業所),本人来店(宇都宮 営業所),本人来店(福岡 営業所),本人来店(高崎 営業所),本人来店(広島 営業所),本人来店(高松 営業所),本人来店(郡山 営業所),本人来店(熊本 営業所),本人来店(京都 営業所),本人来店(新潟 営業所),本人来店(静岡 営業所),本人来店(沖縄 営業所),本人来店(大宮 営業所),本人来店(相模原 営業所),本人来店(世田谷 営業所),本人来店(吉祥寺 営業所),本人来店(横浜 営業所),本人来店(所沢 営業所),本人来店(銀座 営業所),"})
+        setdata.Add(New String() {2, "13", "キャンセル日", 90, "Cal:Blank"})
+        setdata.Add(New String() {2, "14", "完済証明書希望", 100, "無,有"})
+        setdata.Add(New String() {2, "15", "申請書登録日", 90, "Cal:"})
+        setdata.Add(New String() {2, "16", "抹消出庫", 60, "未,済,営業所済"})
+        setdata.Add(New String() {2, "17", "備考", 82, ""})
+        setdata.Add(New String() {3, "00", "登録番号", 0, ""})
+        setdata.Add(New String() {3, "01", "カテゴリ", 0, ""})
+        setdata.Add(New String() {3, "02", "番号", 50, ""})
+        setdata.Add(New String() {3, "03", "受付日", 82, "Cal:"})
+        setdata.Add(New String() {3, "04", "担当者", 60, ",*"})
+        setdata.Add(New String() {3, "05", "顧客番号", 100, ""})
+        setdata.Add(New String() {3, "06", "主債務者名", 85, ""})
+        setdata.Add(New String() {3, "07", "条件変更内容", 150, "ボーナス併用,ボーナス取止,ボーナス月変更,増額による期間短縮,元利⇔元利,法定期限内期間延長"})
+        setdata.Add(New String() {3, "08", "ステータス", 200, "申請書発送(返送待ち),条件保存(変更契約証書発送),登録待ち,登録完了"})
+        setdata.Add(New String() {3, "09", "処理日", 82, "Cal:"})
+        setdata.Add(New String() {3, "10", "登録変更予定月", 95, "Cal:Format:yyyy年MM月"})
+        setdata.Add(New String() {3, "11", "検印日", 82, "Cal:Blank"})
+        setdata.Add(New String() {3, "12", "備考", 120, ""})
+        setdata.Add(New String() {4, "00", "登録番号", 0, ""})
+        setdata.Add(New String() {4, "01", "カテゴリ", 0, ""})
+        setdata.Add(New String() {4, "02", "番号", 50, ""})
+        setdata.Add(New String() {4, "03", "受付日", 82, "Cal:"})
+        setdata.Add(New String() {4, "04", "担当者", 60, ",*"})
+        setdata.Add(New String() {4, "05", "顧客番号", 100, ""})
+        setdata.Add(New String() {4, "06", "ローン種類", 110, "フラット,フラット・アシスト,アシスト,新保証型,旧保証型,バックアップ,FKローン"})
+        setdata.Add(New String() {4, "07", "依頼書返却日", 100, "Cal:Blank"})
+        setdata.Add(New String() {4, "08", "金融機関送付日", 100, "Cal:Blank"})
+        setdata.Add(New String() {4, "09", "送付先", 200, ""})
+        setdata.Add(New String() {4, "10", "返却日(銀行のみ)", 120, "Cal:Blank"})
+        setdata.Add(New String() {5, "00", "登録番号", 0, ""})
+        setdata.Add(New String() {5, "01", "カテゴリ", 0, ""})
+        setdata.Add(New String() {5, "02", "番号", 0, ""})
+        setdata.Add(New String() {5, "03", "発送日", 82, "Cal:"})
+        setdata.Add(New String() {5, "04", "担当者", 80, ",*"})
+        setdata.Add(New String() {5, "05", "発送先", 160, ""})
+        setdata.Add(New String() {5, "06", "内容", 290, "完済申請書,一部繰上返済申請書,変更届,支払利息証明書,団信任意脱退届,口座振替用紙（口座変更）,返済予定表,金消コピー,現在残高証明書"})
+        setdata.Add(New String() {5, "07", "ローン種類", 100, "フラット,アシスト,FA両方,保証型"})
+        setdata.Add(New String() {5, "08", "発送方法", 120, "簡易書留,普通郵便,特定記録,ヤマト便,佐川急便"})
+        setdata.Add(New String() {5, "09", "速達", 90, "速達なし,速達あり"})
+        setdata.Add(New String() {5, "10", "再鑑者", 80, ",*"})
+        setdata.Add(New String() {5, "11", "備考", 120, ""})
+        setdata.Add(New String() {6, "00", "登録番号", 0, ""})
+        setdata.Add(New String() {6, "01", "カテゴリ", 0, ""})
+        setdata.Add(New String() {6, "02", "番号", 0, ""})
+        setdata.Add(New String() {6, "03", "受付日", 82, "Cal:"})
+        setdata.Add(New String() {6, "04", "担当者", 80, ",*"})
+        setdata.Add(New String() {6, "05", "発送元区分", 130, "お客様,司法書士関係,機構,弁護士関係,*"})
+        setdata.Add(New String() {6, "06", "発送元名称", 160, ""})
+        setdata.Add(New String() {6, "07", "内容", 450, "返済予定表戻り,完済戻り,未開封,口座依頼書,団信脱退届,変更届,一繰戻り,*"})
+        setdata.Add(New String() {6, "08", "発送方法", 100, "簡易書留,普通郵便,返付物返却,速達証明,返信用,ヤマト着払"})
+        setdata.Add(New String() {6, "09", "受領者", 80, ",*"})
+
+        DeleteAllData(TID.MRM)
+        For n = 0 To setdata.Count - 1
+            ExeSQLInsert(TID.MRM, setdata(n))
+        Next
+        ExeSQL(TID.MRM)
+        ' カテゴリ6以外は消していいそうなので6以外は削除して、6だけデータ残して全削除
+        ExeSQL(TID.MR, $"DELETE FROM {GetTable(TID.MR)} WHERE C02 <> '6'")
+
+        ' カラムを追加
+        Dim dt As DataTable = GetSelect(TID.MR, $"SELECT * FROM {GetTable(TID.MR)} LIMIT 1")
+        If GetColumCount(TID.MR) > dt.Columns.Count Then
+            AddColumns(TID.MR)
+        End If
+    End Sub
+
+
     ' データベースの最終更新日を確認して、更新直後ならキャッシュがなくLINQを使用したほうが処理速度が早いことを利用するための判定。
     ' Return : True  更新直後ではなくキャッシュあり
     '          False 更新直後　※DB更新から1秒未満
@@ -760,6 +876,11 @@ Public Class Sqldb
     ' TIDからテーブル名取得
     Public Function GetTable(tid As TID) As String
         Return DBTbl(tid, Sqldb.DBID.TABLE)
+    End Function
+
+    ' TIDからカラム数取得
+    Public Function GetColumCount(tid As TID) As Integer
+        Return DBTbl(tid, Sqldb.DBID.CNUM)
     End Function
 
 End Class

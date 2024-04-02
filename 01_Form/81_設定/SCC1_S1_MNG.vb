@@ -46,7 +46,8 @@ Public Class SCC1_S1_MNG
             "サーバーのSC.exeのタイムスタンプ更新",
             "db3ファイル新規作成 (Value値)",
             "PINFO DB移管",
-            "PINFO 移管後の変換"
+            "PINFO 移管後の変換",
+            "MR移管"
             }
         ListBox2.Items.Clear()
         For Each cl In commandNames
@@ -111,6 +112,8 @@ Public Class SCC1_S1_MNG
             Case 3
                 db.DataTransferFPINFO2()
 
+            Case 4
+                db.DataTranceferMR()
         End Select
         MsgBox("完了")
 
