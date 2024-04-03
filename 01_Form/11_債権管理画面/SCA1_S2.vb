@@ -1,6 +1,4 @@
 ﻿Imports System.IO
-Imports System.Windows.Forms.AxHost
-Imports DocumentFormat.OpenXml.VariantTypes
 
 Public Class SCE_S2
 
@@ -77,6 +75,14 @@ Public Class SCE_S2
                 DTP_A1.Text = dday
             End If
         End If
+
+        ' 総務課用の概要選択肢を設定
+        If xml.GetDiv = Common.DIV.GA Then
+            TB_A6.Items.Clear()
+            Dim gaItems As String() = {"完済", "一部繰上返済", "各種変更手続き", "書類発行依頼", "年末残高証明書", "団信", "団信弁済", "口座変更", "条件変更", "入金関係", "郵便物返戻", "相続", "債務引受", "その他"}
+            TB_A6.Items.AddRange(gaItems)
+        End If
+
         TB_A2.Select()
     End Sub
 #End Region

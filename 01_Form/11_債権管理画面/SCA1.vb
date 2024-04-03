@@ -64,6 +64,7 @@ Public Class SCA1
         ShowDGVList(DGV1)
         ShowDGVList(DGV2)
         ShowDGVList(DGV9)
+        FPINFOInit()                ' 物件情報管理の初期設定
         ShowDGV_FPMNG()
         cmn.UpdPBar("最終設定中")
 
@@ -71,16 +72,11 @@ Public Class SCA1
         SetToolTips()               ' ツールチップの設定
         MRInit()                    ' 申請物の初期設定
         DunInit()                   ' 督促管理の初期設定
-        FPINFOInit()                ' 物件情報管理の初期設定
         ' DGVちらつき防止
         cmn.SetDoubleBufferDGV(DGV1, DGV2, DGV4, DGV5, DGV6, DGV_FPLIST, DGV9, DGV_MR1, DGV_FPMNG)
         ' ファイル監視開始 ※ファイル監視によるDB更新を行うと排他競合がおこりアプリが強制終了してしまう問題があるので一旦行わない
         'fwatchers = New List(Of FileWatcher)
         'FWatchingStart()
-
-        ' 一時的に管理表タブを非表示にする
-        'Dim tabPageToRemove As TabPage = TAB_A1.TabPages("Tab_3Mng")
-        'TAB_A1.TabPages.Remove(tabPageToRemove)
 
         ' 解像度が小さいPCは、左端に寄せる (横幅1600px未満なら左寄せ)
         If Screen.PrimaryScreen.Bounds.Width < 1600 Then Me.Left = 0
@@ -284,9 +280,8 @@ Public Class SCA1
         db.UpdateOrigDT(Sqldb.TID.SCR)
 
         ShowDGVList(DGV2)
-        ShowDGVList(DGV4)
+        'ShowDGVList(DGV4)      ' ShowDunLBを選択した契機で更新されるためここではしない
         ShowDGVList(DGV5)
-        ShowDGVMR()
         ShowDunLB()
         cmn.EndPBar()
     End Sub
@@ -383,17 +378,6 @@ Public Class SCA1
             Case Keys.F2
             Case Keys.F3
             Case Keys.F4
-                'Dim dt As DataTable
-                'Dim ss = New SQLServer
-
-                ' 全てのDBを読み込み、SQL ServerにInsertする
-                'For Each value As Sqldb.TID In [Enum].GetValues(GetType(Sqldb.TID))
-                '    Console.WriteLine(value.ToString & " = " & value.ToString("D"))
-                '    dt = db.GetSelect(value, $"SELECT * FROM {db.DBTbl(value, Sqldb.DBID.TABLE)}")
-                '    ss.ExeInsertDataTable(dt, value.ToString)
-                'Next
-
-
         End Select
     End Sub
 
@@ -410,7 +394,7 @@ Public Class SCA1
     Public Sub NoticeUpdateDB_SCD(result As Integer)
         log.cLog("EventCB: DB-SCD更新通知result: " & result)
         ShowDGVList(DGV2)
-        ShowDGVList(DGV4)
+        'ShowDGVList(DGV4)
         ShowDGVList(DGV5)
     End Sub
 
@@ -892,8 +876,6 @@ Public Class SCA1
                                     If EditForm IsNot Nothing Then
                                         If EditForm.Visible Then Continue For                   ' 交渉記録の編集中は更新しない
                                     End If
-
-                                    log.cLog("cycle - FUPD検出:" & PList(n, PL_ID))
                                     updateFlag = True
                                     LastTime(n) = fTime
                                 End If
@@ -946,7 +928,7 @@ Public Class SCA1
     ' FPDB更新を通知
     Private Sub UpdateDB_FP()
         log.cLog("-- UpdateDB_FP")
-        ShowDGV_FPLIST()
+        'ShowDGV_FPLIST()    ' 入力中の文字が消えてしまうため自動更新をしない
         ShowDGV_FPMNG()
     End Sub
 
@@ -1212,7 +1194,6 @@ Public Class SCA1
 
     ' 記録一覧フィルタ ShowDGVListにコールされる
     Private Function FilterDGV5() As DataTable
-        log.TimerST()
         Dim dr As DataRow()
         ' チェック全解除の場合は0行で表示
         If CLB_RecB1.CheckedItems.Count = 0 Or CLB_RecB2.CheckedItems.Count = 0 Then
@@ -1253,7 +1234,6 @@ Public Class SCA1
         If dr.Length = 0 Then
             Return Nothing
         End If
-        log.TimerED("FilterDGV5")
         Return dr.CopyToDataTable
     End Function
 
@@ -1586,7 +1566,6 @@ Public Class SCA1
         ' 各コンボボックス設定
         cmn.SetComboBoxUniqueDGVItems(DGV_FPMNG, "C05", CB_FPLIST, "(全表示)")     ' 内容
         cmn.SetComboBoxUniqueDGVItems(DGV_FPMNG, "C06", CB_FPPerson, "(全表示)")   ' 担当者
-        cmn.SetComboBoxUniqueDGVItems(DGV_FPMNG, "C08", CB_FPStatus, "(全表示)")   ' ステータス
         Dim firstDayOfMonth As DateTime = New DateTime(DateTime.Now.Year, DateTime.Now.Month, 1)
         DTP_FPST.Value = firstDayOfMonth
         RegEventHandlerFP()
@@ -1598,7 +1577,12 @@ Public Class SCA1
         AddHandler CB_FPRangeAll.CheckedChanged, AddressOf ShowDGV_FPMNG
         AddHandler CB_FPPerson.SelectedIndexChanged, AddressOf ShowDGV_FPMNG
         AddHandler CB_FPLIST.SelectedIndexChanged, AddressOf ShowDGV_FPMNG
-        AddHandler Button1.Click, AddressOf Button1_Click
+        AddHandler CB_FPStatus.ItemCheck, AddressOf CB_FPStatus_ItemCheck
+    End Sub
+
+    Private Sub CB_FPStatus_ItemCheck()
+        ' チェックボックスの変更後の状態を取得したいから、ItemCheckのイベント終了後に動作させるようにInvokeで遅延させる
+        BeginInvoke(New MethodInvoker(AddressOf ShowDGV_FPMNG))
     End Sub
 
     ' 物件情報の入力欄を表示
@@ -1673,6 +1657,10 @@ Public Class SCA1
     End Sub
 
     ' ジャンプボタン
+    Private Sub BT_FPMNG_JUMP_Click(sender As Object, e As EventArgs) Handles BT_FPMNG_JUMP.Click
+        ' 該当する物件情報を表示
+        ShowSelectUser(DGV_FPMNG.CurrentRow.Cells(2).Value, Array.IndexOf(sccmn.FPITEMLIST, DGV_FPMNG.CurrentRow.Cells(4).Value))
+    End Sub
     Private Sub BT_FPMNG_JUMP_Click(sender As Object, e As DataGridViewCellEventArgs) Handles DGV_FPMNG.CellDoubleClick, BT_FPMNG_JUMP.Click
         If DGV_FPMNG.Rows.Count = 0 Then Exit Sub
         If e.RowIndex < 0 Then Exit Sub
@@ -2055,7 +2043,16 @@ Public Class SCA1
             Dim c06Match As Boolean = (CB_FPPerson.SelectedIndex <= 0 OrElse row.Cells("C06").Value.ToString().Equals(CB_FPPerson.SelectedItem.ToString()))
 
             ' C07列に対するフィルタリング
-            Dim c07Match As Boolean = (CB_FPStatus.SelectedIndex <= 0 OrElse row.Cells("C07").Value.ToString().Equals(CB_FPStatus.SelectedItem.ToString()))
+            Dim c07Match As Boolean = True ' チェックが全てOFFのときは、すべて表示
+            If CB_FPStatus.CheckedItems.Count > 0 Then
+                c07Match = False ' チェックが1つでもONの場合は、初期値をFalseに設定
+                For Each item As String In CB_FPStatus.CheckedItems
+                    If row.Cells("C07").Value.ToString().Equals(item) Then
+                        c07Match = True
+                        Exit For
+                    End If
+                Next
+            End If
 
             ' 全ての条件が真の場合のみ行を表示
             If keywordMatch AndAlso c05Match AndAlso c02Match AndAlso c06Match AndAlso c07Match Then
@@ -2092,6 +2089,27 @@ Public Class SCA1
         xml.SetDiv(divNo)               ' 部署xml記録
         db.ExeSQL(Sqldb.TID.USER, $"Update TBL Set C04 = '{CType(divNo, Integer)}' Where C01 = '{My.Computer.Name}'")
 
+        ' 専用タブの表示
+        cmn.SetTabVisible(TAB_A1, divNo = Common.DIV.SC, "Tab_3Mng")     ' 管理表
+        cmn.SetTabVisible(TAB_A1, divNo = Common.DIV.GA, "Tab_6GA")      ' 申請物管理
+
+        Select Case divNo
+            Case Common.DIV.SC
+                債権管理部ToolStripMenuItem.Checked = True
+                総務課ToolStripMenuItem.Checked = False
+            Case Common.DIV.GA
+                債権管理部ToolStripMenuItem.Checked = False
+                総務課ToolStripMenuItem.Checked = True
+                ' FormがまだPanelに追加されていない場合、ここで追加
+                If PAN_A.Controls.OfType(Of SCGA_OVIEW).Count() = 0 Then
+                    oview.TopLevel = False
+                    oview.FormBorderStyle = FormBorderStyle.None
+                    oview.Dock = DockStyle.Fill
+                    PAN_A.Controls.Add(oview)
+                    oview.Show()
+                End If
+        End Select
+
         ' Panel内のすべてのコントロールをループ処理
         For Each ctrl As System.Windows.Forms.Control In PAN_A.Controls
             ' Form2のインスタンスを特定
@@ -2106,8 +2124,6 @@ Public Class SCA1
                         ctrl.Visible = True
                         ctrl.Enabled = True
                     End If
-                    債権管理部ToolStripMenuItem.Checked = True
-                    総務課ToolStripMenuItem.Checked = False
 
                 Case Common.DIV.GA  ' 総務課
                     If f2 IsNot Nothing Then
@@ -2116,17 +2132,6 @@ Public Class SCA1
                     Else
                         ctrl.Visible = False
                         ctrl.Enabled = False
-                    End If
-                    債権管理部ToolStripMenuItem.Checked = False
-                    総務課ToolStripMenuItem.Checked = True
-
-                    ' FormがまだPanelに追加されていない場合、ここで追加
-                    If PAN_A.Controls.OfType(Of SCGA_OVIEW).Count() = 0 Then
-                        oview.TopLevel = False
-                        oview.FormBorderStyle = FormBorderStyle.None
-                        oview.Dock = DockStyle.Fill
-                        PAN_A.Controls.Add(oview)
-                        oview.Show()
                     End If
             End Select
         Next

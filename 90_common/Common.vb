@@ -3,6 +3,8 @@ Imports System.Text
 Imports System.IO
 Imports System.Text.RegularExpressions
 Imports Microsoft.SqlServer
+Imports System.Windows.Controls
+Imports System.Windows.Forms
 
 Public Class Common
     ' ディレクトリ名
@@ -323,7 +325,7 @@ Public Class Common
     End Function
 
     ' コンボボックスに指定したDGVの行のユニーク文字列を設定する
-    Public Sub SetComboBoxUniqueDGVItems(dgv As DataGridView, columnName As String, ByRef cbox As ComboBox, topItemName As String)
+    Public Sub SetComboBoxUniqueDGVItems(dgv As DataGridView, columnName As String, ByRef cbox As Windows.Forms.ComboBox, topItemName As String)
         Dim personSet As New HashSet(Of String)
 
         ' DataGridViewの各行を走査
@@ -345,6 +347,48 @@ Public Class Common
         Next
         cbox.SelectedIndex = 0
     End Sub
+
+    ' クラスレベルで非表示にしたタブとそのインデックスを保持するDictionaryを定義
+    Private Shared hiddenTabs As New Dictionary(Of String, Tuple(Of TabPage, Integer))
+
+    ' 指定されたTabControlのタブの表示状態を切り替える共通メソッド
+    Public Shared Sub SetTabVisible(tabControl As Windows.Forms.TabControl, visible As Boolean, tabName As String)
+        Dim tabPage As TabPage = Nothing
+        Dim tabKey As String = $"{tabControl.Name}_{tabName}" ' タブコントロールの名前とタブ名を組み合わせてキーを生成
+
+        ' タブを表示する場合
+        If visible Then
+            If hiddenTabs.ContainsKey(tabKey) Then
+                ' 非表示リストからタブとその元のインデックスを取得
+                tabPage = hiddenTabs(tabKey).Item1
+                Dim index As Integer = hiddenTabs(tabKey).Item2
+                ' 元のインデックスにタブを再挿入
+                If index > tabControl.TabPages.Count Then
+                    ' 元のインデックスが現在のタブの数より大きい場合は、最後に追加
+                    tabControl.TabPages.Add(tabPage)
+                Else
+                    tabControl.TabPages.Insert(index, tabPage)
+                End If
+                hiddenTabs.Remove(tabKey) ' タブを非表示リストから削除
+            End If
+        Else
+            ' タブを非表示にする場合
+            For Each page As TabPage In tabControl.TabPages
+                If page.Name = tabName Then
+                    tabPage = page
+                    Exit For
+                End If
+            Next
+
+            If tabPage IsNot Nothing Then
+                ' タブの現在のインデックスを取得し、非表示リストに追加
+                Dim index As Integer = tabControl.TabPages.IndexOf(tabPage)
+                hiddenTabs(tabKey) = Tuple.Create(tabPage, index)
+                tabControl.TabPages.Remove(tabPage) ' タブをTabControlから削除
+            End If
+        End If
+    End Sub
+
 
     ' プログレスバー表示
     Public Sub StartPBar(progressCount As Integer)

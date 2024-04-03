@@ -160,6 +160,9 @@ Partial Class SCA1
         Me.DataGridViewTextBoxColumn8 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.DataGridViewTextBoxColumn9 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Tab_1SC = New System.Windows.Forms.TabPage()
+        Me.L_TYPE_H = New System.Windows.Forms.Label()
+        Me.L_TYPE_A = New System.Windows.Forms.Label()
+        Me.L_TYPE_F = New System.Windows.Forms.Label()
         Me.TB_ADDRESS3 = New System.Windows.Forms.TextBox()
         Me.L_STS = New System.Windows.Forms.Label()
         Me.PAN_A = New System.Windows.Forms.Panel()
@@ -264,6 +267,7 @@ Partial Class SCA1
         Me.Label6 = New System.Windows.Forms.Label()
         Me.Button19 = New System.Windows.Forms.Button()
         Me.Tab_3Mng = New System.Windows.Forms.TabPage()
+        Me.CB_FPStatus = New System.Windows.Forms.CheckedListBox()
         Me.L_FPSearchHit = New System.Windows.Forms.Label()
         Me.Label13 = New System.Windows.Forms.Label()
         Me.Label12 = New System.Windows.Forms.Label()
@@ -299,11 +303,7 @@ Partial Class SCA1
         Me.表示ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripMenuItem2 = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
-        Me.CB_FPStatus = New System.Windows.Forms.ComboBox()
         Me.ColorDialog1 = New System.Windows.Forms.ColorDialog()
-        Me.L_TYPE_F = New System.Windows.Forms.Label()
-        Me.L_TYPE_A = New System.Windows.Forms.Label()
-        Me.L_TYPE_H = New System.Windows.Forms.Label()
         Me.Tab_4Dun.SuspendLayout()
         CType(Me.DGV4, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.GroupBox1.SuspendLayout()
@@ -1545,6 +1545,36 @@ Partial Class SCA1
         Me.Tab_1SC.TabIndex = 0
         Me.Tab_1SC.Text = "債権情報"
         Me.Tab_1SC.UseVisualStyleBackColor = True
+        '
+        'L_TYPE_H
+        '
+        Me.L_TYPE_H.AutoSize = True
+        Me.L_TYPE_H.BackColor = System.Drawing.Color.Lime
+        Me.L_TYPE_H.Location = New System.Drawing.Point(551, 12)
+        Me.L_TYPE_H.Name = "L_TYPE_H"
+        Me.L_TYPE_H.Size = New System.Drawing.Size(13, 12)
+        Me.L_TYPE_H.TabIndex = 1782
+        Me.L_TYPE_H.Text = "H"
+        '
+        'L_TYPE_A
+        '
+        Me.L_TYPE_A.AutoSize = True
+        Me.L_TYPE_A.BackColor = System.Drawing.Color.Cyan
+        Me.L_TYPE_A.Location = New System.Drawing.Point(536, 12)
+        Me.L_TYPE_A.Name = "L_TYPE_A"
+        Me.L_TYPE_A.Size = New System.Drawing.Size(13, 12)
+        Me.L_TYPE_A.TabIndex = 1781
+        Me.L_TYPE_A.Text = "A"
+        '
+        'L_TYPE_F
+        '
+        Me.L_TYPE_F.AutoSize = True
+        Me.L_TYPE_F.BackColor = System.Drawing.Color.IndianRed
+        Me.L_TYPE_F.Location = New System.Drawing.Point(521, 12)
+        Me.L_TYPE_F.Name = "L_TYPE_F"
+        Me.L_TYPE_F.Size = New System.Drawing.Size(12, 12)
+        Me.L_TYPE_F.TabIndex = 1780
+        Me.L_TYPE_F.Text = "F"
         '
         'TB_ADDRESS3
         '
@@ -2847,8 +2877,8 @@ Partial Class SCA1
         'Tab_3Mng
         '
         Me.Tab_3Mng.BackColor = System.Drawing.Color.Beige
-        Me.Tab_3Mng.Controls.Add(Me.L_FPSearchHit)
         Me.Tab_3Mng.Controls.Add(Me.CB_FPStatus)
+        Me.Tab_3Mng.Controls.Add(Me.L_FPSearchHit)
         Me.Tab_3Mng.Controls.Add(Me.Label13)
         Me.Tab_3Mng.Controls.Add(Me.Label12)
         Me.Tab_3Mng.Controls.Add(Me.CB_FPLIST)
@@ -2870,6 +2900,19 @@ Partial Class SCA1
         Me.Tab_3Mng.Size = New System.Drawing.Size(1132, 682)
         Me.Tab_3Mng.TabIndex = 6
         Me.Tab_3Mng.Text = "管理表"
+        '
+        'CB_FPStatus
+        '
+        Me.CB_FPStatus.BackColor = System.Drawing.Color.White
+        Me.CB_FPStatus.CausesValidation = False
+        Me.CB_FPStatus.CheckOnClick = True
+        Me.CB_FPStatus.Font = New System.Drawing.Font("メイリオ", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.CB_FPStatus.FormattingEnabled = True
+        Me.CB_FPStatus.Items.AddRange(New Object() {"対応中", "対応待ち", "完了"})
+        Me.CB_FPStatus.Location = New System.Drawing.Point(500, 29)
+        Me.CB_FPStatus.Name = "CB_FPStatus"
+        Me.CB_FPStatus.Size = New System.Drawing.Size(120, 64)
+        Me.CB_FPStatus.TabIndex = 1806
         '
         'L_FPSearchHit
         '
@@ -3200,7 +3243,7 @@ Partial Class SCA1
         '機能ToolStripMenuItem
         '
         Me.機能ToolStripMenuItem.Name = "機能ToolStripMenuItem"
-        Me.機能ToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.機能ToolStripMenuItem.Size = New System.Drawing.Size(164, 22)
         Me.機能ToolStripMenuItem.Text = "F35データ読み込み"
         '
         '画面モードToolStripMenuItem
@@ -3215,13 +3258,13 @@ Partial Class SCA1
         Me.債権管理部ToolStripMenuItem.Checked = True
         Me.債権管理部ToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked
         Me.債権管理部ToolStripMenuItem.Name = "債権管理部ToolStripMenuItem"
-        Me.債権管理部ToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.債権管理部ToolStripMenuItem.Size = New System.Drawing.Size(134, 22)
         Me.債権管理部ToolStripMenuItem.Text = "債権管理部"
         '
         '総務課ToolStripMenuItem
         '
         Me.総務課ToolStripMenuItem.Name = "総務課ToolStripMenuItem"
-        Me.総務課ToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.総務課ToolStripMenuItem.Size = New System.Drawing.Size(134, 22)
         Me.総務課ToolStripMenuItem.Text = "総務課"
         '
         '表示ToolStripMenuItem
@@ -3234,7 +3277,7 @@ Partial Class SCA1
         'ToolStripMenuItem2
         '
         Me.ToolStripMenuItem2.Name = "ToolStripMenuItem2"
-        Me.ToolStripMenuItem2.Size = New System.Drawing.Size(180, 22)
+        Me.ToolStripMenuItem2.Size = New System.Drawing.Size(146, 22)
         Me.ToolStripMenuItem2.Text = "ユーザー名設定"
         '
         'MenuStrip1
@@ -3248,47 +3291,6 @@ Partial Class SCA1
         Me.MenuStrip1.Size = New System.Drawing.Size(1139, 19)
         Me.MenuStrip1.TabIndex = 1574
         Me.MenuStrip1.Text = "MenuStrip1"
-        '
-        'CB_FPStatus
-        '
-        Me.CB_FPStatus.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.CB_FPStatus.Font = New System.Drawing.Font("MS UI Gothic", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.CB_FPStatus.FormattingEnabled = True
-        Me.CB_FPStatus.ImeMode = System.Windows.Forms.ImeMode.Hiragana
-        Me.CB_FPStatus.Location = New System.Drawing.Point(500, 29)
-        Me.CB_FPStatus.Name = "CB_FPStatus"
-        Me.CB_FPStatus.Size = New System.Drawing.Size(120, 23)
-        Me.CB_FPStatus.TabIndex = 1804
-        '
-        'L_TYPE_F
-        '
-        Me.L_TYPE_F.AutoSize = True
-        Me.L_TYPE_F.BackColor = System.Drawing.Color.IndianRed
-        Me.L_TYPE_F.Location = New System.Drawing.Point(521, 12)
-        Me.L_TYPE_F.Name = "L_TYPE_F"
-        Me.L_TYPE_F.Size = New System.Drawing.Size(12, 12)
-        Me.L_TYPE_F.TabIndex = 1780
-        Me.L_TYPE_F.Text = "F"
-        '
-        'L_TYPE_A
-        '
-        Me.L_TYPE_A.AutoSize = True
-        Me.L_TYPE_A.BackColor = System.Drawing.Color.Cyan
-        Me.L_TYPE_A.Location = New System.Drawing.Point(536, 12)
-        Me.L_TYPE_A.Name = "L_TYPE_A"
-        Me.L_TYPE_A.Size = New System.Drawing.Size(13, 12)
-        Me.L_TYPE_A.TabIndex = 1781
-        Me.L_TYPE_A.Text = "A"
-        '
-        'L_TYPE_H
-        '
-        Me.L_TYPE_H.AutoSize = True
-        Me.L_TYPE_H.BackColor = System.Drawing.Color.Lime
-        Me.L_TYPE_H.Location = New System.Drawing.Point(551, 12)
-        Me.L_TYPE_H.Name = "L_TYPE_H"
-        Me.L_TYPE_H.Size = New System.Drawing.Size(13, 12)
-        Me.L_TYPE_H.TabIndex = 1782
-        Me.L_TYPE_H.Text = "H"
         '
         'SCA1
         '
@@ -3576,9 +3578,9 @@ Partial Class SCA1
     Friend WithEvents C09 As DataGridViewTextBoxColumn
     Friend WithEvents C08 As DataGridViewTextBoxColumn
     Friend WithEvents C07 As DataGridViewTextBoxColumn
-    Friend WithEvents CB_FPStatus As ComboBox
     Friend WithEvents ColorDialog1 As ColorDialog
     Friend WithEvents L_TYPE_H As Label
     Friend WithEvents L_TYPE_A As Label
     Friend WithEvents L_TYPE_F As Label
+    Friend WithEvents CB_FPStatus As CheckedListBox
 End Class
