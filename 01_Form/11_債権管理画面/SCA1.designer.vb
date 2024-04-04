@@ -125,7 +125,6 @@ Partial Class SCA1
         Me.Button10 = New System.Windows.Forms.Button()
         Me.Label27 = New System.Windows.Forms.Label()
         Me.Tab_2Record = New System.Windows.Forms.TabPage()
-        Me.CB_RecRe = New System.Windows.Forms.CheckBox()
         Me.CB_RecRNG = New System.Windows.Forms.CheckBox()
         Me.Label51 = New System.Windows.Forms.Label()
         Me.DTP_Rec1ED = New System.Windows.Forms.DateTimePicker()
@@ -1084,7 +1083,6 @@ Partial Class SCA1
         'Tab_2Record
         '
         Me.Tab_2Record.BackColor = System.Drawing.Color.FromArgb(CType(CType(242, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(242, Byte), Integer))
-        Me.Tab_2Record.Controls.Add(Me.CB_RecRe)
         Me.Tab_2Record.Controls.Add(Me.CB_RecRNG)
         Me.Tab_2Record.Controls.Add(Me.Label51)
         Me.Tab_2Record.Controls.Add(Me.DTP_Rec1ED)
@@ -1111,16 +1109,6 @@ Partial Class SCA1
         Me.Tab_2Record.Size = New System.Drawing.Size(1132, 682)
         Me.Tab_2Record.TabIndex = 3
         Me.Tab_2Record.Text = "記録一覧"
-        '
-        'CB_RecRe
-        '
-        Me.CB_RecRe.AutoSize = True
-        Me.CB_RecRe.Location = New System.Drawing.Point(1016, 646)
-        Me.CB_RecRe.Name = "CB_RecRe"
-        Me.CB_RecRe.Size = New System.Drawing.Size(113, 16)
-        Me.CB_RecRe.TabIndex = 1770
-        Me.CB_RecRe.Text = "従来の集計に戻す"
-        Me.CB_RecRe.UseVisualStyleBackColor = True
         '
         'CB_RecRNG
         '
@@ -2597,6 +2585,7 @@ Partial Class SCA1
         Me.DGV_MR1.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.DataGridViewTextBoxColumn23, Me.DataGridViewTextBoxColumn24, Me.DataGridViewTextBoxColumn25, Me.担当者, Me.DataGridViewTextBoxColumn27, Me.DataGridViewTextBoxColumn28, Me.DataGridViewTextBoxColumn29, Me.DataGridViewTextBoxColumn30, Me.DataGridViewTextBoxColumn31, Me.DataGridViewTextBoxColumn32, Me.DataGridViewTextBoxColumn33, Me.DataGridViewTextBoxColumn34, Me.DataGridViewTextBoxColumn35, Me.DataGridViewTextBoxColumn36, Me.DataGridViewTextBoxColumn37, Me.DataGridViewTextBoxColumn38, Me.DataGridViewTextBoxColumn39, Me.DataGridViewTextBoxColumn40})
         Me.DGV_MR1.ImeMode = System.Windows.Forms.ImeMode.[On]
         Me.DGV_MR1.Location = New System.Drawing.Point(3, 100)
+        Me.DGV_MR1.MultiSelect = False
         Me.DGV_MR1.Name = "DGV_MR1"
         Me.DGV_MR1.ReadOnly = True
         Me.DGV_MR1.RowHeadersVisible = False
@@ -3243,7 +3232,7 @@ Partial Class SCA1
         '機能ToolStripMenuItem
         '
         Me.機能ToolStripMenuItem.Name = "機能ToolStripMenuItem"
-        Me.機能ToolStripMenuItem.Size = New System.Drawing.Size(164, 22)
+        Me.機能ToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
         Me.機能ToolStripMenuItem.Text = "F35データ読み込み"
         '
         '画面モードToolStripMenuItem
@@ -3258,13 +3247,13 @@ Partial Class SCA1
         Me.債権管理部ToolStripMenuItem.Checked = True
         Me.債権管理部ToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked
         Me.債権管理部ToolStripMenuItem.Name = "債権管理部ToolStripMenuItem"
-        Me.債権管理部ToolStripMenuItem.Size = New System.Drawing.Size(134, 22)
+        Me.債権管理部ToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
         Me.債権管理部ToolStripMenuItem.Text = "債権管理部"
         '
         '総務課ToolStripMenuItem
         '
         Me.総務課ToolStripMenuItem.Name = "総務課ToolStripMenuItem"
-        Me.総務課ToolStripMenuItem.Size = New System.Drawing.Size(134, 22)
+        Me.総務課ToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
         Me.総務課ToolStripMenuItem.Text = "総務課"
         '
         '表示ToolStripMenuItem
@@ -3277,7 +3266,7 @@ Partial Class SCA1
         'ToolStripMenuItem2
         '
         Me.ToolStripMenuItem2.Name = "ToolStripMenuItem2"
-        Me.ToolStripMenuItem2.Size = New System.Drawing.Size(146, 22)
+        Me.ToolStripMenuItem2.Size = New System.Drawing.Size(180, 22)
         Me.ToolStripMenuItem2.Text = "ユーザー名設定"
         '
         'MenuStrip1
@@ -3436,7 +3425,6 @@ Partial Class SCA1
     Friend WithEvents Label5 As Label
     Friend WithEvents Label51 As Label
     Friend WithEvents CB_RecRNG As CheckBox
-    Friend WithEvents CB_RecRe As CheckBox
     Friend WithEvents DGV_PIMENU As DataGridView
     Friend WithEvents DataGridViewTextBoxColumn17 As DataGridViewTextBoxColumn
     Friend WithEvents Button9 As Button

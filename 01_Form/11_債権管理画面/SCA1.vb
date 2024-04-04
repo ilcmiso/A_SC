@@ -460,14 +460,7 @@ Public Class SCA1
                 'AddColumnsDun(dt)                           ' 督促管理に残高更新日を追加     処理に時間かかるから一旦削除
             Case dgv Is DGV5                                ' ## 対応一覧タブ リスト
                 bindID = 4
-
-                ' 記録一覧を従来のフィルタに戻す
-                If CB_RecRe.Checked Then
-                    dt = db.OrgDataTable(Sqldb.TID.SCD).Copy    ' DataTableをオリジナルからコピー
-                    FilterDGV5_old(dt)                          ' 検索条件チェックボックスのフィルタ(従来)
-                Else
-                    dt = FilterDGV5() ' フィルタリング条件を設定
-                End If
+                dt = FilterDGV5() ' フィルタリング条件を設定
 
             Case dgv Is DGV6                                ' ## 督促リスト
                 bindID = 5
@@ -1134,62 +1127,6 @@ Public Class SCA1
         Next
         db.ExeSQL(Sqldb.TID.SCD)
         ShowDGVList(DGV5)
-    End Sub
-
-    ' 記録一覧フィルタ ShowDGVListにコールされる(古いバージョン)
-    Private Sub FilterDGV5_old(ByRef dt As DataTable)
-        ' チェック全解除の場合は0行で表示
-        If CLB_RecB1.CheckedItems.Count = 0 Or CLB_RecB2.CheckedItems.Count = 0 Then dt.Rows.Clear() : Exit Sub
-
-        ' #### -----「手法」チェックボックスのフィルタ  ※チェックのない項目を削り落とすフィルタ方法
-        Dim filter As String = ""
-        ' 「その他」OFFなら、まずCLBの項目が含まれたものだけにする。含まれないものは予め除いておく
-        If Not CLB_RecB1.CheckedItems.Contains("その他") Then
-            Dim tmpf As String = ""
-            For n = 0 To CLB_RecB1.Items.Count - 1
-                tmpf += "[FKD05] like '%" & CLB_RecB1.Items(n) & "%' Or "
-            Next
-            tmpf = RegularExpressions.Regex.Replace(tmpf, " Or $", "")  ' 末尾の or を削除
-            dt = dt.Select(tmpf).CopyToDataTable
-        End If
-        ' 基本表示させるが、チェックボックスがOFFならその項目をフィルタする
-        For n = 0 To CLB_RecB1.Items.Count - 1
-            If Not CLB_RecB1.GetItemChecked(n) Then filter += "[FKD05] not like '%" & CLB_RecB1.Items(n) & "%' And "
-        Next
-
-        ' フィルタ実行(フィルタの結果0件ならフィルタかけずに0行表示)
-        filter = RegularExpressions.Regex.Replace(filter, " And $", "")  ' 末尾の And を削除
-        If dt.Select(filter).Length = 0 Then
-            dt.Rows.Clear()                     ' selectの結果が0件だとエラーになるから、その場合はrows.clearで回避して何も表示しない
-        Else
-            dt = dt.Select(filter).CopyToDataTable
-        End If
-        ' 「架電」OFF「架電×」ONのとき、「架電×」もフィルタかけられてしまっているので、「架電×」だけを追加
-        If Not CLB_RecB1.CheckedItems.Contains("架電") And CLB_RecB1.CheckedItems.Contains("架電×") Then
-            If db.OrgDataTable(Sqldb.TID.SCD).Select("[FKD05] like '*架電×*'").Length > 0 Then
-                Dim addDt As DataTable = db.OrgDataTable(Sqldb.TID.SCD).Select("[FKD05] like '*架電×*'").CopyToDataTable
-                dt.Merge(addDt)
-            End If
-        End If
-
-
-        ' #### -----「対応者」チェックボックスのフィルタ  ※チェックある項目のみ表示するフィルタ方法
-        Dim filter2 As String = ""
-        ' 対応者、対応者2共に含まれていなければ排除
-        For n = 0 To CLB_RecB2.Items.Count - 1
-            If CLB_RecB2.Items(n) = "" Then Continue For    ' チェックボックス「空白」は後でチェックするからパス
-            If CLB_RecB2.GetItemChecked(n) Then filter2 += "([FKD06] = '" & CLB_RecB2.Items(n) & "' Or [FKD12] = '" & CLB_RecB2.Items(n) & "') Or "
-        Next
-        If CLB_RecB2.GetItemChecked(0) Then filter2 += "([FKD06] = '' And [FKD12] = '')"    ' チェックボックス「空白」がONなら対応者が両方空白を追加
-
-        ' フィルタ実行 (フィルタの結果0件ならフィルタかけずに0行表示)
-        'filter2 = filter & filter2
-        filter2 = RegularExpressions.Regex.Replace(filter2, " Or $", "")  ' 末尾の Or を削除
-        If dt.Select(filter2).Length = 0 Then
-            dt.Rows.Clear()                     ' selectの結果が0件だとエラーになるから、その場合はrows.clearで回避して何も表示しない
-        Else
-            dt = dt.Select(filter2).CopyToDataTable
-        End If
     End Sub
 
     ' 記録一覧フィルタ ShowDGVListにコールされる

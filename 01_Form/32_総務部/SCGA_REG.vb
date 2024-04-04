@@ -12,6 +12,7 @@
     Private Const MR_NUMERIC As String = "NUM"
     Private Const MR_BLANK As String = "Blank"
     Private Const MR_FORMAT As String = "Format"
+    Private Const MR_READONLY As String = "ReadOnly"
     Private Const NUMBER_LENGTH As Integer = 5
 
 #Region " OPEN CLOSE "
@@ -42,6 +43,7 @@
                         SetValueDGV("顧客番号", ownForm.DGV1.CurrentRow.Cells(0).Value)
                         SetValueDGV("主債務者名", ownForm.DGV1.CurrentRow.Cells(1).Value)
                         SetValueDGV("債務者", ownForm.DGV1.CurrentRow.Cells(1).Value)
+                        SetValueDGV("実行日", ownForm.DGV9(5, 1).Value)                     ' 金消日を設定
                     End If
                 End If
 
@@ -101,10 +103,10 @@
         DGV_REG1.Rows.Clear()
 
         ' 定義データを取得
-        Dim dr As DataRow() = ownForm.db.OrgDataTable(Sqldb.TID.MRM).Select($"C01 = '{MRType}'")
+        Dim dt As DataTable = ownForm.db.GetSelect(Sqldb.TID.MRM, $"SELECT * FROM {ownForm.db.GetTable(Sqldb.TID.MRM)} WHERE C01 = '{MRType}'")
 
         ' DGVに新しい行を追加
-        For Each row As DataRow In dr
+        For Each row As DataRow In dt.Rows
             Dim order As String = row("C02").ToString()  ' 表示順
             Dim width As String = row("C04").ToString()  ' 横幅
             Dim format As String = row("C05").ToString() ' 表示形式
@@ -127,6 +129,9 @@
 
                 Case MR_NUMERIC
                     ReplaceCell2NumericUpDown(DGV_REG1, order, 1)
+
+                Case MR_READONLY
+                    DGV_REG1.Rows(order).Cells(1).ReadOnly = True
 
                 Case Else
                     If format.Contains(",") Then

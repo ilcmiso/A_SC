@@ -853,6 +853,10 @@ Public Class Sqldb
         End If
     End Sub
 
+    Public Sub DeleteMRData()
+        ' 口座変更だけ削除
+        ExeSQL(TID.MR, $"DELETE FROM {GetTable(TID.MR)} WHERE C02 = '4'")
+    End Sub
 
     ' データベースの最終更新日を確認して、更新直後ならキャッシュがなくLINQを使用したほうが処理速度が早いことを利用するための判定。
     ' Return : True  更新直後ではなくキャッシュあり
