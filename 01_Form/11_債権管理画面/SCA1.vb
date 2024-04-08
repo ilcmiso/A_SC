@@ -34,6 +34,7 @@ Public Class SCA1
     Public EditForm As SCE_S2 = Nothing                           ' 交渉記録フォーム
     ' イベントハンドラーロック 記録一覧チェックリストボックス
     Private LockEventHandler_CLB As Boolean = False
+    Private LockEventHandler_FP As Boolean = False
     ' スレッド
     Private ReadOnly Thread_Entry As Thread = Nothing
     ' デリゲート
@@ -65,7 +66,6 @@ Public Class SCA1
         ShowDGVList(DGV2)
         ShowDGVList(DGV9)
         FPINFOInit()                ' 物件情報管理の初期設定
-        ShowDGV_FPMNG()
         cmn.UpdPBar("最終設定中")
 
         CheckedListBoxInit()        ' タブ 記録一覧の初期設定
@@ -1500,21 +1500,20 @@ Public Class SCA1
             DGV_PIMENU(0, n).Value = sccmn.FPITEMLIST(n)
         Next
 
-        ' 各コンボボックス設定
-        cmn.SetComboBoxUniqueDGVItems(DGV_FPMNG, "C05", CB_FPLIST, "(全表示)")     ' 内容
-        cmn.SetComboBoxUniqueDGVItems(DGV_FPMNG, "C06", CB_FPPerson, "(全表示)")   ' 担当者
         Dim firstDayOfMonth As DateTime = New DateTime(DateTime.Now.Year, DateTime.Now.Month, 1)
         DTP_FPST.Value = firstDayOfMonth
-        RegEventHandlerFP()
+        ShowDGV_FPMNG()
+        ' 各コンボボックス設定
+        LockEventHandler_FP = True
+        cmn.SetComboBoxUniqueDGVItems(DGV_FPMNG, "C05", CB_FPLIST, "(全表示)")     ' 内容
+        cmn.SetComboBoxUniqueDGVItems(DGV_FPMNG, "C06", CB_FPPerson, "(全表示)")   ' 担当者
+        LockEventHandler_FP = False
+        AddHandler CB_FPStatus.ItemCheck, AddressOf CB_FPStatus_ItemCheck
     End Sub
 
-    Private Sub RegEventHandlerFP()
-        AddHandler DTP_FPST.CloseUp, AddressOf ShowDGV_FPMNG
-        AddHandler DTP_FPED.CloseUp, AddressOf ShowDGV_FPMNG
-        AddHandler CB_FPRangeAll.CheckedChanged, AddressOf ShowDGV_FPMNG
-        AddHandler CB_FPPerson.SelectedIndexChanged, AddressOf ShowDGV_FPMNG
-        AddHandler CB_FPLIST.SelectedIndexChanged, AddressOf ShowDGV_FPMNG
-        AddHandler CB_FPStatus.ItemCheck, AddressOf CB_FPStatus_ItemCheck
+    ' イベントハンドラ
+    Private Sub RegEventHandlerFP() Handles DTP_FPST.CloseUp, DTP_FPED.CloseUp, CB_FPRangeAll.CheckedChanged, CB_FPPerson.SelectedIndexChanged, CB_FPLIST.SelectedIndexChanged
+        If Not LockEventHandler_FP Then ShowDGV_FPMNG()
     End Sub
 
     Private Sub CB_FPStatus_ItemCheck()
@@ -1598,7 +1597,7 @@ Public Class SCA1
         ' 該当する物件情報を表示
         ShowSelectUser(DGV_FPMNG.CurrentRow.Cells(2).Value, Array.IndexOf(sccmn.FPITEMLIST, DGV_FPMNG.CurrentRow.Cells(4).Value))
     End Sub
-    Private Sub BT_FPMNG_JUMP_Click(sender As Object, e As DataGridViewCellEventArgs) Handles DGV_FPMNG.CellDoubleClick
+    Private Sub BT_FPMNG_JUMP_Click(sender As Object, e As DataGridViewCellEventArgs) Handles DGV_FPMNG.CellDoubleClick, BT_FPMNG_JUMP.Click
         If DGV_FPMNG.Rows.Count = 0 Then Exit Sub
         If e.RowIndex < 0 Then Exit Sub
         Cursor.Current = Cursors.WaitCursor             ' マウスカーソルを砂時計に
@@ -1894,6 +1893,7 @@ Public Class SCA1
 
     Private Sub ShowDGV_FPMNG()
         log.TimerST()
+        LockEventHandler_FP = True
         Dim dtFPCOS As DataTable = db.GetSelect(Sqldb.TID.FPCOS, $"SELECT * FROM {db.GetTable(Sqldb.TID.FPCOS)}")
         Dim dtFPDATA As DataTable = db.GetSelect(Sqldb.TID.FPDATA, $"SELECT * FROM {db.GetTable(Sqldb.TID.FPDATA)}")
         Dim dgv As DataGridView = DGV_FPMNG
@@ -1938,6 +1938,7 @@ Public Class SCA1
                 End If
             Next
         End If
+        LockEventHandler_FP = False
         log.TimerED("ShowDGV_FPMNG")
     End Sub
 
@@ -2013,7 +2014,7 @@ Public Class SCA1
         DTP_MRST.Value = firstDayOfMonth
         ShowDGVMR()
         TB_MRPaymentDate.Text = Today.Date.ToString("yyyy/MM")
-        cmn.SetComboBoxUniqueDGVItems(DGV_MR1, "担当者", CB_Person, "(全表示)")   ' 担当コンボボックス設定
+
 
         DivMode(xml.GetDiv)
     End Sub
@@ -2075,7 +2076,7 @@ Public Class SCA1
     End Sub
 
     Public Sub ShowDGVMR() Handles CB_MRLIST.SelectedIndexChanged
-        ' コンボボックスの選択されたインデックスを取得
+        log.TimerST()
         mrcmn.InitDGVInfo(DGV_MR1, Sqldb.TID.MRM, CB_MRLIST.SelectedIndex)
         mrcmn.LoadDGVInfo(DGV_MR1, Sqldb.TID.MR, CB_MRLIST.SelectedIndex)
         ' 完済日フィルタを完済日のカラムがあるときだけ有効
@@ -2085,6 +2086,9 @@ Public Class SCA1
 
         mrcmn.PaymentDateColor()                ' 完済日が5～13日の間は色付け
         mrcmn.HighlightCancelledRows(DGV_MR1)   ' キャンセル日の色付け
+
+        cmn.SetComboBoxUniqueDGVItems(DGV_MR1, "担当者", CB_Person, "(全表示)")   ' 担当コンボボックス設定
+        log.TimerED("ShowDGVMR")
     End Sub
 
     ' 追加・編集ボタン

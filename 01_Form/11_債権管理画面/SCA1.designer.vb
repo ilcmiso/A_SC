@@ -2897,7 +2897,7 @@ Partial Class SCA1
         Me.CB_FPStatus.CheckOnClick = True
         Me.CB_FPStatus.Font = New System.Drawing.Font("メイリオ", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.CB_FPStatus.FormattingEnabled = True
-        Me.CB_FPStatus.Items.AddRange(New Object() {"対応中", "対応待ち", "完了"})
+        Me.CB_FPStatus.Items.AddRange(New Object() {"対応中", "待ち", "完了"})
         Me.CB_FPStatus.Location = New System.Drawing.Point(500, 29)
         Me.CB_FPStatus.Name = "CB_FPStatus"
         Me.CB_FPStatus.Size = New System.Drawing.Size(120, 64)
@@ -3232,7 +3232,7 @@ Partial Class SCA1
         '機能ToolStripMenuItem
         '
         Me.機能ToolStripMenuItem.Name = "機能ToolStripMenuItem"
-        Me.機能ToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.機能ToolStripMenuItem.Size = New System.Drawing.Size(164, 22)
         Me.機能ToolStripMenuItem.Text = "F35データ読み込み"
         '
         '画面モードToolStripMenuItem
@@ -3247,13 +3247,13 @@ Partial Class SCA1
         Me.債権管理部ToolStripMenuItem.Checked = True
         Me.債権管理部ToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked
         Me.債権管理部ToolStripMenuItem.Name = "債権管理部ToolStripMenuItem"
-        Me.債権管理部ToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.債権管理部ToolStripMenuItem.Size = New System.Drawing.Size(134, 22)
         Me.債権管理部ToolStripMenuItem.Text = "債権管理部"
         '
         '総務課ToolStripMenuItem
         '
         Me.総務課ToolStripMenuItem.Name = "総務課ToolStripMenuItem"
-        Me.総務課ToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.総務課ToolStripMenuItem.Size = New System.Drawing.Size(134, 22)
         Me.総務課ToolStripMenuItem.Text = "総務課"
         '
         '表示ToolStripMenuItem
@@ -3266,7 +3266,7 @@ Partial Class SCA1
         'ToolStripMenuItem2
         '
         Me.ToolStripMenuItem2.Name = "ToolStripMenuItem2"
-        Me.ToolStripMenuItem2.Size = New System.Drawing.Size(180, 22)
+        Me.ToolStripMenuItem2.Size = New System.Drawing.Size(146, 22)
         Me.ToolStripMenuItem2.Text = "ユーザー名設定"
         '
         'MenuStrip1
