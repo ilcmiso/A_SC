@@ -1138,14 +1138,14 @@ Public Class SCA1
         End If
 
         ' 表示期間 範囲設定
-        Dim dateRngCmd As String = String.Format("[FKD03] >= '{0}' And [FKD03] <= '{1}'", DTP_Rec1ST.Value.ToShortDateString, DTP_Rec1ED.Value.ToString("yyyy/MM/dd 23:59:59"))
+        Dim dateRngCmd As String = $"[FKD03] >= '{DTP_Rec1ST.Value.ToShortDateString}' And [FKD03] <= '{DTP_Rec1ED.Value:yyyy/MM/dd 23:59:59}'"
         If CB_RecRNG.Checked Then dateRngCmd = ""     ' 全期間チェックボックスONなら、期間フィルタをかけない
 
         ' 手法チェックボックス 範囲設定
         Dim methodCmd As String = ""
         If CLB_RecB1.CheckedItems.Count < CLB_RecB1.Items.Count Then
             For n = 0 To CLB_RecB1.Items.Count - 1
-                If CLB_RecB1.GetItemChecked(n) Then methodCmd += "[FKD05] = '" & CLB_RecB1.Items(n) & "' Or "
+                If CLB_RecB1.GetItemChecked(n) Then methodCmd += $"[FKD05] = '{CLB_RecB1.Items(n)}' Or "
             Next
             methodCmd = cmn.RegReplace(methodCmd, " Or $", "")  ' 末尾の Or を削除
         End If
@@ -1155,7 +1155,7 @@ Public Class SCA1
         If CLB_RecB2.CheckedItems.Count < CLB_RecB2.Items.Count Then
             For n = 0 To CLB_RecB2.Items.Count - 1
                 If CLB_RecB2.Items(n) = "" Then Continue For    ' チェックボックス「空白」は後でチェックするからパス
-                If CLB_RecB2.GetItemChecked(n) Then personCmd += "([FKD06] = '" & CLB_RecB2.Items(n) & "' Or [FKD12] = '" & CLB_RecB2.Items(n) & "') Or "   ' 担当者・対応者 共に含まれていなければ排除
+                If CLB_RecB2.GetItemChecked(n) Then personCmd += $"([FKD06] = '{CLB_RecB2.Items(n)}' Or [FKD12] = '{CLB_RecB2.Items(n)}') Or "   ' 担当者・対応者 共に含まれていなければ排除
             Next
             If CLB_RecB2.GetItemChecked(0) Then personCmd += "([FKD06] = '' And [FKD12] = '')"    ' チェックボックス「空白」がONなら、対応者が両方空白を追加
             personCmd = cmn.RegReplace(personCmd, " Or $", "")  ' 末尾の Or を削除
@@ -1168,6 +1168,7 @@ Public Class SCA1
         If personCmd.Length > 0 Then selectCmd += $" And ({personCmd})"
         selectCmd = cmn.RegReplace(selectCmd, "^ And ", "")  ' 先頭の And を削除
         dr = db.OrgDataTable(Sqldb.TID.SCD).Select(selectCmd, "FKD03 DESC")
+        'Return  db.SqlServerSelect($"SELECT * FROM SCD WHERE {selectCmd} ORDER BY [FKD03] DESC")
         If dr.Length = 0 Then
             Return Nothing
         End If
@@ -1598,7 +1599,7 @@ Public Class SCA1
         ' 該当する物件情報を表示
         ShowSelectUser(DGV_FPMNG.CurrentRow.Cells(2).Value, Array.IndexOf(sccmn.FPITEMLIST, DGV_FPMNG.CurrentRow.Cells(4).Value))
     End Sub
-    Private Sub BT_FPMNG_JUMP_Click(sender As Object, e As DataGridViewCellEventArgs) Handles DGV_FPMNG.CellDoubleClick
+    Private Sub BT_FPMNG_JUMP_Click(sender As Object, e As DataGridViewCellEventArgs) Handles DGV_FPMNG.CellDoubleClick, BT_FPMNG_JUMP.Click
         If DGV_FPMNG.Rows.Count = 0 Then Exit Sub
         If e.RowIndex < 0 Then Exit Sub
         Cursor.Current = Cursors.WaitCursor             ' マウスカーソルを砂時計に

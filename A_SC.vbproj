@@ -254,7 +254,6 @@
     <Compile Include="90_common\ExcelManager.vb" />
     <Compile Include="90_common\FileWatcher.vb" />
     <Compile Include="90_common\ILCNetDrive.vb" />
-    <Compile Include="90_common\SQLServer.vb" />
     <Compile Include="ApplicationEvents.vb" />
     <Compile Include="01_Form\11_債権管理画面\SCA1_S6_Calendar.designer.vb">
       <DependentUpon>SCA1_S6_Calendar.vb</DependentUpon>

@@ -48,7 +48,9 @@ Public Class SCC1_S1_MNG
             "PINFO DB移管",
             "PINFO 移管後の変換",
             "MR移管",
-            "MR口座データのみ削除"
+            "MR口座データのみ削除",
+            "SQLite2SQLServer",
+            "SQL速度比較"
             }
         ListBox2.Items.Clear()
         For Each cl In commandNames
@@ -118,7 +120,10 @@ Public Class SCC1_S1_MNG
 
             Case 5
                 db.DeleteMRData()
-
+            Case 6
+                db.RestoreSQLServer()
+            Case 7
+                db.SQLServerSpeedDiff()
         End Select
         MsgBox("完了")
 
