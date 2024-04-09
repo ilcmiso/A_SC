@@ -352,7 +352,7 @@ Public Class Common
     Private Shared hiddenTabs As New Dictionary(Of String, Tuple(Of TabPage, Integer))
 
     ' 指定されたTabControlのタブの表示状態を切り替える共通メソッド
-    Public Shared Sub SetTabVisible(tabControl As Windows.Forms.TabControl, visible As Boolean, tabName As String)
+    Public Sub SetTabVisible(tabControl As Windows.Forms.TabControl, visible As Boolean, tabName As String)
         Dim tabPage As TabPage = Nothing
         Dim tabKey As String = $"{tabControl.Name}_{tabName}" ' タブコントロールの名前とタブ名を組み合わせてキーを生成
 

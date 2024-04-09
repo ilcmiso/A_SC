@@ -20,4 +20,14 @@
     Private Sub BT_A2_Click(sender As Object, e As EventArgs) Handles BT_A2.Click
         Me.Close()
     End Sub
+
+    ' ショートカット F1
+    Private Sub SCA1_KeyPress(ByVal sender As Object, ByVal e As KeyEventArgs) Handles TB_UserName.KeyDown, BT_A1.KeyDown, BT_A2.KeyDown
+        Select Case e.KeyData
+            Case Keys.F1
+                Dim f As Form = New SCC1_S1_MNG
+                f.ShowDialog()
+                f.Dispose()
+        End Select
+    End Sub
 End Class

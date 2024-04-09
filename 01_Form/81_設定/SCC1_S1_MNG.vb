@@ -48,7 +48,8 @@ Public Class SCC1_S1_MNG
             "PINFO DB移管",
             "PINFO 移管後の変換",
             "MR移管",
-            "MR口座データのみ削除"
+            "再生の移行",
+            "破産の移行"
             }
         ListBox2.Items.Clear()
         For Each cl In commandNames
@@ -117,7 +118,10 @@ Public Class SCC1_S1_MNG
                 db.DataTranceferMR()
 
             Case 5
-                db.DeleteMRData()
+                db.TransferSaiseiHasan(True)
+
+            Case 6
+                db.TransferSaiseiHasan(False)
 
         End Select
         MsgBox("完了")

@@ -251,6 +251,7 @@
     </Compile>
     <Compile Include="80_SCcommon\SCcommon.vb" />
     <Compile Include="80_SCcommon\SCMRcommon.vb" />
+    <Compile Include="90_common\ExcelExp.vb" />
     <Compile Include="90_common\ExcelManager.vb" />
     <Compile Include="90_common\FileWatcher.vb" />
     <Compile Include="90_common\ILCNetDrive.vb" />
@@ -331,9 +332,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="90_common\CExcel.vb" />
     <Compile Include="90_common\Common.vb" />
-    <Compile Include="90_common\ExcelExp.vb" />
     <Compile Include="90_common\Log.vb" />
     <Compile Include="90_common\Mutex.vb" />
     <Compile Include="90_common\Sqldb.vb" />

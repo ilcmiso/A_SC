@@ -89,9 +89,16 @@ Public Class ExcelManager
     End Sub
 
     Public Sub SaveAndClose()
-        workbook.SaveAs(filePath)
-        workbook.Close()
-        excelApp.Quit()
+        Try
+            workbook.SaveAs(filePath)
+        Catch ex As System.Runtime.InteropServices.COMException
+            MsgBox("Excelファイルが既に開かれています。閉じてからもう一度お試しください。")
+            Exit Sub
+        End Try
+        If workbook IsNot Nothing Then workbook.Close()
+        If excelApp IsNot Nothing Then excelApp.Quit()
+        Runtime.InteropServices.Marshal.ReleaseComObject(excelApp)
+        Runtime.InteropServices.Marshal.ReleaseComObject(workbook)
     End Sub
 
     Public Sub OpenFile()

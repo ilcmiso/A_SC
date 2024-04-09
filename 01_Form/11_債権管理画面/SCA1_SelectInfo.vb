@@ -48,10 +48,10 @@
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
         Dim outList As New List(Of List(Of String))
         Dim cid As String
-        Dim cExc As New CExcel
 
-        Dim fileName As String = cExc.GetSaveFileName(CExcel.FILTER_EXCEL, "督促情報一覧.xlsx")
-        If fileName = String.Empty Then Exit Sub
+        Dim path As String = cmn.DialogSaveFile("督促情報一覧.xlsx")
+        If path = String.Empty Then Exit Sub
+        Dim excelManager As New ExcelManager(path)
 
         log.cLog("-- Excel出力開始 --")
         log.TimerST()
@@ -162,9 +162,9 @@
 
         log.cLog("-- outList.Count : " & outList.Count)
         If outList.Count > 0 Then
-            If Not String.IsNullOrEmpty(fileName) Then
-                cExc.ExportToExcel(outList, fileName)
-            End If
+            excelManager.ExportToExcel(outList, "Sheet1")
+            excelManager.SaveAndClose()
+            excelManager.OpenFile()
         End If
         log.cLog("-- Excel出力終了 --")
         Me.Close()

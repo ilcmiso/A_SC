@@ -266,6 +266,7 @@ Partial Class SCA1
         Me.Label6 = New System.Windows.Forms.Label()
         Me.Button19 = New System.Windows.Forms.Button()
         Me.Tab_3Mng = New System.Windows.Forms.TabPage()
+        Me.BT_FPMNG_AllOutExcel = New System.Windows.Forms.Button()
         Me.CB_FPStatus = New System.Windows.Forms.CheckedListBox()
         Me.L_FPSearchHit = New System.Windows.Forms.Label()
         Me.Label13 = New System.Windows.Forms.Label()
@@ -303,6 +304,7 @@ Partial Class SCA1
         Me.ToolStripMenuItem2 = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
         Me.ColorDialog1 = New System.Windows.Forms.ColorDialog()
+        Me.GroupBox2 = New System.Windows.Forms.GroupBox()
         Me.Tab_4Dun.SuspendLayout()
         CType(Me.DGV4, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.GroupBox1.SuspendLayout()
@@ -323,6 +325,7 @@ Partial Class SCA1
         Me.Tab_3Mng.SuspendLayout()
         CType(Me.DGV_FPMNG, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.MenuStrip1.SuspendLayout()
+        Me.GroupBox2.SuspendLayout()
         Me.SuspendLayout()
         '
         'PBXX
@@ -2866,6 +2869,7 @@ Partial Class SCA1
         'Tab_3Mng
         '
         Me.Tab_3Mng.BackColor = System.Drawing.Color.Beige
+        Me.Tab_3Mng.Controls.Add(Me.GroupBox2)
         Me.Tab_3Mng.Controls.Add(Me.CB_FPStatus)
         Me.Tab_3Mng.Controls.Add(Me.L_FPSearchHit)
         Me.Tab_3Mng.Controls.Add(Me.Label13)
@@ -2878,7 +2882,6 @@ Partial Class SCA1
         Me.Tab_3Mng.Controls.Add(Me.Label10)
         Me.Tab_3Mng.Controls.Add(Me.CB_FPPerson)
         Me.Tab_3Mng.Controls.Add(Me.Label11)
-        Me.Tab_3Mng.Controls.Add(Me.BT_FPMNG_OutExcel)
         Me.Tab_3Mng.Controls.Add(Me.BT_FPMNG_JUMP)
         Me.Tab_3Mng.Controls.Add(Me.TB_FPMNG_Search)
         Me.Tab_3Mng.Controls.Add(Me.Button16)
@@ -2889,6 +2892,19 @@ Partial Class SCA1
         Me.Tab_3Mng.Size = New System.Drawing.Size(1132, 682)
         Me.Tab_3Mng.TabIndex = 6
         Me.Tab_3Mng.Text = "管理表"
+        '
+        'BT_FPMNG_AllOutExcel
+        '
+        Me.BT_FPMNG_AllOutExcel.BackColor = System.Drawing.Color.MediumAquamarine
+        Me.BT_FPMNG_AllOutExcel.FlatAppearance.BorderColor = System.Drawing.Color.Black
+        Me.BT_FPMNG_AllOutExcel.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.BT_FPMNG_AllOutExcel.ForeColor = System.Drawing.Color.White
+        Me.BT_FPMNG_AllOutExcel.Location = New System.Drawing.Point(6, 55)
+        Me.BT_FPMNG_AllOutExcel.Name = "BT_FPMNG_AllOutExcel"
+        Me.BT_FPMNG_AllOutExcel.Size = New System.Drawing.Size(142, 27)
+        Me.BT_FPMNG_AllOutExcel.TabIndex = 1807
+        Me.BT_FPMNG_AllOutExcel.Text = "全てのデータ出力"
+        Me.BT_FPMNG_AllOutExcel.UseVisualStyleBackColor = False
         '
         'CB_FPStatus
         '
@@ -3043,11 +3059,11 @@ Partial Class SCA1
         Me.BT_FPMNG_OutExcel.FlatAppearance.BorderColor = System.Drawing.Color.Black
         Me.BT_FPMNG_OutExcel.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.BT_FPMNG_OutExcel.ForeColor = System.Drawing.Color.White
-        Me.BT_FPMNG_OutExcel.Location = New System.Drawing.Point(153, 512)
+        Me.BT_FPMNG_OutExcel.Location = New System.Drawing.Point(6, 22)
         Me.BT_FPMNG_OutExcel.Name = "BT_FPMNG_OutExcel"
-        Me.BT_FPMNG_OutExcel.Size = New System.Drawing.Size(102, 27)
+        Me.BT_FPMNG_OutExcel.Size = New System.Drawing.Size(142, 27)
         Me.BT_FPMNG_OutExcel.TabIndex = 1793
-        Me.BT_FPMNG_OutExcel.Text = "Excel出力"
+        Me.BT_FPMNG_OutExcel.Text = "表示中のデータ出力"
         Me.BT_FPMNG_OutExcel.UseVisualStyleBackColor = False
         '
         'BT_FPMNG_JUMP
@@ -3056,9 +3072,9 @@ Partial Class SCA1
         Me.BT_FPMNG_JUMP.FlatAppearance.BorderColor = System.Drawing.Color.Black
         Me.BT_FPMNG_JUMP.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Bold)
         Me.BT_FPMNG_JUMP.ForeColor = System.Drawing.Color.White
-        Me.BT_FPMNG_JUMP.Location = New System.Drawing.Point(3, 512)
+        Me.BT_FPMNG_JUMP.Location = New System.Drawing.Point(14, 512)
         Me.BT_FPMNG_JUMP.Name = "BT_FPMNG_JUMP"
-        Me.BT_FPMNG_JUMP.Size = New System.Drawing.Size(144, 27)
+        Me.BT_FPMNG_JUMP.Size = New System.Drawing.Size(142, 27)
         Me.BT_FPMNG_JUMP.TabIndex = 1752
         Me.BT_FPMNG_JUMP.TabStop = False
         Me.BT_FPMNG_JUMP.Text = "選択中の内容表示"
@@ -3281,6 +3297,17 @@ Partial Class SCA1
         Me.MenuStrip1.TabIndex = 1574
         Me.MenuStrip1.Text = "MenuStrip1"
         '
+        'GroupBox2
+        '
+        Me.GroupBox2.Controls.Add(Me.BT_FPMNG_OutExcel)
+        Me.GroupBox2.Controls.Add(Me.BT_FPMNG_AllOutExcel)
+        Me.GroupBox2.Location = New System.Drawing.Point(8, 550)
+        Me.GroupBox2.Name = "GroupBox2"
+        Me.GroupBox2.Size = New System.Drawing.Size(158, 94)
+        Me.GroupBox2.TabIndex = 1808
+        Me.GroupBox2.TabStop = False
+        Me.GroupBox2.Text = "■ Excel出力"
+        '
         'SCA1
         '
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None
@@ -3325,6 +3352,7 @@ Partial Class SCA1
         CType(Me.DGV_FPMNG, System.ComponentModel.ISupportInitialize).EndInit()
         Me.MenuStrip1.ResumeLayout(False)
         Me.MenuStrip1.PerformLayout()
+        Me.GroupBox2.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -3571,4 +3599,6 @@ Partial Class SCA1
     Friend WithEvents L_TYPE_A As Label
     Friend WithEvents L_TYPE_F As Label
     Friend WithEvents CB_FPStatus As CheckedListBox
+    Friend WithEvents BT_FPMNG_AllOutExcel As Button
+    Friend WithEvents GroupBox2 As GroupBox
 End Class

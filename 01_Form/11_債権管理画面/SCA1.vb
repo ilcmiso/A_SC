@@ -1,4 +1,5 @@
-﻿Imports System.IO
+﻿Imports System.Data.SQLite
+Imports System.IO
 Imports System.Text
 Imports System.Threading
 Imports DocumentFormat.OpenXml.Spreadsheet
@@ -11,7 +12,6 @@ Public Class SCA1
     Private ReadOnly cmn As New Common
     Private ReadOnly sccmn As New SCcommon
     Private ReadOnly log As New Log
-    Private ReadOnly exc As New CExcel
     Public ReadOnly db As New Sqldb
     Private oview As SCGA_OVIEW
     Public xml As New XmlMng
@@ -1505,7 +1505,12 @@ Public Class SCA1
         ShowDGV_FPMNG()
         ' 各コンボボックス設定
         LockEventHandler_FP = True
-        cmn.SetComboBoxUniqueDGVItems(DGV_FPMNG, "C05", CB_FPLIST, "(全表示)")     ' 内容
+        ' cmn.SetComboBoxUniqueDGVItems(DGV_FPMNG, "C05", CB_FPLIST, "(全表示)")     ' 内容
+        CB_FPLIST.Items.Add("(全表示)")
+        For n = 1 To sccmn.FPITEMLIST.Length - 1
+            CB_FPLIST.Items.Add(sccmn.FPITEMLIST(n))
+        Next
+        CB_FPLIST.SelectedIndex = 0
         cmn.SetComboBoxUniqueDGVItems(DGV_FPMNG, "C06", CB_FPPerson, "(全表示)")   ' 担当者
         LockEventHandler_FP = False
         AddHandler CB_FPStatus.ItemCheck, AddressOf CB_FPStatus_ItemCheck
@@ -1609,6 +1614,126 @@ Public Class SCA1
     Private Sub BT_FPMNG_OutExcel_Click(sender As Object, e As EventArgs) Handles BT_FPMNG_OutExcel.Click
         cmn.ExcelOutputDGV($"融資物件一覧.xlsx", DGV_FPMNG)
     End Sub
+
+    ' Excel全出力
+    Private Sub BT_FPMNG_AllOutExcel_Click(sender As Object, e As EventArgs) Handles BT_FPMNG_AllOutExcel.Click
+        Dim path As String = cmn.DialogSaveFile("融資物件一覧_全出力.xlsx")
+        If path = String.Empty Then Exit Sub
+        Dim excelManager As New ExcelManager(path)
+
+        ' TBLテーブルとDATAテーブルから全てのレコードを読み込む
+        Dim dtCos As DataTable = db.GetSelect(Sqldb.TID.FPCOS, $"SELECT * FROM {db.GetTable(Sqldb.TID.FPCOS)}")
+        Dim dtData As DataTable = db.GetSelect(Sqldb.TID.FPDATA, $"SELECT * FROM {db.GetTable(Sqldb.TID.FPDATA)}")
+        Dim dtItem As DataTable = db.GetSelect(Sqldb.TID.FPDATA, $"SELECT * FROM {db.GetTable(Sqldb.TID.FPITEM)} ORDER BY C01, C02")
+        ' 出力するデータのリストを作成
+        For sheetNum = 0 To sccmn.FPITEMLIST.Length - 1
+            Dim exportSheet As New List(Of List(Of String))
+
+            ' 見出し行を追加
+            Dim drItem As DataRow() = dtItem.Select($"C01 = '{sheetNum:00}'")
+            Dim topRow As New List(Of String)
+            topRow.Add("顧客番号")
+            topRow.Add("顧客名")
+            For item = 0 To drItem.Length - 1
+                topRow.Add(drItem(item)(2))
+            Next
+            exportSheet.Add(topRow)
+
+            Select Case sheetNum
+                Case 0
+                    For Each row As DataRow In dtCos.Rows
+                        Dim basicRow As New List(Of String)
+                        For idx = 1 To row.ItemArray.Length - 1
+                            basicRow.Add(row.Item(idx).ToString())
+                        Next
+                        ' 全てが空欄であれば追加しない
+                        Dim isAllEmpty As Boolean = basicRow.All(Function(item) String.IsNullOrWhiteSpace(item))
+                        If Not isAllEmpty Then
+                            exportSheet.Add(basicRow)
+                        End If
+                    Next
+
+                Case Else
+                    ' 内容(C04)毎にデータ取得して出力
+                    Dim contentData As DataRow() = dtData.Select($"C04 = '{sheetNum - 1}'")
+                    For row = 0 To contentData.Length - 1
+                        ' COSから基本情報を設定
+                        Dim exportRow As New List(Of String)
+                        Dim rowCos As DataRow = dtCos.Select($"C01 = {contentData(row)(2)}").FirstOrDefault
+                        If rowCos IsNot Nothing Then
+                            exportRow.Add(rowCos(1))    ' 顧客番号
+                            exportRow.Add(rowCos(2))    ' 顧客名
+                        End If
+
+                        ' DATAからデータを設定
+                        For n = 4 To contentData(row).ItemArray.Length - 1
+                            exportRow.Add(contentData(row)(n))
+                        Next
+                        exportSheet.Add(exportRow)
+                    Next
+            End Select
+            ' Excelにデータを出力
+            excelManager.ExportToExcel(exportSheet, sccmn.FPITEMLIST(sheetNum))
+        Next
+        excelManager.DeleteSheet("Sheet1")
+        excelManager.SaveAndClose()
+        excelManager.OpenFile()
+    End Sub
+
+    '' Excel全出力
+    'Private Sub BT_FPMNG_AllOutExcel_Click(sender As Object, e As EventArgs) Handles BT_FPMNG_AllOutExcel.Click
+    '    Dim path As String = cmn.DialogSaveFile("融資物件一覧_全出力.xlsx")
+    '    If path = String.Empty Then Exit Sub
+    '    Dim excelManager As New ExcelManager(path)
+
+    '    ' TBLテーブルとDATAテーブルから全てのレコードを読み込む
+    '    Dim dtCos As DataTable = db.GetSelect(Sqldb.TID.FPCOS, $"SELECT * FROM {db.GetTable(Sqldb.TID.FPCOS)}")
+    '    Dim dtData As DataTable = db.GetSelect(Sqldb.TID.FPDATA, $"SELECT * FROM {db.GetTable(Sqldb.TID.FPDATA)}")
+
+    '    ' 出力するデータのリストを作成
+    '    Dim exportData As New List(Of List(Of String))
+    '    Dim colRow As New List(Of String)
+    '    ' 見出し行を追加
+    '    Dim colNameList As String() = {"", "顧客番号", "顧客名", "居住有無", "融資物件〒", "融資物件住所", "延滞原因", "フラット期失日", "任売同意期限", "競売申立期限", "アシスト期失日", "買戻日", "一部代位日", "フラット管理事務停止日", "アシスト管理事務停止日", "内容", "担当者", "最終対応日", "次回対応日", "ステータス", "概要", "汎用1", "汎用2", "汎用3", "汎用4", "汎用5", "汎用6", "汎用7", "汎用8", "汎用9", "汎用10", "汎用11", "汎用12", "汎用13", "汎用14", "汎用15", "汎用16", "汎用17", "汎用18", "汎用19", "汎用20", "汎用21", "汎用22", "汎用23", "汎用24", "汎用25", "汎用26"}
+    '    exportData.Add(colNameList.ToList())
+
+    '    ' DATAのデータを行ごとに処理し、それに基づいてTBLのデータをExcelに出力
+    '    For Each rowData As DataRow In dtData.Rows
+    '        Dim exportRow As New List(Of String)
+
+    '        ' TBLテーブルから対応するレコードを検索
+    '        Dim keyNumber As String = rowData("C03").ToString()
+    '        Dim rowTbl As DataRow = dtCos.Select($"C01 = '{keyNumber}'").FirstOrDefault()
+
+    '        If rowTbl IsNot Nothing Then
+    '            ' TBLのC01～C15をリストに追加
+    '            For i As Integer = 0 To 14
+    '                exportRow.Add(rowTbl($"C{i + 1:00}").ToString())
+    '            Next
+    '        End If
+
+    '        ' DATAテーブルのC04～C35をリストに追加（C04はSCcommon.FPITEMLISTから取得）
+    '        For i As Integer = 3 To 34 ' C04～C35
+    '            If i = 3 Then ' C04の場合はSCcommon.FPITEMLIST()から文字列を取得
+    '                Dim index As Integer = Convert.ToInt32(rowData($"C{i + 1:00}"))
+    '                If index >= 0 AndAlso index < sccmn.FPITEMLIST.Length Then
+    '                    exportRow.Add(sccmn.FPITEMLIST(index + 1))
+    '                Else
+    '                    exportRow.Add("") ' 該当するインデックスがない場合は空文字を追加
+    '                End If
+    '            Else
+    '                exportRow.Add(rowData($"C{i + 1:00}").ToString())
+    '            End If
+    '        Next
+    '        ' Excelに出力するためのリストにこの行のデータを追加
+    '        exportData.Add(exportRow)
+    '    Next
+
+    '    ' Excelにデータを出力し、ファイルを開く
+    '    excelManager.ExportToExcel(exportData, "Sheet1")
+    '    excelManager.SaveAndClose()
+    '    excelManager.OpenFile()
+    'End Sub
 
     ' ページボタン
     Private Sub BT_FP_PAGE_Click(sender As Object, e As EventArgs) Handles BT_FP_PAGE.Click
