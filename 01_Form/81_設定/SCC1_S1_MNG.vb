@@ -50,6 +50,8 @@ Public Class SCC1_S1_MNG
             "MR移管",
             "再生の移行",
             "破産の移行"
+            "SQLite2SQLServer",
+            "SQL速度比較"
             }
         ListBox2.Items.Clear()
         For Each cl In commandNames
@@ -122,6 +124,11 @@ Public Class SCC1_S1_MNG
 
             Case 6
                 db.TransferSaiseiHasan(False)
+
+            Case 7
+                db.RestoreSQLServer()
+            Case 8
+                db.SQLServerSpeedDiff()
 
         End Select
         MsgBox("完了")
