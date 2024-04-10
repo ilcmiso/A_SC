@@ -1677,6 +1677,7 @@ Public Class SCA1
             excelManager.ExportToExcel(exportSheet, sccmn.FPITEMLIST(sheetNum))
         Next
         excelManager.DeleteSheet("Sheet1")
+        excelManager.ActivateSheet(sccmn.FPITEMLIST(0))
         excelManager.SaveAndClose()
         excelManager.OpenFile()
     End Sub
@@ -1880,7 +1881,8 @@ Public Class SCA1
                     cell.Style.BackColor = System.Drawing.Color.LightSalmon
                 Next
             Case 3 ' 破産
-                ' 再生・破産のカラーリング
+                DGV_FPLIST(1, 5).Style.BackColor = System.Drawing.Color.DeepSkyBlue
+                DGV_FPLIST(1, 6).Style.BackColor = System.Drawing.Color.DeepSkyBlue
                 DGV_FPLIST(1, 7).Style.BackColor = System.Drawing.Color.Pink
                 DGV_FPLIST(1, 25).Style.BackColor = System.Drawing.Color.Pink
             Case 4 ' 再生
@@ -1932,38 +1934,28 @@ Public Class SCA1
         If cName.Length = 0 Then Return False       ' 顧客名がない場合は無条件で非受任者
 
         Dim keyId As Integer = db.GetFPCOSKeyId(cid)
-        Dim regName As String
+        Dim flagON As Boolean = False
         ' 再生(3)の登録情報を取得
-        Dim dtReg As DataTable = db.GetSelect(Sqldb.TID.FPDATA, $"SELECT C10, C11, C12, C26 FROM {db.GetTable(Sqldb.TID.FPDATA)} WHERE C03 = '{keyId}' AND C04 = '3'")
-        If dtReg.Rows.Count = 0 Then Return False  ' 再生項目が登録されていなければ、受任OFF
-
-        ' 再生の該当者名(C10)が設定無し、受任OFF
-        If dtReg(0)(0).Length = 0 Then Return False
-        regName = dtReg(0)(0)
-        ' 再生の受任日(C11)が設定無し、受任OFF
-        If dtReg(0)(1).Length = 0 Then Return False
-
-        ' 再生の辞任日(C12)が設定あり、受任OFF
-        If dtReg(0)(2).Length > 0 Then Return False
-        ' 再生の認可確定日(C26)が設定あり、受任OFF
-        If dtReg(0)(3).Length > 0 Then Return False
+        Dim dtReg As DataTable = db.GetSelect(Sqldb.TID.FPDATA, $"SELECT C10, C11, C12, C26 FROM {db.GetTable(Sqldb.TID.FPDATA)} WHERE C03 = '{keyId}' AND C04 = '3' AND C10 LIKE '{cName}' ORDER BY C01 DESC")
+        If dtReg.Rows.Count > 0 Then
+            ' 再生の受任日(C11)があり、再生の辞任日(C12)が無く、
+            ' 再生の認可確定日(C26)が無い場合のみ、受任を設定する。
+            If dtReg(0)(1).Length > 0 AndAlso dtReg(0)(2).Length = 0 AndAlso dtReg(0)(3).Length = 0 Then
+                flagON = True
+            End If
+        End If
 
         ' 破産(2)の登録情報を取得
-        Dim dtDel As DataTable = db.GetSelect(Sqldb.TID.FPDATA, $"SELECT C12, C30 FROM {db.GetTable(Sqldb.TID.FPDATA)} WHERE C03 = '{keyId}' AND C04 = '2'")
+        Dim dtDel As DataTable = db.GetSelect(Sqldb.TID.FPDATA, $"SELECT C10, C11, C12, C30 FROM {db.GetTable(Sqldb.TID.FPDATA)} WHERE C03 = '{keyId}' AND C04 = '2' AND C10 LIKE '{cName}' ORDER BY C01 DESC")
         If dtDel.Rows.Count > 0 Then
-            ' 破産の辞任日(C12)が設定あり、受任OFF
-            If dtDel(0)(0).Length > 0 Then Return False
-            ' 破産の免責確定日(C30)が設定あり、受任OFF
-            If dtDel(0)(1).Length > 0 Then Return False
+            ' 破産の受任日(C11)があり、破産の辞任日(C12)が無く、
+            ' 破産の免責確定日(C30)が無い場合のみ、受任を設定する。
+            If dtDel(0)(1).Length > 0 AndAlso dtDel(0)(2).Length = 0 AndAlso dtDel(0)(3).Length = 0 Then
+                flagON = True
+            End If
         End If
-
-        ' 該当者名に主債務者名、もしくは連帯債務者のcNameが含まれていれば受任者ON
-        ' カタカナを半角→全角、スペース(空白)を削除　して、該当者名に含まれているか比較
-        If cmn.RegReplace(StrConv(regName, VbStrConv.Wide), "　", "").IndexOf(cmn.RegReplace(cName, "　", "")) >= 0 Then
-            ' 受任者を返却
-            Return True
-        End If
-        Return False
+        ' 受任 を返却
+        Return flagON
     End Function
 
     ' 受任者マークのON/OFF

@@ -132,7 +132,7 @@ Public Class Sqldb
 
         ' ColumnsInit()
         CreateDBFiles()         ' DBファイルの新規作成
-        InitSQLServerConnection()
+        'InitSQLServerConnection()
     End Sub
 
     ' 新規DBファイルの生成  既にある場合は何もしない

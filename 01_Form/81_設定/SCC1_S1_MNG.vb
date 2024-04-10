@@ -49,7 +49,7 @@ Public Class SCC1_S1_MNG
             "PINFO 移管後の変換",
             "MR移管",
             "再生の移行",
-            "破産の移行"
+            "破産の移行",
             "SQLite2SQLServer",
             "SQL速度比較"
             }

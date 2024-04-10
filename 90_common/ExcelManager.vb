@@ -101,6 +101,17 @@ Public Class ExcelManager
         Runtime.InteropServices.Marshal.ReleaseComObject(workbook)
     End Sub
 
+    ' シートをアクティブにする
+    Public Sub ActivateSheet(sheetName As String)
+        Dim worksheet As Worksheet
+        Try
+            worksheet = workbook.Sheets(sheetName)
+            worksheet.Activate()
+        Catch ex As Exception
+            MsgBox($"シート「{sheetName}」が見つかりません。", MsgBoxStyle.Critical)
+        End Try
+    End Sub
+
     Public Sub OpenFile()
         Process.Start(filePath)
     End Sub
