@@ -8,17 +8,19 @@ Public Class SCE_S2
     Private CRow As DataGridViewRow
     Private addSW As Boolean
     Public PrinfFileName As String     ' 帳票手動選択印刷のファイル名　VBR_Sendで参照
+    Private ownForm As SCA1
 
 #Region " OPEN CLOSE "
     Private Sub FLS_Shown(sender As Object, e As EventArgs) Handles MyBase.Shown
+        ownForm = DirectCast(Me.Owner, SCA1)            ' 親フォームを参照できるようにキャスト
         T4Init()
         ShowSendFmtList()
         RadioButton1_CheckedChanged()
         ' 初期設定
-        addSW = SCA1.addSW                                          ' 追加or編集ボタンのフラグ True:追加  False:編集
-        CRow = SCA1.DGV1.CurrentRow                                 ' 追加or編集ボタンを押した時点での顧客情報を保持(あとで顧客選択を変更しても、最初の顧客情報は保持する必要がある)
-        If SCA1.DGV2.Rows.Count > 0 Then
-            DGV2cid = SCA1.DGV2.CurrentRow.Cells(0).Value                   ' 選択債務者のCID(DGV2)
+        addSW = ownForm.addSW                                       ' 追加or編集ボタンのフラグ True:追加  False:編集
+        CRow = ownForm.DGV1.CurrentRow                              ' 追加or編集ボタンを押した時点での顧客情報を保持(あとで顧客選択を変更しても、最初の顧客情報は保持する必要がある)
+        If ownForm.DGV2.Rows.Count > 0 Then
+            DGV2cid = ownForm.DGV2.CurrentRow.Cells(0).Value                   ' 選択債務者のCID(DGV2)
         End If
         TB_A1.Text = DateTime.Now.ToString("yyyy/MM/dd HH:mm")
         TB_A2.SelectedIndex = 0
@@ -36,21 +38,18 @@ Public Class SCE_S2
         If CRow.Cells(0).Value = Common.DUMMY_NO Then
             Label6.Visible = True
             TB_DNAME.Visible = True
-            '    TabControl1.TabPages.Remove(TabControl1.TabPages(3))        ' 交渉記録印刷の非表示
-            '    TabControl1.TabPages.Remove(TabControl1.TabPages(2))        ' 送付物選択の非表示
-            '    TabControl1.TabPages.Remove(TabControl1.TabPages(1))        ' 顧客複数選択の非表示
         End If
-        L_STSSend.Text = SCA1.DGV9(1, 2).Value & " の顧客情報を印刷します。"
+        L_STSSend.Text = ownForm.DGV9(1, 2).Value & " の顧客情報を印刷します。"
 
         ' データ読み込み
         If addSW Then       ' 追加ボタン
-            L_STS.Text = SCA1.DGV9(1, 2).Value & " の記録を追加中。"
+            L_STS.Text = ownForm.DGV9(1, 2).Value & " の記録を追加中。"
         Else                ' 編集ボタン 
-            L_STS.Text = SCA1.DGV9(1, 2).Value & " の記録を編集中。"
+            L_STS.Text = ownForm.DGV9(1, 2).Value & " の記録を編集中。"
             If TabControl1.TabPages.Count = 2 Then TabControl1.TabPages.Remove(TabControl1.TabPages(1))        ' 顧客複数選択の非表示
 
             ' 登録済みデータ読み込み
-            Dim dt As DataTable = SCA1.db.OrgDataTable(Sqldb.TID.SCD).Select("[FKD01] = '" & SCA1.DGV2.CurrentRow.Cells(0).Value & "'").CopyToDataTable
+            Dim dt As DataTable = ownForm.db.GetSelect(Sqldb.TID.SCD, $"[FKD01] = '{ownForm.DGV2.CurrentRow.Cells(0).Value}")
             If dt.Rows.Count = 1 Then
                 TB_A1.Text = dt.Rows(0).Item(2)             ' 日時
                 TB_A2.Text = dt.Rows(0).Item(3)             ' 相手
@@ -69,7 +68,7 @@ Public Class SCE_S2
             End If
 
             ' 督促状チェックと日付を読み込み
-            Dim dday As String = SCA1.DGV2(7, SCA1.DGV2.CurrentRow.Index).Value ' 督促日
+            Dim dday As String = ownForm.DGV2(7, ownForm.DGV2.CurrentRow.Index).Value ' 督促日
             If dday <> "" Then
                 CheckBox1.Checked = True
                 DTP_A1.Text = dday
@@ -130,7 +129,7 @@ Public Class SCE_S2
             Else
                 AddDB(dNowM & CRow.Index, CRow.Cells(0).Value, DDay, showName1, showName2)
             End If
-            sqlret = SCA1.db.ExeSQL(Sqldb.TID.SCD)
+            sqlret = ownForm.db.ExeSQL(Sqldb.TID.SCD)
         Else
             ' 編集ボタン
             Dim SqlCmd As String = "Update FKSCD Set " &
@@ -152,19 +151,13 @@ Public Class SCE_S2
                 SqlCmd += ",FKD09 = '" & TB_DNAME.Text & "' "                            ' 顧客名(ダミー顧客)
             End If
             SqlCmd += "Where FKD01 = '" & DGV2cid & "'"
-            sqlret = SCA1.db.ExeSQL(Sqldb.TID.SCD, SqlCmd)
+            sqlret = ownForm.db.ExeSQL(Sqldb.TID.SCD, SqlCmd)
         End If
 
         ' ユーザー名をPCに記録
-        'xml.GetUserName = TB_A4.Text
         xml.SetUserName2(TB_A7.Text)
         xml.SetXml()
         If sqlret Then  ' SQL結果が正常ならフォーム閉じて正常応答
-            'If CheckBox1.Checked Then
-            '    Me.DialogResult = DialogResult.Yes      ' 督促状ありならYes返却
-            'Else
-            '    Me.DialogResult = DialogResult.OK
-            'End If
             Me.Close()
         End If
     End Sub
@@ -178,7 +171,7 @@ Public Class SCE_S2
     Private Sub RadioButton1_CheckedChanged() Handles RadioButton1.CheckedChanged
         TextBox1.Enabled = RadioButton2.Checked
         DGV_S2.Enabled = RadioButton2.Checked
-        Dim userName As String = SCA1.DGV9(1, 2).Value
+        Dim userName As String = ownForm.DGV9(1, 2).Value
         If userName = "" Then userName = "ダミー"
         If RadioButton1.Checked Then
             L_STS2.Text = userName & " の交渉記録を作成する"
@@ -232,7 +225,7 @@ Public Class SCE_S2
                                         TB_A10.Text & "','" &               ' 送付先住所
                                         TB_A11.Text & "','" &               ' 送付先名前
                                         CB_A9.Text & "')"                   ' 発送種別
-        SCA1.db.AddSQL(Sqldb.TID.SCD, SqlCmd)
+        ownForm.db.AddSQL(Sqldb.TID.SCD, SqlCmd)
     End Sub
 
     ' 顧客選択
@@ -242,7 +235,7 @@ Public Class SCE_S2
     Private Function GetDunCosDataTable() As DataTable
         Dim cmn As New Common
 
-        Dim retDt As DataTable = SCA1.db.OrgDataTablePlusAssist.Clone
+        Dim retDt As DataTable = ownForm.db.OrgDataTablePlusAssist.Clone
         Dim rs As New StringReader(TextBox1.Text)
         Dim tmpDt As DataTable          ' マージに使うテンポラリDataTable
         Dim cNo As String
@@ -254,14 +247,14 @@ Public Class SCE_S2
             cNo = rs.ReadLine()
             If cNo = "" Then Continue While                                                                ' 空白なら顧客番号とみなさずスキップ
             If cmn.RegReplace(cNo, "[0-9]", "").Length > 0 Then Continue While                             ' 数字以外が含まれていたら顧客番号とみなさずスキップ
-            f35Dr = SCA1.db.OrgDataTablePlusAssist.Select("[FK02] = '" & cNo & "'")
+            f35Dr = ownForm.db.OrgDataTablePlusAssist.Select("[FK02] = '" & cNo & "'")
             If f35Dr.Count = 0 Then
                 ' 該当顧客番号がない。　アシストの番号からも検索
-                assDr = SCA1.db.OrgDataTable(Sqldb.TID.SCAS).Select("[C12] = '" & cNo & "'")
+                assDr = ownForm.db.OrgDataTable(Sqldb.TID.SCAS).Select("[C12] = '" & cNo & "'")
                 If assDr.Count = 0 Then Continue While    ' 該当顧客番号がどちらのDBに存在しないならスキップ
 
                 ' 顧客番号欄に入力された番号が、アシスト番号だった場合は、顧客番号に変換して検索する
-                f35Dr = SCA1.db.OrgDataTablePlusAssist.Select("[FK02] = '" & assDr(0).Item(1) & "'")
+                f35Dr = ownForm.db.OrgDataTablePlusAssist.Select("[FK02] = '" & assDr(0).Item(1) & "'")
             End If
 
             ' 顧客番号から顧客データをDBからSelectで取得
@@ -331,8 +324,8 @@ Public Class SCE_S2
         log.TimerST()
         Cursor.Current = Cursors.WaitCursor             ' マウスカーソルを砂時計に
         Dim ExcExp As New ExcelExp
-        If RB_T4_A.Checked Then ExcExp.OutRec(oPath, SCA1.DGV1.CurrentRow.Cells(0).Value)
-            If RB_T4_B.Checked Then ExcExp.OutRec(oPath)
+        If RB_T4_A.Checked Then ExcExp.OutRec(oPath, ownForm.DGV1.CurrentRow.Cells(0).Value)
+        If RB_T4_B.Checked Then ExcExp.OutRec(oPath)
         log.TimerED("ExcExp")
     End Sub
 
@@ -382,14 +375,14 @@ Public Class SCE_S2
     Private Sub ShowDGV1()
         DGV1.Rows.Clear()
         ' 交渉記録の日付が日付形式ではないものをピックアップしてアナウンスする
-        For x = 0 To SCA1.db.OrgDataTable(Sqldb.TID.SCD).Rows.Count - 1
-            If Not DateTime.TryParse(SCA1.db.OrgDataTable(Sqldb.TID.SCD).Rows(x)(2), Nothing) Then
+        For x = 0 To ownForm.db.OrgDataTable(Sqldb.TID.SCD).Rows.Count - 1
+            If Not DateTime.TryParse(ownForm.db.OrgDataTable(Sqldb.TID.SCD).Rows(x)(2), Nothing) Then
                 DGV1.Rows.Add()
-                DGV1(0, DGV1.Rows.Count - 1).Value = SCA1.db.OrgDataTable(Sqldb.TID.SCD).Rows(x)(0)
-                DGV1(1, DGV1.Rows.Count - 1).Value = SCA1.db.OrgDataTable(Sqldb.TID.SCD).Rows(x)(1)
-                DGV1(2, DGV1.Rows.Count - 1).Value = SCA1.db.OrgDataTable(Sqldb.TID.SCD).Rows(x)(8)
-                DGV1(3, DGV1.Rows.Count - 1).Value = SCA1.db.OrgDataTable(Sqldb.TID.SCD).Rows(x)(2)
-                DGV1(4, DGV1.Rows.Count - 1).Value = SCA1.db.OrgDataTable(Sqldb.TID.SCD).Rows(x)(5)
+                DGV1(0, DGV1.Rows.Count - 1).Value = ownForm.db.OrgDataTable(Sqldb.TID.SCD).Rows(x)(0)
+                DGV1(1, DGV1.Rows.Count - 1).Value = ownForm.db.OrgDataTable(Sqldb.TID.SCD).Rows(x)(1)
+                DGV1(2, DGV1.Rows.Count - 1).Value = ownForm.db.OrgDataTable(Sqldb.TID.SCD).Rows(x)(8)
+                DGV1(3, DGV1.Rows.Count - 1).Value = ownForm.db.OrgDataTable(Sqldb.TID.SCD).Rows(x)(2)
+                DGV1(4, DGV1.Rows.Count - 1).Value = ownForm.db.OrgDataTable(Sqldb.TID.SCD).Rows(x)(5)
             End If
         Next
     End Sub
@@ -397,8 +390,8 @@ Public Class SCE_S2
     Private Sub DGV1_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles DGV1.CellDoubleClick
         If DGV1.Rows.Count = 0 Then Exit Sub
         Cursor.Current = Cursors.WaitCursor             ' マウスカーソルを砂時計に
-        SCA1.ShowSelectUser(DGV1.CurrentRow.Cells(1).Value)
-        SCA1.ShowSelectRecord(DGV1.CurrentRow.Cells(0).Value)
+        ownForm.ShowSelectUser(DGV1.CurrentRow.Cells(1).Value)
+        ownForm.ShowSelectRecord(DGV1.CurrentRow.Cells(0).Value)
         Me.Close()
     End Sub
 
