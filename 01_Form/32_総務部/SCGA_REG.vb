@@ -13,7 +13,7 @@
     Private Const MR_BLANK As String = "Blank"
     Private Const MR_FORMAT As String = "Format"
     Private Const MR_READONLY As String = "ReadOnly"
-    Private Const NUMBER_LENGTH As Integer = 5
+    Private Const NUMBER_LENGTH As Integer = 3
 
 #Region " OPEN CLOSE "
     Private Sub FLS_Load(sender As Object, e As EventArgs) Handles MyBase.Load
@@ -48,6 +48,8 @@
                 End If
 
                 Select Case MRType
+                    Case 4
+                        SetValueDGV("新口座開始月", "")
                     Case 5
                         ' UserListにあるユーザー名をコンボボックスのItemsに設定
                         SetComboBoxItemsDGV("再鑑者", userList)
@@ -189,12 +191,17 @@
 
     ' 番号の最大値+1取得
     Public Function GetNextMaxValue(CateNo As String) As String
-        ' DataTableを取得
-        Dim dt As DataTable = ownForm.db.OrgDataTable(Sqldb.TID.MR)
+        Dim yymm As String = Today.ToString("yyMM")
+        Dim val As String = $"{yymm}{CateNo}{1.ToString("D" & NUMBER_LENGTH)}"
+
+        ' 今月最初の番号が存在するか確認し、なければ001を返却
+        Dim dt As DataTable = ownForm.db.GetSelect(Sqldb.TID.MR, $"SELECT * FROM {ownForm.db.GetTable(Sqldb.TID.MR)} WHERE C02 = '{CateNo}' And C03 = '{val}'")
+        If dt.Rows.Count = 0 Then Return val
+
+        dt = ownForm.db.GetSelect(Sqldb.TID.MR, $"SELECT * FROM {ownForm.db.GetTable(Sqldb.TID.MR)} WHERE C02 = '{CateNo}'")
 
         ' CateNoと等しい行をフィルタリングし、3列目の最大値を取得
         Dim maxVal As Integer? = dt.AsEnumerable().
-                             Where(Function(row) row.Field(Of String)("C02") = CateNo).
                              Select(Function(row)
                                         Dim value As Integer
                                         If Integer.TryParse(row.Field(Of String)("C03"), value) Then
@@ -208,11 +215,12 @@
 
         ' 最大値に1を加える
         Dim nextMaxVal As Integer = maxVal.GetValueOrDefault() + 1
-        If nextMaxVal.ToString.Length <= NUMBER_LENGTH Then
-            Return CateNo & nextMaxVal.ToString("D" & NUMBER_LENGTH)
+        If nextMaxVal.ToString.Length > NUMBER_LENGTH Then
+            val = nextMaxVal
         Else
-            Return nextMaxVal.ToString("D" & NUMBER_LENGTH)
+            val = $"{yymm}{CateNo}{nextMaxVal.ToString("D" & NUMBER_LENGTH)}"
         End If
+        Return val
     End Function
 
     ' 指定文字のセルに値を設定
@@ -302,11 +310,11 @@
         AddHandler dtPicker.CloseUp, Sub(sender, e)
                                          dgv.CommitEdit(DataGridViewDataErrorContexts.Commit)
                                          dgv(colIndex, rowIndex).Value = dtPicker.Value.ToString(formatType)
-                                         ' 次の行のセルを選択し、編集モードにする
-                                         If rowIndex + 1 < dgv.Rows.Count Then
-                                             dgv.CurrentCell = dgv(colIndex, rowIndex + 1)
-                                             dgv.BeginEdit(True)
-                                         End If
+                                         '' 次の行のセルを選択し、編集モードにする
+                                         'If rowIndex + 1 < dgv.Rows.Count Then
+                                         '    dgv.CurrentCell = dgv(colIndex, rowIndex + 1)
+                                         '    dgv.BeginEdit(True)
+                                         'End If
                                          editTimer.Stop()
                                      End Sub
         AddHandler dtPicker.Leave, Sub(sender, e)

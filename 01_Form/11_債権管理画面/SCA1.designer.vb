@@ -266,6 +266,8 @@ Partial Class SCA1
         Me.Label6 = New System.Windows.Forms.Label()
         Me.Button19 = New System.Windows.Forms.Button()
         Me.Tab_3Mng = New System.Windows.Forms.TabPage()
+        Me.GroupBox2 = New System.Windows.Forms.GroupBox()
+        Me.BT_FPMNG_OutExcel = New System.Windows.Forms.Button()
         Me.BT_FPMNG_AllOutExcel = New System.Windows.Forms.Button()
         Me.CB_FPStatus = New System.Windows.Forms.CheckedListBox()
         Me.L_FPSearchHit = New System.Windows.Forms.Label()
@@ -279,7 +281,6 @@ Partial Class SCA1
         Me.Label10 = New System.Windows.Forms.Label()
         Me.CB_FPPerson = New System.Windows.Forms.ComboBox()
         Me.Label11 = New System.Windows.Forms.Label()
-        Me.BT_FPMNG_OutExcel = New System.Windows.Forms.Button()
         Me.BT_FPMNG_JUMP = New System.Windows.Forms.Button()
         Me.TB_FPMNG_Search = New System.Windows.Forms.TextBox()
         Me.Button16 = New System.Windows.Forms.Button()
@@ -304,7 +305,6 @@ Partial Class SCA1
         Me.ToolStripMenuItem2 = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
         Me.ColorDialog1 = New System.Windows.Forms.ColorDialog()
-        Me.GroupBox2 = New System.Windows.Forms.GroupBox()
         Me.Tab_4Dun.SuspendLayout()
         CType(Me.DGV4, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.GroupBox1.SuspendLayout()
@@ -323,9 +323,9 @@ Partial Class SCA1
         Me.Tab_6GA.SuspendLayout()
         CType(Me.DGV_MR1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Tab_3Mng.SuspendLayout()
+        Me.GroupBox2.SuspendLayout()
         CType(Me.DGV_FPMNG, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.MenuStrip1.SuspendLayout()
-        Me.GroupBox2.SuspendLayout()
         Me.SuspendLayout()
         '
         'PBXX
@@ -694,7 +694,7 @@ Partial Class SCA1
         Me.CB_DunA6.FlatStyle = System.Windows.Forms.FlatStyle.Popup
         Me.CB_DunA6.Font = New System.Drawing.Font("MS UI Gothic", 9.75!)
         Me.CB_DunA6.FormattingEnabled = True
-        Me.CB_DunA6.Items.AddRange(New Object() {"1.事前督促", "2.延滞督促", "3.延滞督促(引通日無し)", "4.翌月不能", "5.SPレター", "6.アシスト督促状(金額あり)", "7.アシスト督促状(金額なし)", "8.アシストSPﾚﾀｰ "})
+        Me.CB_DunA6.Items.AddRange(New Object() {"1.事前案内", "2.延滞督促", "3.延滞督促(引通日無し)", "4.翌月不能", "5.SPレター", "6.アシスト督促状(金額あり)", "7.アシスト督促状(金額なし)", "8.アシストSPﾚﾀｰ "})
         Me.CB_DunA6.Location = New System.Drawing.Point(68, 49)
         Me.CB_DunA6.Name = "CB_DunA6"
         Me.CB_DunA6.Size = New System.Drawing.Size(143, 21)
@@ -2893,6 +2893,30 @@ Partial Class SCA1
         Me.Tab_3Mng.TabIndex = 6
         Me.Tab_3Mng.Text = "管理表"
         '
+        'GroupBox2
+        '
+        Me.GroupBox2.Controls.Add(Me.BT_FPMNG_OutExcel)
+        Me.GroupBox2.Controls.Add(Me.BT_FPMNG_AllOutExcel)
+        Me.GroupBox2.Location = New System.Drawing.Point(8, 550)
+        Me.GroupBox2.Name = "GroupBox2"
+        Me.GroupBox2.Size = New System.Drawing.Size(158, 94)
+        Me.GroupBox2.TabIndex = 1808
+        Me.GroupBox2.TabStop = False
+        Me.GroupBox2.Text = "■ Excel出力"
+        '
+        'BT_FPMNG_OutExcel
+        '
+        Me.BT_FPMNG_OutExcel.BackColor = System.Drawing.Color.MediumAquamarine
+        Me.BT_FPMNG_OutExcel.FlatAppearance.BorderColor = System.Drawing.Color.Black
+        Me.BT_FPMNG_OutExcel.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.BT_FPMNG_OutExcel.ForeColor = System.Drawing.Color.White
+        Me.BT_FPMNG_OutExcel.Location = New System.Drawing.Point(6, 22)
+        Me.BT_FPMNG_OutExcel.Name = "BT_FPMNG_OutExcel"
+        Me.BT_FPMNG_OutExcel.Size = New System.Drawing.Size(142, 27)
+        Me.BT_FPMNG_OutExcel.TabIndex = 1793
+        Me.BT_FPMNG_OutExcel.Text = "表示中のデータ出力"
+        Me.BT_FPMNG_OutExcel.UseVisualStyleBackColor = False
+        '
         'BT_FPMNG_AllOutExcel
         '
         Me.BT_FPMNG_AllOutExcel.BackColor = System.Drawing.Color.MediumAquamarine
@@ -3052,19 +3076,6 @@ Partial Class SCA1
         Me.Label11.TabIndex = 1794
         Me.Label11.Text = "担当者"
         Me.Label11.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        '
-        'BT_FPMNG_OutExcel
-        '
-        Me.BT_FPMNG_OutExcel.BackColor = System.Drawing.Color.MediumAquamarine
-        Me.BT_FPMNG_OutExcel.FlatAppearance.BorderColor = System.Drawing.Color.Black
-        Me.BT_FPMNG_OutExcel.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.BT_FPMNG_OutExcel.ForeColor = System.Drawing.Color.White
-        Me.BT_FPMNG_OutExcel.Location = New System.Drawing.Point(6, 22)
-        Me.BT_FPMNG_OutExcel.Name = "BT_FPMNG_OutExcel"
-        Me.BT_FPMNG_OutExcel.Size = New System.Drawing.Size(142, 27)
-        Me.BT_FPMNG_OutExcel.TabIndex = 1793
-        Me.BT_FPMNG_OutExcel.Text = "表示中のデータ出力"
-        Me.BT_FPMNG_OutExcel.UseVisualStyleBackColor = False
         '
         'BT_FPMNG_JUMP
         '
@@ -3297,17 +3308,6 @@ Partial Class SCA1
         Me.MenuStrip1.TabIndex = 1574
         Me.MenuStrip1.Text = "MenuStrip1"
         '
-        'GroupBox2
-        '
-        Me.GroupBox2.Controls.Add(Me.BT_FPMNG_OutExcel)
-        Me.GroupBox2.Controls.Add(Me.BT_FPMNG_AllOutExcel)
-        Me.GroupBox2.Location = New System.Drawing.Point(8, 550)
-        Me.GroupBox2.Name = "GroupBox2"
-        Me.GroupBox2.Size = New System.Drawing.Size(158, 94)
-        Me.GroupBox2.TabIndex = 1808
-        Me.GroupBox2.TabStop = False
-        Me.GroupBox2.Text = "■ Excel出力"
-        '
         'SCA1
         '
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None
@@ -3349,10 +3349,10 @@ Partial Class SCA1
         CType(Me.DGV_MR1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.Tab_3Mng.ResumeLayout(False)
         Me.Tab_3Mng.PerformLayout()
+        Me.GroupBox2.ResumeLayout(False)
         CType(Me.DGV_FPMNG, System.ComponentModel.ISupportInitialize).EndInit()
         Me.MenuStrip1.ResumeLayout(False)
         Me.MenuStrip1.PerformLayout()
-        Me.GroupBox2.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()
 

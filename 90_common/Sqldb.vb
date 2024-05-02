@@ -923,6 +923,10 @@ Public Class Sqldb
         ExeSQL(TID.FPDATA)
     End Sub
 
+    Public Sub TransferJizen()
+        ExeSQL(TID.SCD, "UPDATE FKSCD SET FKD11 = '1.事前案内' WHERE FKD11 = '1.事前督促';")
+    End Sub
+
     ' データベースの最終更新日を確認して、更新直後ならキャッシュがなくLINQを使用したほうが処理速度が早いことを利用するための判定。
     ' Return : True  更新直後ではなくキャッシュあり
     '          False 更新直後　※DB更新から1秒未満

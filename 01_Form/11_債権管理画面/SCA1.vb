@@ -2128,8 +2128,7 @@ Public Class SCA1
         oview = New SCGA_OVIEW
         CB_MRLIST.Items.AddRange(sccmn.MRITEMLIST)
         CB_MRLIST.SelectedIndex = 0
-        Dim firstDayOfMonth As DateTime = New DateTime(DateTime.Now.Year, DateTime.Now.Month, 1)
-        DTP_MRST.Value = firstDayOfMonth
+        DTP_MRED.Value = Today.AddYears(1).Date         ' 1年後を指定
         ShowDGVMR()
         TB_MRPaymentDate.Text = Today.Date.ToString("yyyy/MM")
 

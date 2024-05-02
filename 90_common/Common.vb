@@ -327,6 +327,7 @@ Public Class Common
     ' コンボボックスに指定したDGVの行のユニーク文字列を設定する
     Public Sub SetComboBoxUniqueDGVItems(dgv As DataGridView, columnName As String, ByRef cbox As Windows.Forms.ComboBox, topItemName As String)
         Dim personSet As New HashSet(Of String)
+        If Not dgv.Columns.Contains(columnName) Then Exit Sub
 
         ' DataGridViewの各行を走査
         For Each row As DataGridViewRow In dgv.Rows
