@@ -2203,6 +2203,7 @@ Public Class SCA1
 
         mrcmn.PaymentDateColor()                ' 完済日が5～13日の間は色付け
         mrcmn.HighlightCancelledRows(DGV_MR1)   ' キャンセル日の色付け
+        mrcmn.HighlightCompletedRows(DGV_MR1)   ' ステータス完了の色付け
 
         cmn.SetComboBoxUniqueDGVItems(DGV_MR1, "担当者", CB_Person, "(全表示)")   ' 担当コンボボックス設定
         log.TimerED("ShowDGVMR")
@@ -2234,6 +2235,22 @@ Public Class SCA1
         Cursor.Current = Cursors.WaitCursor             ' マウスカーソルを砂時計に
         db.ExeSQL(Sqldb.TID.MR, $"Delete From TBL Where C01 = '{DGV_MR1.CurrentRow.Cells(0).Value}'")
         ShowDGVMR()
+    End Sub
+
+    ' 顧客情報の表示ボタン
+    Private Sub Button17_Click(sender As Object, e As EventArgs) Handles Button17.Click
+        Dim columnIndex As Integer = cmn.FindColumnIndex(DGV_MR1, "顧客番号")
+        If columnIndex = -1 Then Exit Sub ' カラムが見つからなければ何もしない
+
+        ' 選択されている行を取得
+        Dim selectedRow As DataGridViewRow = DGV_MR1.CurrentRow
+        If selectedRow IsNot Nothing AndAlso Not selectedRow.IsNewRow Then
+            ' 選択されている行の「顧客番号」を取得
+            Dim cellValue As String = selectedRow.Cells(columnIndex).Value?.ToString()
+            If Not String.IsNullOrEmpty(Trim(cellValue)) Then
+                ShowSelectUser(cellValue)
+            End If
+        End If
     End Sub
 
     Private Sub FilterMRSearch(word As String)

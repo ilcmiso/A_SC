@@ -11,19 +11,9 @@
         HolidaysDate = LoadHolidaysFromCSV($"{cmn.CurrentPath}{Common.DIR_DB3}syukujitsu.csv")      ' 祝日データの読み込み
     End Sub
 
-    ' 指定したカラム名のデータ取得
-    Private Function FindColumnIndex(dgv As DataGridView, columnName As String) As Integer
-        For i As Integer = 0 To dgv.Columns.Count - 1
-            If dgv.Columns(i).Name = columnName Then
-                Return i
-            End If
-        Next
-        Return -1
-    End Function
-
     ' 完済日を見つけ、5日～13日（※14日以降が土日祝日なら範囲とする）だった場合に赤色にする
     Public Sub PaymentDateColor()
-        Dim columnIndex As Integer = FindColumnIndex(SCA1.DGV_MR1, "完済日")
+        Dim columnIndex As Integer = cmn.FindColumnIndex(SCA1.DGV_MR1, "完済日")
         If columnIndex = -1 Then Return
 
         For Each row As DataGridViewRow In SCA1.DGV_MR1.Rows
@@ -132,7 +122,7 @@
     ' カラム名がキャンセル日の行が、空欄でなかったら行グレーアウト
     Public Sub HighlightCancelledRows(dgv As DataGridView)
         ' "キャンセル日"カラムのインデックスを探す
-        Dim columnIndex As Integer = FindColumnIndex(dgv, "キャンセル日")
+        Dim columnIndex As Integer = cmn.FindColumnIndex(dgv, "キャンセル日")
         If columnIndex = -1 Then Return ' カラムが見つからなければ処理を終了
 
         ' DataGridViewの各行をループして条件に一致する行のセルの背景色を変更
@@ -146,9 +136,26 @@
         Next
     End Sub
 
+    ' ステータスカラムが完了の場合に行の背景色をSkyBlueに変更
+    Public Sub HighlightCompletedRows(dgv As DataGridView)
+        ' "ステータス"カラムのインデックスを探す
+        Dim columnIndex As Integer = cmn.FindColumnIndex(dgv, "ステータス")
+        If columnIndex = -1 Then Return ' カラムが見つからなければ処理を終了
+
+        ' DataGridViewの各行をループして条件に一致する行のセルの背景色を変更
+        For Each row As DataGridViewRow In dgv.Rows
+            If Not row.IsNewRow AndAlso Not IsDBNull(row.Cells(columnIndex).Value) AndAlso row.Cells(columnIndex).Value.ToString().Contains("完了") Then
+                ' ステータスが完了を含む場合、その行の全セルの背景色をSkyBlueに設定
+                For Each cell As DataGridViewCell In row.Cells
+                    cell.Style.BackColor = Color.GreenYellow
+                Next
+            End If
+        Next
+    End Sub
+
     ' カラム名に完済日が含まれているか
     Public Function IsColumnsPaymentDate(dgv As DataGridView) As Boolean
-        Dim columnIndex As Integer = FindColumnIndex(dgv, "完済日")
+        Dim columnIndex As Integer = cmn.FindColumnIndex(dgv, "完済日")
         If columnIndex = -1 Then Return False
         Return True
     End Function

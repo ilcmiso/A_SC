@@ -51,6 +51,9 @@
                     Case 4
                         SetValueDGV("新口座開始月", "")
                     Case 5
+                        If ownForm.DGV1.CurrentRow.Cells(0).Value <> Common.DUMMY_NO Then
+                            SetValueDGV("発送先", ownForm.DGV1.CurrentRow.Cells(1).Value)
+                        End If
                         ' UserListにあるユーザー名をコンボボックスのItemsに設定
                         SetComboBoxItemsDGV("再鑑者", userList)
                     Case 6
@@ -96,6 +99,12 @@
                 End If
             Next
         Next
+
+        ' 備考の内容を備考テキストボックスに設定
+        Dim idx As Integer = cmn.FindColumnIndex(ownForm.DGV_MR1, "備考")
+        If idx >= 0 Then
+            TB_Remarks.Text = ownForm.DGV_MR1.Rows(ownForm.DGV_MR1.CurrentRow.Index).Cells(idx).Value
+        End If
     End Sub
 
 
@@ -141,8 +150,13 @@
                         ReplaceCell2ComboBox(DGV_REG1, order, 1, items)
                     End If
             End Select
+            ' 備考は別途テキストボックスとして表示するため、行は非表示にする
+            If row(2) = "備考" Then
+                L_Remarks.Visible = True
+                TB_Remarks.Visible = True
+                DGV_REG1.Rows(order).Visible = False
+            End If
         Next
-
         ' DGV_REG1.Columns(1).DefaultCellStyle.WrapMode = DataGridViewTriState.True
 
     End Sub
@@ -154,7 +168,11 @@
         ' SQLコマンド生成
         Dim commandText As New List(Of String)
         For n = 0 To DGV_REG1.Rows.Count - 1
-            commandText.Add(DGV_REG1(1, n).Value)
+            If DGV_REG1(0, n).Value = "備考" Then
+                commandText.Add(TB_Remarks.Text)
+            Else
+                commandText.Add(DGV_REG1(1, n).Value)
+            End If
         Next
 
         If ownForm.ActiveControl.Name = BTADD Then

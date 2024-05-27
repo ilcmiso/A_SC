@@ -305,6 +305,7 @@ Partial Class SCA1
         Me.ToolStripMenuItem2 = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
         Me.ColorDialog1 = New System.Windows.Forms.ColorDialog()
+        Me.Button17 = New System.Windows.Forms.Button()
         Me.Tab_4Dun.SuspendLayout()
         CType(Me.DGV4, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.GroupBox1.SuspendLayout()
@@ -2406,6 +2407,7 @@ Partial Class SCA1
         'Tab_6GA
         '
         Me.Tab_6GA.BackColor = System.Drawing.Color.LightBlue
+        Me.Tab_6GA.Controls.Add(Me.Button17)
         Me.Tab_6GA.Controls.Add(Me.TB_MRPaymentDate)
         Me.Tab_6GA.Controls.Add(Me.Label8)
         Me.Tab_6GA.Controls.Add(Me.L_MRSearchHit)
@@ -3308,6 +3310,20 @@ Partial Class SCA1
         Me.MenuStrip1.TabIndex = 1574
         Me.MenuStrip1.Text = "MenuStrip1"
         '
+        'Button17
+        '
+        Me.Button17.BackColor = System.Drawing.Color.SteelBlue
+        Me.Button17.FlatAppearance.BorderColor = System.Drawing.Color.Black
+        Me.Button17.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Bold)
+        Me.Button17.ForeColor = System.Drawing.Color.White
+        Me.Button17.Location = New System.Drawing.Point(302, 372)
+        Me.Button17.Name = "Button17"
+        Me.Button17.Size = New System.Drawing.Size(142, 27)
+        Me.Button17.TabIndex = 1800
+        Me.Button17.TabStop = False
+        Me.Button17.Text = "顧客情報の表示"
+        Me.Button17.UseVisualStyleBackColor = False
+        '
         'SCA1
         '
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None
@@ -3601,4 +3617,5 @@ Partial Class SCA1
     Friend WithEvents CB_FPStatus As CheckedListBox
     Friend WithEvents BT_FPMNG_AllOutExcel As Button
     Friend WithEvents GroupBox2 As GroupBox
+    Friend WithEvents Button17 As Button
 End Class

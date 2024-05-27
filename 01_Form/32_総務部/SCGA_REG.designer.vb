@@ -22,9 +22,9 @@ Partial Class SCGA_REG
     'コード エディターを使って変更しないでください。
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
-        Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle3 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle4 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle6 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle5 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Me.PBXX = New System.Windows.Forms.Button()
         Me.L_REGTITLE = New System.Windows.Forms.Label()
         Me.DGV_REG1 = New System.Windows.Forms.DataGridView()
@@ -32,6 +32,8 @@ Partial Class SCGA_REG
         Me.Column1 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.BT_A1 = New System.Windows.Forms.Button()
         Me.BT_A2 = New System.Windows.Forms.Button()
+        Me.TB_Remarks = New System.Windows.Forms.TextBox()
+        Me.L_Remarks = New System.Windows.Forms.Label()
         CType(Me.DGV_REG1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
@@ -68,25 +70,25 @@ Partial Class SCGA_REG
         Me.DGV_REG1.AllowUserToResizeRows = False
         Me.DGV_REG1.BackgroundColor = System.Drawing.Color.White
         Me.DGV_REG1.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.[Single]
-        DataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle1.BackColor = System.Drawing.Color.LightGray
-        DataGridViewCellStyle1.Font = New System.Drawing.Font("MS UI Gothic", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        DataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText
-        DataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        DataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.DGV_REG1.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle1
+        DataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle4.BackColor = System.Drawing.Color.LightGray
+        DataGridViewCellStyle4.Font = New System.Drawing.Font("MS UI Gothic", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        DataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.WindowText
+        DataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.DGV_REG1.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle4
         Me.DGV_REG1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing
         Me.DGV_REG1.ColumnHeadersVisible = False
         Me.DGV_REG1.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.項目, Me.Column1})
-        DataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Window
-        DataGridViewCellStyle3.Font = New System.Drawing.Font("MS UI Gothic", 9.0!)
-        DataGridViewCellStyle3.ForeColor = System.Drawing.Color.Black
-        DataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle3.SelectionForeColor = System.Drawing.Color.Black
-        DataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.DGV_REG1.DefaultCellStyle = DataGridViewCellStyle3
+        DataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.Window
+        DataGridViewCellStyle6.Font = New System.Drawing.Font("MS UI Gothic", 9.0!)
+        DataGridViewCellStyle6.ForeColor = System.Drawing.Color.Black
+        DataGridViewCellStyle6.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle6.SelectionForeColor = System.Drawing.Color.Black
+        DataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.DGV_REG1.DefaultCellStyle = DataGridViewCellStyle6
         Me.DGV_REG1.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter
         Me.DGV_REG1.Location = New System.Drawing.Point(1, 22)
         Me.DGV_REG1.MultiSelect = False
@@ -95,14 +97,14 @@ Partial Class SCGA_REG
         Me.DGV_REG1.RowTemplate.Height = 21
         Me.DGV_REG1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
         Me.DGV_REG1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect
-        Me.DGV_REG1.Size = New System.Drawing.Size(298, 434)
+        Me.DGV_REG1.Size = New System.Drawing.Size(298, 535)
         Me.DGV_REG1.TabIndex = 1813
         Me.DGV_REG1.TabStop = False
         '
         '項目
         '
-        DataGridViewCellStyle2.BackColor = System.Drawing.Color.FromArgb(CType(CType(192, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
-        Me.項目.DefaultCellStyle = DataGridViewCellStyle2
+        DataGridViewCellStyle5.BackColor = System.Drawing.Color.FromArgb(CType(CType(192, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
+        Me.項目.DefaultCellStyle = DataGridViewCellStyle5
         Me.項目.HeaderText = "Column2"
         Me.項目.Name = "項目"
         Me.項目.ReadOnly = True
@@ -122,7 +124,7 @@ Partial Class SCGA_REG
         Me.BT_A1.FlatAppearance.BorderColor = System.Drawing.Color.Black
         Me.BT_A1.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.BT_A1.ForeColor = System.Drawing.Color.White
-        Me.BT_A1.Location = New System.Drawing.Point(126, 462)
+        Me.BT_A1.Location = New System.Drawing.Point(126, 562)
         Me.BT_A1.Name = "BT_A1"
         Me.BT_A1.Size = New System.Drawing.Size(86, 31)
         Me.BT_A1.TabIndex = 1811
@@ -135,18 +137,44 @@ Partial Class SCGA_REG
         Me.BT_A2.FlatAppearance.BorderColor = System.Drawing.Color.Black
         Me.BT_A2.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.BT_A2.ForeColor = System.Drawing.Color.White
-        Me.BT_A2.Location = New System.Drawing.Point(213, 462)
+        Me.BT_A2.Location = New System.Drawing.Point(213, 562)
         Me.BT_A2.Name = "BT_A2"
         Me.BT_A2.Size = New System.Drawing.Size(86, 31)
         Me.BT_A2.TabIndex = 1812
         Me.BT_A2.Text = "キャンセル"
         Me.BT_A2.UseVisualStyleBackColor = False
         '
+        'TB_Remarks
+        '
+        Me.TB_Remarks.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
+        Me.TB_Remarks.Location = New System.Drawing.Point(2, 461)
+        Me.TB_Remarks.Multiline = True
+        Me.TB_Remarks.Name = "TB_Remarks"
+        Me.TB_Remarks.Size = New System.Drawing.Size(296, 100)
+        Me.TB_Remarks.TabIndex = 1815
+        Me.TB_Remarks.Visible = False
+        '
+        'L_Remarks
+        '
+        Me.L_Remarks.BackColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(192, Byte), Integer))
+        Me.L_Remarks.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.L_Remarks.Font = New System.Drawing.Font("メイリオ", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.L_Remarks.ForeColor = System.Drawing.Color.White
+        Me.L_Remarks.Location = New System.Drawing.Point(0, 435)
+        Me.L_Remarks.Name = "L_Remarks"
+        Me.L_Remarks.Size = New System.Drawing.Size(298, 24)
+        Me.L_Remarks.TabIndex = 1816
+        Me.L_Remarks.Text = "備　考"
+        Me.L_Remarks.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        Me.L_Remarks.Visible = False
+        '
         'SCGA_REG
         '
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None
         Me.BackColor = System.Drawing.SystemColors.ControlLight
-        Me.ClientSize = New System.Drawing.Size(302, 495)
+        Me.ClientSize = New System.Drawing.Size(302, 596)
+        Me.Controls.Add(Me.L_Remarks)
+        Me.Controls.Add(Me.TB_Remarks)
         Me.Controls.Add(Me.L_REGTITLE)
         Me.Controls.Add(Me.DGV_REG1)
         Me.Controls.Add(Me.BT_A1)
@@ -161,6 +189,7 @@ Partial Class SCGA_REG
         Me.Text = "申請物の登録"
         CType(Me.DGV_REG1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
+        Me.PerformLayout()
 
     End Sub
 
@@ -171,4 +200,6 @@ Partial Class SCGA_REG
     Friend WithEvents BT_A2 As Button
     Friend WithEvents 項目 As DataGridViewTextBoxColumn
     Friend WithEvents Column1 As DataGridViewTextBoxColumn
+    Friend WithEvents TB_Remarks As TextBox
+    Friend WithEvents L_Remarks As Label
 End Class

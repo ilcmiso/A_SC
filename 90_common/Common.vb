@@ -390,6 +390,15 @@ Public Class Common
         End If
     End Sub
 
+    ' 指定したカラム名のデータ取得
+    Public Function FindColumnIndex(dgv As DataGridView, columnName As String) As Integer
+        For i As Integer = 0 To dgv.Columns.Count - 1
+            If dgv.Columns(i).Name = columnName Then
+                Return i
+            End If
+        Next
+        Return -1
+    End Function
 
     ' プログレスバー表示
     Public Sub StartPBar(progressCount As Integer)

@@ -927,6 +927,11 @@ Public Class Sqldb
         ExeSQL(TID.SCD, "UPDATE FKSCD SET FKD11 = '1.事前案内' WHERE FKD11 = '1.事前督促';")
     End Sub
 
+    Public Sub MRDBFixTemp()
+        ExeSQL(TID.MR, "UPDATE TBL SET C21 = C20, C20 = C19, C19 = C18, C18 = C17, C17 = C16, C16 = C15, C15 = C14, C14 = C13, C13 = C12, C12 = C11, C11 = C10, C10 = C09, C09 = '' WHERE C02 = '1';")
+        ExeSQL(TID.MR, "UPDATE TBL SET C21 = C20, C20 = C19, C19 = C18, C18 = C17, C17 = C16, C16 = C15, C15 = C14, C14 = C13, C13 = '' WHERE C02 = '4';")
+    End Sub
+
     ' データベースの最終更新日を確認して、更新直後ならキャッシュがなくLINQを使用したほうが処理速度が早いことを利用するための判定。
     ' Return : True  更新直後ではなくキャッシュあり
     '          False 更新直後　※DB更新から1秒未満
