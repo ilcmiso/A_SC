@@ -193,9 +193,14 @@
     Public Function GetNextMaxValue(CateNo As String) As String
         Dim yymm As String = Today.ToString("yyMM")
         Dim val As String = $"{yymm}{CateNo}{1.ToString("D" & NUMBER_LENGTH)}"
+        Dim dt As DataTable
+        ' 口座変更(4)の場合のみ、5000番からのインクリメントを大嶋様が希望
+        If CateNo = 4 Then
+            val = 5000
+        End If
 
         ' 今月最初の番号が存在するか確認し、なければ001を返却
-        Dim dt As DataTable = ownForm.db.GetSelect(Sqldb.TID.MR, $"SELECT * FROM {ownForm.db.GetTable(Sqldb.TID.MR)} WHERE C02 = '{CateNo}' And C03 = '{val}'")
+        dt = ownForm.db.GetSelect(Sqldb.TID.MR, $"SELECT * FROM {ownForm.db.GetTable(Sqldb.TID.MR)} WHERE C02 = '{CateNo}' And C03 = '{val}'")
         If dt.Rows.Count = 0 Then Return val
 
         dt = ownForm.db.GetSelect(Sqldb.TID.MR, $"SELECT * FROM {ownForm.db.GetTable(Sqldb.TID.MR)} WHERE C02 = '{CateNo}'")
