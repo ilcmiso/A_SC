@@ -1,6 +1,7 @@
 ﻿Public Class SCGA_REG
 
     Private ReadOnly cmn As New Common
+    Private ReadOnly sccmn As New SCcommon
     Private ReadOnly xml As New XmlMng
     Private ReadOnly log As New Log
     Private ownForm As SCA1
@@ -35,7 +36,7 @@
             Case BTADD  ' 追加ボタン契機
 
                 ' 各項目に初期入力値を設定
-                SetValueDGV("番号", GetNextMaxValue(MRType))
+                SetValueDGV("番号", GetNextMaxValue())
                 SetComboBoxItemsDGV("担当者", userList)
                 SetValueDGV("担当者", xml.GetUserName)
                 If ownForm.DGV1.CurrentRow IsNot Nothing Then
@@ -44,19 +45,20 @@
                         SetValueDGV("主債務者名", ownForm.DGV1.CurrentRow.Cells(1).Value)
                         SetValueDGV("債務者", ownForm.DGV1.CurrentRow.Cells(1).Value)
                         SetValueDGV("実行日", ownForm.DGV9(5, 1).Value)                     ' 金消日を設定
+                        SetValueDGV("証券番号", ownForm.DGV9(3, 0).Value)
                     End If
                 End If
 
                 Select Case MRType
-                    Case 4
+                    Case SCcommon.MRITEMID.ACCOUNT_CHANGE  ' 口座変更
                         SetValueDGV("新口座開始月", "")
-                    Case 5
+                    Case SCcommon.MRITEMID.MAIL_SEND       ' 郵便発送
                         If ownForm.DGV1.CurrentRow.Cells(0).Value <> Common.DUMMY_NO Then
                             SetValueDGV("発送先", ownForm.DGV1.CurrentRow.Cells(1).Value)
                         End If
                         ' UserListにあるユーザー名をコンボボックスのItemsに設定
                         SetComboBoxItemsDGV("再鑑者", userList)
-                    Case 6
+                    Case SCcommon.MRITEMID.MAIL_RECV       ' 郵便受領
                         ' UserListにあるユーザー名をコンボボックスのItemsに設定
                         SetComboBoxItemsDGV("受領者", userList)
                 End Select
@@ -184,7 +186,7 @@
         ownForm.db.ExeSQL(Sqldb.TID.MR)
 
         ' 追加後、発送届けが基本セットになるため、発送届けが必要か確認するダイアログ表示
-        If ownForm.ActiveControl.Name = BTADD AndAlso MRType < 5 Then
+        If ownForm.ActiveControl.Name = BTADD AndAlso MRType < SCcommon.MRITEMID.MAIL_SEND Then
             Dim r As Integer
             r = MessageBox.Show($"登録しました。{vbCrLf}併せて「郵便発送簿」を追加しますか？",
                                 "ご確認ください",
@@ -208,43 +210,47 @@
 #End Region
 
     ' 番号の最大値+1取得
-    Public Function GetNextMaxValue(CateNo As String) As String
-        Dim yymm As String = Today.ToString("yyMM")
-        Dim val As String = $"{yymm}{CateNo}{1.ToString("D" & NUMBER_LENGTH)}"
-        Dim dt As DataTable
-        ' 口座変更(4)の場合のみ、5000番からのインクリメントを大嶋様が希望
-        If CateNo = 4 Then
-            val = 5000
+    Private Function GetNextMaxValue() As String
+        Return GetNextMaxValue(Today.ToString("yyMM"))
+    End Function
+    Private Function GetNextMaxValue(sDate_yymm As String) As String
+        Dim val As String
+        Dim baseValue As Integer = 1
+        If MRType = SCcommon.MRITEMID.ACCOUNT_CHANGE Then
+            baseValue = 5000
         End If
 
-        ' 今月最初の番号が存在するか確認し、なければ001を返却
-        dt = ownForm.db.GetSelect(Sqldb.TID.MR, $"SELECT * FROM {ownForm.db.GetTable(Sqldb.TID.MR)} WHERE C02 = '{CateNo}' And C03 = '{val}'")
+        val = $"{sDate_yymm}{MRType}{baseValue.ToString("D" & NUMBER_LENGTH)}"
+
+        ' データベースから指定されたMRTypeのデータを取得
+        Dim dt As DataTable = ownForm.db.GetSelect(Sqldb.TID.MR, $"SELECT C03 FROM {ownForm.db.GetTable(Sqldb.TID.MR)} WHERE C02 = '{MRType}'")
+
+        ' データが存在しない場合は初期値を返す
         If dt.Rows.Count = 0 Then Return val
 
-        dt = ownForm.db.GetSelect(Sqldb.TID.MR, $"SELECT * FROM {ownForm.db.GetTable(Sqldb.TID.MR)} WHERE C02 = '{CateNo}'")
-
-        ' CateNoと等しい行をフィルタリングし、3列目の最大値を取得
+        ' 指定された年月のデータをフィルタリングし、最大値を取得
         Dim maxVal As Integer? = dt.AsEnumerable().
                              Select(Function(row)
-                                        Dim value As Integer
-                                        If Integer.TryParse(row.Field(Of String)("C03"), value) Then
-                                            Return value
-                                        Else
-                                            Return 0
+                                        Dim strValue As String = row.Field(Of String)("C03")
+                                        If strValue.StartsWith(sDate_yymm & MRType.ToString()) AndAlso strValue.Length = sDate_yymm.Length + MRType.ToString().Length + NUMBER_LENGTH Then
+                                            Dim numericPart As String = strValue.Substring(sDate_yymm.Length + MRType.ToString().Length)
+                                            Dim value As Integer
+                                            If Integer.TryParse(numericPart, value) Then
+                                                Return value
+                                            End If
                                         End If
+                                        Return 0
                                     End Function).
                              DefaultIfEmpty(0).
                              Max()
 
         ' 最大値に1を加える
         Dim nextMaxVal As Integer = maxVal.GetValueOrDefault() + 1
-        If nextMaxVal.ToString.Length > NUMBER_LENGTH Then
-            val = nextMaxVal
-        Else
-            val = $"{yymm}{CateNo}{nextMaxVal.ToString("D" & NUMBER_LENGTH)}"
-        End If
+        val = $"{sDate_yymm}{MRType}{nextMaxVal.ToString("D" & NUMBER_LENGTH)}"
+
         Return val
     End Function
+
 
     ' 指定文字のセルに値を設定
     Sub SetValueDGV(searchWord As String, valueToSet As String)
@@ -326,19 +332,21 @@
 
         If type = MR_BLANK Then dgv(colIndex, rowIndex).Value = ""
 
-        Dim editTimer As New Timer()
-        editTimer.Interval = 100
         ' 値変更時にDataGridViewのセルに反映
-        ' 空欄からのdtPicker変更時、DGVに反映されない場合があるため、CommitEditと次のセル選択処理をしている
         AddHandler dtPicker.CloseUp, Sub(sender, e)
+                                         dgv.EndEdit() ' 追加: これで現在の編集が終了します。
                                          dgv.CommitEdit(DataGridViewDataErrorContexts.Commit)
                                          dgv(colIndex, rowIndex).Value = dtPicker.Value.ToString(formatType)
-                                         '' 次の行のセルを選択し、編集モードにする
-                                         'If rowIndex + 1 < dgv.Rows.Count Then
-                                         '    dgv.CurrentCell = dgv(colIndex, rowIndex + 1)
-                                         '    dgv.BeginEdit(True)
-                                         'End If
-                                         editTimer.Stop()
+                                         ' 現在のセルの1つ左のセルを選択
+                                         Dim previousCell As Integer = Math.Max(0, colIndex - 1)
+                                         dgv.CurrentCell = dgv.Rows(rowIndex).Cells(previousCell)
+
+                                         ' 選択状態を元のセルに戻す
+                                         dgv.CurrentCell = dgv.Rows(rowIndex).Cells(colIndex)
+                                         ' 一部繰越用の実施年月を設定したとき、実施年月を基準に番号を設定する
+                                         If dgv.Rows(rowIndex).Cells(colIndex - 1).Value = "実施年月" And ownForm.ActiveControl.Name = BTADD Then
+                                             SetValueDGV("番号", GetNextMaxValue(dtPicker.Value.ToString("yyMM")))
+                                         End If
                                      End Sub
         AddHandler dtPicker.Leave, Sub(sender, e)
                                        DGV_REG1.Focus()
@@ -445,7 +453,7 @@
     ' 追加の郵便発送簿実行
     Private Sub AddPostSend()
         Dim beforeType As Integer = MRType
-        MRType = 5
+        MRType = SCcommon.MRITEMID.MAIL_SEND
         ownForm.CB_MRLIST.SelectedIndex = MRType
 
         ' 「内容」の入力文字列を取得

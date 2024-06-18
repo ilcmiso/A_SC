@@ -59,7 +59,7 @@ Public Class Sqldb
         {DB_FKSCPI, TBL_ITEM, 5, "C", DBSV, True},
         {DB_FKSCASSIST, TBL_STANDARD, 28, "C", DBLO, True},
         {DB_AUTOCALL, TBL_STANDARD, 4, "C", DBSV, True},
-        {DB_MNGREQ, TBL_STANDARD, 21, "C", DBSV, True},
+        {DB_MNGREQ, TBL_STANDARD, 22, "C", DBSV, True},
         {DB_MRITEM, TBL_STANDARD, 5, "C", DBSV, True},
         {DB_USERLIST, TBL_STANDARD, 5, "C", DBSV, True},
         {DB_OVERTAX, TBL_STANDARD, 103, "C", DBSV, True}
@@ -930,6 +930,16 @@ Public Class Sqldb
     Public Sub MRDBFixTemp()
         ExeSQL(TID.MR, "UPDATE TBL SET C21 = C20, C20 = C19, C19 = C18, C18 = C17, C17 = C16, C16 = C15, C15 = C14, C14 = C13, C13 = C12, C12 = C11, C11 = C10, C10 = C09, C09 = '' WHERE C02 = '1';")
         ExeSQL(TID.MR, "UPDATE TBL SET C21 = C20, C20 = C19, C19 = C18, C18 = C17, C17 = C16, C16 = C15, C15 = C14, C14 = C13, C13 = '' WHERE C02 = '4';")
+    End Sub
+
+    Public Sub MRDBFixTemp0618()
+        ExeSQL(TID.MR, "UPDATE TBL SET C02 = CAST(CAST(C02 AS INTEGER) + 1 AS TEXT) WHERE CAST(C02 AS INTEGER) >= 2;")
+        ExeSQL(TID.MR, "UPDATE TBL SET C03 = SUBSTR(C03, 1, 4) || CAST(CAST(SUBSTR(C03, 5, 1) AS INTEGER) + 1 AS TEXT) || SUBSTR(C03, 6) WHERE C03 LIKE '240%' AND CAST(SUBSTR(C03, 5, 1) AS INTEGER) >= 2;")
+        ExeSQL(TID.MR, "UPDATE TBL SET C02 = '2', C11 = '' WHERE C02 = '1' AND (C07 = 'アシスト' OR C07 = '新保証型');")
+        ExeSQL(TID.MR, "UPDATE TBL SET C10 = C11, C11 = C12, C12 = C13, C13 = C14, C14 = C15, C15 = C16, C16 = C17, C17 = C18, C18 = C19, C19 = C20, C20 = C21, C21 = '' WHERE C02 = '1';")
+        ExeSQL(TID.MR, "UPDATE TBL SET C21 = C20, C20 = C19, C19 = C18, C18 = C17, C17 = C16, C16 = C15, C15 = C14, C14 = C13, C13 = C12, C12 = C11, C11 = C10, C10 = C09, C09 = C08, C08 = '' WHERE C02 = '2';")
+        ExeSQL(TID.MR, "ALTER TABLE TBL ADD C22 TEXT Not Null Default '';")
+        ExeSQL(TID.MR, "UPDATE TBL SET C22 = C21, C21 = '' WHERE C02 = '0';")
     End Sub
 
     ' データベースの最終更新日を確認して、更新直後ならキャッシュがなくLINQを使用したほうが処理速度が早いことを利用するための判定。

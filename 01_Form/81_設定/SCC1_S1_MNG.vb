@@ -53,7 +53,8 @@ Public Class SCC1_S1_MNG
             "SQLite2SQLServer",
             "SQL速度比較",
             "事前督促->事前案内 変換",
-            "申請物DB変換"
+            "申請物DB変換",
+            "DB変換0618"
             }
         ListBox2.Items.Clear()
         For Each cl In commandNames
@@ -135,6 +136,8 @@ Public Class SCC1_S1_MNG
                 db.TransferJizen()
             Case 10
                 db.MRDBFixTemp()
+            Case 11
+                db.MRDBFixTemp0618()
 
         End Select
         MsgBox("完了")
