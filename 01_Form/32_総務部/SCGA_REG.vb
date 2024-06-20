@@ -214,43 +214,43 @@
         Return GetNextMaxValue(Today.ToString("yyMM"))
     End Function
     Private Function GetNextMaxValue(sDate_yymm As String) As String
-        Dim val As String
-        Dim baseValue As Integer = 1
+        Dim val As String = $"{sDate_yymm}{MRType}{1.ToString("D" & NUMBER_LENGTH)}"
+        Dim filter As String = ""
+        Dim dt As DataTable
+        ' 口座変更(4)の場合のみ、5000番からのインクリメントを大嶋様が希望
         If MRType = SCcommon.MRITEMID.ACCOUNT_CHANGE Then
-            baseValue = 5000
+            val = 5000
+        Else
+            filter = sDate_yymm
         End If
 
-        val = $"{sDate_yymm}{MRType}{baseValue.ToString("D" & NUMBER_LENGTH)}"
-
-        ' データベースから指定されたMRTypeのデータを取得
-        Dim dt As DataTable = ownForm.db.GetSelect(Sqldb.TID.MR, $"SELECT C03 FROM {ownForm.db.GetTable(Sqldb.TID.MR)} WHERE C02 = '{MRType}'")
-
-        ' データが存在しない場合は初期値を返す
+        ' 年月が一致する番号を取得。新規番号であればそのまま001として返却
+        dt = ownForm.db.GetSelect(Sqldb.TID.MR, $"SELECT * FROM {ownForm.db.GetTable(Sqldb.TID.MR)} WHERE C02 = '{MRType}' AND C03 LIKE '{filter}%'")
         If dt.Rows.Count = 0 Then Return val
 
-        ' 指定された年月のデータをフィルタリングし、最大値を取得
+        ' 取得したリストの最大値を取得
         Dim maxVal As Integer? = dt.AsEnumerable().
                              Select(Function(row)
-                                        Dim strValue As String = row.Field(Of String)("C03")
-                                        If strValue.StartsWith(sDate_yymm & MRType.ToString()) AndAlso strValue.Length = sDate_yymm.Length + MRType.ToString().Length + NUMBER_LENGTH Then
-                                            Dim numericPart As String = strValue.Substring(sDate_yymm.Length + MRType.ToString().Length)
-                                            Dim value As Integer
-                                            If Integer.TryParse(numericPart, value) Then
-                                                Return value
-                                            End If
+                                        Dim value As Integer
+                                        If Integer.TryParse(row.Field(Of String)("C03"), value) Then
+                                            Return value
+                                        Else
+                                            Return 0
                                         End If
-                                        Return 0
                                     End Function).
                              DefaultIfEmpty(0).
                              Max()
 
         ' 最大値に1を加える
         Dim nextMaxVal As Integer = maxVal.GetValueOrDefault() + 1
-        val = $"{sDate_yymm}{MRType}{nextMaxVal.ToString("D" & NUMBER_LENGTH)}"
-
+        If nextMaxVal.ToString.Length > NUMBER_LENGTH Then
+            val = nextMaxVal
+        Else
+            val = $"{sDate_yymm}{MRType}{nextMaxVal.ToString("D" & NUMBER_LENGTH)}"
+        End If
+        log.cLog($"IN:{sDate_yymm} maxval:{maxVal} OUT:{val}")
         Return val
     End Function
-
 
     ' 指定文字のセルに値を設定
     Sub SetValueDGV(searchWord As String, valueToSet As String)

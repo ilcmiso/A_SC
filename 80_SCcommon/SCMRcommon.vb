@@ -117,6 +117,7 @@
             Next
             dgv.Rows.Add(newRow)
         Next
+        dgv.Sort(dgv.Columns(2), ComponentModel.ListSortDirection.Descending)
     End Sub
 
     ' カラム名がキャンセル日の行が、空欄でなかったら行グレーアウト

@@ -226,6 +226,7 @@ Partial Class SCA1
         Me.Button1 = New System.Windows.Forms.Button()
         Me.TAB_A1 = New System.Windows.Forms.TabControl()
         Me.Tab_6GA = New System.Windows.Forms.TabPage()
+        Me.Button17 = New System.Windows.Forms.Button()
         Me.TB_MRPaymentDate = New System.Windows.Forms.TextBox()
         Me.Label8 = New System.Windows.Forms.Label()
         Me.L_MRSearchHit = New System.Windows.Forms.Label()
@@ -305,7 +306,6 @@ Partial Class SCA1
         Me.ToolStripMenuItem2 = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
         Me.ColorDialog1 = New System.Windows.Forms.ColorDialog()
-        Me.Button17 = New System.Windows.Forms.Button()
         Me.Tab_4Dun.SuspendLayout()
         CType(Me.DGV4, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.GroupBox1.SuspendLayout()
@@ -2436,6 +2436,20 @@ Partial Class SCA1
         Me.Tab_6GA.TabIndex = 5
         Me.Tab_6GA.Text = "申請物管理"
         '
+        'Button17
+        '
+        Me.Button17.BackColor = System.Drawing.Color.SteelBlue
+        Me.Button17.FlatAppearance.BorderColor = System.Drawing.Color.Black
+        Me.Button17.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Bold)
+        Me.Button17.ForeColor = System.Drawing.Color.White
+        Me.Button17.Location = New System.Drawing.Point(302, 372)
+        Me.Button17.Name = "Button17"
+        Me.Button17.Size = New System.Drawing.Size(142, 27)
+        Me.Button17.TabIndex = 1800
+        Me.Button17.TabStop = False
+        Me.Button17.Text = "顧客情報の表示"
+        Me.Button17.UseVisualStyleBackColor = False
+        '
         'TB_MRPaymentDate
         '
         Me.TB_MRPaymentDate.BackColor = System.Drawing.Color.White
@@ -3309,20 +3323,6 @@ Partial Class SCA1
         Me.MenuStrip1.Size = New System.Drawing.Size(1139, 19)
         Me.MenuStrip1.TabIndex = 1574
         Me.MenuStrip1.Text = "MenuStrip1"
-        '
-        'Button17
-        '
-        Me.Button17.BackColor = System.Drawing.Color.SteelBlue
-        Me.Button17.FlatAppearance.BorderColor = System.Drawing.Color.Black
-        Me.Button17.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Bold)
-        Me.Button17.ForeColor = System.Drawing.Color.White
-        Me.Button17.Location = New System.Drawing.Point(302, 372)
-        Me.Button17.Name = "Button17"
-        Me.Button17.Size = New System.Drawing.Size(142, 27)
-        Me.Button17.TabIndex = 1800
-        Me.Button17.TabStop = False
-        Me.Button17.Text = "顧客情報の表示"
-        Me.Button17.UseVisualStyleBackColor = False
         '
         'SCA1
         '

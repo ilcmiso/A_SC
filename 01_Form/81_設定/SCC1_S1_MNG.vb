@@ -45,16 +45,9 @@ Public Class SCC1_S1_MNG
         Dim commandNames As String() = {
             "サーバーのSC.exeのタイムスタンプ更新",
             "db3ファイル新規作成 (Value値)",
-            "PINFO DB移管",
-            "PINFO 移管後の変換",
-            "MR移管",
-            "再生の移行",
-            "破産の移行",
             "SQLite2SQLServer",
             "SQL速度比較",
-            "事前督促->事前案内 変換",
-            "申請物DB変換",
-            "DB変換0618"
+            "DB変換0619"
             }
         ListBox2.Items.Clear()
         For Each cl In commandNames
@@ -114,30 +107,11 @@ Public Class SCC1_S1_MNG
                 End Using
 
             Case 2
-                db.DataTransferFPINFO()
-
-            Case 3
-                db.DataTransferFPINFO2()
-
-            Case 4
-                db.DataTranceferMR()
-
-            Case 5
-                db.TransferSaiseiHasan(True)
-
-            Case 6
-                db.TransferSaiseiHasan(False)
-
-            Case 7
                 db.RestoreSQLServer()
-            Case 8
+            Case 3
                 db.SQLServerSpeedDiff()
-            Case 9
-                db.TransferJizen()
-            Case 10
-                db.MRDBFixTemp()
-            Case 11
-                db.MRDBFixTemp0618()
+            Case 4
+                db.MRDBFixTemp0619()
 
         End Select
         MsgBox("完了")
