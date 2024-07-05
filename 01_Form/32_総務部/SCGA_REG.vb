@@ -347,6 +347,10 @@
                                          If dgv.Rows(rowIndex).Cells(colIndex - 1).Value = "実施年月" And ownForm.ActiveControl.Name = BTADD Then
                                              SetValueDGV("番号", GetNextMaxValue(dtPicker.Value.ToString("yyMM")))
                                          End If
+                                         If dgv.Rows(rowIndex).Cells(colIndex - 1).Value = "完済日" And ownForm.ActiveControl.Name = BTADD Then
+                                             SetValueDGV("番号", GetNextMaxValue(dtPicker.Value.ToString("yyMM")))
+                                         End If
+
                                      End Sub
         AddHandler dtPicker.Leave, Sub(sender, e)
                                        DGV_REG1.Focus()
