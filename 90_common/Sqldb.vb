@@ -95,7 +95,6 @@ Public Class Sqldb
 
     Public OrgDataTable(DBTbl.GetLength(0) - 1) As DataTable               ' 各DBテーブルのマスターテーブル
     Public OrgDataTablePlusAssist As DataTable                                  ' FKSC+Assist のマスターテーブル
-    Public DTLastUpdateTime(DBTbl.GetLength(0) - 1) As DateTime            ' 各DBテーブルの最終更新日
     Private ReadOnly svCon(DBTbl.GetLength(0) - 1) As SQLiteConnection     ' サーバーコネクション
     Private ReadOnly svCmd(DBTbl.GetLength(0) - 1) As SQLiteCommand
     Private ReadOnly loCon(DBTbl.GetLength(0) - 1) As SQLiteConnection     ' ローカルコネクション
@@ -433,6 +432,7 @@ Public Class Sqldb
     ' オリジナルDTの更新
     Public Sub UpdateOrigDT()
         For Each tid In [Enum].GetValues(GetType(TID))
+            If tid = tid.SCD Then Continue For
             If DBTbl(tid, DBID.READTGT) Then UpdateOrigDT(tid)         ' SC_DBTableの「読み込み対象」がTrueのものだけを読み込む
         Next
     End Sub
@@ -440,7 +440,6 @@ Public Class Sqldb
         log.cLog($"UpdateOrigDT:{[Enum].GetName(GetType(TID), tid)}")
         cmn.UpdPBar("顧客情報の構築中")
         OrgDataTable(tid) = ReadOrgDtSelect(tid)
-        DTLastUpdateTime(tid) = Now     ' 最終更新日を設定
     End Sub
 
     ' オリジナルDT(アシスト)の更新 FKSC+AssistのDataTableを作成
@@ -616,15 +615,6 @@ Public Class Sqldb
         ExeSQL(TID.MR, "UPDATE TBL SET C21 = C20, C20 = C19, C19 = C18, C18 = C17, C17 = C16, C16 = C15, C15 = C14, C14 = C13, C13 = C12, C12 = C11, C11 = C10, C10 = C09, C09 = '' WHERE C02 = '1';")
         ExeSQL(TID.MR, "UPDATE TBL SET C21 = C20, C20 = C19, C19 = C18, C18 = C17, C17 = C16, C16 = C15, C15 = C14, C14 = C13, C13 = C12, C12 = C11, C11 = C10, C10 = '' WHERE C02 = '2';")
     End Sub
-
-    ' データベースの最終更新日を確認して、更新直後ならキャッシュがなくLINQを使用したほうが処理速度が早いことを利用するための判定。
-    ' Return : True  更新直後ではなくキャッシュあり
-    '          False 更新直後　※DB更新から1秒未満
-    Public Function CheckDBUpdateCache(tid As Integer) As Boolean
-        Dim uptimeDiff As Double = (DateTime.Now - DTLastUpdateTime(tid)).TotalSeconds
-        log.cLog($" uptimeDiff({tid}) : {uptimeDiff >= 1} {uptimeDiff}")
-        Return uptimeDiff >= 1
-    End Function
 
     ' 物件情報(FPIB) 顧客番号からの顧客キーを取得
     Public Function GetFPCOSKeyId(cid As String) As Integer

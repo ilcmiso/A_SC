@@ -50,7 +50,7 @@ Public Class SCE_S2
             If TabControl1.TabPages.Count = 2 Then TabControl1.TabPages.Remove(TabControl1.TabPages(1))        ' 顧客複数選択の非表示
 
             ' 登録済みデータ読み込み
-            Dim dt As DataTable = SCA1.db.OrgDataTable(Sqldb.TID.SCD).Select("[FKD01] = '" & SCA1.DGV2.CurrentRow.Cells(0).Value & "'").CopyToDataTable
+            Dim dt As DataTable = SCA1.db.GetSelect(Sqldb.TID.SCD, $"SELECT * From {SCA1.db.GetTable(Sqldb.TID.SCD)} WHERE FKD01 = '{SCA1.DGV2.CurrentRow.Cells(0).Value}'")
             If dt.Rows.Count = 1 Then
                 TB_A1.Text = dt.Rows(0).Item(2)             ' 日時
                 TB_A2.Text = dt.Rows(0).Item(3)             ' 相手
@@ -382,14 +382,16 @@ Public Class SCE_S2
     Private Sub ShowDGV1()
         DGV1.Rows.Clear()
         ' 交渉記録の日付が日付形式ではないものをピックアップしてアナウンスする
-        For x = 0 To SCA1.db.OrgDataTable(Sqldb.TID.SCD).Rows.Count - 1
-            If Not DateTime.TryParse(SCA1.db.OrgDataTable(Sqldb.TID.SCD).Rows(x)(2), Nothing) Then
+        Dim dt As DataTable = SCA1.db.GetSelect(Sqldb.TID.SCD, $"SELECT * FROM {SCA1.db.GetTable(Sqldb.TID.SCD)}")
+
+        For x = 0 To dt.Rows.Count - 1
+            If Not DateTime.TryParse(dt.Rows(x)(2), Nothing) Then
                 DGV1.Rows.Add()
-                DGV1(0, DGV1.Rows.Count - 1).Value = SCA1.db.OrgDataTable(Sqldb.TID.SCD).Rows(x)(0)
-                DGV1(1, DGV1.Rows.Count - 1).Value = SCA1.db.OrgDataTable(Sqldb.TID.SCD).Rows(x)(1)
-                DGV1(2, DGV1.Rows.Count - 1).Value = SCA1.db.OrgDataTable(Sqldb.TID.SCD).Rows(x)(8)
-                DGV1(3, DGV1.Rows.Count - 1).Value = SCA1.db.OrgDataTable(Sqldb.TID.SCD).Rows(x)(2)
-                DGV1(4, DGV1.Rows.Count - 1).Value = SCA1.db.OrgDataTable(Sqldb.TID.SCD).Rows(x)(5)
+                DGV1(0, DGV1.Rows.Count - 1).Value = dt.Rows(x)(0)
+                DGV1(1, DGV1.Rows.Count - 1).Value = dt.Rows(x)(1)
+                DGV1(2, DGV1.Rows.Count - 1).Value = dt.Rows(x)(8)
+                DGV1(3, DGV1.Rows.Count - 1).Value = dt.Rows(x)(2)
+                DGV1(4, DGV1.Rows.Count - 1).Value = dt.Rows(x)(5)
             End If
         Next
     End Sub
