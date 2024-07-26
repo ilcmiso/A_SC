@@ -165,6 +165,7 @@ Public Class SCE_S2
             'Else
             '    Me.DialogResult = DialogResult.OK
             'End If
+            SCA1.ExUpdateButton2()
             Me.Close()
         End If
     End Sub
@@ -382,7 +383,9 @@ Public Class SCE_S2
     Private Sub ShowDGV1()
         DGV1.Rows.Clear()
         ' 交渉記録の日付が日付形式ではないものをピックアップしてアナウンスする
-        Dim dt As DataTable = SCA1.db.GetSelect(Sqldb.TID.SCD, $"SELECT * FROM {SCA1.db.GetTable(Sqldb.TID.SCD)}")
+        SCA1.db.UpdateOrigDT(Sqldb.TID.SCD)
+        Dim dt As DataTable = SCA1.db.OrgDataTable(Sqldb.TID.SCD).Copy
+        'Dim dt As DataTable = SCA1.db.GetSelect(Sqldb.TID.SCD, $"SELECT * FROM {SCA1.db.GetTable(Sqldb.TID.SCD)}")
 
         For x = 0 To dt.Rows.Count - 1
             If Not DateTime.TryParse(dt.Rows(x)(2), Nothing) Then

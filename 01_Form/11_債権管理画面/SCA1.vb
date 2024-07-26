@@ -269,7 +269,7 @@ Public Class SCA1
         ' DGV2の指定行を削除
         Cursor.Current = Cursors.WaitCursor             ' マウスカーソルを砂時計に
         db.ExeSQL(Sqldb.TID.SCD, "Delete From FKSCD Where FKD01 = '" & id & "'")
-        ExUpdateButton()
+        ExUpdateButton2()
     End Sub
 
     ' 更新ボタン DGV1
@@ -277,7 +277,7 @@ Public Class SCA1
         cmn.StartPBar(7)
         cmn.UpdPBar("顧客情報ダウンロード中")
         db.DBFileFDL(Sqldb.TID.SCD)                     ' ファイル強制ダウンロード
-        db.UpdateOrigDT(Sqldb.TID.SCD)
+        'db.UpdateOrigDT(Sqldb.TID.SCD)
         db.UpdateOrigDT(Sqldb.TID.SCR)
 
         ShowDGVList(DGV2)
@@ -285,6 +285,11 @@ Public Class SCA1
         ShowDGVList(DGV5)
         ShowDunLB()
         cmn.EndPBar()
+    End Sub
+
+    Public Sub ExUpdateButton2()
+        db.DBFileFDL(Sqldb.TID.SCD)                     ' ファイル強制ダウンロード
+        ShowDGVList(DGV2)
     End Sub
 
     ' 印刷ボタン
@@ -379,6 +384,7 @@ Public Class SCA1
             Case Keys.F2
             Case Keys.F3
             Case Keys.F4
+                Dim task = db.UpdateOrigDTAsync(Sqldb.TID.SCD)
         End Select
     End Sub
 
@@ -905,7 +911,8 @@ Public Class SCA1
     ' 他PCでDB更新を通知
     Private Sub UpdateDB_SCD()
         log.cLog("-- UpdateDB_SCD")
-        ' L_UPD.Visible = True
+
+        ShowDGVList(DGV2)                               ' 交渉記録
 
         ' 自動更新チェックがONの場合のみ自動更新
         If CB_AUTOUPD.Checked Then

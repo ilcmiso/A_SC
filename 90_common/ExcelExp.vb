@@ -231,6 +231,6 @@
         cmn.EndPBar()
         Eclose()
         Process.Start(oPath)
-        If fixDB Then db.UpdateOrigDT(Sqldb.TID.SCD)            ' 日付を修正したDBを元に戻す
+        'If fixDB Then db.UpdateOrigDT(Sqldb.TID.SCD)            ' 日付を修正したDBを元に戻す
     End Sub
 End Class

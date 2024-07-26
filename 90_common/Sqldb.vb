@@ -1,9 +1,8 @@
 ﻿Imports System.Data.SqlClient
 Imports System.Data.SQLite
 Imports System.IO
-Imports AdvanceSoftware.PDF.Drawing.EMF.Records
-Imports DocumentFormat.OpenXml.Bibliography
-Imports DocumentFormat.OpenXml.Office.Word
+Imports System.Threading
+Imports System.Threading.Tasks
 
 Public Class Sqldb
     Private ReadOnly log As New Log
@@ -439,7 +438,8 @@ Public Class Sqldb
     Public Sub UpdateOrigDT(tid As TID)
         log.cLog($"UpdateOrigDT:{[Enum].GetName(GetType(TID), tid)}")
         cmn.UpdPBar("顧客情報の構築中")
-        OrgDataTable(tid) = ReadOrgDtSelect(tid)
+        Dim tempDt As DataTable = ReadOrgDtSelect(tid)
+        OrgDataTable(tid) = tempDt
     End Sub
 
     ' オリジナルDT(アシスト)の更新 FKSC+AssistのDataTableを作成
@@ -634,6 +634,15 @@ Public Class Sqldb
     ' TIDからカラム数取得
     Public Function GetColumCount(tid As TID) As Integer
         Return DBTbl(tid, Sqldb.DBID.CNUM)
+    End Function
+
+    '#### Async 関連     #################################################
+    ' 非同期でUpdateOrigDTを実行するメソッド
+    Public Async Function UpdateOrigDTAsync(tid As TID) As Task
+        ' Task.Runでバックグラウンドスレッドで実行
+        Await Task.Run(Sub() UpdateOrigDT(tid))
+        ' 処理完了後にメッセージボックスを表示
+        MessageBox.Show("UpdateOrigDT has completed.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information)
     End Function
 
     '#### SQL Server関連 #################################################
