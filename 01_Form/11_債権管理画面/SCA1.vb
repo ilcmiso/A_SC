@@ -2202,8 +2202,10 @@ Public Class SCA1
         FilterMRSearch(TB_MRSearch.Text)
 
         mrcmn.PaymentDateColor()                ' 完済日が5～13日の間は色付け
-        mrcmn.HighlightCancelledRows(DGV_MR1)   ' キャンセル日の色付け
-        mrcmn.HighlightCompletedRows(DGV_MR1)   ' ステータス完了の色付け
+        mrcmn.HighlightRows(DGV_MR1, "キャンセル日", "", System.Drawing.Color.DarkGray)
+        mrcmn.HighlightRows(DGV_MR1, "ステータス", "完了", System.Drawing.Color.GreenYellow)
+        mrcmn.HighlightRows(DGV_MR1, "抹消発送日", "", System.Drawing.Color.DarkGray)
+        mrcmn.HighlightRows(DGV_MR1, "ステータス", "取下げ", System.Drawing.Color.Salmon)
 
         cmn.SetComboBoxUniqueDGVItems(DGV_MR1, "担当者", CB_Person, "(全表示)")   ' 担当コンボボックス設定
         log.TimerED("ShowDGVMR")

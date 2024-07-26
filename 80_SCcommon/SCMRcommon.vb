@@ -1,4 +1,6 @@
-﻿Public Class SCMRcommon
+﻿Imports DocumentFormat.OpenXml.Spreadsheet
+
+Public Class SCMRcommon
 
     Private ReadOnly cmn As New Common
     ' 申請物管理
@@ -120,36 +122,23 @@
         dgv.Sort(dgv.Columns(2), ComponentModel.ListSortDirection.Descending)
     End Sub
 
-    ' カラム名がキャンセル日の行が、空欄でなかったら行グレーアウト
-    Public Sub HighlightCancelledRows(dgv As DataGridView)
-        ' "キャンセル日"カラムのインデックスを探す
-        Dim columnIndex As Integer = cmn.FindColumnIndex(dgv, "キャンセル日")
+    ' DataGridViewの指定カラムに指定文字列が含まれる場合、その行の全セルの背景色を変更する汎用メソッド
+    Public Sub HighlightRows(dgv As DataGridView, columnName As String, hitWords As String, color As System.Drawing.Color)
+        ' カラムのインデックスを探す
+        Dim columnIndex As Integer = cmn.FindColumnIndex(dgv, columnName)
         If columnIndex = -1 Then Return ' カラムが見つからなければ処理を終了
 
         ' DataGridViewの各行をループして条件に一致する行のセルの背景色を変更
         For Each row As DataGridViewRow In dgv.Rows
-            If Not row.IsNewRow AndAlso Not IsDBNull(row.Cells(columnIndex).Value) AndAlso Not String.IsNullOrEmpty(Trim(row.Cells(columnIndex).Value.ToString())) Then
-                ' キャンセル日が空欄でない場合、その行の全セルの背景色を薄いグレーに設定
-                For Each cell As DataGridViewCell In row.Cells
-                    cell.Style.BackColor = Color.LightGray
-                Next
-            End If
-        Next
-    End Sub
-
-    ' ステータスカラムが完了の場合に行の背景色をSkyBlueに変更
-    Public Sub HighlightCompletedRows(dgv As DataGridView)
-        ' "ステータス"カラムのインデックスを探す
-        Dim columnIndex As Integer = cmn.FindColumnIndex(dgv, "ステータス")
-        If columnIndex = -1 Then Return ' カラムが見つからなければ処理を終了
-
-        ' DataGridViewの各行をループして条件に一致する行のセルの背景色を変更
-        For Each row As DataGridViewRow In dgv.Rows
-            If Not row.IsNewRow AndAlso Not IsDBNull(row.Cells(columnIndex).Value) AndAlso row.Cells(columnIndex).Value.ToString().Contains("完了") Then
-                ' ステータスが完了を含む場合、その行の全セルの背景色をSkyBlueに設定
-                For Each cell As DataGridViewCell In row.Cells
-                    cell.Style.BackColor = Color.GreenYellow
-                Next
+            If Not row.IsNewRow AndAlso Not IsDBNull(row.Cells(columnIndex).Value) Then
+                Dim cellValue As String = row.Cells(columnIndex).Value.ToString()
+                If (String.IsNullOrEmpty(hitWords) AndAlso Not String.IsNullOrEmpty(cellValue)) OrElse (Not String.IsNullOrEmpty(hitWords) AndAlso cellValue.Contains(hitWords)) Then
+                    ' HitWordsが空欄の場合は指定カラムに何かが含まれていれば、その行の全セルの背景色を設定
+                    ' HitWordsが指定されている場合はその文字列が含まれている場合に背景色を設定
+                    For Each cell As DataGridViewCell In row.Cells
+                        cell.Style.BackColor = color
+                    Next
+                End If
             End If
         Next
     End Sub
