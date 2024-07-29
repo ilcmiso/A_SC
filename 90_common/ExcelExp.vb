@@ -38,9 +38,10 @@
         Dim fPath As String = cmn.CurrentPath & Common.DIR_EXC & Common.DIR_EXCFMT3 & Common.FILE_EXCREC
         If oPath = "" Then Exit Sub
         'Dim db As Sqldb = SCA1.db
+        'Dim dr As DataRow() = db.OrgDataTable(Sqldb.TID.SCD).Select(String.Format("FKD02 = '{0}'", cid))
+        Dim dt As DataTable = db.GetSelect(Sqldb.TID.SCD, $"SELECT * FROM {db.GetTable(Sqldb.TID.SCD)} WHERE FKD02 = '{cid}'")
 
-        Dim dr As DataRow() = db.OrgDataTable(Sqldb.TID.SCD).Select(String.Format("FKD02 = '{0}'", cid))
-        If dr.Length = 0 Then
+        If dt.Rows.Count = 0 Then
             MsgBox("交渉記録が見つかりません。")
             Exit Sub
         End If
@@ -49,15 +50,17 @@
         ret = Eopen(fPath, oPath)
         If Not ret Then Exit Sub
 
-        Dim sDr As DataRow() = db.OrgDataTable(Sqldb.TID.SC).Select(String.Format("FK02 = '{0}'", cid))     ' 連帯債務者名取得
-        Dim asDr As DataRow() = db.OrgDataTable(Sqldb.TID.SCAS).Select(String.Format("C02 = '{0}'", cid))   ' 証券番号取得
+        'Dim sDr As DataRow() = db.OrgDataTable(Sqldb.TID.SC).Select(String.Format("FK02 = '{0}'", cid))     ' 連帯債務者名取得
+        Dim scDt As DataTable = db.GetSelect(Sqldb.TID.SC, $"SELECT * FROM {db.GetTable(Sqldb.TID.SC)} WHERE FK02 = '{cid}'")     ' 連帯債務者名取得
+        'Dim asDr As DataRow() = db.OrgDataTable(Sqldb.TID.SCAS).Select(String.Format("C02 = '{0}'", cid))   ' 証券番号取得
+        Dim asDt As DataTable = db.GetSelect(Sqldb.TID.SCAS, $"SELECT * FROM {db.GetTable(Sqldb.TID.SCAS)} WHERE C02 = '{cid}'")  ' 証券番号取得
 
         Dim cNum As Integer = 0
         Dim sid As String = ""
-        Dim cName As String = cmn.FixSPName(dr(0)(8))
+        Dim cName As String = cmn.FixSPName(dt.Rows(0)(8))
         Dim sName As String = ""
-        If sDr.Length > 0 Then sName = cmn.FixSPName(sDr(0)(29))
-        If asDr.Length > 0 Then sid = asDr(0)(11)
+        If scDt.Rows.Count > 0 Then sName = cmn.FixSPName(scDt.Rows(0)(29))
+        If asDt.Rows.Count > 0 Then sid = asDt.Rows(0)(11)
 
         ' 一覧シート
         CreatorExpress1.SheetNo = 0
@@ -76,14 +79,14 @@
         CreatorExpress1.Pos(6, 0).Value = sid                 ' 証券番号
         CreatorExpress1.Pos(6, 1).Value = sName               ' 連帯債務者名
 
-        For rNum = 0 To dr.Length - 1
-            CreatorExpress1.Pos(0, rNum + RECORD_H).Value = dr(rNum)(2)
-            CreatorExpress1.Pos(1, rNum + RECORD_H).Value = dr(rNum)(3)
-            CreatorExpress1.Pos(2, rNum + RECORD_H).Value = dr(rNum)(10)
-            CreatorExpress1.Pos(3, rNum + RECORD_H).Value = dr(rNum)(4)
-            CreatorExpress1.Pos(4, rNum + RECORD_H).Value = dr(rNum)(12)
-            CreatorExpress1.Pos(5, rNum + RECORD_H).Value = dr(rNum)(5)
-            CreatorExpress1.Pos(6, rNum + RECORD_H).Value = dr(rNum)(6)
+        For rNum = 0 To dt.Rows.Count - 1
+            CreatorExpress1.Pos(0, rNum + RECORD_H).Value = dt.Rows(rNum)(2)
+            CreatorExpress1.Pos(1, rNum + RECORD_H).Value = dt.Rows(rNum)(3)
+            CreatorExpress1.Pos(2, rNum + RECORD_H).Value = dt.Rows(rNum)(10)
+            CreatorExpress1.Pos(3, rNum + RECORD_H).Value = dt.Rows(rNum)(4)
+            CreatorExpress1.Pos(4, rNum + RECORD_H).Value = dt.Rows(rNum)(12)
+            CreatorExpress1.Pos(5, rNum + RECORD_H).Value = dt.Rows(rNum)(5)
+            CreatorExpress1.Pos(6, rNum + RECORD_H).Value = dt.Rows(rNum)(6)
         Next
 
         Eclose()
@@ -100,20 +103,21 @@
         'Dim db As Sqldb = SCA1.db
 
         Dim s2 As SCE_S2 = SCA1.EditForm
+        Dim dt As DataTable = db.GetSelect(Sqldb.TID.SCD, $"SELECT * FROM {db.GetTable(Sqldb.TID.SCD)}")
 
         ' 交渉記録の日付が日付形式ではないものは、日付を変更しておく。
         ' 異常な日付が存在していると、DataTable.Selectの日付比較でエラーが発生してしまうため。
         Dim fixDB As Boolean = False      ' dbの日付を一時的に更新したフラグ。あとでdbを元に戻す
-        For x = 0 To db.OrgDataTable(Sqldb.TID.SCD).Rows.Count - 1
-            If Not DateTime.TryParse(db.OrgDataTable(Sqldb.TID.SCD).Rows(x)(2), Nothing) Then
-                db.OrgDataTable(Sqldb.TID.SCD).Rows(x).Item(2) = "2999/12/31"
+        For x = 0 To dt.Rows.Count - 1
+            If Not DateTime.TryParse(dt.Rows(x)(2), Nothing) Then
+                dt.Rows(x).Item(2) = "2999/12/31"
                 fixDB = True
             End If
         Next
 
         Dim stDate As String = s2.DTP_T4_A.Value.ToString("yyyy/MM/dd 00:00")
         Dim edDate As String = s2.DTP_T4_B.Value.ToString("yyyy/MM/dd 23:59")
-        Dim dr As DataRow() = db.OrgDataTable(Sqldb.TID.SCD).Select(String.Format("FKD03 <> '' And FKD03 >= #{0}# And FKD03 <= #{1}#", stDate, edDate), "FKD02, FKD03")
+        Dim dr As DataRow() = dt.Select(String.Format("FKD03 <> '' And FKD03 >= #{0}# And FKD03 <= #{1}#", stDate, edDate), "FKD02, FKD03")
         If dr.Length = 0 Then
             MsgBox("指定期間の交渉記録が見つかりません。")
             Exit Sub
@@ -227,6 +231,6 @@
         cmn.EndPBar()
         Eclose()
         Process.Start(oPath)
-        If fixDB Then db.UpdateOrigDT(Sqldb.TID.SCD)            ' 日付を修正したDBを元に戻す
+        'If fixDB Then db.UpdateOrigDT(Sqldb.TID.SCD)            ' 日付を修正したDBを元に戻す
     End Sub
 End Class

@@ -16,6 +16,7 @@ Public Class SCA1
     Public ReadOnly db As New Sqldb
     Private oview As SCGA_OVIEW
     Public xml As New XmlMng
+    Public MaxCosCount As Integer = 0               ' 顧客最大数(DB読み込み時)
 
     ' 監視
     Private PoolingStart As Boolean = False                         ' 監視フラグ
@@ -269,7 +270,7 @@ Public Class SCA1
         ' DGV2の指定行を削除
         Cursor.Current = Cursors.WaitCursor             ' マウスカーソルを砂時計に
         db.ExeSQL(Sqldb.TID.SCD, "Delete From FKSCD Where FKD01 = '" & id & "'")
-        ExUpdateButton()
+        ExUpdateButton2()
     End Sub
 
     ' 更新ボタン DGV1
@@ -277,7 +278,7 @@ Public Class SCA1
         cmn.StartPBar(7)
         cmn.UpdPBar("顧客情報ダウンロード中")
         db.DBFileFDL(Sqldb.TID.SCD)                     ' ファイル強制ダウンロード
-        db.UpdateOrigDT(Sqldb.TID.SCD)
+        'db.UpdateOrigDT(Sqldb.TID.SCD)
         db.UpdateOrigDT(Sqldb.TID.SCR)
 
         ShowDGVList(DGV2)
@@ -285,6 +286,11 @@ Public Class SCA1
         ShowDGVList(DGV5)
         ShowDunLB()
         cmn.EndPBar()
+    End Sub
+
+    Public Sub ExUpdateButton2()
+        db.DBFileFDL(Sqldb.TID.SCD)                     ' ファイル強制ダウンロード
+        ShowDGVList(DGV2)
     End Sub
 
     ' 印刷ボタン
@@ -379,6 +385,7 @@ Public Class SCA1
             Case Keys.F2
             Case Keys.F3
             Case Keys.F4
+                Dim task = db.UpdateOrigDTAsync(Sqldb.TID.SCD)
         End Select
     End Sub
 
@@ -426,6 +433,7 @@ Public Class SCA1
             Case dgv Is DGV1                                ' ## 顧客情報タブ リスト
                 bindID = 0
                 dt = db.OrgDataTablePlusAssist.Copy         ' DataTableをオリジナルからコピー
+                MaxCosCount = db.OrgDataTablePlusAssist.Rows.Count
                 ' AddREMtoDGV1(dt)                            ' REMをDGVに追加
 
                 ' ダミー顧客を生成
@@ -443,14 +451,7 @@ Public Class SCA1
                 ' DGV1の選択した顧客の交渉記録をフィルタ表示
                 If DGV1.Rows.Count > 0 Then
                     Dim dr As DataRow() = Nothing
-                    If db.CheckDBUpdateCache(Sqldb.TID.SCD) Then
-                        dr = db.OrgDataTable(Sqldb.TID.SCD).Select("FKD02 = '" & DGV1.CurrentRow.Cells(0).Value & "'")
-                    Else
-                        Dim query = From row In db.OrgDataTable(Sqldb.TID.SCD).AsEnumerable()
-                                    Where row.Field(Of String)("FKD02") = DGV1.CurrentRow.Cells(0).Value.ToString()
-                        dr = query.ToArray()
-                    End If
-                    If dr.Length > 0 Then dt = dr.CopyToDataTable
+                    dt = db.GetSelect(Sqldb.TID.SCD, $"SELECT * From {db.GetTable(Sqldb.TID.SCD)} WHERE FKD02 = '{DGV1.CurrentRow.Cells(0).Value}'")
                 End If
             'Case dgv Is DGV3                                ' ## タスクタブ リスト
             '    bindID = 2
@@ -602,7 +603,7 @@ Public Class SCA1
         Select Case True
             Case dgv Is DGV1
                 DGV1.Sort(DGV1.Columns(5), ComponentModel.ListSortDirection.Descending)
-                L_STS.Text = " ( " & DGV1.Rows.Count & " / " & db.OrgDataTablePlusAssist.Rows.Count & " ) 件 表示中"
+                L_STS.Text = " ( " & DGV1.Rows.Count & " / " & MaxCosCount & " ) 件 表示中"
                 EnableObjects(dgv.Rows.Count <> 0)              ' もしDGV1のメンバーが0なら編集できなくする
             Case dgv Is DGV2
                 TB_Remarks.Text = ""         ' 備考欄初期化
@@ -614,7 +615,7 @@ Public Class SCA1
                 dgv.Sort(dgv.Columns(2), ComponentModel.ListSortDirection.Descending)
             Case dgv Is DGV5
                 DGV5_CellClick()
-                L_STS_Rec.Text = " ( " & DGV5.Rows.Count & " / " & db.OrgDataTable(Sqldb.TID.SCD).Rows.Count & " ) 件 表示中"
+                L_STS_Rec.Text = " ( " & DGV5.Rows.Count & " / " & maxCosCount & " ) 件 表示中"
                 'Case dgv Is DGV7
 
             Case Else
@@ -912,7 +913,8 @@ Public Class SCA1
     ' 他PCでDB更新を通知
     Private Sub UpdateDB_SCD()
         log.cLog("-- UpdateDB_SCD")
-        ' L_UPD.Visible = True
+
+        ShowDGVList(DGV2)                               ' 交渉記録
 
         ' 自動更新チェックがONの場合のみ自動更新
         If CB_AUTOUPD.Checked Then
@@ -1137,7 +1139,8 @@ Public Class SCA1
 
     ' 記録一覧フィルタ ShowDGVListにコールされる
     Private Function FilterDGV5() As DataTable
-        Dim dr As DataRow()
+        Cursor.Current = Cursors.WaitCursor             ' マウスカーソルを砂時計に
+
         ' チェック全解除の場合は0行で表示
         If CLB_RecB1.CheckedItems.Count = 0 Or CLB_RecB2.CheckedItems.Count = 0 Then
             Return Nothing
@@ -1173,12 +1176,14 @@ Public Class SCA1
         If methodCmd.Length > 0 Then selectCmd += $" And ({methodCmd})"
         If personCmd.Length > 0 Then selectCmd += $" And ({personCmd})"
         selectCmd = cmn.RegReplace(selectCmd, "^ And ", "")  ' 先頭の And を削除
-        dr = db.OrgDataTable(Sqldb.TID.SCD).Select(selectCmd, "FKD03 DESC")
-        'Return  db.SqlServerSelect($"SELECT * FROM SCD WHERE {selectCmd} ORDER BY [FKD03] DESC")
-        If dr.Length = 0 Then
-            Return Nothing
+
+        Dim dt As DataTable
+        If selectCmd.Length > 0 Then
+            dt = db.GetSelect(Sqldb.TID.SCD, $"SELECT * FROM {db.GetTable(Sqldb.TID.SCD)} WHERE {selectCmd} ORDER BY FKD03 DESC")
+        Else
+            dt = db.GetSelect(Sqldb.TID.SCD, $"SELECT * FROM {db.GetTable(Sqldb.TID.SCD)} ORDER BY FKD03 DESC")
         End If
-        Return dr.CopyToDataTable
+        Return dt
     End Function
 
 

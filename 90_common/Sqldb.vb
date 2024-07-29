@@ -1,9 +1,8 @@
 ﻿Imports System.Data.SqlClient
 Imports System.Data.SQLite
 Imports System.IO
-Imports AdvanceSoftware.PDF.Drawing.EMF.Records
-Imports DocumentFormat.OpenXml.Bibliography
-Imports DocumentFormat.OpenXml.Office.Word
+Imports System.Threading
+Imports System.Threading.Tasks
 
 Public Class Sqldb
     Private ReadOnly log As New Log
@@ -95,7 +94,6 @@ Public Class Sqldb
 
     Public OrgDataTable(DBTbl.GetLength(0) - 1) As DataTable               ' 各DBテーブルのマスターテーブル
     Public OrgDataTablePlusAssist As DataTable                                  ' FKSC+Assist のマスターテーブル
-    Public DTLastUpdateTime(DBTbl.GetLength(0) - 1) As DateTime            ' 各DBテーブルの最終更新日
     Private ReadOnly svCon(DBTbl.GetLength(0) - 1) As SQLiteConnection     ' サーバーコネクション
     Private ReadOnly svCmd(DBTbl.GetLength(0) - 1) As SQLiteCommand
     Private ReadOnly loCon(DBTbl.GetLength(0) - 1) As SQLiteConnection     ' ローカルコネクション
@@ -433,14 +431,15 @@ Public Class Sqldb
     ' オリジナルDTの更新
     Public Sub UpdateOrigDT()
         For Each tid In [Enum].GetValues(GetType(TID))
+            If tid = tid.SCD Then Continue For
             If DBTbl(tid, DBID.READTGT) Then UpdateOrigDT(tid)         ' SC_DBTableの「読み込み対象」がTrueのものだけを読み込む
         Next
     End Sub
     Public Sub UpdateOrigDT(tid As TID)
         log.cLog($"UpdateOrigDT:{[Enum].GetName(GetType(TID), tid)}")
         cmn.UpdPBar("顧客情報の構築中")
-        OrgDataTable(tid) = ReadOrgDtSelect(tid)
-        DTLastUpdateTime(tid) = Now     ' 最終更新日を設定
+        Dim tempDt As DataTable = ReadOrgDtSelect(tid)
+        OrgDataTable(tid) = tempDt
     End Sub
 
     ' オリジナルDT(アシスト)の更新 FKSC+AssistのDataTableを作成
@@ -617,15 +616,6 @@ Public Class Sqldb
         ExeSQL(TID.MR, "UPDATE TBL SET C21 = C20, C20 = C19, C19 = C18, C18 = C17, C17 = C16, C16 = C15, C15 = C14, C14 = C13, C13 = C12, C12 = C11, C11 = C10, C10 = '' WHERE C02 = '2';")
     End Sub
 
-    ' データベースの最終更新日を確認して、更新直後ならキャッシュがなくLINQを使用したほうが処理速度が早いことを利用するための判定。
-    ' Return : True  更新直後ではなくキャッシュあり
-    '          False 更新直後　※DB更新から1秒未満
-    Public Function CheckDBUpdateCache(tid As Integer) As Boolean
-        Dim uptimeDiff As Double = (DateTime.Now - DTLastUpdateTime(tid)).TotalSeconds
-        log.cLog($" uptimeDiff({tid}) : {uptimeDiff >= 1} {uptimeDiff}")
-        Return uptimeDiff >= 1
-    End Function
-
     ' 物件情報(FPIB) 顧客番号からの顧客キーを取得
     Public Function GetFPCOSKeyId(cid As String) As Integer
         Dim dt As DataTable = GetSelect(Sqldb.TID.FPCOS, $"Select C01 From {DBTbl(Sqldb.TID.FPCOS, Sqldb.DBID.TABLE)} Where C02 = '{cid}'")
@@ -644,6 +634,15 @@ Public Class Sqldb
     ' TIDからカラム数取得
     Public Function GetColumCount(tid As TID) As Integer
         Return DBTbl(tid, Sqldb.DBID.CNUM)
+    End Function
+
+    '#### Async 関連     #################################################
+    ' 非同期でUpdateOrigDTを実行するメソッド
+    Public Async Function UpdateOrigDTAsync(tid As TID) As Task
+        ' Task.Runでバックグラウンドスレッドで実行
+        Await Task.Run(Sub() UpdateOrigDT(tid))
+        ' 処理完了後にメッセージボックスを表示
+        MessageBox.Show("UpdateOrigDT has completed.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information)
     End Function
 
     '#### SQL Server関連 #################################################
