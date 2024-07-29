@@ -95,13 +95,13 @@ Public Class VBR_DGV2
         CellReport1.Cell("E7").Value = SCA1.DGV9(6, 9).Value         ' 延滞月数
         CellReport1.Cell("E8").Value = SCA1.DGV9(6, 10).Value        ' 延滞合計額
 
-        CellReport1.Cell("E10").Value = SCA1.DGV9(1, 11).Value       ' 居住サイン
-        CellReport1.Cell("E11").Value = SCA1.DGV9(3, 11).Value       ' 物件郵便番号
-        CellReport1.Cell("E12").Value = SCA1.DGV9(1, 12).Value       ' 物件住所
-        CellReport1.Cell("E13").Value = SCA1.DGV9(1, 13).Value       ' 金融機関
-        CellReport1.Cell("E14").Value = SCA1.DGV9(3, 13).Value       ' 支店コード
-        CellReport1.Cell("E15").Value = SCA1.DGV9(1, 14).Value       ' 口座番号
-        CellReport1.Cell("E16").Value = SCA1.DGV9(3, 14).Value       ' 口座名義
+        CellReport1.Cell("E10").Value = SCA1.DGV9(8, 1).Value       ' 居住サイン
+        CellReport1.Cell("E11").Value = SCA1.DGV9(8, 2).Value       ' 物件郵便番号
+        CellReport1.Cell("E12").Value = SCA1.DGV9(8, 3).Value       ' 物件住所
+        CellReport1.Cell("E13").Value = SCA1.DGV9(8, 4).Value       ' 金融機関
+        CellReport1.Cell("E14").Value = SCA1.DGV9(8, 5).Value       ' 支店コード
+        CellReport1.Cell("E15").Value = SCA1.DGV9(8, 6).Value       ' 口座番号
+        CellReport1.Cell("E16").Value = SCA1.DGV9(8, 7).Value       ' 口座名義
 
         CellReport1.Cell("G1").Value = SCA1.TB_FreeMemo.Text          ' フリーメモ
 

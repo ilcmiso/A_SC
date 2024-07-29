@@ -2283,6 +2283,8 @@ Public Class SCA1
 
         ' DataGridViewの各行を走査
         For Each row As DataGridViewRow In DGV_MR1.Rows
+            row.Visible = False
+
             ' 日付の範囲チェック
             If Not CB_MRRangeAll.Checked Then
                 Dim dateValue As Date = DateTime.Parse(row.Cells(3).Value.ToString())
