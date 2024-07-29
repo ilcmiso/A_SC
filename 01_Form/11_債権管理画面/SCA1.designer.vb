@@ -25,11 +25,7 @@ Partial Class SCA1
         Me.components = New System.ComponentModel.Container()
         Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle3 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle4 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle5 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle6 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle7 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle8 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle9 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle10 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
@@ -37,14 +33,7 @@ Partial Class SCA1
         Dim DataGridViewCellStyle12 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle13 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle19 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle14 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle15 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle16 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle17 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle18 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle20 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle21 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle22 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle23 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle24 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle25 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
@@ -55,12 +44,23 @@ Partial Class SCA1
         Dim DataGridViewCellStyle30 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle31 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle32 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle14 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle15 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle16 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle17 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle18 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle3 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle4 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle33 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle34 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle35 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle36 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle37 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle38 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle6 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle7 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle21 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle22 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(SCA1))
         Me.PBXX = New System.Windows.Forms.Button()
         Me.tt1 = New System.Windows.Forms.ToolTip(Me.components)
@@ -70,14 +70,6 @@ Partial Class SCA1
         Me.Button9 = New System.Windows.Forms.Button()
         Me.Label42 = New System.Windows.Forms.Label()
         Me.DGV4 = New System.Windows.Forms.DataGridView()
-        Me.Column18 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Column12 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Column17 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Column11 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Column14 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Column15 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Column16 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Column35 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.LB_DunRead = New System.Windows.Forms.ListBox()
         Me.L_STS_Dun2 = New System.Windows.Forms.Label()
         Me.Label45 = New System.Windows.Forms.Label()
@@ -108,17 +100,6 @@ Partial Class SCA1
         Me.TB_DunIN = New System.Windows.Forms.TextBox()
         Me.Button14 = New System.Windows.Forms.Button()
         Me.DGV6 = New System.Windows.Forms.DataGridView()
-        Me.DataGridViewTextBoxColumn10 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Column19 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.DataGridViewTextBoxColumn14 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.DataGridViewTextBoxColumn15 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Column31 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.DataGridViewTextBoxColumn13 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Column32 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Column33 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Column34 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Column36 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Column37 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Button13 = New System.Windows.Forms.Button()
         Me.Button12 = New System.Windows.Forms.Button()
         Me.Button11 = New System.Windows.Forms.Button()
@@ -145,19 +126,6 @@ Partial Class SCA1
         Me.CLB_RecB2 = New System.Windows.Forms.CheckedListBox()
         Me.Button4 = New System.Windows.Forms.Button()
         Me.DGV5 = New System.Windows.Forms.DataGridView()
-        Me.Column38 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.DataGridViewTextBoxColumn3 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.DataGridViewTextBoxColumn4 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Column20 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Column21 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.DataGridViewTextBoxColumn5 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Column24 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.DataGridViewTextBoxColumn6 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Column29 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.DataGridViewTextBoxColumn7 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Column25 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.DataGridViewTextBoxColumn8 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.DataGridViewTextBoxColumn9 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Tab_1SC = New System.Windows.Forms.TabPage()
         Me.L_TYPE_H = New System.Windows.Forms.Label()
         Me.L_TYPE_A = New System.Windows.Forms.Label()
@@ -181,13 +149,6 @@ Partial Class SCA1
         Me.TB_ADDRESS2 = New System.Windows.Forms.TextBox()
         Me.TB_ADDRESS1 = New System.Windows.Forms.TextBox()
         Me.DGV9 = New System.Windows.Forms.DataGridView()
-        Me.DataGridViewTextBoxColumn19 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.DataGridViewTextBoxColumn20 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.DataGridViewTextBoxColumn21 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.DataGridViewTextBoxColumn22 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Column39 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Column40 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Column41 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.CB_AUTOUPD = New System.Windows.Forms.CheckBox()
         Me.Label32 = New System.Windows.Forms.Label()
         Me.Label30 = New System.Windows.Forms.Label()
@@ -195,17 +156,6 @@ Partial Class SCA1
         Me.BT_B4 = New System.Windows.Forms.Button()
         Me.BT_B2 = New System.Windows.Forms.Button()
         Me.DGV2 = New System.Windows.Forms.DataGridView()
-        Me.Column9 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.DataGridViewTextBoxColumn1 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.DataGridViewTextBoxColumn2 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Column22 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Column4 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Column7 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Column23 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.督促通知日 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Column3 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Column13 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Column30 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.TB_FreeMemo = New System.Windows.Forms.TextBox()
         Me.TB_Remarks = New System.Windows.Forms.TextBox()
         Me.Button6 = New System.Windows.Forms.Button()
@@ -286,16 +236,6 @@ Partial Class SCA1
         Me.TB_FPMNG_Search = New System.Windows.Forms.TextBox()
         Me.Button16 = New System.Windows.Forms.Button()
         Me.DGV_FPMNG = New System.Windows.Forms.DataGridView()
-        Me.C01 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.C02 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.C03 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.C04 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.C05 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.C06 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.C10 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.C09 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.C08 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.C07 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.CreatorExpress1 = New AdvanceSoftware.ExcelCreator.Xlsx.CreatorExpress(Me.components)
         Me.データ読み込みToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.機能ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -306,6 +246,68 @@ Partial Class SCA1
         Me.ToolStripMenuItem2 = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
         Me.ColorDialog1 = New System.Windows.Forms.ColorDialog()
+        Me.DataGridViewTextBoxColumn19 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.DataGridViewTextBoxColumn20 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.DataGridViewTextBoxColumn21 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.DataGridViewTextBoxColumn22 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Column39 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Column40 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Column41 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Column27 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Column28 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Column18 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Column12 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Column17 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Column11 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Column14 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Column15 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Column16 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Column35 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.DataGridViewTextBoxColumn10 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Column19 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.DataGridViewTextBoxColumn14 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.DataGridViewTextBoxColumn15 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Column31 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.DataGridViewTextBoxColumn13 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Column32 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Column33 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Column34 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Column36 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Column37 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.C01 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.C02 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.C03 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.C04 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.C05 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.C06 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.C10 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.C09 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.C08 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.C07 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Column38 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.DataGridViewTextBoxColumn3 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.DataGridViewTextBoxColumn4 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Column20 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Column21 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.DataGridViewTextBoxColumn5 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Column24 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.DataGridViewTextBoxColumn6 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Column29 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.DataGridViewTextBoxColumn7 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Column25 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.DataGridViewTextBoxColumn8 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.DataGridViewTextBoxColumn9 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Column9 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.DataGridViewTextBoxColumn1 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.DataGridViewTextBoxColumn2 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Column22 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Column4 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Column7 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Column23 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.督促通知日 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Column3 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Column13 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Column30 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Tab_4Dun.SuspendLayout()
         CType(Me.DGV4, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.GroupBox1.SuspendLayout()
@@ -354,7 +356,7 @@ Partial Class SCA1
         Me.L_UPDMsg.BackColor = System.Drawing.Color.Fuchsia
         Me.L_UPDMsg.Font = New System.Drawing.Font("メイリオ", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.L_UPDMsg.ForeColor = System.Drawing.Color.Transparent
-        Me.L_UPDMsg.Location = New System.Drawing.Point(880, 1)
+        Me.L_UPDMsg.Location = New System.Drawing.Point(1120, 1)
         Me.L_UPDMsg.Name = "L_UPDMsg"
         Me.L_UPDMsg.Size = New System.Drawing.Size(250, 17)
         Me.L_UPDMsg.TabIndex = 1573
@@ -385,7 +387,7 @@ Partial Class SCA1
         Me.Tab_4Dun.Location = New System.Drawing.Point(4, 20)
         Me.Tab_4Dun.Name = "Tab_4Dun"
         Me.Tab_4Dun.Padding = New System.Windows.Forms.Padding(3)
-        Me.Tab_4Dun.Size = New System.Drawing.Size(1132, 682)
+        Me.Tab_4Dun.Size = New System.Drawing.Size(1369, 682)
         Me.Tab_4Dun.TabIndex = 2
         Me.Tab_4Dun.Text = "督促状管理"
         '
@@ -395,7 +397,7 @@ Partial Class SCA1
         Me.Button18.FlatAppearance.BorderColor = System.Drawing.Color.Black
         Me.Button18.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.Button18.ForeColor = System.Drawing.Color.Cyan
-        Me.Button18.Location = New System.Drawing.Point(920, 407)
+        Me.Button18.Location = New System.Drawing.Point(1158, 407)
         Me.Button18.Name = "Button18"
         Me.Button18.Size = New System.Drawing.Size(206, 40)
         Me.Button18.TabIndex = 1766
@@ -409,7 +411,7 @@ Partial Class SCA1
         Me.Button9.FlatAppearance.BorderColor = System.Drawing.Color.Black
         Me.Button9.Font = New System.Drawing.Font("メイリオ", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.Button9.ForeColor = System.Drawing.Color.Black
-        Me.Button9.Location = New System.Drawing.Point(917, 52)
+        Me.Button9.Location = New System.Drawing.Point(1155, 52)
         Me.Button9.Name = "Button9"
         Me.Button9.Size = New System.Drawing.Size(206, 27)
         Me.Button9.TabIndex = 1765
@@ -425,7 +427,7 @@ Partial Class SCA1
         Me.Label42.ForeColor = System.Drawing.Color.White
         Me.Label42.Location = New System.Drawing.Point(0, 338)
         Me.Label42.Name = "Label42"
-        Me.Label42.Size = New System.Drawing.Size(699, 28)
+        Me.Label42.Size = New System.Drawing.Size(925, 28)
         Me.Label42.TabIndex = 1762
         Me.Label42.Text = "下記の顧客の督促状を作成・送付履歴の記録をする"
         Me.Label42.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -457,75 +459,9 @@ Partial Class SCA1
         Me.DGV4.RowTemplate.Height = 21
         Me.DGV4.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
         Me.DGV4.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.DGV4.Size = New System.Drawing.Size(784, 292)
+        Me.DGV4.Size = New System.Drawing.Size(1021, 292)
         Me.DGV4.TabIndex = 1571
         Me.DGV4.TabStop = False
-        '
-        'Column18
-        '
-        Me.Column18.HeaderText = "識別番号"
-        Me.Column18.MinimumWidth = 6
-        Me.Column18.Name = "Column18"
-        Me.Column18.ReadOnly = True
-        Me.Column18.Visible = False
-        Me.Column18.Width = 110
-        '
-        'Column12
-        '
-        Me.Column12.HeaderText = "記録日時"
-        Me.Column12.MinimumWidth = 6
-        Me.Column12.Name = "Column12"
-        Me.Column12.ReadOnly = True
-        Me.Column12.Visible = False
-        Me.Column12.Width = 140
-        '
-        'Column17
-        '
-        Me.Column17.HeaderText = "督促日"
-        Me.Column17.MinimumWidth = 6
-        Me.Column17.Name = "Column17"
-        Me.Column17.ReadOnly = True
-        Me.Column17.Width = 90
-        '
-        'Column11
-        '
-        Me.Column11.HeaderText = "債務番号"
-        Me.Column11.MinimumWidth = 6
-        Me.Column11.Name = "Column11"
-        Me.Column11.ReadOnly = True
-        Me.Column11.Width = 120
-        '
-        'Column14
-        '
-        Me.Column14.HeaderText = "債務者名"
-        Me.Column14.MinimumWidth = 6
-        Me.Column14.Name = "Column14"
-        Me.Column14.ReadOnly = True
-        Me.Column14.Width = 140
-        '
-        'Column15
-        '
-        Me.Column15.HeaderText = "債務者カナ"
-        Me.Column15.MinimumWidth = 6
-        Me.Column15.Name = "Column15"
-        Me.Column15.ReadOnly = True
-        Me.Column15.Width = 140
-        '
-        'Column16
-        '
-        Me.Column16.HeaderText = "相手"
-        Me.Column16.MinimumWidth = 6
-        Me.Column16.Name = "Column16"
-        Me.Column16.ReadOnly = True
-        Me.Column16.Width = 90
-        '
-        'Column35
-        '
-        Me.Column35.HeaderText = "内容"
-        Me.Column35.MinimumWidth = 6
-        Me.Column35.Name = "Column35"
-        Me.Column35.ReadOnly = True
-        Me.Column35.Width = 195
         '
         'LB_DunRead
         '
@@ -568,7 +504,7 @@ Partial Class SCA1
         Me.Button15.FlatAppearance.BorderColor = System.Drawing.Color.Black
         Me.Button15.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.Button15.ForeColor = System.Drawing.Color.Cyan
-        Me.Button15.Location = New System.Drawing.Point(920, 361)
+        Me.Button15.Location = New System.Drawing.Point(1158, 361)
         Me.Button15.Name = "Button15"
         Me.Button15.Size = New System.Drawing.Size(206, 40)
         Me.Button15.TabIndex = 1761
@@ -612,7 +548,7 @@ Partial Class SCA1
         Me.GroupBox1.Controls.Add(Me.Label35)
         Me.GroupBox1.Controls.Add(Me.NUD_DunA1)
         Me.GroupBox1.Font = New System.Drawing.Font("メイリオ", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.GroupBox1.Location = New System.Drawing.Point(705, 451)
+        Me.GroupBox1.Location = New System.Drawing.Point(931, 453)
         Me.GroupBox1.Name = "GroupBox1"
         Me.GroupBox1.Size = New System.Drawing.Size(418, 217)
         Me.GroupBox1.TabIndex = 1759
@@ -870,7 +806,7 @@ Partial Class SCA1
         '
         Me.TB_DunIN.Font = New System.Drawing.Font("メイリオ", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.TB_DunIN.ForeColor = System.Drawing.SystemColors.InfoText
-        Me.TB_DunIN.Location = New System.Drawing.Point(705, 337)
+        Me.TB_DunIN.Location = New System.Drawing.Point(931, 336)
         Me.TB_DunIN.MaxLength = 2000000000
         Me.TB_DunIN.Multiline = True
         Me.TB_DunIN.Name = "TB_DunIN"
@@ -884,7 +820,7 @@ Partial Class SCA1
         Me.Button14.FlatAppearance.BorderColor = System.Drawing.Color.Black
         Me.Button14.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.Button14.ForeColor = System.Drawing.Color.Cyan
-        Me.Button14.Location = New System.Drawing.Point(920, 315)
+        Me.Button14.Location = New System.Drawing.Point(1158, 315)
         Me.Button14.Name = "Button14"
         Me.Button14.Size = New System.Drawing.Size(206, 40)
         Me.Button14.TabIndex = 1756
@@ -918,102 +854,9 @@ Partial Class SCA1
         Me.DGV6.RowTemplate.Height = 21
         Me.DGV6.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
         Me.DGV6.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.DGV6.Size = New System.Drawing.Size(698, 286)
+        Me.DGV6.Size = New System.Drawing.Size(924, 286)
         Me.DGV6.TabIndex = 1754
         Me.DGV6.TabStop = False
-        '
-        'DataGridViewTextBoxColumn10
-        '
-        Me.DataGridViewTextBoxColumn10.HeaderText = "債務番号"
-        Me.DataGridViewTextBoxColumn10.MinimumWidth = 6
-        Me.DataGridViewTextBoxColumn10.Name = "DataGridViewTextBoxColumn10"
-        Me.DataGridViewTextBoxColumn10.ReadOnly = True
-        Me.DataGridViewTextBoxColumn10.Width = 110
-        '
-        'Column19
-        '
-        Me.Column19.HeaderText = "ローン種別"
-        Me.Column19.MinimumWidth = 6
-        Me.Column19.Name = "Column19"
-        Me.Column19.ReadOnly = True
-        Me.Column19.Visible = False
-        Me.Column19.Width = 125
-        '
-        'DataGridViewTextBoxColumn14
-        '
-        Me.DataGridViewTextBoxColumn14.HeaderText = "債務者名"
-        Me.DataGridViewTextBoxColumn14.MinimumWidth = 6
-        Me.DataGridViewTextBoxColumn14.Name = "DataGridViewTextBoxColumn14"
-        Me.DataGridViewTextBoxColumn14.ReadOnly = True
-        Me.DataGridViewTextBoxColumn14.Width = 120
-        '
-        'DataGridViewTextBoxColumn15
-        '
-        Me.DataGridViewTextBoxColumn15.HeaderText = "債務者カナ"
-        Me.DataGridViewTextBoxColumn15.MinimumWidth = 6
-        Me.DataGridViewTextBoxColumn15.Name = "DataGridViewTextBoxColumn15"
-        Me.DataGridViewTextBoxColumn15.ReadOnly = True
-        Me.DataGridViewTextBoxColumn15.Width = 120
-        '
-        'Column31
-        '
-        Me.Column31.HeaderText = "残高更新日"
-        Me.Column31.MinimumWidth = 6
-        Me.Column31.Name = "Column31"
-        Me.Column31.ReadOnly = True
-        Me.Column31.Width = 90
-        '
-        'DataGridViewTextBoxColumn13
-        '
-        DataGridViewCellStyle3.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer), CType(CType(192, Byte), Integer))
-        DataGridViewCellStyle3.Format = "N0"
-        DataGridViewCellStyle3.NullValue = "0"
-        Me.DataGridViewTextBoxColumn13.DefaultCellStyle = DataGridViewCellStyle3
-        Me.DataGridViewTextBoxColumn13.HeaderText = "返済額1"
-        Me.DataGridViewTextBoxColumn13.MinimumWidth = 6
-        Me.DataGridViewTextBoxColumn13.Name = "DataGridViewTextBoxColumn13"
-        Me.DataGridViewTextBoxColumn13.Width = 70
-        '
-        'Column32
-        '
-        DataGridViewCellStyle4.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer), CType(CType(192, Byte), Integer))
-        DataGridViewCellStyle4.Format = "N2"
-        DataGridViewCellStyle4.NullValue = "0"
-        Me.Column32.DefaultCellStyle = DataGridViewCellStyle4
-        Me.Column32.HeaderText = "返済額2"
-        Me.Column32.MinimumWidth = 6
-        Me.Column32.Name = "Column32"
-        Me.Column32.Width = 70
-        '
-        'Column33
-        '
-        Me.Column33.HeaderText = "主債務者住所"
-        Me.Column33.MinimumWidth = 6
-        Me.Column33.Name = "Column33"
-        Me.Column33.Visible = False
-        Me.Column33.Width = 125
-        '
-        'Column34
-        '
-        Me.Column34.HeaderText = "連帯者住所"
-        Me.Column34.MinimumWidth = 6
-        Me.Column34.Name = "Column34"
-        Me.Column34.Visible = False
-        Me.Column34.Width = 125
-        '
-        'Column36
-        '
-        Me.Column36.HeaderText = "B返済額"
-        Me.Column36.MinimumWidth = 6
-        Me.Column36.Name = "Column36"
-        Me.Column36.Width = 70
-        '
-        'Column37
-        '
-        Me.Column37.HeaderText = "B月"
-        Me.Column37.MinimumWidth = 6
-        Me.Column37.Name = "Column37"
-        Me.Column37.Width = 40
         '
         'Button13
         '
@@ -1021,7 +864,7 @@ Partial Class SCA1
         Me.Button13.FlatAppearance.BorderColor = System.Drawing.Color.Black
         Me.Button13.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.Button13.ForeColor = System.Drawing.Color.Cyan
-        Me.Button13.Location = New System.Drawing.Point(920, 269)
+        Me.Button13.Location = New System.Drawing.Point(1158, 269)
         Me.Button13.Name = "Button13"
         Me.Button13.Size = New System.Drawing.Size(206, 40)
         Me.Button13.TabIndex = 1753
@@ -1035,7 +878,7 @@ Partial Class SCA1
         Me.Button12.FlatAppearance.BorderColor = System.Drawing.Color.Black
         Me.Button12.Font = New System.Drawing.Font("メイリオ", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.Button12.ForeColor = System.Drawing.Color.White
-        Me.Button12.Location = New System.Drawing.Point(917, 6)
+        Me.Button12.Location = New System.Drawing.Point(1155, 6)
         Me.Button12.Name = "Button12"
         Me.Button12.Size = New System.Drawing.Size(206, 40)
         Me.Button12.TabIndex = 1752
@@ -1049,7 +892,7 @@ Partial Class SCA1
         Me.Button11.FlatAppearance.BorderColor = System.Drawing.Color.Black
         Me.Button11.Font = New System.Drawing.Font("MS UI Gothic", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.Button11.ForeColor = System.Drawing.Color.White
-        Me.Button11.Location = New System.Drawing.Point(1023, 85)
+        Me.Button11.Location = New System.Drawing.Point(1261, 85)
         Me.Button11.Name = "Button11"
         Me.Button11.Size = New System.Drawing.Size(100, 27)
         Me.Button11.TabIndex = 1609
@@ -1063,7 +906,7 @@ Partial Class SCA1
         Me.Button10.FlatAppearance.BorderColor = System.Drawing.Color.Black
         Me.Button10.Font = New System.Drawing.Font("MS UI Gothic", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.Button10.ForeColor = System.Drawing.Color.White
-        Me.Button10.Location = New System.Drawing.Point(917, 85)
+        Me.Button10.Location = New System.Drawing.Point(1155, 85)
         Me.Button10.Name = "Button10"
         Me.Button10.Size = New System.Drawing.Size(100, 27)
         Me.Button10.TabIndex = 1607
@@ -1079,7 +922,7 @@ Partial Class SCA1
         Me.Label27.ForeColor = System.Drawing.Color.White
         Me.Label27.Location = New System.Drawing.Point(1, 0)
         Me.Label27.Name = "Label27"
-        Me.Label27.Size = New System.Drawing.Size(911, 28)
+        Me.Label27.Size = New System.Drawing.Size(1148, 28)
         Me.Label27.TabIndex = 1604
         Me.Label27.Text = "過去の送付履歴の閲覧"
         Me.Label27.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -1110,14 +953,14 @@ Partial Class SCA1
         Me.Tab_2Record.Location = New System.Drawing.Point(4, 20)
         Me.Tab_2Record.Name = "Tab_2Record"
         Me.Tab_2Record.Padding = New System.Windows.Forms.Padding(3)
-        Me.Tab_2Record.Size = New System.Drawing.Size(1132, 682)
+        Me.Tab_2Record.Size = New System.Drawing.Size(1369, 682)
         Me.Tab_2Record.TabIndex = 3
         Me.Tab_2Record.Text = "記録一覧"
         '
         'CB_RecRNG
         '
         Me.CB_RecRNG.AutoSize = True
-        Me.CB_RecRNG.Location = New System.Drawing.Point(891, 71)
+        Me.CB_RecRNG.Location = New System.Drawing.Point(1119, 71)
         Me.CB_RecRNG.Name = "CB_RecRNG"
         Me.CB_RecRNG.Size = New System.Drawing.Size(60, 16)
         Me.CB_RecRNG.TabIndex = 1769
@@ -1127,7 +970,7 @@ Partial Class SCA1
         'Label51
         '
         Me.Label51.AutoSize = True
-        Me.Label51.Location = New System.Drawing.Point(1001, 53)
+        Me.Label51.Location = New System.Drawing.Point(1229, 53)
         Me.Label51.Name = "Label51"
         Me.Label51.Size = New System.Drawing.Size(17, 12)
         Me.Label51.TabIndex = 1768
@@ -1139,7 +982,7 @@ Partial Class SCA1
         Me.DTP_Rec1ED.Font = New System.Drawing.Font("MS UI Gothic", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.DTP_Rec1ED.Format = System.Windows.Forms.DateTimePickerFormat.[Short]
         Me.DTP_Rec1ED.ImeMode = System.Windows.Forms.ImeMode.Off
-        Me.DTP_Rec1ED.Location = New System.Drawing.Point(1021, 47)
+        Me.DTP_Rec1ED.Location = New System.Drawing.Point(1249, 47)
         Me.DTP_Rec1ED.MaxDate = New Date(2100, 12, 31, 0, 0, 0, 0)
         Me.DTP_Rec1ED.MinDate = New Date(2000, 1, 1, 0, 0, 0, 0)
         Me.DTP_Rec1ED.Name = "DTP_Rec1ED"
@@ -1153,7 +996,7 @@ Partial Class SCA1
         Me.DTP_Rec1ST.Font = New System.Drawing.Font("MS UI Gothic", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.DTP_Rec1ST.Format = System.Windows.Forms.DateTimePickerFormat.[Short]
         Me.DTP_Rec1ST.ImeMode = System.Windows.Forms.ImeMode.Off
-        Me.DTP_Rec1ST.Location = New System.Drawing.Point(891, 47)
+        Me.DTP_Rec1ST.Location = New System.Drawing.Point(1119, 47)
         Me.DTP_Rec1ST.MaxDate = New Date(2100, 12, 31, 0, 0, 0, 0)
         Me.DTP_Rec1ST.MinDate = New Date(2000, 1, 1, 0, 0, 0, 0)
         Me.DTP_Rec1ST.Name = "DTP_Rec1ST"
@@ -1167,7 +1010,7 @@ Partial Class SCA1
         Me.Label5.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.Label5.Font = New System.Drawing.Font("メイリオ", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.Label5.ForeColor = System.Drawing.Color.White
-        Me.Label5.Location = New System.Drawing.Point(891, 24)
+        Me.Label5.Location = New System.Drawing.Point(1119, 24)
         Me.Label5.Name = "Label5"
         Me.Label5.Size = New System.Drawing.Size(234, 20)
         Me.Label5.TabIndex = 1759
@@ -1180,7 +1023,7 @@ Partial Class SCA1
         Me.Button8.FlatAppearance.BorderColor = System.Drawing.Color.Black
         Me.Button8.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.Button8.ForeColor = System.Drawing.Color.White
-        Me.Button8.Location = New System.Drawing.Point(889, 535)
+        Me.Button8.Location = New System.Drawing.Point(1117, 535)
         Me.Button8.Name = "Button8"
         Me.Button8.Size = New System.Drawing.Size(113, 27)
         Me.Button8.TabIndex = 1758
@@ -1194,7 +1037,7 @@ Partial Class SCA1
         Me.Button7.FlatAppearance.BorderColor = System.Drawing.Color.Black
         Me.Button7.Font = New System.Drawing.Font("メイリオ", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.Button7.ForeColor = System.Drawing.Color.White
-        Me.Button7.Location = New System.Drawing.Point(1009, 535)
+        Me.Button7.Location = New System.Drawing.Point(1237, 535)
         Me.Button7.Name = "Button7"
         Me.Button7.Size = New System.Drawing.Size(110, 57)
         Me.Button7.TabIndex = 1757
@@ -1204,7 +1047,7 @@ Partial Class SCA1
         '
         'BT_RecE2
         '
-        Me.BT_RecE2.Location = New System.Drawing.Point(1010, 444)
+        Me.BT_RecE2.Location = New System.Drawing.Point(1238, 444)
         Me.BT_RecE2.Name = "BT_RecE2"
         Me.BT_RecE2.Size = New System.Drawing.Size(113, 23)
         Me.BT_RecE2.TabIndex = 1756
@@ -1213,7 +1056,7 @@ Partial Class SCA1
         '
         'BT_RecE1
         '
-        Me.BT_RecE1.Location = New System.Drawing.Point(889, 444)
+        Me.BT_RecE1.Location = New System.Drawing.Point(1117, 444)
         Me.BT_RecE1.Name = "BT_RecE1"
         Me.BT_RecE1.Size = New System.Drawing.Size(113, 23)
         Me.BT_RecE1.TabIndex = 1755
@@ -1257,7 +1100,7 @@ Partial Class SCA1
         Me.TB_RecD1.Name = "TB_RecD1"
         Me.TB_RecD1.ReadOnly = True
         Me.TB_RecD1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.TB_RecD1.Size = New System.Drawing.Size(884, 128)
+        Me.TB_RecD1.Size = New System.Drawing.Size(1110, 128)
         Me.TB_RecD1.TabIndex = 1752
         Me.TB_RecD1.TabStop = False
         '
@@ -1278,7 +1121,7 @@ Partial Class SCA1
         Me.BT_RecC1.FlatAppearance.BorderColor = System.Drawing.Color.Black
         Me.BT_RecC1.Font = New System.Drawing.Font("メイリオ", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.BT_RecC1.ForeColor = System.Drawing.Color.White
-        Me.BT_RecC1.Location = New System.Drawing.Point(889, 485)
+        Me.BT_RecC1.Location = New System.Drawing.Point(1117, 485)
         Me.BT_RecC1.Name = "BT_RecC1"
         Me.BT_RecC1.Size = New System.Drawing.Size(232, 44)
         Me.BT_RecC1.TabIndex = 1751
@@ -1292,7 +1135,7 @@ Partial Class SCA1
         Me.Label29.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.Label29.Font = New System.Drawing.Font("メイリオ", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.Label29.ForeColor = System.Drawing.Color.White
-        Me.Label29.Location = New System.Drawing.Point(891, 104)
+        Me.Label29.Location = New System.Drawing.Point(1119, 104)
         Me.Label29.Name = "Label29"
         Me.Label29.Size = New System.Drawing.Size(113, 20)
         Me.Label29.TabIndex = 1602
@@ -1305,7 +1148,7 @@ Partial Class SCA1
         Me.Label28.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.Label28.Font = New System.Drawing.Font("メイリオ", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.Label28.ForeColor = System.Drawing.Color.White
-        Me.Label28.Location = New System.Drawing.Point(1012, 104)
+        Me.Label28.Location = New System.Drawing.Point(1240, 104)
         Me.Label28.Name = "Label28"
         Me.Label28.Size = New System.Drawing.Size(113, 20)
         Me.Label28.TabIndex = 1601
@@ -1320,7 +1163,7 @@ Partial Class SCA1
         Me.CLB_RecB1.Font = New System.Drawing.Font("メイリオ", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.CLB_RecB1.FormattingEnabled = True
         Me.CLB_RecB1.Items.AddRange(New Object() {"受電", "受電(オートコール)", "架電", "架電×", "督促(架電)", "郵便発送", "郵便受領", "FAX", "メール", "訪問", "面談", "手渡", "ご通知送付", "その他"})
-        Me.CLB_RecB1.Location = New System.Drawing.Point(891, 124)
+        Me.CLB_RecB1.Location = New System.Drawing.Point(1119, 124)
         Me.CLB_RecB1.Name = "CLB_RecB1"
         Me.CLB_RecB1.Size = New System.Drawing.Size(113, 284)
         Me.CLB_RecB1.TabIndex = 1600
@@ -1332,7 +1175,7 @@ Partial Class SCA1
         Me.CLB_RecB2.CheckOnClick = True
         Me.CLB_RecB2.Font = New System.Drawing.Font("メイリオ", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.CLB_RecB2.FormattingEnabled = True
-        Me.CLB_RecB2.Location = New System.Drawing.Point(1012, 123)
+        Me.CLB_RecB2.Location = New System.Drawing.Point(1240, 123)
         Me.CLB_RecB2.Name = "CLB_RecB2"
         Me.CLB_RecB2.Size = New System.Drawing.Size(113, 264)
         Me.CLB_RecB2.Sorted = True
@@ -1380,125 +1223,9 @@ Partial Class SCA1
         Me.DGV5.RowTemplate.Height = 21
         Me.DGV5.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
         Me.DGV5.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.DGV5.Size = New System.Drawing.Size(884, 492)
+        Me.DGV5.Size = New System.Drawing.Size(1110, 492)
         Me.DGV5.TabIndex = 1578
         Me.DGV5.TabStop = False
-        '
-        'Column38
-        '
-        Me.Column38.HeaderText = "識別番号"
-        Me.Column38.MinimumWidth = 6
-        Me.Column38.Name = "Column38"
-        Me.Column38.ReadOnly = True
-        Me.Column38.Visible = False
-        Me.Column38.Width = 125
-        '
-        'DataGridViewTextBoxColumn3
-        '
-        Me.DataGridViewTextBoxColumn3.HeaderText = "顧客番号"
-        Me.DataGridViewTextBoxColumn3.MinimumWidth = 6
-        Me.DataGridViewTextBoxColumn3.Name = "DataGridViewTextBoxColumn3"
-        Me.DataGridViewTextBoxColumn3.ReadOnly = True
-        Me.DataGridViewTextBoxColumn3.Visible = False
-        Me.DataGridViewTextBoxColumn3.Width = 150
-        '
-        'DataGridViewTextBoxColumn4
-        '
-        Me.DataGridViewTextBoxColumn4.HeaderText = "日時"
-        Me.DataGridViewTextBoxColumn4.MinimumWidth = 6
-        Me.DataGridViewTextBoxColumn4.Name = "DataGridViewTextBoxColumn4"
-        Me.DataGridViewTextBoxColumn4.ReadOnly = True
-        Me.DataGridViewTextBoxColumn4.Width = 120
-        '
-        'Column20
-        '
-        Me.Column20.HeaderText = "債務者氏名"
-        Me.Column20.MinimumWidth = 6
-        Me.Column20.Name = "Column20"
-        Me.Column20.ReadOnly = True
-        Me.Column20.Width = 125
-        '
-        'Column21
-        '
-        Me.Column21.HeaderText = "債務者カナ"
-        Me.Column21.MinimumWidth = 6
-        Me.Column21.Name = "Column21"
-        Me.Column21.ReadOnly = True
-        Me.Column21.Visible = False
-        Me.Column21.Width = 125
-        '
-        'DataGridViewTextBoxColumn5
-        '
-        DataGridViewCellStyle6.BackColor = System.Drawing.Color.White
-        DataGridViewCellStyle6.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        DataGridViewCellStyle6.ForeColor = System.Drawing.Color.Black
-        Me.DataGridViewTextBoxColumn5.DefaultCellStyle = DataGridViewCellStyle6
-        Me.DataGridViewTextBoxColumn5.HeaderText = "相手"
-        Me.DataGridViewTextBoxColumn5.MinimumWidth = 6
-        Me.DataGridViewTextBoxColumn5.Name = "DataGridViewTextBoxColumn5"
-        Me.DataGridViewTextBoxColumn5.ReadOnly = True
-        Me.DataGridViewTextBoxColumn5.Width = 125
-        '
-        'Column24
-        '
-        Me.Column24.HeaderText = "概要"
-        Me.Column24.MinimumWidth = 6
-        Me.Column24.Name = "Column24"
-        Me.Column24.ReadOnly = True
-        Me.Column24.Width = 125
-        '
-        'DataGridViewTextBoxColumn6
-        '
-        Me.DataGridViewTextBoxColumn6.HeaderText = "手法（手段）"
-        Me.DataGridViewTextBoxColumn6.MinimumWidth = 6
-        Me.DataGridViewTextBoxColumn6.Name = "DataGridViewTextBoxColumn6"
-        Me.DataGridViewTextBoxColumn6.ReadOnly = True
-        Me.DataGridViewTextBoxColumn6.Width = 125
-        '
-        'Column29
-        '
-        Me.Column29.HeaderText = "場所"
-        Me.Column29.MinimumWidth = 6
-        Me.Column29.Name = "Column29"
-        Me.Column29.ReadOnly = True
-        Me.Column29.Width = 125
-        '
-        'DataGridViewTextBoxColumn7
-        '
-        Me.DataGridViewTextBoxColumn7.HeaderText = "担当者"
-        Me.DataGridViewTextBoxColumn7.MinimumWidth = 6
-        Me.DataGridViewTextBoxColumn7.Name = "DataGridViewTextBoxColumn7"
-        Me.DataGridViewTextBoxColumn7.ReadOnly = True
-        Me.DataGridViewTextBoxColumn7.Width = 80
-        '
-        'Column25
-        '
-        Me.Column25.HeaderText = "対応者"
-        Me.Column25.MinimumWidth = 6
-        Me.Column25.Name = "Column25"
-        Me.Column25.ReadOnly = True
-        Me.Column25.Width = 80
-        '
-        'DataGridViewTextBoxColumn8
-        '
-        DataGridViewCellStyle7.Format = "d"
-        DataGridViewCellStyle7.NullValue = Nothing
-        Me.DataGridViewTextBoxColumn8.DefaultCellStyle = DataGridViewCellStyle7
-        Me.DataGridViewTextBoxColumn8.HeaderText = "督促通知"
-        Me.DataGridViewTextBoxColumn8.MinimumWidth = 6
-        Me.DataGridViewTextBoxColumn8.Name = "DataGridViewTextBoxColumn8"
-        Me.DataGridViewTextBoxColumn8.ReadOnly = True
-        Me.DataGridViewTextBoxColumn8.Width = 90
-        '
-        'DataGridViewTextBoxColumn9
-        '
-        Me.DataGridViewTextBoxColumn9.HeaderText = "備考内容"
-        Me.DataGridViewTextBoxColumn9.MaxInputLength = 999999
-        Me.DataGridViewTextBoxColumn9.MinimumWidth = 6
-        Me.DataGridViewTextBoxColumn9.Name = "DataGridViewTextBoxColumn9"
-        Me.DataGridViewTextBoxColumn9.ReadOnly = True
-        Me.DataGridViewTextBoxColumn9.Visible = False
-        Me.DataGridViewTextBoxColumn9.Width = 125
         '
         'Tab_1SC
         '
@@ -1533,7 +1260,7 @@ Partial Class SCA1
         Me.Tab_1SC.Location = New System.Drawing.Point(4, 20)
         Me.Tab_1SC.Name = "Tab_1SC"
         Me.Tab_1SC.Padding = New System.Windows.Forms.Padding(3)
-        Me.Tab_1SC.Size = New System.Drawing.Size(1132, 682)
+        Me.Tab_1SC.Size = New System.Drawing.Size(1369, 682)
         Me.Tab_1SC.TabIndex = 0
         Me.Tab_1SC.Text = "債権情報"
         Me.Tab_1SC.UseVisualStyleBackColor = True
@@ -1575,11 +1302,11 @@ Partial Class SCA1
         Me.TB_ADDRESS3.Font = New System.Drawing.Font("メイリオ", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.TB_ADDRESS3.ForeColor = System.Drawing.Color.Black
         Me.TB_ADDRESS3.ImeMode = System.Windows.Forms.ImeMode.Hiragana
-        Me.TB_ADDRESS3.Location = New System.Drawing.Point(592, 259)
+        Me.TB_ADDRESS3.Location = New System.Drawing.Point(582, 259)
         Me.TB_ADDRESS3.Multiline = True
         Me.TB_ADDRESS3.Name = "TB_ADDRESS3"
         Me.TB_ADDRESS3.ReadOnly = True
-        Me.TB_ADDRESS3.Size = New System.Drawing.Size(304, 22)
+        Me.TB_ADDRESS3.Size = New System.Drawing.Size(303, 22)
         Me.TB_ADDRESS3.TabIndex = 1779
         Me.TB_ADDRESS3.Visible = False
         Me.TB_ADDRESS3.WordWrap = False
@@ -1775,7 +1502,7 @@ Partial Class SCA1
         Me.L_JUNIN2.BackColor = System.Drawing.Color.Gainsboro
         Me.L_JUNIN2.Font = New System.Drawing.Font("メイリオ", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.L_JUNIN2.ForeColor = System.Drawing.Color.Gray
-        Me.L_JUNIN2.Location = New System.Drawing.Point(561, 154)
+        Me.L_JUNIN2.Location = New System.Drawing.Point(552, 154)
         Me.L_JUNIN2.Name = "L_JUNIN2"
         Me.L_JUNIN2.Size = New System.Drawing.Size(30, 17)
         Me.L_JUNIN2.TabIndex = 1771
@@ -1787,7 +1514,7 @@ Partial Class SCA1
         Me.L_JUNIN1.BackColor = System.Drawing.Color.Gainsboro
         Me.L_JUNIN1.Font = New System.Drawing.Font("メイリオ", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.L_JUNIN1.ForeColor = System.Drawing.Color.Gray
-        Me.L_JUNIN1.Location = New System.Drawing.Point(561, 48)
+        Me.L_JUNIN1.Location = New System.Drawing.Point(552, 48)
         Me.L_JUNIN1.Name = "L_JUNIN1"
         Me.L_JUNIN1.Size = New System.Drawing.Size(30, 17)
         Me.L_JUNIN1.TabIndex = 1770
@@ -1800,11 +1527,11 @@ Partial Class SCA1
         Me.TB_ADDRESS2.Font = New System.Drawing.Font("メイリオ", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.TB_ADDRESS2.ForeColor = System.Drawing.Color.Black
         Me.TB_ADDRESS2.ImeMode = System.Windows.Forms.ImeMode.Hiragana
-        Me.TB_ADDRESS2.Location = New System.Drawing.Point(592, 214)
+        Me.TB_ADDRESS2.Location = New System.Drawing.Point(582, 214)
         Me.TB_ADDRESS2.Multiline = True
         Me.TB_ADDRESS2.Name = "TB_ADDRESS2"
         Me.TB_ADDRESS2.ReadOnly = True
-        Me.TB_ADDRESS2.Size = New System.Drawing.Size(304, 22)
+        Me.TB_ADDRESS2.Size = New System.Drawing.Size(303, 22)
         Me.TB_ADDRESS2.TabIndex = 6
         Me.TB_ADDRESS2.WordWrap = False
         '
@@ -1815,11 +1542,11 @@ Partial Class SCA1
         Me.TB_ADDRESS1.Font = New System.Drawing.Font("メイリオ", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.TB_ADDRESS1.ForeColor = System.Drawing.Color.Black
         Me.TB_ADDRESS1.ImeMode = System.Windows.Forms.ImeMode.Hiragana
-        Me.TB_ADDRESS1.Location = New System.Drawing.Point(592, 109)
+        Me.TB_ADDRESS1.Location = New System.Drawing.Point(582, 109)
         Me.TB_ADDRESS1.Multiline = True
         Me.TB_ADDRESS1.Name = "TB_ADDRESS1"
         Me.TB_ADDRESS1.ReadOnly = True
-        Me.TB_ADDRESS1.Size = New System.Drawing.Size(304, 22)
+        Me.TB_ADDRESS1.Size = New System.Drawing.Size(303, 22)
         Me.TB_ADDRESS1.TabIndex = 7
         Me.TB_ADDRESS1.WordWrap = False
         '
@@ -1842,7 +1569,7 @@ Partial Class SCA1
         Me.DGV9.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle13
         Me.DGV9.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.DGV9.ColumnHeadersVisible = False
-        Me.DGV9.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.DataGridViewTextBoxColumn19, Me.DataGridViewTextBoxColumn20, Me.DataGridViewTextBoxColumn21, Me.DataGridViewTextBoxColumn22, Me.Column39, Me.Column40, Me.Column41})
+        Me.DGV9.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.DataGridViewTextBoxColumn19, Me.DataGridViewTextBoxColumn20, Me.DataGridViewTextBoxColumn21, Me.DataGridViewTextBoxColumn22, Me.Column39, Me.Column40, Me.Column41, Me.Column27, Me.Column28})
         Me.DGV9.Location = New System.Drawing.Point(521, 24)
         Me.DGV9.MultiSelect = False
         Me.DGV9.Name = "DGV9"
@@ -1859,78 +1586,9 @@ Partial Class SCA1
         Me.DGV9.RowTemplate.Height = 21
         Me.DGV9.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
         Me.DGV9.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect
-        Me.DGV9.Size = New System.Drawing.Size(605, 257)
+        Me.DGV9.Size = New System.Drawing.Size(845, 257)
         Me.DGV9.TabIndex = 1776
         Me.DGV9.TabStop = False
-        '
-        'DataGridViewTextBoxColumn19
-        '
-        Me.DataGridViewTextBoxColumn19.HeaderText = "１"
-        Me.DataGridViewTextBoxColumn19.MinimumWidth = 6
-        Me.DataGridViewTextBoxColumn19.Name = "DataGridViewTextBoxColumn19"
-        Me.DataGridViewTextBoxColumn19.ReadOnly = True
-        Me.DataGridViewTextBoxColumn19.Width = 70
-        '
-        'DataGridViewTextBoxColumn20
-        '
-        DataGridViewCellStyle14.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle14.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.DataGridViewTextBoxColumn20.DefaultCellStyle = DataGridViewCellStyle14
-        Me.DataGridViewTextBoxColumn20.HeaderText = "２"
-        Me.DataGridViewTextBoxColumn20.MinimumWidth = 6
-        Me.DataGridViewTextBoxColumn20.Name = "DataGridViewTextBoxColumn20"
-        Me.DataGridViewTextBoxColumn20.ReadOnly = True
-        Me.DataGridViewTextBoxColumn20.Width = 124
-        '
-        'DataGridViewTextBoxColumn21
-        '
-        DataGridViewCellStyle15.BackColor = System.Drawing.Color.White
-        DataGridViewCellStyle15.ForeColor = System.Drawing.Color.Black
-        Me.DataGridViewTextBoxColumn21.DefaultCellStyle = DataGridViewCellStyle15
-        Me.DataGridViewTextBoxColumn21.HeaderText = "３"
-        Me.DataGridViewTextBoxColumn21.MinimumWidth = 6
-        Me.DataGridViewTextBoxColumn21.Name = "DataGridViewTextBoxColumn21"
-        Me.DataGridViewTextBoxColumn21.ReadOnly = True
-        Me.DataGridViewTextBoxColumn21.Width = 70
-        '
-        'DataGridViewTextBoxColumn22
-        '
-        DataGridViewCellStyle16.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle16.BackColor = System.Drawing.Color.White
-        DataGridViewCellStyle16.ForeColor = System.Drawing.Color.Black
-        DataGridViewCellStyle16.Format = "d"
-        DataGridViewCellStyle16.NullValue = Nothing
-        Me.DataGridViewTextBoxColumn22.DefaultCellStyle = DataGridViewCellStyle16
-        Me.DataGridViewTextBoxColumn22.HeaderText = "４"
-        Me.DataGridViewTextBoxColumn22.MinimumWidth = 6
-        Me.DataGridViewTextBoxColumn22.Name = "DataGridViewTextBoxColumn22"
-        Me.DataGridViewTextBoxColumn22.ReadOnly = True
-        Me.DataGridViewTextBoxColumn22.Width = 110
-        '
-        'Column39
-        '
-        Me.Column39.HeaderText = "５"
-        Me.Column39.Name = "Column39"
-        Me.Column39.ReadOnly = True
-        Me.Column39.Width = 75
-        '
-        'Column40
-        '
-        DataGridViewCellStyle17.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        Me.Column40.DefaultCellStyle = DataGridViewCellStyle17
-        Me.Column40.HeaderText = "６"
-        Me.Column40.Name = "Column40"
-        Me.Column40.ReadOnly = True
-        Me.Column40.Width = 68
-        '
-        'Column41
-        '
-        DataGridViewCellStyle18.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        Me.Column41.DefaultCellStyle = DataGridViewCellStyle18
-        Me.Column41.HeaderText = "７"
-        Me.Column41.Name = "Column41"
-        Me.Column41.ReadOnly = True
-        Me.Column41.Width = 68
         '
         'CB_AUTOUPD
         '
@@ -1952,7 +1610,7 @@ Partial Class SCA1
         Me.Label32.ForeColor = System.Drawing.Color.White
         Me.Label32.Location = New System.Drawing.Point(523, 540)
         Me.Label32.Name = "Label32"
-        Me.Label32.Size = New System.Drawing.Size(588, 24)
+        Me.Label32.Size = New System.Drawing.Size(838, 24)
         Me.Label32.TabIndex = 1766
         Me.Label32.Text = "顧客情報フリーメモ"
         Me.Label32.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -1965,7 +1623,7 @@ Partial Class SCA1
         Me.Label30.ForeColor = System.Drawing.Color.White
         Me.Label30.Location = New System.Drawing.Point(523, 284)
         Me.Label30.Name = "Label30"
-        Me.Label30.Size = New System.Drawing.Size(588, 24)
+        Me.Label30.Size = New System.Drawing.Size(843, 24)
         Me.Label30.TabIndex = 1765
         Me.Label30.Text = "交渉記録"
         Me.Label30.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -1989,7 +1647,7 @@ Partial Class SCA1
         Me.BT_B4.FlatAppearance.BorderColor = System.Drawing.Color.Black
         Me.BT_B4.Font = New System.Drawing.Font("MS UI Gothic", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.BT_B4.ForeColor = System.Drawing.Color.White
-        Me.BT_B4.Location = New System.Drawing.Point(1019, 309)
+        Me.BT_B4.Location = New System.Drawing.Point(823, 309)
         Me.BT_B4.Name = "BT_B4"
         Me.BT_B4.Size = New System.Drawing.Size(92, 27)
         Me.BT_B4.TabIndex = 1583
@@ -2039,109 +1697,9 @@ Partial Class SCA1
         Me.DGV2.RowTemplate.Height = 21
         Me.DGV2.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
         Me.DGV2.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.DGV2.Size = New System.Drawing.Size(589, 104)
+        Me.DGV2.Size = New System.Drawing.Size(843, 104)
         Me.DGV2.TabIndex = 1577
         Me.DGV2.TabStop = False
-        '
-        'Column9
-        '
-        Me.Column9.HeaderText = "識別番号"
-        Me.Column9.MinimumWidth = 6
-        Me.Column9.Name = "Column9"
-        Me.Column9.ReadOnly = True
-        Me.Column9.Visible = False
-        Me.Column9.Width = 120
-        '
-        'DataGridViewTextBoxColumn1
-        '
-        Me.DataGridViewTextBoxColumn1.HeaderText = "日時"
-        Me.DataGridViewTextBoxColumn1.MinimumWidth = 6
-        Me.DataGridViewTextBoxColumn1.Name = "DataGridViewTextBoxColumn1"
-        Me.DataGridViewTextBoxColumn1.ReadOnly = True
-        Me.DataGridViewTextBoxColumn1.Width = 105
-        '
-        'DataGridViewTextBoxColumn2
-        '
-        DataGridViewCellStyle21.BackColor = System.Drawing.Color.White
-        DataGridViewCellStyle21.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        DataGridViewCellStyle21.ForeColor = System.Drawing.Color.Black
-        Me.DataGridViewTextBoxColumn2.DefaultCellStyle = DataGridViewCellStyle21
-        Me.DataGridViewTextBoxColumn2.HeaderText = "相手"
-        Me.DataGridViewTextBoxColumn2.MinimumWidth = 6
-        Me.DataGridViewTextBoxColumn2.Name = "DataGridViewTextBoxColumn2"
-        Me.DataGridViewTextBoxColumn2.ReadOnly = True
-        Me.DataGridViewTextBoxColumn2.Width = 95
-        '
-        'Column22
-        '
-        Me.Column22.HeaderText = "概要"
-        Me.Column22.MinimumWidth = 6
-        Me.Column22.Name = "Column22"
-        Me.Column22.ReadOnly = True
-        Me.Column22.Width = 70
-        '
-        'Column4
-        '
-        Me.Column4.HeaderText = "手法（手段）"
-        Me.Column4.MinimumWidth = 6
-        Me.Column4.Name = "Column4"
-        Me.Column4.ReadOnly = True
-        Me.Column4.Width = 125
-        '
-        'Column7
-        '
-        Me.Column7.HeaderText = "担当者"
-        Me.Column7.MinimumWidth = 6
-        Me.Column7.Name = "Column7"
-        Me.Column7.ReadOnly = True
-        Me.Column7.Width = 55
-        '
-        'Column23
-        '
-        Me.Column23.HeaderText = "対応者"
-        Me.Column23.MinimumWidth = 6
-        Me.Column23.Name = "Column23"
-        Me.Column23.ReadOnly = True
-        Me.Column23.Width = 55
-        '
-        '督促通知日
-        '
-        DataGridViewCellStyle22.Format = "d"
-        DataGridViewCellStyle22.NullValue = Nothing
-        Me.督促通知日.DefaultCellStyle = DataGridViewCellStyle22
-        Me.督促通知日.HeaderText = "督促通知"
-        Me.督促通知日.MinimumWidth = 6
-        Me.督促通知日.Name = "督促通知日"
-        Me.督促通知日.ReadOnly = True
-        Me.督促通知日.Width = 80
-        '
-        'Column3
-        '
-        Me.Column3.HeaderText = "備考内容"
-        Me.Column3.MaxInputLength = 999999
-        Me.Column3.MinimumWidth = 6
-        Me.Column3.Name = "Column3"
-        Me.Column3.ReadOnly = True
-        Me.Column3.Visible = False
-        Me.Column3.Width = 125
-        '
-        'Column13
-        '
-        Me.Column13.HeaderText = "場所"
-        Me.Column13.MinimumWidth = 6
-        Me.Column13.Name = "Column13"
-        Me.Column13.ReadOnly = True
-        Me.Column13.Visible = False
-        Me.Column13.Width = 125
-        '
-        'Column30
-        '
-        Me.Column30.HeaderText = "ダミー名"
-        Me.Column30.MinimumWidth = 6
-        Me.Column30.Name = "Column30"
-        Me.Column30.ReadOnly = True
-        Me.Column30.Visible = False
-        Me.Column30.Width = 125
         '
         'TB_FreeMemo
         '
@@ -2154,7 +1712,7 @@ Partial Class SCA1
         Me.TB_FreeMemo.Multiline = True
         Me.TB_FreeMemo.Name = "TB_FreeMemo"
         Me.TB_FreeMemo.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.TB_FreeMemo.Size = New System.Drawing.Size(589, 93)
+        Me.TB_FreeMemo.Size = New System.Drawing.Size(843, 93)
         Me.TB_FreeMemo.TabIndex = 1582
         Me.TB_FreeMemo.TabStop = False
         '
@@ -2170,7 +1728,7 @@ Partial Class SCA1
         Me.TB_Remarks.Name = "TB_Remarks"
         Me.TB_Remarks.ReadOnly = True
         Me.TB_Remarks.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.TB_Remarks.Size = New System.Drawing.Size(589, 95)
+        Me.TB_Remarks.Size = New System.Drawing.Size(843, 95)
         Me.TB_Remarks.TabIndex = 0
         Me.TB_Remarks.TabStop = False
         '
@@ -2221,7 +1779,7 @@ Partial Class SCA1
         Me.L_TELADD.AutoSize = True
         Me.L_TELADD.Font = New System.Drawing.Font("メイリオ", 9.75!, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.L_TELADD.ForeColor = System.Drawing.Color.DodgerBlue
-        Me.L_TELADD.Location = New System.Drawing.Point(1017, 5)
+        Me.L_TELADD.Location = New System.Drawing.Point(1261, 4)
         Me.L_TELADD.Name = "L_TELADD"
         Me.L_TELADD.Size = New System.Drawing.Size(100, 20)
         Me.L_TELADD.TabIndex = 1574
@@ -2400,7 +1958,7 @@ Partial Class SCA1
         Me.TAB_A1.Name = "TAB_A1"
         Me.TAB_A1.Padding = New System.Drawing.Point(40, 3)
         Me.TAB_A1.SelectedIndex = 0
-        Me.TAB_A1.Size = New System.Drawing.Size(1140, 706)
+        Me.TAB_A1.Size = New System.Drawing.Size(1377, 706)
         Me.TAB_A1.TabIndex = 1570
         Me.TAB_A1.TabStop = False
         '
@@ -2432,7 +1990,7 @@ Partial Class SCA1
         Me.Tab_6GA.Location = New System.Drawing.Point(4, 20)
         Me.Tab_6GA.Name = "Tab_6GA"
         Me.Tab_6GA.Padding = New System.Windows.Forms.Padding(3)
-        Me.Tab_6GA.Size = New System.Drawing.Size(1132, 682)
+        Me.Tab_6GA.Size = New System.Drawing.Size(1369, 682)
         Me.Tab_6GA.TabIndex = 5
         Me.Tab_6GA.Text = "申請物管理"
         '
@@ -2612,7 +2170,7 @@ Partial Class SCA1
         Me.DGV_MR1.RowTemplate.DefaultCellStyle.BackColor = System.Drawing.Color.White
         Me.DGV_MR1.RowTemplate.Height = 21
         Me.DGV_MR1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.DGV_MR1.Size = New System.Drawing.Size(1125, 266)
+        Me.DGV_MR1.Size = New System.Drawing.Size(1358, 266)
         Me.DGV_MR1.TabIndex = 1771
         Me.DGV_MR1.TabStop = False
         '
@@ -2905,7 +2463,7 @@ Partial Class SCA1
         Me.Tab_3Mng.Location = New System.Drawing.Point(4, 20)
         Me.Tab_3Mng.Name = "Tab_3Mng"
         Me.Tab_3Mng.Padding = New System.Windows.Forms.Padding(3)
-        Me.Tab_3Mng.Size = New System.Drawing.Size(1132, 682)
+        Me.Tab_3Mng.Size = New System.Drawing.Size(1369, 682)
         Me.Tab_3Mng.TabIndex = 6
         Me.Tab_3Mng.Text = "管理表"
         '
@@ -3158,107 +2716,9 @@ Partial Class SCA1
         Me.DGV_FPMNG.RowTemplate.Height = 21
         Me.DGV_FPMNG.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
         Me.DGV_FPMNG.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.DGV_FPMNG.Size = New System.Drawing.Size(1132, 408)
+        Me.DGV_FPMNG.Size = New System.Drawing.Size(1361, 408)
         Me.DGV_FPMNG.TabIndex = 1181
         Me.DGV_FPMNG.TabStop = False
-        '
-        'C01
-        '
-        DataGridViewCellStyle33.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        DataGridViewCellStyle33.Format = "N0"
-        DataGridViewCellStyle33.NullValue = Nothing
-        Me.C01.DefaultCellStyle = DataGridViewCellStyle33
-        Me.C01.HeaderText = "No"
-        Me.C01.Name = "C01"
-        Me.C01.ReadOnly = True
-        Me.C01.Width = 40
-        '
-        'C02
-        '
-        Me.C02.HeaderText = "登録日時"
-        Me.C02.Name = "C02"
-        Me.C02.ReadOnly = True
-        Me.C02.Visible = False
-        Me.C02.Width = 110
-        '
-        'C03
-        '
-        Me.C03.HeaderText = "債権番号"
-        Me.C03.MinimumWidth = 6
-        Me.C03.Name = "C03"
-        Me.C03.ReadOnly = True
-        Me.C03.Width = 105
-        '
-        'C04
-        '
-        DataGridViewCellStyle34.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.C04.DefaultCellStyle = DataGridViewCellStyle34
-        Me.C04.HeaderText = "債務者氏名"
-        Me.C04.MinimumWidth = 6
-        Me.C04.Name = "C04"
-        Me.C04.ReadOnly = True
-        Me.C04.Width = 120
-        '
-        'C05
-        '
-        DataGridViewCellStyle35.BackColor = System.Drawing.Color.White
-        DataGridViewCellStyle35.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        DataGridViewCellStyle35.ForeColor = System.Drawing.Color.Black
-        Me.C05.DefaultCellStyle = DataGridViewCellStyle35
-        Me.C05.HeaderText = "内容"
-        Me.C05.MinimumWidth = 6
-        Me.C05.Name = "C05"
-        Me.C05.ReadOnly = True
-        Me.C05.Width = 90
-        '
-        'C06
-        '
-        DataGridViewCellStyle36.BackColor = System.Drawing.Color.White
-        DataGridViewCellStyle36.ForeColor = System.Drawing.Color.Black
-        DataGridViewCellStyle36.NullValue = Nothing
-        Me.C06.DefaultCellStyle = DataGridViewCellStyle36
-        Me.C06.HeaderText = "担当者"
-        Me.C06.MinimumWidth = 6
-        Me.C06.Name = "C06"
-        Me.C06.ReadOnly = True
-        Me.C06.Width = 80
-        '
-        'C10
-        '
-        DataGridViewCellStyle37.NullValue = Nothing
-        Me.C10.DefaultCellStyle = DataGridViewCellStyle37
-        Me.C10.HeaderText = "最終対応日"
-        Me.C10.MinimumWidth = 6
-        Me.C10.Name = "C10"
-        Me.C10.ReadOnly = True
-        Me.C10.Width = 90
-        '
-        'C09
-        '
-        DataGridViewCellStyle38.ForeColor = System.Drawing.Color.Red
-        DataGridViewCellStyle38.NullValue = "0"
-        Me.C09.DefaultCellStyle = DataGridViewCellStyle38
-        Me.C09.HeaderText = "次回対応日"
-        Me.C09.MinimumWidth = 6
-        Me.C09.Name = "C09"
-        Me.C09.ReadOnly = True
-        Me.C09.Width = 90
-        '
-        'C08
-        '
-        Me.C08.HeaderText = "ステータス"
-        Me.C08.MinimumWidth = 6
-        Me.C08.Name = "C08"
-        Me.C08.ReadOnly = True
-        Me.C08.Width = 80
-        '
-        'C07
-        '
-        Me.C07.HeaderText = "概要"
-        Me.C07.MinimumWidth = 6
-        Me.C07.Name = "C07"
-        Me.C07.ReadOnly = True
-        Me.C07.Width = 415
         '
         'CreatorExpress1
         '
@@ -3320,15 +2780,566 @@ Partial Class SCA1
         Me.MenuStrip1.Location = New System.Drawing.Point(0, 0)
         Me.MenuStrip1.Name = "MenuStrip1"
         Me.MenuStrip1.Padding = New System.Windows.Forms.Padding(6, 0, 0, 0)
-        Me.MenuStrip1.Size = New System.Drawing.Size(1139, 19)
+        Me.MenuStrip1.Size = New System.Drawing.Size(1377, 19)
         Me.MenuStrip1.TabIndex = 1574
         Me.MenuStrip1.Text = "MenuStrip1"
+        '
+        'DataGridViewTextBoxColumn19
+        '
+        Me.DataGridViewTextBoxColumn19.HeaderText = "１"
+        Me.DataGridViewTextBoxColumn19.MinimumWidth = 6
+        Me.DataGridViewTextBoxColumn19.Name = "DataGridViewTextBoxColumn19"
+        Me.DataGridViewTextBoxColumn19.ReadOnly = True
+        Me.DataGridViewTextBoxColumn19.Width = 60
+        '
+        'DataGridViewTextBoxColumn20
+        '
+        DataGridViewCellStyle14.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle14.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.DataGridViewTextBoxColumn20.DefaultCellStyle = DataGridViewCellStyle14
+        Me.DataGridViewTextBoxColumn20.HeaderText = "２"
+        Me.DataGridViewTextBoxColumn20.MinimumWidth = 6
+        Me.DataGridViewTextBoxColumn20.Name = "DataGridViewTextBoxColumn20"
+        Me.DataGridViewTextBoxColumn20.ReadOnly = True
+        Me.DataGridViewTextBoxColumn20.Width = 124
+        '
+        'DataGridViewTextBoxColumn21
+        '
+        DataGridViewCellStyle15.BackColor = System.Drawing.Color.White
+        DataGridViewCellStyle15.ForeColor = System.Drawing.Color.Black
+        Me.DataGridViewTextBoxColumn21.DefaultCellStyle = DataGridViewCellStyle15
+        Me.DataGridViewTextBoxColumn21.HeaderText = "３"
+        Me.DataGridViewTextBoxColumn21.MinimumWidth = 6
+        Me.DataGridViewTextBoxColumn21.Name = "DataGridViewTextBoxColumn21"
+        Me.DataGridViewTextBoxColumn21.ReadOnly = True
+        Me.DataGridViewTextBoxColumn21.Width = 69
+        '
+        'DataGridViewTextBoxColumn22
+        '
+        DataGridViewCellStyle16.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle16.BackColor = System.Drawing.Color.White
+        DataGridViewCellStyle16.ForeColor = System.Drawing.Color.Black
+        DataGridViewCellStyle16.Format = "d"
+        DataGridViewCellStyle16.NullValue = Nothing
+        Me.DataGridViewTextBoxColumn22.DefaultCellStyle = DataGridViewCellStyle16
+        Me.DataGridViewTextBoxColumn22.HeaderText = "４"
+        Me.DataGridViewTextBoxColumn22.MinimumWidth = 6
+        Me.DataGridViewTextBoxColumn22.Name = "DataGridViewTextBoxColumn22"
+        Me.DataGridViewTextBoxColumn22.ReadOnly = True
+        Me.DataGridViewTextBoxColumn22.Width = 110
+        '
+        'Column39
+        '
+        Me.Column39.HeaderText = "５"
+        Me.Column39.Name = "Column39"
+        Me.Column39.ReadOnly = True
+        Me.Column39.Width = 70
+        '
+        'Column40
+        '
+        DataGridViewCellStyle17.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        Me.Column40.DefaultCellStyle = DataGridViewCellStyle17
+        Me.Column40.HeaderText = "６"
+        Me.Column40.Name = "Column40"
+        Me.Column40.ReadOnly = True
+        Me.Column40.Width = 68
+        '
+        'Column41
+        '
+        DataGridViewCellStyle18.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        Me.Column41.DefaultCellStyle = DataGridViewCellStyle18
+        Me.Column41.HeaderText = "７"
+        Me.Column41.Name = "Column41"
+        Me.Column41.ReadOnly = True
+        Me.Column41.Width = 68
+        '
+        'Column27
+        '
+        Me.Column27.HeaderText = "8"
+        Me.Column27.Name = "Column27"
+        Me.Column27.ReadOnly = True
+        Me.Column27.Width = 65
+        '
+        'Column28
+        '
+        Me.Column28.HeaderText = "9"
+        Me.Column28.Name = "Column28"
+        Me.Column28.ReadOnly = True
+        Me.Column28.Width = 270
+        '
+        'Column18
+        '
+        Me.Column18.HeaderText = "識別番号"
+        Me.Column18.MinimumWidth = 6
+        Me.Column18.Name = "Column18"
+        Me.Column18.ReadOnly = True
+        Me.Column18.Visible = False
+        Me.Column18.Width = 110
+        '
+        'Column12
+        '
+        Me.Column12.HeaderText = "記録日時"
+        Me.Column12.MinimumWidth = 6
+        Me.Column12.Name = "Column12"
+        Me.Column12.ReadOnly = True
+        Me.Column12.Visible = False
+        Me.Column12.Width = 140
+        '
+        'Column17
+        '
+        Me.Column17.HeaderText = "督促日"
+        Me.Column17.MinimumWidth = 6
+        Me.Column17.Name = "Column17"
+        Me.Column17.ReadOnly = True
+        Me.Column17.Width = 90
+        '
+        'Column11
+        '
+        Me.Column11.HeaderText = "債務番号"
+        Me.Column11.MinimumWidth = 6
+        Me.Column11.Name = "Column11"
+        Me.Column11.ReadOnly = True
+        Me.Column11.Width = 120
+        '
+        'Column14
+        '
+        Me.Column14.HeaderText = "債務者名"
+        Me.Column14.MinimumWidth = 6
+        Me.Column14.Name = "Column14"
+        Me.Column14.ReadOnly = True
+        Me.Column14.Width = 140
+        '
+        'Column15
+        '
+        Me.Column15.HeaderText = "債務者カナ"
+        Me.Column15.MinimumWidth = 6
+        Me.Column15.Name = "Column15"
+        Me.Column15.ReadOnly = True
+        Me.Column15.Width = 140
+        '
+        'Column16
+        '
+        Me.Column16.HeaderText = "相手"
+        Me.Column16.MinimumWidth = 6
+        Me.Column16.Name = "Column16"
+        Me.Column16.ReadOnly = True
+        Me.Column16.Width = 90
+        '
+        'Column35
+        '
+        Me.Column35.HeaderText = "内容"
+        Me.Column35.MinimumWidth = 6
+        Me.Column35.Name = "Column35"
+        Me.Column35.ReadOnly = True
+        Me.Column35.Width = 420
+        '
+        'DataGridViewTextBoxColumn10
+        '
+        Me.DataGridViewTextBoxColumn10.HeaderText = "債務番号"
+        Me.DataGridViewTextBoxColumn10.MinimumWidth = 6
+        Me.DataGridViewTextBoxColumn10.Name = "DataGridViewTextBoxColumn10"
+        Me.DataGridViewTextBoxColumn10.ReadOnly = True
+        Me.DataGridViewTextBoxColumn10.Width = 140
+        '
+        'Column19
+        '
+        Me.Column19.HeaderText = "ローン種別"
+        Me.Column19.MinimumWidth = 6
+        Me.Column19.Name = "Column19"
+        Me.Column19.ReadOnly = True
+        Me.Column19.Visible = False
+        Me.Column19.Width = 125
+        '
+        'DataGridViewTextBoxColumn14
+        '
+        Me.DataGridViewTextBoxColumn14.HeaderText = "債務者名"
+        Me.DataGridViewTextBoxColumn14.MinimumWidth = 6
+        Me.DataGridViewTextBoxColumn14.Name = "DataGridViewTextBoxColumn14"
+        Me.DataGridViewTextBoxColumn14.ReadOnly = True
+        Me.DataGridViewTextBoxColumn14.Width = 140
+        '
+        'DataGridViewTextBoxColumn15
+        '
+        Me.DataGridViewTextBoxColumn15.HeaderText = "債務者カナ"
+        Me.DataGridViewTextBoxColumn15.MinimumWidth = 6
+        Me.DataGridViewTextBoxColumn15.Name = "DataGridViewTextBoxColumn15"
+        Me.DataGridViewTextBoxColumn15.ReadOnly = True
+        Me.DataGridViewTextBoxColumn15.Width = 140
+        '
+        'Column31
+        '
+        Me.Column31.HeaderText = "残高更新日"
+        Me.Column31.MinimumWidth = 6
+        Me.Column31.Name = "Column31"
+        Me.Column31.ReadOnly = True
+        '
+        'DataGridViewTextBoxColumn13
+        '
+        DataGridViewCellStyle3.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer), CType(CType(192, Byte), Integer))
+        DataGridViewCellStyle3.Format = "N0"
+        DataGridViewCellStyle3.NullValue = "0"
+        Me.DataGridViewTextBoxColumn13.DefaultCellStyle = DataGridViewCellStyle3
+        Me.DataGridViewTextBoxColumn13.HeaderText = "返済額1"
+        Me.DataGridViewTextBoxColumn13.MinimumWidth = 6
+        Me.DataGridViewTextBoxColumn13.Name = "DataGridViewTextBoxColumn13"
+        Me.DataGridViewTextBoxColumn13.Width = 90
+        '
+        'Column32
+        '
+        DataGridViewCellStyle4.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer), CType(CType(192, Byte), Integer))
+        DataGridViewCellStyle4.Format = "N2"
+        DataGridViewCellStyle4.NullValue = "0"
+        Me.Column32.DefaultCellStyle = DataGridViewCellStyle4
+        Me.Column32.HeaderText = "返済額2"
+        Me.Column32.MinimumWidth = 6
+        Me.Column32.Name = "Column32"
+        Me.Column32.Width = 90
+        '
+        'Column33
+        '
+        Me.Column33.HeaderText = "主債務者住所"
+        Me.Column33.MinimumWidth = 6
+        Me.Column33.Name = "Column33"
+        Me.Column33.Visible = False
+        Me.Column33.Width = 140
+        '
+        'Column34
+        '
+        Me.Column34.HeaderText = "連帯者住所"
+        Me.Column34.MinimumWidth = 6
+        Me.Column34.Name = "Column34"
+        Me.Column34.Visible = False
+        Me.Column34.Width = 140
+        '
+        'Column36
+        '
+        Me.Column36.HeaderText = "B返済額"
+        Me.Column36.MinimumWidth = 6
+        Me.Column36.Name = "Column36"
+        Me.Column36.Width = 90
+        '
+        'Column37
+        '
+        Me.Column37.HeaderText = "B月"
+        Me.Column37.MinimumWidth = 6
+        Me.Column37.Name = "Column37"
+        Me.Column37.Width = 55
+        '
+        'C01
+        '
+        DataGridViewCellStyle33.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        DataGridViewCellStyle33.Format = "N0"
+        DataGridViewCellStyle33.NullValue = Nothing
+        Me.C01.DefaultCellStyle = DataGridViewCellStyle33
+        Me.C01.HeaderText = "No"
+        Me.C01.Name = "C01"
+        Me.C01.ReadOnly = True
+        Me.C01.Width = 50
+        '
+        'C02
+        '
+        Me.C02.HeaderText = "登録日時"
+        Me.C02.Name = "C02"
+        Me.C02.ReadOnly = True
+        Me.C02.Visible = False
+        Me.C02.Width = 120
+        '
+        'C03
+        '
+        Me.C03.HeaderText = "債権番号"
+        Me.C03.MinimumWidth = 6
+        Me.C03.Name = "C03"
+        Me.C03.ReadOnly = True
+        Me.C03.Width = 115
+        '
+        'C04
+        '
+        DataGridViewCellStyle34.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.C04.DefaultCellStyle = DataGridViewCellStyle34
+        Me.C04.HeaderText = "債務者氏名"
+        Me.C04.MinimumWidth = 6
+        Me.C04.Name = "C04"
+        Me.C04.ReadOnly = True
+        Me.C04.Width = 130
+        '
+        'C05
+        '
+        DataGridViewCellStyle35.BackColor = System.Drawing.Color.White
+        DataGridViewCellStyle35.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        DataGridViewCellStyle35.ForeColor = System.Drawing.Color.Black
+        Me.C05.DefaultCellStyle = DataGridViewCellStyle35
+        Me.C05.HeaderText = "内容"
+        Me.C05.MinimumWidth = 6
+        Me.C05.Name = "C05"
+        Me.C05.ReadOnly = True
+        Me.C05.Width = 110
+        '
+        'C06
+        '
+        DataGridViewCellStyle36.BackColor = System.Drawing.Color.White
+        DataGridViewCellStyle36.ForeColor = System.Drawing.Color.Black
+        DataGridViewCellStyle36.NullValue = Nothing
+        Me.C06.DefaultCellStyle = DataGridViewCellStyle36
+        Me.C06.HeaderText = "担当者"
+        Me.C06.MinimumWidth = 6
+        Me.C06.Name = "C06"
+        Me.C06.ReadOnly = True
+        Me.C06.Width = 80
+        '
+        'C10
+        '
+        DataGridViewCellStyle37.NullValue = Nothing
+        Me.C10.DefaultCellStyle = DataGridViewCellStyle37
+        Me.C10.HeaderText = "最終対応日"
+        Me.C10.MinimumWidth = 6
+        Me.C10.Name = "C10"
+        Me.C10.ReadOnly = True
+        '
+        'C09
+        '
+        DataGridViewCellStyle38.ForeColor = System.Drawing.Color.Red
+        DataGridViewCellStyle38.NullValue = "0"
+        Me.C09.DefaultCellStyle = DataGridViewCellStyle38
+        Me.C09.HeaderText = "次回対応日"
+        Me.C09.MinimumWidth = 6
+        Me.C09.Name = "C09"
+        Me.C09.ReadOnly = True
+        '
+        'C08
+        '
+        Me.C08.HeaderText = "ステータス"
+        Me.C08.MinimumWidth = 6
+        Me.C08.Name = "C08"
+        Me.C08.ReadOnly = True
+        '
+        'C07
+        '
+        Me.C07.HeaderText = "概要"
+        Me.C07.MinimumWidth = 6
+        Me.C07.Name = "C07"
+        Me.C07.ReadOnly = True
+        Me.C07.Width = 500
+        '
+        'Column38
+        '
+        Me.Column38.HeaderText = "識別番号"
+        Me.Column38.MinimumWidth = 6
+        Me.Column38.Name = "Column38"
+        Me.Column38.ReadOnly = True
+        Me.Column38.Visible = False
+        Me.Column38.Width = 125
+        '
+        'DataGridViewTextBoxColumn3
+        '
+        Me.DataGridViewTextBoxColumn3.HeaderText = "顧客番号"
+        Me.DataGridViewTextBoxColumn3.MinimumWidth = 6
+        Me.DataGridViewTextBoxColumn3.Name = "DataGridViewTextBoxColumn3"
+        Me.DataGridViewTextBoxColumn3.ReadOnly = True
+        Me.DataGridViewTextBoxColumn3.Visible = False
+        Me.DataGridViewTextBoxColumn3.Width = 150
+        '
+        'DataGridViewTextBoxColumn4
+        '
+        Me.DataGridViewTextBoxColumn4.HeaderText = "日時"
+        Me.DataGridViewTextBoxColumn4.MinimumWidth = 6
+        Me.DataGridViewTextBoxColumn4.Name = "DataGridViewTextBoxColumn4"
+        Me.DataGridViewTextBoxColumn4.ReadOnly = True
+        Me.DataGridViewTextBoxColumn4.Width = 130
+        '
+        'Column20
+        '
+        Me.Column20.HeaderText = "債務者氏名"
+        Me.Column20.MinimumWidth = 6
+        Me.Column20.Name = "Column20"
+        Me.Column20.ReadOnly = True
+        Me.Column20.Width = 200
+        '
+        'Column21
+        '
+        Me.Column21.HeaderText = "債務者カナ"
+        Me.Column21.MinimumWidth = 6
+        Me.Column21.Name = "Column21"
+        Me.Column21.ReadOnly = True
+        Me.Column21.Visible = False
+        Me.Column21.Width = 125
+        '
+        'DataGridViewTextBoxColumn5
+        '
+        DataGridViewCellStyle6.BackColor = System.Drawing.Color.White
+        DataGridViewCellStyle6.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        DataGridViewCellStyle6.ForeColor = System.Drawing.Color.Black
+        Me.DataGridViewTextBoxColumn5.DefaultCellStyle = DataGridViewCellStyle6
+        Me.DataGridViewTextBoxColumn5.HeaderText = "相手"
+        Me.DataGridViewTextBoxColumn5.MinimumWidth = 6
+        Me.DataGridViewTextBoxColumn5.Name = "DataGridViewTextBoxColumn5"
+        Me.DataGridViewTextBoxColumn5.ReadOnly = True
+        Me.DataGridViewTextBoxColumn5.Width = 125
+        '
+        'Column24
+        '
+        Me.Column24.HeaderText = "概要"
+        Me.Column24.MinimumWidth = 6
+        Me.Column24.Name = "Column24"
+        Me.Column24.ReadOnly = True
+        Me.Column24.Width = 125
+        '
+        'DataGridViewTextBoxColumn6
+        '
+        Me.DataGridViewTextBoxColumn6.HeaderText = "手法（手段）"
+        Me.DataGridViewTextBoxColumn6.MinimumWidth = 6
+        Me.DataGridViewTextBoxColumn6.Name = "DataGridViewTextBoxColumn6"
+        Me.DataGridViewTextBoxColumn6.ReadOnly = True
+        Me.DataGridViewTextBoxColumn6.Width = 125
+        '
+        'Column29
+        '
+        Me.Column29.HeaderText = "場所"
+        Me.Column29.MinimumWidth = 6
+        Me.Column29.Name = "Column29"
+        Me.Column29.ReadOnly = True
+        Me.Column29.Width = 125
+        '
+        'DataGridViewTextBoxColumn7
+        '
+        Me.DataGridViewTextBoxColumn7.HeaderText = "担当者"
+        Me.DataGridViewTextBoxColumn7.MinimumWidth = 6
+        Me.DataGridViewTextBoxColumn7.Name = "DataGridViewTextBoxColumn7"
+        Me.DataGridViewTextBoxColumn7.ReadOnly = True
+        Me.DataGridViewTextBoxColumn7.Width = 80
+        '
+        'Column25
+        '
+        Me.Column25.HeaderText = "対応者"
+        Me.Column25.MinimumWidth = 6
+        Me.Column25.Name = "Column25"
+        Me.Column25.ReadOnly = True
+        Me.Column25.Width = 80
+        '
+        'DataGridViewTextBoxColumn8
+        '
+        DataGridViewCellStyle7.Format = "d"
+        DataGridViewCellStyle7.NullValue = Nothing
+        Me.DataGridViewTextBoxColumn8.DefaultCellStyle = DataGridViewCellStyle7
+        Me.DataGridViewTextBoxColumn8.HeaderText = "督促通知"
+        Me.DataGridViewTextBoxColumn8.MinimumWidth = 6
+        Me.DataGridViewTextBoxColumn8.Name = "DataGridViewTextBoxColumn8"
+        Me.DataGridViewTextBoxColumn8.ReadOnly = True
+        Me.DataGridViewTextBoxColumn8.Width = 90
+        '
+        'DataGridViewTextBoxColumn9
+        '
+        Me.DataGridViewTextBoxColumn9.HeaderText = "備考内容"
+        Me.DataGridViewTextBoxColumn9.MaxInputLength = 999999
+        Me.DataGridViewTextBoxColumn9.MinimumWidth = 6
+        Me.DataGridViewTextBoxColumn9.Name = "DataGridViewTextBoxColumn9"
+        Me.DataGridViewTextBoxColumn9.ReadOnly = True
+        Me.DataGridViewTextBoxColumn9.Visible = False
+        Me.DataGridViewTextBoxColumn9.Width = 125
+        '
+        'Column9
+        '
+        Me.Column9.HeaderText = "識別番号"
+        Me.Column9.MinimumWidth = 6
+        Me.Column9.Name = "Column9"
+        Me.Column9.ReadOnly = True
+        Me.Column9.Visible = False
+        Me.Column9.Width = 130
+        '
+        'DataGridViewTextBoxColumn1
+        '
+        Me.DataGridViewTextBoxColumn1.HeaderText = "日時"
+        Me.DataGridViewTextBoxColumn1.MinimumWidth = 6
+        Me.DataGridViewTextBoxColumn1.Name = "DataGridViewTextBoxColumn1"
+        Me.DataGridViewTextBoxColumn1.ReadOnly = True
+        Me.DataGridViewTextBoxColumn1.Width = 130
+        '
+        'DataGridViewTextBoxColumn2
+        '
+        DataGridViewCellStyle21.BackColor = System.Drawing.Color.White
+        DataGridViewCellStyle21.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        DataGridViewCellStyle21.ForeColor = System.Drawing.Color.Black
+        Me.DataGridViewTextBoxColumn2.DefaultCellStyle = DataGridViewCellStyle21
+        Me.DataGridViewTextBoxColumn2.HeaderText = "相手"
+        Me.DataGridViewTextBoxColumn2.MinimumWidth = 6
+        Me.DataGridViewTextBoxColumn2.Name = "DataGridViewTextBoxColumn2"
+        Me.DataGridViewTextBoxColumn2.ReadOnly = True
+        Me.DataGridViewTextBoxColumn2.Width = 105
+        '
+        'Column22
+        '
+        Me.Column22.HeaderText = "概要"
+        Me.Column22.MinimumWidth = 6
+        Me.Column22.Name = "Column22"
+        Me.Column22.ReadOnly = True
+        Me.Column22.Width = 160
+        '
+        'Column4
+        '
+        Me.Column4.HeaderText = "手法（手段）"
+        Me.Column4.MinimumWidth = 6
+        Me.Column4.Name = "Column4"
+        Me.Column4.ReadOnly = True
+        Me.Column4.Width = 120
+        '
+        'Column7
+        '
+        Me.Column7.HeaderText = "担当者"
+        Me.Column7.MinimumWidth = 6
+        Me.Column7.Name = "Column7"
+        Me.Column7.ReadOnly = True
+        Me.Column7.Width = 65
+        '
+        'Column23
+        '
+        Me.Column23.HeaderText = "対応者"
+        Me.Column23.MinimumWidth = 6
+        Me.Column23.Name = "Column23"
+        Me.Column23.ReadOnly = True
+        Me.Column23.Width = 65
+        '
+        '督促通知日
+        '
+        DataGridViewCellStyle22.Format = "d"
+        DataGridViewCellStyle22.NullValue = Nothing
+        Me.督促通知日.DefaultCellStyle = DataGridViewCellStyle22
+        Me.督促通知日.HeaderText = "督促通知"
+        Me.督促通知日.MinimumWidth = 6
+        Me.督促通知日.Name = "督促通知日"
+        Me.督促通知日.ReadOnly = True
+        Me.督促通知日.Width = 90
+        '
+        'Column3
+        '
+        Me.Column3.HeaderText = "備考内容"
+        Me.Column3.MaxInputLength = 999999
+        Me.Column3.MinimumWidth = 6
+        Me.Column3.Name = "Column3"
+        Me.Column3.ReadOnly = True
+        Me.Column3.Visible = False
+        Me.Column3.Width = 125
+        '
+        'Column13
+        '
+        Me.Column13.HeaderText = "場所"
+        Me.Column13.MinimumWidth = 6
+        Me.Column13.Name = "Column13"
+        Me.Column13.ReadOnly = True
+        Me.Column13.Width = 115
+        '
+        'Column30
+        '
+        Me.Column30.HeaderText = "ダミー名"
+        Me.Column30.MinimumWidth = 6
+        Me.Column30.Name = "Column30"
+        Me.Column30.ReadOnly = True
+        Me.Column30.Visible = False
+        Me.Column30.Width = 125
         '
         'SCA1
         '
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None
         Me.BackColor = System.Drawing.Color.WhiteSmoke
-        Me.ClientSize = New System.Drawing.Size(1139, 706)
+        Me.ClientSize = New System.Drawing.Size(1377, 706)
         Me.Controls.Add(Me.L_UPDMsg)
         Me.Controls.Add(Me.MenuStrip1)
         Me.Controls.Add(Me.PBXX)
@@ -3448,19 +3459,6 @@ Partial Class SCA1
     Friend WithEvents BT_PI2 As Button
     Friend WithEvents DTP_PI1 As DateTimePicker
     Friend WithEvents BT_FPSave As Button
-    Friend WithEvents Column38 As DataGridViewTextBoxColumn
-    Friend WithEvents DataGridViewTextBoxColumn3 As DataGridViewTextBoxColumn
-    Friend WithEvents DataGridViewTextBoxColumn4 As DataGridViewTextBoxColumn
-    Friend WithEvents Column20 As DataGridViewTextBoxColumn
-    Friend WithEvents Column21 As DataGridViewTextBoxColumn
-    Friend WithEvents DataGridViewTextBoxColumn5 As DataGridViewTextBoxColumn
-    Friend WithEvents Column24 As DataGridViewTextBoxColumn
-    Friend WithEvents DataGridViewTextBoxColumn6 As DataGridViewTextBoxColumn
-    Friend WithEvents Column29 As DataGridViewTextBoxColumn
-    Friend WithEvents DataGridViewTextBoxColumn7 As DataGridViewTextBoxColumn
-    Friend WithEvents Column25 As DataGridViewTextBoxColumn
-    Friend WithEvents DataGridViewTextBoxColumn8 As DataGridViewTextBoxColumn
-    Friend WithEvents DataGridViewTextBoxColumn9 As DataGridViewTextBoxColumn
     Friend WithEvents Label32 As Label
     Friend WithEvents Label30 As Label
     Friend WithEvents Label33 As Label
@@ -3472,36 +3470,6 @@ Partial Class SCA1
     Friend WithEvents DGV_PIMENU As DataGridView
     Friend WithEvents DataGridViewTextBoxColumn17 As DataGridViewTextBoxColumn
     Friend WithEvents Button9 As Button
-    Friend WithEvents Column9 As DataGridViewTextBoxColumn
-    Friend WithEvents DataGridViewTextBoxColumn1 As DataGridViewTextBoxColumn
-    Friend WithEvents DataGridViewTextBoxColumn2 As DataGridViewTextBoxColumn
-    Friend WithEvents Column22 As DataGridViewTextBoxColumn
-    Friend WithEvents Column4 As DataGridViewTextBoxColumn
-    Friend WithEvents Column7 As DataGridViewTextBoxColumn
-    Friend WithEvents Column23 As DataGridViewTextBoxColumn
-    Friend WithEvents 督促通知日 As DataGridViewTextBoxColumn
-    Friend WithEvents Column3 As DataGridViewTextBoxColumn
-    Friend WithEvents Column13 As DataGridViewTextBoxColumn
-    Friend WithEvents Column30 As DataGridViewTextBoxColumn
-    Friend WithEvents Column18 As DataGridViewTextBoxColumn
-    Friend WithEvents Column12 As DataGridViewTextBoxColumn
-    Friend WithEvents Column17 As DataGridViewTextBoxColumn
-    Friend WithEvents Column11 As DataGridViewTextBoxColumn
-    Friend WithEvents Column14 As DataGridViewTextBoxColumn
-    Friend WithEvents Column15 As DataGridViewTextBoxColumn
-    Friend WithEvents Column16 As DataGridViewTextBoxColumn
-    Friend WithEvents Column35 As DataGridViewTextBoxColumn
-    Friend WithEvents DataGridViewTextBoxColumn10 As DataGridViewTextBoxColumn
-    Friend WithEvents Column19 As DataGridViewTextBoxColumn
-    Friend WithEvents DataGridViewTextBoxColumn14 As DataGridViewTextBoxColumn
-    Friend WithEvents DataGridViewTextBoxColumn15 As DataGridViewTextBoxColumn
-    Friend WithEvents Column31 As DataGridViewTextBoxColumn
-    Friend WithEvents DataGridViewTextBoxColumn13 As DataGridViewTextBoxColumn
-    Friend WithEvents Column32 As DataGridViewTextBoxColumn
-    Friend WithEvents Column33 As DataGridViewTextBoxColumn
-    Friend WithEvents Column34 As DataGridViewTextBoxColumn
-    Friend WithEvents Column36 As DataGridViewTextBoxColumn
-    Friend WithEvents Column37 As DataGridViewTextBoxColumn
     Friend WithEvents CreatorExpress1 As AdvanceSoftware.ExcelCreator.Xlsx.CreatorExpress
     Friend WithEvents CB_AUTOUPD As CheckBox
     Friend WithEvents Column26 As DataGridViewTextBoxColumn
@@ -3536,13 +3504,6 @@ Partial Class SCA1
     Friend WithEvents Label4 As Label
     Friend WithEvents Label7 As Label
     Friend WithEvents TB_ADDRESS3 As TextBox
-    Friend WithEvents DataGridViewTextBoxColumn19 As DataGridViewTextBoxColumn
-    Friend WithEvents DataGridViewTextBoxColumn20 As DataGridViewTextBoxColumn
-    Friend WithEvents DataGridViewTextBoxColumn21 As DataGridViewTextBoxColumn
-    Friend WithEvents DataGridViewTextBoxColumn22 As DataGridViewTextBoxColumn
-    Friend WithEvents Column39 As DataGridViewTextBoxColumn
-    Friend WithEvents Column40 As DataGridViewTextBoxColumn
-    Friend WithEvents Column41 As DataGridViewTextBoxColumn
     Friend WithEvents Button2 As Button
     Friend WithEvents Button5 As Button
     Friend WithEvents L_MRSearchHit As Label
@@ -3600,6 +3561,42 @@ Partial Class SCA1
     Friend WithEvents DataGridViewTextBoxColumn38 As DataGridViewTextBoxColumn
     Friend WithEvents DataGridViewTextBoxColumn39 As DataGridViewTextBoxColumn
     Friend WithEvents DataGridViewTextBoxColumn40 As DataGridViewTextBoxColumn
+    Friend WithEvents ColorDialog1 As ColorDialog
+    Friend WithEvents L_TYPE_H As Label
+    Friend WithEvents L_TYPE_A As Label
+    Friend WithEvents L_TYPE_F As Label
+    Friend WithEvents CB_FPStatus As CheckedListBox
+    Friend WithEvents BT_FPMNG_AllOutExcel As Button
+    Friend WithEvents GroupBox2 As GroupBox
+    Friend WithEvents Button17 As Button
+    Friend WithEvents DataGridViewTextBoxColumn19 As DataGridViewTextBoxColumn
+    Friend WithEvents DataGridViewTextBoxColumn20 As DataGridViewTextBoxColumn
+    Friend WithEvents DataGridViewTextBoxColumn21 As DataGridViewTextBoxColumn
+    Friend WithEvents DataGridViewTextBoxColumn22 As DataGridViewTextBoxColumn
+    Friend WithEvents Column39 As DataGridViewTextBoxColumn
+    Friend WithEvents Column40 As DataGridViewTextBoxColumn
+    Friend WithEvents Column41 As DataGridViewTextBoxColumn
+    Friend WithEvents Column27 As DataGridViewTextBoxColumn
+    Friend WithEvents Column28 As DataGridViewTextBoxColumn
+    Friend WithEvents Column18 As DataGridViewTextBoxColumn
+    Friend WithEvents Column12 As DataGridViewTextBoxColumn
+    Friend WithEvents Column17 As DataGridViewTextBoxColumn
+    Friend WithEvents Column11 As DataGridViewTextBoxColumn
+    Friend WithEvents Column14 As DataGridViewTextBoxColumn
+    Friend WithEvents Column15 As DataGridViewTextBoxColumn
+    Friend WithEvents Column16 As DataGridViewTextBoxColumn
+    Friend WithEvents Column35 As DataGridViewTextBoxColumn
+    Friend WithEvents DataGridViewTextBoxColumn10 As DataGridViewTextBoxColumn
+    Friend WithEvents Column19 As DataGridViewTextBoxColumn
+    Friend WithEvents DataGridViewTextBoxColumn14 As DataGridViewTextBoxColumn
+    Friend WithEvents DataGridViewTextBoxColumn15 As DataGridViewTextBoxColumn
+    Friend WithEvents Column31 As DataGridViewTextBoxColumn
+    Friend WithEvents DataGridViewTextBoxColumn13 As DataGridViewTextBoxColumn
+    Friend WithEvents Column32 As DataGridViewTextBoxColumn
+    Friend WithEvents Column33 As DataGridViewTextBoxColumn
+    Friend WithEvents Column34 As DataGridViewTextBoxColumn
+    Friend WithEvents Column36 As DataGridViewTextBoxColumn
+    Friend WithEvents Column37 As DataGridViewTextBoxColumn
     Friend WithEvents C01 As DataGridViewTextBoxColumn
     Friend WithEvents C02 As DataGridViewTextBoxColumn
     Friend WithEvents C03 As DataGridViewTextBoxColumn
@@ -3610,12 +3607,28 @@ Partial Class SCA1
     Friend WithEvents C09 As DataGridViewTextBoxColumn
     Friend WithEvents C08 As DataGridViewTextBoxColumn
     Friend WithEvents C07 As DataGridViewTextBoxColumn
-    Friend WithEvents ColorDialog1 As ColorDialog
-    Friend WithEvents L_TYPE_H As Label
-    Friend WithEvents L_TYPE_A As Label
-    Friend WithEvents L_TYPE_F As Label
-    Friend WithEvents CB_FPStatus As CheckedListBox
-    Friend WithEvents BT_FPMNG_AllOutExcel As Button
-    Friend WithEvents GroupBox2 As GroupBox
-    Friend WithEvents Button17 As Button
+    Friend WithEvents Column38 As DataGridViewTextBoxColumn
+    Friend WithEvents DataGridViewTextBoxColumn3 As DataGridViewTextBoxColumn
+    Friend WithEvents DataGridViewTextBoxColumn4 As DataGridViewTextBoxColumn
+    Friend WithEvents Column20 As DataGridViewTextBoxColumn
+    Friend WithEvents Column21 As DataGridViewTextBoxColumn
+    Friend WithEvents DataGridViewTextBoxColumn5 As DataGridViewTextBoxColumn
+    Friend WithEvents Column24 As DataGridViewTextBoxColumn
+    Friend WithEvents DataGridViewTextBoxColumn6 As DataGridViewTextBoxColumn
+    Friend WithEvents Column29 As DataGridViewTextBoxColumn
+    Friend WithEvents DataGridViewTextBoxColumn7 As DataGridViewTextBoxColumn
+    Friend WithEvents Column25 As DataGridViewTextBoxColumn
+    Friend WithEvents DataGridViewTextBoxColumn8 As DataGridViewTextBoxColumn
+    Friend WithEvents DataGridViewTextBoxColumn9 As DataGridViewTextBoxColumn
+    Friend WithEvents Column9 As DataGridViewTextBoxColumn
+    Friend WithEvents DataGridViewTextBoxColumn1 As DataGridViewTextBoxColumn
+    Friend WithEvents DataGridViewTextBoxColumn2 As DataGridViewTextBoxColumn
+    Friend WithEvents Column22 As DataGridViewTextBoxColumn
+    Friend WithEvents Column4 As DataGridViewTextBoxColumn
+    Friend WithEvents Column7 As DataGridViewTextBoxColumn
+    Friend WithEvents Column23 As DataGridViewTextBoxColumn
+    Friend WithEvents 督促通知日 As DataGridViewTextBoxColumn
+    Friend WithEvents Column3 As DataGridViewTextBoxColumn
+    Friend WithEvents Column13 As DataGridViewTextBoxColumn
+    Friend WithEvents Column30 As DataGridViewTextBoxColumn
 End Class

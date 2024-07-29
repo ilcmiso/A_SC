@@ -399,6 +399,20 @@ Public Class Common
         Next
         Return -1
     End Function
+    ' DataGridViewの指定カラムの各行のフォントとアライメントを変更するメソッド
+    Public Sub ChangeColumnFont(dgv As DataGridView, partialColumnName As String, newFont As Font)
+        ' 各カラムをループして、カラム名が指定した文字列を含むカラムを探す
+        For Each column As DataGridViewColumn In dgv.Columns
+            If column.HeaderText.Contains(partialColumnName) Then
+                Dim columnIndex As Integer = column.Index
+
+                ' DataGridViewの各行をループして指定カラムのフォントとアライメントを変更
+                For Each row As DataGridViewRow In dgv.Rows
+                    row.Cells(columnIndex).Style.Font = newFont
+                Next
+            End If
+        Next
+    End Sub
 
     ' プログレスバー表示
     Public Sub StartPBar(progressCount As Integer)

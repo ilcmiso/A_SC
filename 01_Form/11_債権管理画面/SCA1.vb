@@ -2,6 +2,7 @@
 Imports System.IO
 Imports System.Text
 Imports System.Threading
+Imports System.Drawing
 Imports DocumentFormat.OpenXml.Spreadsheet
 
 Public Class SCA1
@@ -416,9 +417,10 @@ Public Class SCA1
         Dim idx As Integer = 0
         Dim dt As DataTable = Nothing
         Dim bindID As Integer
+        If dgv.Visible = False Then Exit Sub
         log.TimerST()
 
-        If dgv.Rows.Count > 0 Then idx = dgv.CurrentRow.Index           ' 元の選択中行を覚えておく
+        If dgv.Rows.Count > 0 Then idx = dgv.CurrentRow.Index           ' 元の選択中行を覚えておく        
 
         Select Case True
             Case dgv Is DGV1                                ' ## 顧客情報タブ リスト
@@ -518,13 +520,13 @@ Public Class SCA1
                         If dr(0)(11)(0) = "6" Then L_TYPE_H.Visible = True
                     End If
 
-                    dgv(1, 11).Value = cmn.SetValueDefault(cInfo.Item(63), "")       ' 住居サイン
-                    dgv(3, 11).Value = cmn.SetValueDefault(cInfo.Item(64), "")       ' 物件郵便番号
-                    dgv(1, 12).Value = cmn.SetValueDefault(cInfo.Item(65), "")       ' 物件住所
-                    dgv(1, 13).Value = cmn.SetValueDefault(cInfo.Item(43), "")       ' 金融機関
-                    dgv(3, 13).Value = cmn.SetValueDefault(cInfo.Item(44), "")       ' 支店番号
-                    dgv(1, 14).Value = cmn.SetValueDefault(cInfo.Item(41), "")       ' 口座番号
-                    dgv(3, 14).Value = cmn.SetValueDefault(cInfo.Item(42), "")       ' 口座名義
+                    dgv(8, 1).Value = cmn.SetValueDefault(cInfo.Item(63), "")       ' 住居サイン
+                    dgv(8, 2).Value = cmn.SetValueDefault(cInfo.Item(64), "")       ' 物件郵便番号
+                    dgv(8, 3).Value = cmn.SetValueDefault(cInfo.Item(65), "")       ' 物件住所
+                    dgv(8, 4).Value = cmn.SetValueDefault(cInfo.Item(43), "")       ' 金融機関
+                    dgv(8, 5).Value = cmn.SetValueDefault(cInfo.Item(44), "")       ' 支店番号
+                    dgv(8, 6).Value = cmn.SetValueDefault(cInfo.Item(41), "")       ' 口座番号
+                    dgv(8, 7).Value = cmn.SetValueDefault(cInfo.Item(42), "")       ' 口座名義
 
                     ' DGV9の住所欄の幅が狭いのでテキストボックスにも表示させておく
                     TB_ADDRESS1.Text = cmn.SetValueDefault(cInfo.Item(16), "")
@@ -980,22 +982,24 @@ Public Class SCA1
         If dgv.Rows.Count = 0 Then
             ' 新規DGV成形
             Dim ItemNames As String(,) = {
-                    {"債権番号", "", "証券番号", "", "契約種別", ""},
-                    {"ﾖﾐｶﾅ", "", "TEL", "", "金消契約日", ""},
-                    {"債務者", "", "生年月日", "", "貸付金額", ""},
-                    {"郵便番号", "", "旧団信加入", "", "残高", ""},
-                    {"住所", "", "", "", "貸付金額(B)", ""},
-                    {"勤務先", "", "勤務先TEL", "", "残高(B)", ""},
-                    {"ﾖﾐｶﾅ", "", "TEL", "", "残高更新日", ""},
-                    {"連債者", "", "生年月日", "", "返済額", ""},
-                    {"郵便番号", "", "旧団信加入", "", "返済額(B)", ""},
-                    {"住所", "", "", "", "延滞月数", ""},
-                    {"勤務先", "", "勤務先TEL", "", "延滞合計額", ""},
-                    {"住居サイン", "", "物件〒", "", "完済日", ""},
-                    {"物件住所", "", "", "", "", ""},
-                    {"金融機関", "", "支店番号", "", "", ""},
-                    {"口座番号", "", "口座名義", "", "", ""}
+                    {"債権番号", "", "証券番号", "", "契約種別", "", "", "", ""},
+                    {"ﾖﾐｶﾅ", "", "TEL", "", "金消契約日", "", "", "住居サイン", ""},
+                    {"債務者", "", "生年月日", "", "貸付金額", "", "", "物件〒", ""},
+                    {"郵便番号", "", "旧団信加入", "", "残高", "", "", "物件住所", ""},
+                    {"住所", "", "", "", "貸付金額(B)", "", "", "金融機関", ""},
+                    {"勤務先", "", "勤務先TEL", "", "残高(B)", "", "", "支店番号", ""},
+                    {"ﾖﾐｶﾅ", "", "TEL", "", "残高更新日", "", "", "口座番号", ""},
+                    {"連債者", "", "生年月日", "", "返済額", "", "", "口座名義", ""},
+                    {"郵便番号", "", "旧団信加入", "", "返済額(B)", "", "", "", ""},
+                    {"住所", "", "", "", "延滞月数", "", "", "", ""},
+                    {"勤務先", "", "勤務先TEL", "", "延滞合計額", "", "", "", ""},
+                    {"", "", "", "", "完済日", "", "", "", ""}
                 }
+            '{"住居サイン", "", "物件〒", "", "完済日", ""},
+            '{"物件住所", "", "", "", "", ""},
+            '{"金融機関", "", "支店番号", "", "", ""},
+            '{"口座番号", "", "口座名義", "", "", ""}
+
             For row = 0 To ItemNames.GetLength(0) - 1
                 dgv.Rows.Add()
                 For col = 0 To ItemNames.GetLength(1) - 1
@@ -1007,10 +1011,12 @@ Public Class SCA1
             dgv.Columns(0).DefaultCellStyle.BackColor = System.Drawing.Color.Gainsboro
             dgv.Columns(2).DefaultCellStyle.BackColor = System.Drawing.Color.Gainsboro
             dgv.Columns(4).DefaultCellStyle.BackColor = System.Drawing.Color.Gainsboro
+            dgv.Columns(7).DefaultCellStyle.BackColor = System.Drawing.Color.Gainsboro
             dgv.Rows(0).DividerHeight = 1
             dgv.Rows(5).DividerHeight = 1
-            dgv.Rows(10).DividerHeight = 1
+            'dgv.Rows(10).DividerHeight = 1
             dgv.Columns(3).DividerWidth = 1
+            dgv.Columns(6).DividerWidth = 1
         Else
             ' 顧客情報のみクリア
             Dim clearCooumns() As Integer = {1, 3, 5, 6}
@@ -2146,6 +2152,7 @@ Public Class SCA1
 
         ' 専用タブの表示
         cmn.SetTabVisible(TAB_A1, divNo = Common.DIV.SC, "Tab_3Mng")     ' 管理表
+        cmn.SetTabVisible(TAB_A1, divNo = Common.DIV.SC, "Tab_4Dun")     ' 督促状管理
         cmn.SetTabVisible(TAB_A1, divNo = Common.DIV.GA, "Tab_6GA")      ' 申請物管理
 
         Select Case divNo
@@ -2207,6 +2214,14 @@ Public Class SCA1
         mrcmn.HighlightRows(DGV_MR1, "抹消発送日", "", System.Drawing.Color.DarkGray)
         mrcmn.HighlightRows(DGV_MR1, "ステータス", "取下げ", System.Drawing.Color.Salmon)
 
+        Dim moneyFont As New System.Drawing.Font("メイリオ", 11, FontStyle.Bold)
+        cmn.ChangeColumnFont(DGV_MR1, "金額", moneyFont)
+        Dim dateFont As New System.Drawing.Font("メイリオ", 9, FontStyle.Bold)
+        cmn.ChangeColumnFont(DGV_MR1, "日", dateFont)
+        cmn.ChangeColumnFont(DGV_MR1, "年月", dateFont)
+        cmn.ChangeColumnFont(DGV_MR1, "開始月", dateFont)
+        cmn.ChangeColumnFont(DGV_MR1, "予定月", dateFont)
+
         cmn.SetComboBoxUniqueDGVItems(DGV_MR1, "担当者", CB_Person, "(全表示)")   ' 担当コンボボックス設定
         log.TimerED("ShowDGVMR")
     End Sub
@@ -2265,11 +2280,6 @@ Public Class SCA1
         Dim startDate As Date = DTP_MRST.Value.Date
         Dim endDate As Date = DTP_MRED.Value.Date
         Dim searchHit As Integer = 0
-
-        ' 一旦すべての行を非表示にする
-        For Each row As DataGridViewRow In DGV_MR1.Rows
-            row.Visible = False
-        Next
 
         ' DataGridViewの各行を走査
         For Each row As DataGridViewRow In DGV_MR1.Rows
