@@ -289,8 +289,10 @@ Public Class SCA1
     End Sub
 
     Public Sub ExUpdateButton2()
-        db.DBFileFDL(Sqldb.TID.SCD)                     ' ファイル強制ダウンロード
-        ShowDGVList(DGV2)
+        If CB_AUTOUPD.Checked Then
+            db.DBFileFDL(Sqldb.TID.SCD)                     ' ファイル強制ダウンロード
+            ShowDGVList(DGV2)
+        End If
     End Sub
 
     ' 印刷ボタン
@@ -615,7 +617,7 @@ Public Class SCA1
                 dgv.Sort(dgv.Columns(2), ComponentModel.ListSortDirection.Descending)
             Case dgv Is DGV5
                 DGV5_CellClick()
-                L_STS_Rec.Text = " ( " & DGV5.Rows.Count & " / " & maxCosCount & " ) 件 表示中"
+                L_STS_Rec.Text = " ( " & DGV5.Rows.Count & " / " & MaxCosCount & " ) 件 表示中"
                 'Case dgv Is DGV7
 
             Case Else
@@ -913,13 +915,7 @@ Public Class SCA1
     ' 他PCでDB更新を通知
     Private Sub UpdateDB_SCD()
         log.cLog("-- UpdateDB_SCD")
-
-        ShowDGVList(DGV2)                               ' 交渉記録
-
-        ' 自動更新チェックがONの場合のみ自動更新
-        If CB_AUTOUPD.Checked Then
-            ExUpdateButton()
-        End If
+        ExUpdateButton2()
     End Sub
 
     ' FPDB更新を通知
@@ -1042,6 +1038,8 @@ Public Class SCA1
     End Sub
     ' itemIndexは物件情報の大項目番号
     Public Sub ShowSelectUser(cid As String, itemIndex As Integer)
+        TAB_A1.SelectedTab = Tab_1SC
+
         ' フィルタかけられて、DGVに非表示になっていたら予め解除しておく
         Dim dt As DataTable = CType(DGV1.DataSource, DataTable)
         If dt.Select("[FK02] = '" & cid & "'").Length = 0 Then
@@ -1058,8 +1056,6 @@ Public Class SCA1
                 Exit For
             End If
         Next
-
-        TAB_A1.SelectedTab = Tab_1SC
     End Sub
 
     ' 指定した記録情報を表示する DGV2
@@ -2205,7 +2201,9 @@ Public Class SCA1
     End Sub
 
     Public Sub ShowDGVMR() Handles CB_MRLIST.SelectedIndexChanged
+        Static tmpFont As System.Drawing.Font = DGV_MR1.Font
         log.TimerST()
+        db.UpdateOrigDT(Sqldb.TID.MRM)
         mrcmn.InitDGVInfo(DGV_MR1, Sqldb.TID.MRM, CB_MRLIST.SelectedIndex)
         mrcmn.LoadDGVInfo(DGV_MR1, Sqldb.TID.MR, CB_MRLIST.SelectedIndex)
         ' 完済日フィルタを完済日のカラムがあるときだけ有効
@@ -2219,9 +2217,15 @@ Public Class SCA1
         mrcmn.HighlightRows(DGV_MR1, "抹消発送日", "", System.Drawing.Color.DarkGray)
         mrcmn.HighlightRows(DGV_MR1, "ステータス", "取下げ", System.Drawing.Color.Salmon)
 
-        Dim moneyFont As New System.Drawing.Font("メイリオ", 11, FontStyle.Bold)
+        Dim moneyFont As New System.Drawing.Font("メイリオ", 11, FontStyle.Bold)    ' 金額用のフォント
+        Dim dateFont As New System.Drawing.Font("メイリオ", 9, FontStyle.Bold)      ' 日付用のフォント
+        ' 完済管理表示中
+        If CB_MRLIST.SelectedIndex = SCcommon.MRITEMID.FULL_REPAY Then
+            DGV_MR1.Font = dateFont
+        Else
+            DGV_MR1.Font = tmpFont
+        End If
         cmn.ChangeColumnFont(DGV_MR1, "金額", moneyFont)
-        Dim dateFont As New System.Drawing.Font("メイリオ", 9, FontStyle.Bold)
         cmn.ChangeColumnFont(DGV_MR1, "日", dateFont)
         cmn.ChangeColumnFont(DGV_MR1, "年月", dateFont)
         cmn.ChangeColumnFont(DGV_MR1, "開始月", dateFont)

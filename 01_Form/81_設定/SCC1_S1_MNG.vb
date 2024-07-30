@@ -47,7 +47,7 @@ Public Class SCC1_S1_MNG
             "db3ファイル新規作成 (Value値)",
             "SQLite2SQLServer",
             "SQL速度比較",
-            "DB変換0619"
+            "DB変換0730"
             }
         ListBox2.Items.Clear()
         For Each cl In commandNames
@@ -111,7 +111,7 @@ Public Class SCC1_S1_MNG
             Case 3
                 db.SQLServerSpeedDiff()
             Case 4
-                db.MRDBFixTemp0619()
+                db.MRDBFixTemp0730()
 
         End Select
         MsgBox("完了")

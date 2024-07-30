@@ -611,9 +611,10 @@ Public Class Sqldb
         Return num
     End Function
 
-    Public Sub MRDBFixTemp0619()
-        ExeSQL(TID.MR, "UPDATE TBL SET C21 = C20, C20 = C19, C19 = C18, C18 = C17, C17 = C16, C16 = C15, C15 = C14, C14 = C13, C13 = C12, C12 = C11, C11 = C10, C10 = C09, C09 = '' WHERE C02 = '1';")
-        ExeSQL(TID.MR, "UPDATE TBL SET C21 = C20, C20 = C19, C19 = C18, C18 = C17, C17 = C16, C16 = C15, C15 = C14, C14 = C13, C13 = C12, C12 = C11, C11 = C10, C10 = '' WHERE C02 = '2';")
+    Public Sub MRDBFixTemp0730()
+        ExeSQL(TID.MR, "UPDATE TBL SET C09 = '' WHERE C09 = '無';")
+        ExeSQL(TID.MR, "UPDATE TBL SET C15 = '' WHERE C15 = '無';")
+        ExeSQL(TID.MR, "UPDATE TBL SET C17 = '' WHERE C17 = '未';")
     End Sub
 
     ' 物件情報(FPIB) 顧客番号からの顧客キーを取得
