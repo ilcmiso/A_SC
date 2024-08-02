@@ -387,7 +387,8 @@ Public Class SCA1
             Case Keys.F2
             Case Keys.F3
             Case Keys.F4
-                Dim task = db.UpdateOrigDTAsync(Sqldb.TID.SCD)
+                db.UpdateOrigDT(Sqldb.TID.MRM)
+                ShowDGVMR()
         End Select
     End Sub
 
@@ -2201,7 +2202,6 @@ Public Class SCA1
     End Sub
 
     Public Sub ShowDGVMR() Handles CB_MRLIST.SelectedIndexChanged
-        Static tmpFont As System.Drawing.Font = DGV_MR1.Font
         log.TimerST()
         db.UpdateOrigDT(Sqldb.TID.MRM)
         mrcmn.InitDGVInfo(DGV_MR1, Sqldb.TID.MRM, CB_MRLIST.SelectedIndex)
@@ -2217,19 +2217,19 @@ Public Class SCA1
         mrcmn.HighlightRows(DGV_MR1, "抹消発送日", "", System.Drawing.Color.DarkGray)
         mrcmn.HighlightRows(DGV_MR1, "ステータス", "取下げ", System.Drawing.Color.Salmon)
 
-        Dim moneyFont As New System.Drawing.Font("メイリオ", 11, FontStyle.Bold)    ' 金額用のフォント
-        Dim dateFont As New System.Drawing.Font("メイリオ", 9, FontStyle.Bold)      ' 日付用のフォント
-        ' 完済管理表示中
-        If CB_MRLIST.SelectedIndex = SCcommon.MRITEMID.FULL_REPAY Then
-            DGV_MR1.Font = dateFont
-        Else
-            DGV_MR1.Font = tmpFont
-        End If
-        cmn.ChangeColumnFont(DGV_MR1, "金額", moneyFont)
-        cmn.ChangeColumnFont(DGV_MR1, "日", dateFont)
-        cmn.ChangeColumnFont(DGV_MR1, "年月", dateFont)
-        cmn.ChangeColumnFont(DGV_MR1, "開始月", dateFont)
-        cmn.ChangeColumnFont(DGV_MR1, "予定月", dateFont)
+        'Dim moneyFont As New System.Drawing.Font("メイリオ", 11, FontStyle.Bold)    ' 金額用のフォント
+        'Dim dateFont As New System.Drawing.Font("メイリオ", 9, FontStyle.Bold)      ' 日付用のフォント
+        '' 完済管理表示中
+        'If CB_MRLIST.SelectedIndex = SCcommon.MRITEMID.FULL_REPAY Then
+        '    DGV_MR1.Font = dateFont
+        'Else
+        '    DGV_MR1.Font = tmpFont
+        'End If
+        'cmn.ChangeColumnFont(DGV_MR1, "金額", moneyFont)
+        'cmn.ChangeColumnFont(DGV_MR1, "日", dateFont)
+        'cmn.ChangeColumnFont(DGV_MR1, "年月", dateFont)
+        'cmn.ChangeColumnFont(DGV_MR1, "開始月", dateFont)
+        'cmn.ChangeColumnFont(DGV_MR1, "予定月", dateFont)
 
         cmn.SetComboBoxUniqueDGVItems(DGV_MR1, "担当者", CB_Person, "(全表示)")   ' 担当コンボボックス設定
         log.TimerED("ShowDGVMR")
@@ -2441,6 +2441,13 @@ Public Class SCA1
     ' ユーザー名設定
     Private Sub ToolStripMenuItem2_Click(sender As Object, e As EventArgs) Handles ToolStripMenuItem2.Click
         Dim fm As Form = SCA_SetUserName
+        fm.ShowInTaskbar = False
+        fm.ShowDialog()
+        fm.Dispose()
+    End Sub
+
+    Private Sub データ投入ToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles データ投入ToolStripMenuItem.Click
+        Dim fm As Form = SCA_InputData
         fm.ShowInTaskbar = False
         fm.ShowDialog()
         fm.Dispose()

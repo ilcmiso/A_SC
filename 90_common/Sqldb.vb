@@ -65,21 +65,21 @@ Public Class Sqldb
     }
     ' DBテーブルのDB種別 SC_DBTableの[ 列数 ]とリンクする必要がある
     Public Enum TID As Integer
-        SC = 0       ' FKSC
-        SCR          ' FKSCREM
-        SCD          ' FKSCD
-        PI           ' PINFO
-        FPCOS        ' FPINFO 融資物件 顧客情報
-        FPDATA       ' FPINFO 融資物件 登録情報
-        FPDATA2      ' FPINFO 融資物件 登録情報
-        FPITEM       ' FPINFO ITEM
-        PIM          ' PINFO MASTER(ITEM)
-        SCAS         ' ASSIST
-        AC           ' AutoCall
-        MR           ' MngRequest 申請物管理
-        MRM          ' MngRequest(ITEM)
-        USER         ' UserList
-        OTAX         ' OverTax
+        SC = 0       '  0 FKSC
+        SCR          '  1 FKSCREM
+        SCD          '  2 FKSCD
+        PI           '  3 PINFO
+        FPCOS        '  4 FPINFO 融資物件 顧客情報
+        FPDATA       '  5 FPINFO 融資物件 登録情報
+        FPDATA2      '  6 FPINFO 融資物件 登録情報
+        FPITEM       '  7 FPINFO ITEM
+        PIM          '  8 PINFO MASTER(ITEM)
+        SCAS         '  9 ASSIST
+        AC           ' 10 AutoCall
+        MR           ' 11 MngRequest 申請物管理
+        MRM          ' 12 MngRequest(ITEM)
+        USER         ' 13 UserList
+        OTAX         ' 14 OverTax
     End Enum
 
     ' DBテーブルの識別子 SC_DBTableの[ 行数 ]とリンクする必要がある

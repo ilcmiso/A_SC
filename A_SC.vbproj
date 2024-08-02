@@ -148,11 +148,23 @@
     </Reference>
     <Reference Include="System.Deployment" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.IO.Compression, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\40-System.IO.Compression.1.0.0.2\lib\net40-client\System.IO.Compression.dll</HintPath>
+    </Reference>
+    <Reference Include="System.IO.Compression.FileSystem, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\40-System.IO.Compression.FileSystem.1.0.0.2\lib\net40-client\System.IO.Compression.FileSystem.dll</HintPath>
+    </Reference>
+    <Reference Include="System.IO.Compression.ZipFile, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>packages\System.IO.Compression.ZipFile.4.3.0\lib\net46\System.IO.Compression.ZipFile.dll</HintPath>
+    </Reference>
     <Reference Include="System.IO.FileSystem.Primitives, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>packages\System.IO.FileSystem.Primitives.4.0.1\lib\net46\System.IO.FileSystem.Primitives.dll</HintPath>
     </Reference>
     <Reference Include="System.IO.Packaging, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>packages\System.IO.Packaging.4.0.0\lib\net46\System.IO.Packaging.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Shim, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\System.Shim.1.0.0.1\lib\net40-client\System.Shim.dll</HintPath>
     </Reference>
     <Reference Include="System.Transactions" />
     <Reference Include="System.Web" />
@@ -219,6 +231,12 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="01_Form\91_汎用\SCA_InputData.designer.vb">
+      <DependentUpon>SCA_InputData.vb</DependentUpon>
+    </Compile>
+    <Compile Include="01_Form\91_汎用\SCA_InputData.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="01_Form\91_汎用\SCA_SetUserName.designer.vb">
       <DependentUpon>SCA_SetUserName.vb</DependentUpon>
     </Compile>
@@ -364,6 +382,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="01_Form\91_汎用\SCA_InputData.resx">
+      <DependentUpon>SCA_InputData.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="01_Form\91_汎用\SCA_SetUserName.resx">
       <DependentUpon>SCA_SetUserName.vb</DependentUpon>
     </EmbeddedResource>
