@@ -115,4 +115,102 @@ Public Class ExcelManager
     Public Sub OpenFile()
         Process.Start(filePath)
     End Sub
+
+
+    ' 複数のExcelファイルを1つのBookにシートをマージ  シート名を返却
+    Public Function MergeExcelFiles(ByVal FilePaths As List(Of String), OutPath As String) As List(Of String)
+        Dim excelApp As New Application
+        Dim WbTarget As Workbook = excelApp.Workbooks.Add()
+        Dim WbSource As Workbook
+        Dim WsSource As Worksheet
+        Dim WsTarget As Worksheet
+        Dim FilePath As String
+        Dim SheetName As String
+        Dim NewSheetName As String
+        Dim SheetCounter As Integer
+        Dim SheetList As New List(Of String)
+
+        ' Excelの表示をオフにする
+        excelApp.Visible = False
+
+        ' 先頭のデフォルトシートの名前を "XXX" に変更
+        WbTarget.Sheets(1).Name = "XXXXX"
+
+        ' 引数で渡されたExcelファイルのパスをループ
+        For Each FilePath In FilePaths
+            ' Excelファイルを開く
+            WbSource = excelApp.Workbooks.Open(FilePath)
+
+            ' 各シートをターゲットのブックにコピー
+            For Each WsSource In WbSource.Sheets
+                ' 元のシート名を取得
+                SheetName = WsSource.Name
+                NewSheetName = SheetName
+                SheetCounter = 1
+
+                ' シート名が重複している場合、連番を付ける
+                Do While SheetExists(WbTarget, NewSheetName)
+                    NewSheetName = SheetName & "_" & SheetCounter
+                    SheetCounter += 1
+                Loop
+
+                ' ターゲットに新しいシートを追加
+                WsTarget = WbTarget.Sheets.Add(After:=WbTarget.Sheets(WbTarget.Sheets.Count))
+
+                ' 新しいシート名を設定
+                WsTarget.Name = NewSheetName
+                SheetList.Add(WsTarget.Name)
+
+                ' シートの内容をコピー
+                WsSource.Cells.Copy(WsTarget.Cells)
+            Next
+
+            ' ソースのブックを閉じる
+            WbSource.Close(False)
+        Next
+
+        ' マージが完了したら、先頭の "XXX" シートを削除
+        WbTarget.Sheets("XXXXX").Delete()
+
+        ' ターゲットのブックを保存
+        WbTarget.SaveAs(OutPath)
+        WbTarget.Close()
+
+        ' Excelアプリケーションを終了
+        excelApp.Quit()
+
+        ' リソースの解放
+        ReleaseObject(WbTarget)
+        ReleaseObject(WbSource)
+        ReleaseObject(excelApp)
+        Return SheetList
+
+    End Function
+
+    ' 指定したシート名がターゲットブックに存在するかチェックする関数
+    Private Function SheetExists(ByVal Wb As Workbook, ByVal SheetName As String) As Boolean
+        On Error Resume Next
+        Dim Ws As Worksheet = Wb.Sheets(SheetName)
+        If Ws Is Nothing Then
+            SheetExists = False
+        Else
+            SheetExists = True
+        End If
+        On Error GoTo 0
+    End Function
+
+    ' オブジェクト解放用の関数
+    Private Sub ReleaseObject(ByVal obj As Object)
+        Try
+            If obj IsNot Nothing Then
+                System.Runtime.InteropServices.Marshal.ReleaseComObject(obj)
+                obj = Nothing
+            End If
+        Catch ex As Exception
+            obj = Nothing
+        Finally
+            GC.Collect()
+        End Try
+    End Sub
+
 End Class

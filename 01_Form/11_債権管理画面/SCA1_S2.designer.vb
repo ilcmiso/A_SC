@@ -74,7 +74,7 @@ Partial Class SCE_S2
         Me.RadioButton2 = New System.Windows.Forms.RadioButton()
         Me.RadioButton1 = New System.Windows.Forms.RadioButton()
         Me.TabPage3 = New System.Windows.Forms.TabPage()
-        Me.Button9 = New System.Windows.Forms.Button()
+        Me.TV_ListFMT = New System.Windows.Forms.TreeView()
         Me.Button5 = New System.Windows.Forms.Button()
         Me.Label15 = New System.Windows.Forms.Label()
         Me.Panel1 = New System.Windows.Forms.Panel()
@@ -106,6 +106,7 @@ Partial Class SCE_S2
         Me.DTP_T4_A = New System.Windows.Forms.DateTimePicker()
         Me.Button7 = New System.Windows.Forms.Button()
         Me.Button6 = New System.Windows.Forms.Button()
+        Me.Button9 = New System.Windows.Forms.Button()
         Me.TabControl1.SuspendLayout()
         Me.TabPage1.SuspendLayout()
         Me.TabPage2.SuspendLayout()
@@ -735,6 +736,7 @@ Partial Class SCE_S2
         'TabPage3
         '
         Me.TabPage3.BackColor = System.Drawing.SystemColors.ControlLight
+        Me.TabPage3.Controls.Add(Me.TV_ListFMT)
         Me.TabPage3.Controls.Add(Me.Button9)
         Me.TabPage3.Controls.Add(Me.Button5)
         Me.TabPage3.Controls.Add(Me.Label15)
@@ -752,16 +754,13 @@ Partial Class SCE_S2
         Me.TabPage3.TabIndex = 2
         Me.TabPage3.Text = "送付物"
         '
-        'Button9
+        'TV_ListFMT
         '
-        Me.Button9.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
-        Me.Button9.Font = New System.Drawing.Font("メイリオ", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.Button9.Location = New System.Drawing.Point(366, 94)
-        Me.Button9.Name = "Button9"
-        Me.Button9.Size = New System.Drawing.Size(135, 66)
-        Me.Button9.TabIndex = 1770
-        Me.Button9.Text = "【お試し】" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "帳票手動選択印刷"
-        Me.Button9.UseVisualStyleBackColor = False
+        Me.TV_ListFMT.Font = New System.Drawing.Font("メイリオ", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.TV_ListFMT.Location = New System.Drawing.Point(12, 26)
+        Me.TV_ListFMT.Name = "TV_ListFMT"
+        Me.TV_ListFMT.Size = New System.Drawing.Size(199, 244)
+        Me.TV_ListFMT.TabIndex = 1771
         '
         'Button5
         '
@@ -1129,6 +1128,17 @@ Partial Class SCE_S2
         Me.Button6.Text = "印　刷"
         Me.Button6.UseVisualStyleBackColor = False
         '
+        'Button9
+        '
+        Me.Button9.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
+        Me.Button9.Font = New System.Drawing.Font("メイリオ", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.Button9.Location = New System.Drawing.Point(366, 94)
+        Me.Button9.Name = "Button9"
+        Me.Button9.Size = New System.Drawing.Size(135, 66)
+        Me.Button9.TabIndex = 1770
+        Me.Button9.Text = "【お試し】" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "帳票手動選択印刷"
+        Me.Button9.UseVisualStyleBackColor = False
+        '
         'SCE_S2
         '
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None
@@ -1240,5 +1250,6 @@ Partial Class SCE_S2
     Friend WithEvents Column22 As DataGridViewTextBoxColumn
     Friend WithEvents Label20 As Label
     Friend WithEvents CB_T4_ASS As CheckBox
+    Friend WithEvents TV_ListFMT As TreeView
     Friend WithEvents Button9 As Button
 End Class

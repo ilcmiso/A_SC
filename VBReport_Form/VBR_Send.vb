@@ -3,13 +3,45 @@ Public Class VBR_Send
 
     Private ReadOnly cmn As New Common
     Private ReadOnly log As New Log
+    Private TreeViewFmt As TreeView
+    Private ReadOnly excelManager As New ExcelManager("")
+
+    Const TEMP_FILENAME As String = "Mix.xlsx"
+
     Private Sub ME_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         log.TimerST()
 
         'ViewerControl1.Clear()
         Dim ownerForm As SCE_S2 = DirectCast(Me.Owner, SCE_S2)            ' 親フォームを参照できるようにキャスト
-        Dim fName As String = ownerForm.LB_SendFMTList.SelectedItem
-        Dim outfPath As String = cmn.CurrentPath & Common.DIR_EXC & Common.DIR_EXCOUT1
+        Dim sheetList As List(Of String) = Nothing        ' 複数ファイル用シート名リスト
+        TreeViewFmt = ownerForm.TV_ListFMT
+
+        If ownerForm.LB_SendFMTList.Visible Then
+            ' 債権管理部のファイル
+            CellReport1.FileName = ownerForm.EXCPATH_FMT & ownerForm.LB_SendFMTList.SelectedItem
+        Else
+            ' 総務課のファイル
+            If ownerForm.selectedNodesPath.Count > 1 Then
+                ' 複数選択の場合、選択されたExcelを1Bookにマージしてテンポラリファイルを作成
+                Dim tempFile As String = ownerForm.EXCPATH_OUT & TEMP_FILENAME
+                Dim list As New List(Of String)
+                For n = 0 To ownerForm.selectedNodesPath.Count - 1
+                    list.Add(ownerForm.EXCPATH_FMT & ownerForm.selectedNodesPath(n))
+                Next
+                sheetList = excelManager.MergeExcelFiles(list, tempFile)
+                CellReport1.FileName = tempFile
+            Else
+                ' 単体ファイル
+                CellReport1.FileName = ownerForm.EXCPATH_FMT & ownerForm.selectedNodesPath(0)
+            End If
+        End If
+
+        'If fName Is Nothing Then
+        '    MsgBox("帳票が選択できていません。")
+        '    Me.Close()
+        '    Exit Sub
+        'End If
+        Dim outfPath As String = ownerForm.EXCPATH_OUT
 
         ' 出力先ディレクトリ作成
         cmn.CreateDir(outfPath)
@@ -19,16 +51,13 @@ Public Class VBR_Send
             Me.Close()
             Exit Sub
         End If
-        CellReport1.FileName = cmn.CurrentPath & Common.DIR_EXC & Common.DIR_EXCFMT1 & fName
         CellReport1.ScaleMode = AdvanceSoftware.VBReport8.ScaleMode.Pixel
         'CellReport1.ApplyFormula = True
 
         ' 帳票手動指定ボタンを押された場合そのファイルパスに変更する
         If ownerForm.PrinfFileName IsNot Nothing Then
-            fName = GetFileName(ownerForm.PrinfFileName)
             CellReport1.FileName = ownerForm.PrinfFileName
         End If
-
 
         If ownerForm.DGV_S2.Rows.Count > 1 Then
             ' 顧客複数選択
@@ -42,25 +71,42 @@ Public Class VBR_Send
                 CellReport1.Report.SaveAs(String.Format("{0}{1}_{2}_{3}",
                                                         outfPath,
                                                         DateTime.Parse(ownerForm.TB_A1.Text).ToString("yyyyMMdd"),
-                                                        cmn.RegReplace(ownerForm.DGV_S2.Rows(n).Cells(1).Value, "　| ", ""), fName),
+                                                        cmn.RegReplace(ownerForm.DGV_S2.Rows(n).Cells(1).Value, "　| ", ""),
+                                                        IO.Path.GetFileName(CellReport1.FileName)),
                                           AdvanceSoftware.VBReport8.ExcelVersion.ver2016)
             Next
         Else
             ' 顧客単体指定
             CellReport1.Report.Start()
             CellReport1.Report.File()
-            CellReport1.Page.Start("Sheet1", "1")
-            WriteExcel(SCA1.DGV1.CurrentRow.Cells(0).Value)
-            CellReport1.Page.End()
-            CellReport1.Report.End()
-            CellReport1.Report.SaveAs(String.Format("{0}{1}_{2}_{3}",
+
+            If sheetList Is Nothing Then
+                ' Excel単一シート
+                CellReport1.Page.Start("Sheet1", "1")
+                WriteExcel(SCA1.DGV1.CurrentRow.Cells(0).Value)
+                CellReport1.Page.End()
+            Else
+                ' Excel複数シートの場合、Sheet名を指定する
+                For n = 0 To sheetList.Count - 1
+                    CellReport1.Page.Start(sheetList(n), "1")
+                    WriteExcel(SCA1.DGV1.CurrentRow.Cells(0).Value)
+                    CellReport1.Page.End()
+                Next
+            End If
+
+            Dim outfilename As String = String.Format("{0}{1}_{2}_{3}",
                                                     outfPath,
                                                     DateTime.Parse(ownerForm.TB_A1.Text).ToString("yyyyMMdd"),
-                                                    cmn.RegReplace(SCA1.DGV1.CurrentRow.Cells(1).Value, "　| ", ""), fName),
-                                      AdvanceSoftware.VBReport8.ExcelVersion.ver2016)
+                                                    cmn.RegReplace(SCA1.DGV1.CurrentRow.Cells(1).Value, "　| ", ""),
+                                                    IO.Path.GetFileName(CellReport1.FileName))
+            CellReport1.Report.End()
+            CellReport1.Report.SaveAs(outfilename, AdvanceSoftware.VBReport8.ExcelVersion.ver2016)
         End If
+        ' tmpファイルがあれば削除
+        If IO.File.Exists(ownerForm.EXCPATH_OUT & TEMP_FILENAME) Then IO.File.Delete(ownerForm.EXCPATH_OUT & TEMP_FILENAME)
+
         Process.Start(outfPath)
-        log.timerED("Exce出力")
+        log.TimerED("Exce出力")
         Me.Close()
     End Sub
 
@@ -104,5 +150,24 @@ Public Class VBR_Send
             CellReport1.Pos(0, idxList.Length + n).Value = itemList(n)
         Next
     End Sub
+
+    ' 選択中のノードのフルパスを取得するメソッド
+    Private Function GetSelectedNodePath() As String
+        ' TreeViewで何も選択されていない場合はNothingを返す
+        If TreeViewFmt.SelectedNode Is Nothing Then
+            Return Nothing
+        End If
+
+        ' 選択中のノードのフルパスを取得
+        Dim selectedNode As TreeNode = TreeViewFmt.SelectedNode
+        ' フルパスの拡張子を確認する
+        If System.IO.Path.HasExtension(selectedNode.FullPath) Then
+            ' 拡張子が存在する場合はパスを返す
+            Return selectedNode.FullPath
+        Else
+            ' フォルダである場合はNothingを返す
+            Return Nothing
+        End If
+    End Function
 
 End Class

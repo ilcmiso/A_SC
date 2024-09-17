@@ -8,10 +8,21 @@ Public Class SCE_S2
     Private CRow As DataGridViewRow
     Private addSW As Boolean
     Public PrinfFileName As String     ' 帳票手動選択印刷のファイル名　VBR_Sendで参照
+    Public EXCPATH_FMT As String
+    Public EXCPATH_OUT As String
+
 
 #Region " OPEN CLOSE "
     Private Sub FLS_Shown(sender As Object, e As EventArgs) Handles MyBase.Shown
         T4Init()
+        ' 部署別 帳票パス設定
+        If xml.GetDiv = Common.DIV.SC Then
+            EXCPATH_FMT = cmn.CurrentPath & Common.DIR_EXC & Common.DIR_EXCFMT1
+            EXCPATH_OUT = cmn.CurrentPath & Common.DIR_EXC & Common.DIR_EXCOUT1
+        Else
+            EXCPATH_FMT = cmn.CurrentPath & Common.DIR_EXC & Common.DIR_EXCFMTGA
+            EXCPATH_OUT = cmn.CurrentPath & Common.DIR_EXC & Common.DIR_EXCOUTGA
+        End If
         ShowSendFmtList()
         RadioButton1_CheckedChanged()
         ' 初期設定
@@ -190,7 +201,7 @@ Public Class SCE_S2
 
     ' 帳票フォルダを開くボタン
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
-        Process.Start(cmn.CurrentPath & Common.DIR_EXC & Common.DIR_EXCFMT1)
+        Process.Start(EXCPATH_FMT)
     End Sub
 
     ' 帳票再読み込みボタン
@@ -200,12 +211,12 @@ Public Class SCE_S2
 
     ' 作成済フォルダを開くボタン
     Private Sub Button5_Click(sender As Object, e As EventArgs) Handles Button5.Click
-        Process.Start(cmn.CurrentPath & Common.DIR_EXC & Common.DIR_EXCOUT1)
+        Process.Start(EXCPATH_OUT)
     End Sub
 
     ' 帳票手動選択ボタン
     Private Sub Button9_Click(sender As Object, e As EventArgs) Handles Button9.Click
-        Dim fpath As String = cmn.DialogReadFile("", cmn.CurrentPath & Common.DIR_EXC & Common.DIR_EXCFMT1)
+        Dim fpath As String = cmn.DialogReadFile("", EXCPATH_FMT)
         If fpath <> "" Then
             PrinfFileName = fpath
             Button4.PerformClick()
@@ -305,10 +316,72 @@ Public Class SCE_S2
 
     ' 送付物のフォーマットリスト表示
     Private Sub ShowSendFmtList()
+        If xml.GetDiv = Common.DIV.GA Then
+            LB_SendFMTList.Visible = False
+            Button9.Visible = False
+            ShowSendFmtListGA()
+        Else
+            TV_ListFMT.Visible = False
+            ShowSendFmtListSC()
+        End If
+    End Sub
+
+
+
+
+    ' 複数選択されたノードを保持するリスト
+    Private selectedNodes As New List(Of TreeNode)
+    Public selectedNodesPath As New List(Of String)
+
+    ' TreeViewのNodeMouseClickイベントで複数選択を実現
+    Private Sub TV_ListFMT_NodeMouseClick(sender As Object, e As TreeNodeMouseClickEventArgs) Handles TV_ListFMT.NodeMouseClick
+        ' Ctrlキーが押されているか確認
+        If (Control.ModifierKeys And Keys.Control) = Keys.Control Then
+            ' ノードが既に選択されているかどうかをチェック
+            If selectedNodes.Contains(e.Node) Then
+                ' 選択済みの場合はリストから削除し、色を元に戻す
+                selectedNodes.Remove(e.Node)
+                selectedNodesPath.Remove(e.Node.FullPath)
+                e.Node.BackColor = TV_ListFMT.BackColor
+            Else
+                ' 選択されていない場合はリストに追加し、色を変更
+                selectedNodes.Add(e.Node)
+                If IsExcelFile(e.Node.FullPath) Then
+                    selectedNodesPath.Add(e.Node.FullPath)
+                End If
+                e.Node.BackColor = Color.LightBlue
+            End If
+        Else
+            ' Ctrlキーが押されていない場合は、単一選択モードとして動作
+            ClearSelection()
+            selectedNodes.Add(e.Node)
+            If IsExcelFile(e.Node.FullPath) Then
+                selectedNodesPath.Add(e.Node.FullPath)
+            End If
+            e.Node.BackColor = Color.LightBlue
+        End If
+    End Sub
+
+    ' 選択状態をクリアするメソッド
+    Private Sub ClearSelection()
+        For Each node As TreeNode In selectedNodes
+            node.BackColor = TV_ListFMT.BackColor
+        Next
+        selectedNodes.Clear()
+        selectedNodesPath.Clear()
+    End Sub
+
+    Public Function IsExcelFile(fileName As String) As Boolean
+        Return fileName.EndsWith(".xlsx", StringComparison.OrdinalIgnoreCase) OrElse
+           fileName.EndsWith(".xls", StringComparison.OrdinalIgnoreCase)
+    End Function
+
+
+    ' 送付物のフォーマットリスト表示
+    Private Sub ShowSendFmtListSC()
         LB_SendFMTList.Items.Clear()
-        Dim dirPath As String = cmn.CurrentPath & Common.DIR_EXC & Common.DIR_EXCFMT1 ' 検索するディレクトリ
         ' 対象ファイルを検索する
-        Dim fileList As String() = Directory.GetFileSystemEntries(dirPath, "*.xls?")
+        Dim fileList As String() = Directory.GetFileSystemEntries(EXCPATH_FMT, "*.xls?")
         ' 抽出したファイル名をリストに設定
         For Each filePath As String In fileList
             If Path.GetFileName(filePath).StartsWith("~") Then Continue For              ' チルダ「~」で始まるファイル(隠しファイル)は非表示にする
@@ -317,9 +390,50 @@ Public Class SCE_S2
         If LB_SendFMTList.Items.Count > 0 Then LB_SendFMTList.SelectedIndex = 0
     End Sub
 
+
+    ' 送付物のフォーマットリストをツリービューに表示
+    Private Sub ShowSendFmtListGA()
+        TV_ListFMT.Nodes.Clear() ' ツリービューの内容をクリア
+
+        ' サブフォルダを含む全てのフォルダを取得
+        Dim directories As String() = Directory.GetDirectories(EXCPATH_FMT)
+
+        ' ルートフォルダに含まれるファイルを表示
+        AddFilesToTreeView(EXCPATH_FMT, TV_ListFMT.Nodes)
+
+        ' 各サブフォルダに対して処理を行う
+        For Each folderPath As String In directories
+            ' フォルダ名をツリービューのノードとして追加
+            Dim folderNode As TreeNode = TV_ListFMT.Nodes.Add($"【{Path.GetFileName(folderPath)}】")
+
+            ' フォルダ内のExcelファイルを取得し、ノードの下に追加
+            AddFilesToTreeView(folderPath, folderNode.Nodes)
+        Next
+
+        ' 最初のノードを展開
+        If TV_ListFMT.Nodes.Count > 0 Then
+            TV_ListFMT.Nodes(0).Expand()
+        End If
+    End Sub
+
+    ' 指定されたフォルダ内のExcelファイルをツリービューに追加するサブプロシージャ
+    Private Sub AddFilesToTreeView(folderPath As String, nodes As TreeNodeCollection)
+        Dim fileList As String() = Directory.GetFiles(folderPath, "*.xls?")
+
+        For Each filePath As String In fileList
+            If Path.GetFileName(filePath).StartsWith("~") Then Continue For ' チルダ「~」で始まるファイル(隠しファイル)は非表示にする
+            nodes.Add(Path.GetFileName(filePath))
+        Next
+    End Sub
+
     ' 送付物の印刷
     Private Sub Button4_Click(sender As Object, e As EventArgs) Handles Button4.Click
-        If LB_SendFMTList.SelectedItems.Count = 0 Then Exit Sub
+        If xml.GetDiv = Common.DIV.SC Then
+            If LB_SendFMTList.SelectedItems.Count = 0 Then Exit Sub
+        End If
+        For Each node As TreeNode In selectedNodes
+            Console.WriteLine(node.Text)
+        Next
         Cursor.Current = Cursors.WaitCursor             ' マウスカーソルを砂時計に
         Dim f As New VBR_Send
         f.ShowDialog(Me)

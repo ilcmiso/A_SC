@@ -22,7 +22,9 @@ Public Class Common
     Public Const DIR_EXCFMT1 As String = "01_送付物\"             ' Excel帳票01 送付物ディレクトリ名
     Public Const DIR_EXCFMT2 As String = "02_督促状\"             ' Excel帳票02 督促状ディレクトリ名
     Public Const DIR_EXCFMT3 As String = "03_交渉内容一覧\"       ' Excel帳票03 交渉内容ディレクトリ名
+    Public Const DIR_EXCFMTGA As String = "04_送付物_総務\"       ' Excel帳票 総務 送付物ディレクトリ名
     Public Const DIR_EXCOUT1 As String = "91_送付物出力\"         ' Excel帳票01 送付物出力済みディレクトリ名
+    Public Const DIR_EXCOUTGA As String = "92_送付物出力_総務\"   ' Excel帳票 総務 送付物出力済みディレクトリ名
 
     Public Const EXE_NAME As String = "A_SC.exe"                  ' アプリケーション本体ファイル名
     Public Const FILE_TEL As String = "ILC_SCTEL.log"             ' 着信ログファイルのファイル名
@@ -65,7 +67,7 @@ Public Class Common
     ' 各ディレクトリ生成
     Private Sub CreateCurrentDir()
         Dim dirlist() As String = {     ' 作成ディレクトリリスト
-            DIR_TEL, DIR_DB3, DIR_MTX, DIR_UPD, DIR_FLE, DIR_LOG, DIR_EXC, DIR_BKU, (DIR_EXC & DIR_EXCFMT1), (DIR_EXC & DIR_EXCFMT3)
+            DIR_TEL, DIR_DB3, DIR_MTX, DIR_UPD, DIR_FLE, DIR_LOG, DIR_EXC, DIR_BKU, (DIR_EXC & DIR_EXCFMT1), (DIR_EXC & DIR_EXCFMT3), (DIR_EXC & DIR_EXCFMTGA), (DIR_EXC & DIR_EXCOUTGA)
         }
         For Each d In dirlist
             If Not Directory.Exists(CurrentPath & d) Then Directory.CreateDirectory(CurrentPath & d)
