@@ -404,7 +404,7 @@ Public Class SCE_S2
         ' 各サブフォルダに対して処理を行う
         For Each folderPath As String In directories
             ' フォルダ名をツリービューのノードとして追加
-            Dim folderNode As TreeNode = TV_ListFMT.Nodes.Add($"【{Path.GetFileName(folderPath)}】")
+            Dim folderNode As TreeNode = TV_ListFMT.Nodes.Add($"{Path.GetFileName(folderPath)}")
 
             ' フォルダ内のExcelファイルを取得し、ノードの下に追加
             AddFilesToTreeView(folderPath, folderNode.Nodes)
