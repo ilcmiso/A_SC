@@ -24,11 +24,18 @@
             Case 7 : CellReport1.FileName += "SC09_アシストSPレター.xlsx"
         End Select
 
+        Dim sendNGListMain As New HashSet(Of String)(SCA1.db.GetSelect(Sqldb.TID.SCR, "SELECT FKR01 FROM FKSCREM WHERE FKR04 = '1' OR FKR04 = '3'").
+                                AsEnumerable().
+                                Select(Function(row) row.Field(Of String)("FKR01")))
+
+        Dim sendNGListSub As New HashSet(Of String)(SCA1.db.GetSelect(Sqldb.TID.SCR, "SELECT FKR01 FROM FKSCREM WHERE FKR04 = '2' OR FKR04 = '3'").
+                                AsEnumerable().
+                                Select(Function(row) row.Field(Of String)("FKR01")))
+
         CellReport1.ScaleMode = AdvanceSoftware.VBReport8.ScaleMode.Pixel
         CellReport1.ApplyFormula = True
         CellReport1.Report.Start()
         CellReport1.Report.File()
-
 
         For n = 0 To SCA1.DGV6.Rows.Count - 1
             ' 主債務者　連帯債務者
@@ -36,6 +43,11 @@
                 Dim cid As String = SCA1.DGV6.Rows(n).Cells(0).Value
                 Dim contract As String = "ﾌﾗｯﾄ35"
                 Dim am As Integer                                    ' 督促金額 ＝ 返済額1＋返済額2＋（B返済額）　※B返済額は、B返済月の場合のみ
+
+                ' 督促状送付NGリストの顧客番号と一致した場合は印刷しない
+                If deb = 0 And sendNGListMain.Contains(cid) Then Continue For
+                If deb = 1 And sendNGListSub.Contains(cid) Then Continue For
+
                 am = SCA1.DGV6.Rows(n).Cells(5).Value
                 If SCA1.DGV6.Rows(n).Cells(6).Value <> "" Then am += SCA1.DGV6.Rows(n).Cells(6).Value           ' 返済額1 + 2
                 If ChkBonus(SCA1.DGV6.Rows(n).Cells(10).Value) Then am += SCA1.DGV6.Rows(n).Cells(9).Value      ' + B返済額
@@ -46,13 +58,6 @@
                     If deb = 1 And dt.Rows(0).Item(16) = dt.Rows(0).Item(36) Then Continue For      ' 主債務者と同じ住所なら連帯債務者はスキップ
                 End If
 
-                'If SCA1.DGV6.Rows(n).Cells(1).Value = "1" Then
-                '    contract = "ﾌﾗｯﾄ35"
-                'Else
-                '    'contract = "ﾌﾗｯﾄ ｱｼｽﾄ"
-                '    contract = "ﾌﾗｯﾄ35"
-                'End If
-
                 ' 主債務者名、連帯債務者名の特殊文字の置換
                 Dim chkWords_b() As String = {"", "", "", ""}
                 Dim chkWords_a() As String = {"髙", "𠮷", "釼", "祐"}
@@ -60,7 +65,6 @@
                     If dt.Rows(0).Item(9).ToString.IndexOf(chkWords_b(cn)) >= 0 Then dt.Rows(0).Item(9) = dt.Rows(0).Item(9).ToString.Replace(chkWords_b(cn), chkWords_a(cn))
                     If dt.Rows(0).Item(29).ToString.IndexOf(chkWords_b(cn)) >= 0 Then dt.Rows(0).Item(29) = dt.Rows(0).Item(29).ToString.Replace(chkWords_b(cn), chkWords_a(cn))
                 Next
-
 
                 CellReport1.Page.Start("Sheet1", "1")
 
@@ -71,20 +75,24 @@
                     CellReport1.Cell("A2").Value = dt.Rows(0).Item(16)                                  ' 住所1
                     CellReport1.Cell("A3").Value = ""                                                   ' 住所2
 
-                    CellReport1.Cell("B1").Value = dt.Rows(0).Item(9) & "　様"                          ' 債務者名
-                    If dt.Rows(0).Item(29) <> "" Then
-                        CellReport1.Cell("B2").Value = dt.Rows(0).Item(29) & "　様"                     ' 連帯債務者名
+                    If sendNGListMain.Contains(cid) Then
+                        CellReport1.Cell("B1").Value = dt.Rows(0).Item(9) & "　様"                          ' 債務者名
+                    End If
+                    If sendNGListSub.Contains(cid) Then
+                        If dt.Rows(0).Item(29) <> "" Then
+                            CellReport1.Cell("B2").Value = dt.Rows(0).Item(29) & "　様"                     ' 連帯債務者名
+                        End If
                     End If
                 ElseIf deb = 0 Then
                     ' 主債務者 単体
                     CellReport1.Cell("A1").Value = "〒" & dt.Rows(0).Item(15)                           ' 郵便番号
-                    CellReport1.Cell("A2").Value = dt.Rows(0).Item(16)                                  ' 住所1
-                    CellReport1.Cell("A3").Value = ""                                                   ' 住所2
+                        CellReport1.Cell("A2").Value = dt.Rows(0).Item(16)                                  ' 住所1
+                        CellReport1.Cell("A3").Value = ""                                                   ' 住所2
 
-                    CellReport1.Cell("B1").Value = dt.Rows(0).Item(9) & "　様"                          ' 債務者名
-                ElseIf deb = 1 Then
-                    ' 連帯債務者 単体
-                    CellReport1.Cell("A1").Value = "〒" & dt.Rows(0).Item(35)                           ' 郵便番号
+                        CellReport1.Cell("B1").Value = dt.Rows(0).Item(9) & "　様"                          ' 債務者名
+                    ElseIf deb = 1 Then
+                        ' 連帯債務者 単体
+                        CellReport1.Cell("A1").Value = "〒" & dt.Rows(0).Item(35)                           ' 郵便番号
                     CellReport1.Cell("A2").Value = dt.Rows(0).Item(36)                                  ' 住所1
                     CellReport1.Cell("A3").Value = ""                                                   ' 住所2
 

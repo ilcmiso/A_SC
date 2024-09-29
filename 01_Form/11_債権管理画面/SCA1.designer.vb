@@ -161,6 +161,9 @@ Partial Class SCA1
         Me.DataGridViewTextBoxColumn8 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.DataGridViewTextBoxColumn9 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Tab_1SC = New System.Windows.Forms.TabPage()
+        Me.Label16 = New System.Windows.Forms.Label()
+        Me.L_SENDNG2 = New System.Windows.Forms.Label()
+        Me.L_SENDNG1 = New System.Windows.Forms.Label()
         Me.L_TYPE_H = New System.Windows.Forms.Label()
         Me.L_TYPE_A = New System.Windows.Forms.Label()
         Me.L_TYPE_F = New System.Windows.Forms.Label()
@@ -303,6 +306,7 @@ Partial Class SCA1
         Me.CreatorExpress1 = New AdvanceSoftware.ExcelCreator.Xlsx.CreatorExpress(Me.components)
         Me.データ読み込みToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.機能ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.データ投入ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.画面モードToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.債権管理部ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.総務課ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -310,7 +314,7 @@ Partial Class SCA1
         Me.ToolStripMenuItem2 = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
         Me.ColorDialog1 = New System.Windows.Forms.ColorDialog()
-        Me.データ投入ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.Button20 = New System.Windows.Forms.Button()
         Me.Tab_4Dun.SuspendLayout()
         CType(Me.DGV4, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.GroupBox1.SuspendLayout()
@@ -369,6 +373,7 @@ Partial Class SCA1
         'Tab_4Dun
         '
         Me.Tab_4Dun.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(225, Byte), Integer), CType(CType(255, Byte), Integer))
+        Me.Tab_4Dun.Controls.Add(Me.Button20)
         Me.Tab_4Dun.Controls.Add(Me.Button18)
         Me.Tab_4Dun.Controls.Add(Me.Button9)
         Me.Tab_4Dun.Controls.Add(Me.Label42)
@@ -889,7 +894,7 @@ Partial Class SCA1
         Me.Button14.FlatAppearance.BorderColor = System.Drawing.Color.Black
         Me.Button14.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.Button14.ForeColor = System.Drawing.Color.Cyan
-        Me.Button14.Location = New System.Drawing.Point(1158, 315)
+        Me.Button14.Location = New System.Drawing.Point(1159, 315)
         Me.Button14.Name = "Button14"
         Me.Button14.Size = New System.Drawing.Size(206, 40)
         Me.Button14.TabIndex = 1756
@@ -1506,6 +1511,9 @@ Partial Class SCA1
         '
         'Tab_1SC
         '
+        Me.Tab_1SC.Controls.Add(Me.Label16)
+        Me.Tab_1SC.Controls.Add(Me.L_SENDNG2)
+        Me.Tab_1SC.Controls.Add(Me.L_SENDNG1)
         Me.Tab_1SC.Controls.Add(Me.L_TYPE_H)
         Me.Tab_1SC.Controls.Add(Me.L_TYPE_A)
         Me.Tab_1SC.Controls.Add(Me.L_TYPE_F)
@@ -1541,6 +1549,42 @@ Partial Class SCA1
         Me.Tab_1SC.TabIndex = 0
         Me.Tab_1SC.Text = "債権情報"
         Me.Tab_1SC.UseVisualStyleBackColor = True
+        '
+        'Label16
+        '
+        Me.Label16.AutoSize = True
+        Me.Label16.BackColor = System.Drawing.Color.Transparent
+        Me.Label16.Font = New System.Drawing.Font("メイリオ", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.Label16.ForeColor = System.Drawing.Color.IndianRed
+        Me.Label16.Location = New System.Drawing.Point(590, 6)
+        Me.Label16.Name = "Label16"
+        Me.Label16.Size = New System.Drawing.Size(63, 18)
+        Me.Label16.TabIndex = 1785
+        Me.Label16.Text = "[発送NG]"
+        '
+        'L_SENDNG2
+        '
+        Me.L_SENDNG2.AutoSize = True
+        Me.L_SENDNG2.BackColor = System.Drawing.Color.Silver
+        Me.L_SENDNG2.Font = New System.Drawing.Font("メイリオ", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.L_SENDNG2.ForeColor = System.Drawing.Color.White
+        Me.L_SENDNG2.Location = New System.Drawing.Point(677, 6)
+        Me.L_SENDNG2.Name = "L_SENDNG2"
+        Me.L_SENDNG2.Size = New System.Drawing.Size(19, 17)
+        Me.L_SENDNG2.TabIndex = 1784
+        Me.L_SENDNG2.Text = "連"
+        '
+        'L_SENDNG1
+        '
+        Me.L_SENDNG1.AutoSize = True
+        Me.L_SENDNG1.BackColor = System.Drawing.Color.Silver
+        Me.L_SENDNG1.Font = New System.Drawing.Font("メイリオ", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.L_SENDNG1.ForeColor = System.Drawing.Color.White
+        Me.L_SENDNG1.Location = New System.Drawing.Point(654, 6)
+        Me.L_SENDNG1.Name = "L_SENDNG1"
+        Me.L_SENDNG1.Size = New System.Drawing.Size(19, 17)
+        Me.L_SENDNG1.TabIndex = 1783
+        Me.L_SENDNG1.Text = "主"
         '
         'L_TYPE_H
         '
@@ -1847,7 +1891,7 @@ Partial Class SCA1
         Me.DGV9.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.DGV9.ColumnHeadersVisible = False
         Me.DGV9.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.DataGridViewTextBoxColumn19, Me.DataGridViewTextBoxColumn20, Me.DataGridViewTextBoxColumn21, Me.DataGridViewTextBoxColumn22, Me.Column39, Me.Column40, Me.Column41, Me.Column27, Me.Column28})
-        Me.DGV9.Location = New System.Drawing.Point(521, 24)
+        Me.DGV9.Location = New System.Drawing.Point(522, 24)
         Me.DGV9.MultiSelect = False
         Me.DGV9.Name = "DGV9"
         Me.DGV9.ReadOnly = True
@@ -3299,8 +3343,14 @@ Partial Class SCA1
         '機能ToolStripMenuItem
         '
         Me.機能ToolStripMenuItem.Name = "機能ToolStripMenuItem"
-        Me.機能ToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.機能ToolStripMenuItem.Size = New System.Drawing.Size(164, 22)
         Me.機能ToolStripMenuItem.Text = "F35データ読み込み"
+        '
+        'データ投入ToolStripMenuItem
+        '
+        Me.データ投入ToolStripMenuItem.Name = "データ投入ToolStripMenuItem"
+        Me.データ投入ToolStripMenuItem.Size = New System.Drawing.Size(164, 22)
+        Me.データ投入ToolStripMenuItem.Text = "データ投入"
         '
         '画面モードToolStripMenuItem
         '
@@ -3314,13 +3364,13 @@ Partial Class SCA1
         Me.債権管理部ToolStripMenuItem.Checked = True
         Me.債権管理部ToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked
         Me.債権管理部ToolStripMenuItem.Name = "債権管理部ToolStripMenuItem"
-        Me.債権管理部ToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.債権管理部ToolStripMenuItem.Size = New System.Drawing.Size(134, 22)
         Me.債権管理部ToolStripMenuItem.Text = "債権管理部"
         '
         '総務課ToolStripMenuItem
         '
         Me.総務課ToolStripMenuItem.Name = "総務課ToolStripMenuItem"
-        Me.総務課ToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.総務課ToolStripMenuItem.Size = New System.Drawing.Size(134, 22)
         Me.総務課ToolStripMenuItem.Text = "総務課"
         '
         '表示ToolStripMenuItem
@@ -3333,7 +3383,7 @@ Partial Class SCA1
         'ToolStripMenuItem2
         '
         Me.ToolStripMenuItem2.Name = "ToolStripMenuItem2"
-        Me.ToolStripMenuItem2.Size = New System.Drawing.Size(180, 22)
+        Me.ToolStripMenuItem2.Size = New System.Drawing.Size(146, 22)
         Me.ToolStripMenuItem2.Text = "ユーザー名設定"
         '
         'MenuStrip1
@@ -3348,11 +3398,19 @@ Partial Class SCA1
         Me.MenuStrip1.TabIndex = 1574
         Me.MenuStrip1.Text = "MenuStrip1"
         '
-        'データ投入ToolStripMenuItem
+        'Button20
         '
-        Me.データ投入ToolStripMenuItem.Name = "データ投入ToolStripMenuItem"
-        Me.データ投入ToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
-        Me.データ投入ToolStripMenuItem.Text = "データ投入"
+        Me.Button20.BackColor = System.Drawing.Color.Yellow
+        Me.Button20.FlatAppearance.BorderColor = System.Drawing.Color.Black
+        Me.Button20.Font = New System.Drawing.Font("メイリオ", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Button20.ForeColor = System.Drawing.Color.Black
+        Me.Button20.Location = New System.Drawing.Point(1233, 118)
+        Me.Button20.Name = "Button20"
+        Me.Button20.Size = New System.Drawing.Size(128, 27)
+        Me.Button20.TabIndex = 1767
+        Me.Button20.TabStop = False
+        Me.Button20.Text = "発送NGリスト確認"
+        Me.Button20.UseVisualStyleBackColor = False
         '
         'SCA1
         '
@@ -3651,4 +3709,8 @@ Partial Class SCA1
     Friend WithEvents Column13 As DataGridViewTextBoxColumn
     Friend WithEvents Column30 As DataGridViewTextBoxColumn
     Friend WithEvents データ投入ToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents Label16 As Label
+    Friend WithEvents L_SENDNG2 As Label
+    Friend WithEvents L_SENDNG1 As Label
+    Friend WithEvents Button20 As Button
 End Class

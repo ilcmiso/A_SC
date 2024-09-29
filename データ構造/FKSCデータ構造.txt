@@ -130,7 +130,7 @@ FKS.FKSCD_R.FKD17        ' 郵便発送種目		' 2202B追加
 FKS.FKSCREM_R.FKR01        ' 識別番号(FKSCとリンク)
 FKS.FKSCREM_R.FKR02        ' 最新の督促通知日
 FKS.FKSCREM_R.FKR03        ' フリーメモ内容
-FKS.FKSCREM_R.FKR04        ' 追加電話番号（１つだけ）
+FKS.FKSCREM_R.FKR04        ' 追加電話番号（１つだけ）→発送NGフラグとして再利用[1=主,2=連,3=両方] '2409C
 FKS.FKSCREM_R.FKR05        ' 追加電話番号（複数版）
 FKS.FKSCREM_R.FKR06        ' 追加電話番号（複数版）ハイフン無し  ※電話番号の検索一致用
 

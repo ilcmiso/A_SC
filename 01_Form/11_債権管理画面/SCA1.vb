@@ -218,6 +218,7 @@ Public Class SCA1
         ShowDGVList(DGV9)                               ' 顧客詳細情報
 
         ShowAssignee()                                  ' 物件情報の受任者マークの表示設定
+        ShowSendNGLabel()
 
         L_STS.Text = " ( " & DGV1.Rows.Count & " / " & db.OrgDataTablePlusAssist.Rows.Count & " ) 件 表示中  -  " &
                      DGV1.SelectedRows.Count & " 人を選択中"
@@ -1321,6 +1322,7 @@ Public Class SCA1
         Dim rs As New StringReader(TB_DunIN.Text)
         Dim tmpDt As DataTable          ' マージに使うテンポラリDataTable
         Dim cNo As String
+
         ' 顧客番号リストのテキストボックスから、顧客番号のみ取得してリスト
         While rs.Peek() > -1
             Dim f35Dr As DataRow()
@@ -1346,6 +1348,22 @@ Public Class SCA1
         End While
         Return retDt
     End Function
+
+    ' 発送NGリスト確認ボタン
+    Private Sub Button20_Click_1(sender As Object, e As EventArgs) Handles Button20.Click
+        ' すでにフォームが開かれているか確認
+        For Each form In Application.OpenForms
+            If TypeOf form Is SCA1_SendNGList Then
+                form.Activate()
+                Return
+            End If
+        Next
+        Dim f As New SCA1_SendNGList
+        f.ShowInTaskbar = False
+        f.TopMost = True  ' 手前に表示
+        f.Show()
+    End Sub
+
 
     ' 督促状対象者追加ボタン
     Private Sub Button13_Click(sender As Object, e As EventArgs) Handles Button13.Click
@@ -2421,6 +2439,81 @@ Public Class SCA1
     Private Sub CB_Person_SelectedIndexChanged(sender As Object, e As EventArgs) Handles CB_Person.SelectedIndexChanged
         FilterMRSearch(TB_MRSearch.Text)
     End Sub
+#End Region
+
+#Region "発送NG"
+
+    ' 発送NGボタン
+    Private Sub SendNG_Click(sender As Object, e As EventArgs) Handles L_SENDNG1.Click, L_SENDNG2.Click
+        If DGV1.Rows.Count = 0 Then Exit Sub
+        If DGV1.CurrentRow.Cells(0).Value = Common.DUMMY_NO Then Exit Sub
+        Dim eBt As Label = CType(sender, Label)
+        Dim cid As String = DGV1.CurrentRow.Cells(0).Value
+        Dim state As Integer = GetSendNGState(cid)
+
+        Select Case eBt.Text
+            Case "主"
+                If L_SENDNG1.BackColor = System.Drawing.Color.Silver Then
+                    ' OFF -> ON
+                    L_SENDNG1.BackColor = System.Drawing.Color.Red
+                    SendNGUpdate(cid, (state Or 1))
+                Else
+                    ' ON -> OFF
+                    L_SENDNG1.BackColor = System.Drawing.Color.Silver
+                    SendNGUpdate(cid, (state And Not 1))
+                End If
+            Case "連"
+                If L_SENDNG2.BackColor = System.Drawing.Color.Silver Then
+                    ' OFF -> ON
+                    L_SENDNG2.BackColor = System.Drawing.Color.Red
+                    SendNGUpdate(cid, (state Or 2))
+                Else
+                    ' ON -> OFF
+                    L_SENDNG2.BackColor = System.Drawing.Color.Silver
+                    SendNGUpdate(cid, (state And Not 2))
+                End If
+        End Select
+        MsgBox(String.Format("[{0}] の発送NG設定を変更しました。", eBt.Text))
+    End Sub
+
+    ' 発送NGの状態更新( 1:主 2:連 3:両方 )
+    Private Sub SendNGUpdate(cid As String, val As Integer)
+        If db.IsExistREM(cid) Then
+            db.ExeSQL(Sqldb.TID.SCR, $"UPDATE FKSCREM SET FKR04 = '{val}' Where FKR01 = '{cid}'")
+        Else
+            db.ExeSQL(Sqldb.TID.SCR, $"INSERT INTO FKSCREM VALUES('{cid}', '', '', '{val}', '', '')")
+        End If
+        db.ExeSQL(Sqldb.TID.SCR)
+    End Sub
+
+    ' DBから現在の発送NG状態を取得
+    Private Function GetSendNGState(cid As String) As Integer
+        ' FKSCREMからFKR04を取得する処理
+        Dim ret As Integer = 0
+        Dim dt As DataTable = db.GetSelect(Sqldb.TID.SCR, $"SELECT FKR04 FROM FKSCREM WHERE FKR01 = '{cid}'")
+        If dt.Rows.Count > 0 Then
+            ret = cmn.Int(dt(0)(0))
+        End If
+        Return ret
+    End Function
+
+    ' 発送NGのラベルカラー設定
+    Private Sub ShowSendNGLabel()
+        Dim cid As String = DGV1.CurrentRow.Cells(0).Value
+        Dim state As Integer = GetSendNGState(cid)
+        L_SENDNG1.BackColor = System.Drawing.Color.Silver
+        L_SENDNG2.BackColor = System.Drawing.Color.Silver
+        Select Case state
+            Case 1
+                L_SENDNG1.BackColor = System.Drawing.Color.Red
+            Case 2
+                L_SENDNG2.BackColor = System.Drawing.Color.Red
+            Case 3
+                L_SENDNG1.BackColor = System.Drawing.Color.Red
+                L_SENDNG2.BackColor = System.Drawing.Color.Red
+        End Select
+    End Sub
+
 #End Region
 
 #Region "MenuItemEvent"

@@ -231,6 +231,18 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="01_Form\11_債権管理画面\SCA1_SelectInfo.designer.vb">
+      <DependentUpon>SCA1_SelectInfo.vb</DependentUpon>
+    </Compile>
+    <Compile Include="01_Form\11_債権管理画面\SCA1_SelectInfo.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="01_Form\11_債権管理画面\SCA1_SendNGList.designer.vb">
+      <DependentUpon>SCA1_SendNGList.vb</DependentUpon>
+    </Compile>
+    <Compile Include="01_Form\11_債権管理画面\SCA1_SendNGList.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="01_Form\91_汎用\SCA_InputData.designer.vb">
       <DependentUpon>SCA_InputData.vb</DependentUpon>
     </Compile>
@@ -247,12 +259,6 @@
       <DependentUpon>SCA_ProgressBar.vb</DependentUpon>
     </Compile>
     <Compile Include="01_Form\91_汎用\SCA_ProgressBar.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="01_Form\11_債権管理画面\SCA1_SelectInfo.designer.vb">
-      <DependentUpon>SCA1_SelectInfo.vb</DependentUpon>
-    </Compile>
-    <Compile Include="01_Form\11_債権管理画面\SCA1_SelectInfo.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="01_Form\32_総務部\SCGA_OVIEW.designer.vb">
@@ -382,6 +388,12 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="01_Form\11_債権管理画面\SCA1_SelectInfo.resx">
+      <DependentUpon>SCA1_SelectInfo.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="01_Form\11_債権管理画面\SCA1_SendNGList.resx">
+      <DependentUpon>SCA1_SendNGList.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="01_Form\91_汎用\SCA_InputData.resx">
       <DependentUpon>SCA_InputData.vb</DependentUpon>
     </EmbeddedResource>
@@ -390,9 +402,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="01_Form\91_汎用\SCA_ProgressBar.resx">
       <DependentUpon>SCA_ProgressBar.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="01_Form\11_債権管理画面\SCA1_SelectInfo.resx">
-      <DependentUpon>SCA1_SelectInfo.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="01_Form\11_債権管理画面\SCA1_S6_Calendar.resx">
       <DependentUpon>SCA1_S6_Calendar.vb</DependentUpon>
