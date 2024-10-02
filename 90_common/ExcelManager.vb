@@ -95,6 +95,10 @@ Public Class ExcelManager
             MsgBox("Excelファイルが既に開かれています。閉じてからもう一度お試しください。")
             Exit Sub
         End Try
+        Dispose()
+    End Sub
+
+    Public Sub Dispose()
         If workbook IsNot Nothing Then workbook.Close()
         If excelApp IsNot Nothing Then excelApp.Quit()
         Runtime.InteropServices.Marshal.ReleaseComObject(excelApp)
@@ -121,9 +125,8 @@ Public Class ExcelManager
     Public Function MergeExcelFiles(ByVal FilePaths As List(Of String), OutPath As String) As List(Of String)
         Dim excelApp As New Application
         Dim WbTarget As Workbook = excelApp.Workbooks.Add()
-        Dim WbSource As Workbook
+        Dim WbSource As Workbook = Nothing
         Dim WsSource As Worksheet
-        Dim WsTarget As Worksheet
         Dim FilePath As String
         Dim SheetName As String
         Dim NewSheetName As String
@@ -133,7 +136,7 @@ Public Class ExcelManager
         ' Excelの表示をオフにする
         excelApp.Visible = False
 
-        ' 先頭のデフォルトシートの名前を "XXX" に変更
+        ' 先頭のデフォルトシートの名前を "XXXXX" に変更
         WbTarget.Sheets(1).Name = "XXXXX"
 
         ' 引数で渡されたExcelファイルのパスをループ
@@ -154,22 +157,22 @@ Public Class ExcelManager
                     SheetCounter += 1
                 Loop
 
-                ' ターゲットに新しいシートを追加
-                WsTarget = WbTarget.Sheets.Add(After:=WbTarget.Sheets(WbTarget.Sheets.Count))
+                ' シートをターゲットのブックにコピー
+                WsSource.Copy(After:=WbTarget.Sheets(WbTarget.Sheets.Count))
+
+                ' コピーされたシートを取得
+                Dim CopiedSheet As Worksheet = WbTarget.Sheets(WbTarget.Sheets.Count)
 
                 ' 新しいシート名を設定
-                WsTarget.Name = NewSheetName
-                SheetList.Add(WsTarget.Name)
-
-                ' シートの内容をコピー
-                WsSource.Cells.Copy(WsTarget.Cells)
+                CopiedSheet.Name = NewSheetName
+                SheetList.Add(CopiedSheet.Name)
             Next
 
             ' ソースのブックを閉じる
             WbSource.Close(False)
         Next
 
-        ' マージが完了したら、先頭の "XXX" シートを削除
+        ' マージが完了したら、先頭の "XXXXX" シートを削除
         WbTarget.Sheets("XXXXX").Delete()
 
         ' ターゲットのブックを保存

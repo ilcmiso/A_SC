@@ -106,6 +106,8 @@ Public Class VBR_Send
         If IO.File.Exists(ownerForm.EXCPATH_OUT & TEMP_FILENAME) Then IO.File.Delete(ownerForm.EXCPATH_OUT & TEMP_FILENAME)
 
         Process.Start(outfPath)
+        CellReport1.Dispose()
+        excelManager.Dispose()
         log.TimerED("Exce出力")
         Me.Close()
     End Sub
