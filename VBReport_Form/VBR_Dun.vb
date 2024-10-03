@@ -55,7 +55,11 @@
                 Dim dt As DataTable = SCA1.db.OrgDataTablePlusAssist.Select("[FK02] = '" & cid & "'").CopyToDataTable
                 If deb = 1 And dt.Rows(0).Item(29) = "" Then Continue For                   ' 連帯債務者がいない場合は連帯者処理スキップ
                 If SCA1.CB_DunA7.SelectedIndex = 0 Then                                             ' 同住所の印刷部数が「纏める」なら
-                    If deb = 1 And dt.Rows(0).Item(16) = dt.Rows(0).Item(36) Then Continue For      ' 主債務者と同じ住所なら連帯債務者はスキップ
+                    If deb = 1 And
+                        dt.Rows(0).Item(16) = dt.Rows(0).Item(36) And
+                        Not sendNGListMain.Contains(cid) Then
+                        Continue For      ' 主債務者と同じ住所なら連帯債務者はスキップ。ただし主債務者が発送NGになっている場合は連帯債務者のみでも印刷する
+                    End If
                 End If
 
                 ' 主債務者名、連帯債務者名の特殊文字の置換
@@ -75,10 +79,10 @@
                     CellReport1.Cell("A2").Value = dt.Rows(0).Item(16)                                  ' 住所1
                     CellReport1.Cell("A3").Value = ""                                                   ' 住所2
 
-                    If sendNGListMain.Contains(cid) Then
+                    If Not sendNGListMain.Contains(cid) Then
                         CellReport1.Cell("B1").Value = dt.Rows(0).Item(9) & "　様"                          ' 債務者名
                     End If
-                    If sendNGListSub.Contains(cid) Then
+                    If Not sendNGListSub.Contains(cid) Then
                         If dt.Rows(0).Item(29) <> "" Then
                             CellReport1.Cell("B2").Value = dt.Rows(0).Item(29) & "　様"                     ' 連帯債務者名
                         End If
@@ -86,13 +90,13 @@
                 ElseIf deb = 0 Then
                     ' 主債務者 単体
                     CellReport1.Cell("A1").Value = "〒" & dt.Rows(0).Item(15)                           ' 郵便番号
-                        CellReport1.Cell("A2").Value = dt.Rows(0).Item(16)                                  ' 住所1
-                        CellReport1.Cell("A3").Value = ""                                                   ' 住所2
+                    CellReport1.Cell("A2").Value = dt.Rows(0).Item(16)                                  ' 住所1
+                    CellReport1.Cell("A3").Value = ""                                                   ' 住所2
 
-                        CellReport1.Cell("B1").Value = dt.Rows(0).Item(9) & "　様"                          ' 債務者名
-                    ElseIf deb = 1 Then
-                        ' 連帯債務者 単体
-                        CellReport1.Cell("A1").Value = "〒" & dt.Rows(0).Item(35)                           ' 郵便番号
+                    CellReport1.Cell("B1").Value = dt.Rows(0).Item(9) & "　様"                          ' 債務者名
+                ElseIf deb = 1 Then
+                    ' 連帯債務者 単体
+                    CellReport1.Cell("A1").Value = "〒" & dt.Rows(0).Item(35)                           ' 郵便番号
                     CellReport1.Cell("A2").Value = dt.Rows(0).Item(36)                                  ' 住所1
                     CellReport1.Cell("A3").Value = ""                                                   ' 住所2
 
