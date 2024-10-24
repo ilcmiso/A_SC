@@ -83,12 +83,12 @@ Public Class SCA_InputData
                 ExecuteSQLCommand(tableNo, sql)
             End If
         Next
+        MessageBox.Show("データベースの更新が完了しました。", "完了", MessageBoxButtons.OK, MessageBoxIcon.Information)
     End Sub
 
     Private Sub ExecuteSQLCommand(TableNo As Integer, sql As String)
         Dim db As New Sqldb
         db.ExeSQL(TableNo, sql)
-        MessageBox.Show("データベースの更新が完了しました。", "成功", MessageBoxButtons.OK, MessageBoxIcon.Information)
     End Sub
 
     Private Sub CopyDirectory(sourceDir As String, destDir As String)

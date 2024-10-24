@@ -24,8 +24,9 @@ Partial Class SCA_InputData
     Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(SCA_InputData))
         Me.PBXX = New System.Windows.Forms.Button()
-        Me.PB_A = New System.Windows.Forms.PictureBox()
-        CType(Me.PB_A, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.PictureBox1 = New System.Windows.Forms.PictureBox()
+        Me.Label1 = New System.Windows.Forms.Label()
+        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'PBXX
@@ -40,23 +41,34 @@ Partial Class SCA_InputData
         Me.PBXX.Text = "PBXX"
         Me.PBXX.UseVisualStyleBackColor = False
         '
-        'PB_A
+        'PictureBox1
         '
-        Me.PB_A.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.PB_A.Image = CType(resources.GetObject("PB_A.Image"), System.Drawing.Image)
-        Me.PB_A.Location = New System.Drawing.Point(-2, 0)
-        Me.PB_A.Name = "PB_A"
-        Me.PB_A.Size = New System.Drawing.Size(174, 159)
-        Me.PB_A.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
-        Me.PB_A.TabIndex = 1571
-        Me.PB_A.TabStop = False
+        Me.PictureBox1.Image = CType(resources.GetObject("PictureBox1.Image"), System.Drawing.Image)
+        Me.PictureBox1.Location = New System.Drawing.Point(55, 79)
+        Me.PictureBox1.Name = "PictureBox1"
+        Me.PictureBox1.Size = New System.Drawing.Size(143, 73)
+        Me.PictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize
+        Me.PictureBox1.TabIndex = 1572
+        Me.PictureBox1.TabStop = False
+        '
+        'Label1
+        '
+        Me.Label1.AutoSize = True
+        Me.Label1.Font = New System.Drawing.Font("メイリオ", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.Label1.ForeColor = System.Drawing.Color.Blue
+        Me.Label1.Location = New System.Drawing.Point(5, 6)
+        Me.Label1.Name = "Label1"
+        Me.Label1.Size = New System.Drawing.Size(256, 60)
+        Me.Label1.TabIndex = 1573
+        Me.Label1.Text = "【ファイルの投入方法】" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "下記のようなアイコンのファイルを、" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "ココにドラッグ＆ドロップしてください。"
         '
         'SCA_InputData
         '
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None
         Me.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
-        Me.ClientSize = New System.Drawing.Size(174, 160)
-        Me.Controls.Add(Me.PB_A)
+        Me.ClientSize = New System.Drawing.Size(261, 162)
+        Me.Controls.Add(Me.Label1)
+        Me.Controls.Add(Me.PictureBox1)
         Me.Controls.Add(Me.PBXX)
         Me.ForeColor = System.Drawing.Color.Black
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow
@@ -65,11 +77,13 @@ Partial Class SCA_InputData
         Me.ShowIcon = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "更新ファイル、SQLファイルを投入"
-        CType(Me.PB_A, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
+        Me.PerformLayout()
 
     End Sub
 
     Friend WithEvents PBXX As Button
-    Friend WithEvents PB_A As PictureBox
+    Friend WithEvents PictureBox1 As PictureBox
+    Friend WithEvents Label1 As Label
 End Class

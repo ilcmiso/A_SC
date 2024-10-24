@@ -31,6 +31,10 @@
         Dim userList As String() = dataTable.AsEnumerable().Select(Function(row) row.Field(Of String)("C03")).ToArray()
 
         FillDataGridView()
+        cmn.SetCellFontDGV(DGV_REG1, "項目", "実施年月", isBold:=True)
+        cmn.SetCellFontDGV(DGV_REG1, "項目", "アシスト同時完済", isBold:=True)
+        cmn.SetCellFontDGV(DGV_REG1, "項目", "完済日", isBold:=True)
+        cmn.SetCellFontDGV(DGV_REG1, "項目", "登録変更予定月", isBold:=True)
 
         Select Case ownForm.ActiveControl.Name
             Case BTADD  ' 追加ボタン契機
@@ -66,6 +70,7 @@
             Case BTEDIT ' 編集ボタン契機
                 ' DGVデータ読み込み
                 SetComboBoxItemsDGV("担当者", userList)
+                SetComboBoxItemsDGV("再鑑者", userList)
                 SetValueDGV("担当者", xml.GetUserName)
                 LoadDataGridView()
         End Select

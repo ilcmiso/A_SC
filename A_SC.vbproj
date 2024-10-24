@@ -492,6 +492,7 @@
     <None Include="packages.config" />
     <None Include="Resource\dandd.png" />
     <Content Include="Resource\icon_text.png" />
+    <Content Include="Resource\InputDataSample.png" />
     <Content Include="Resource\SC.ico" />
     <Content Include="データ構造\FKSC_TODOデータ構造.txt" />
     <Content Include="データ構造\FKSCデータ構造.txt" />

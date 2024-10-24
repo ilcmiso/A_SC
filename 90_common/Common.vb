@@ -416,6 +416,32 @@ Public Class Common
         Next
     End Sub
 
+    ' 指定したDGVの指定した列に、指定した文字列と一致した場合、そのセルのフォントを変更する
+    ' ex) SetCellFontDGV(DGV_REG1, "担当者", "山田太郎", isBold:=True)
+    ' ex) SetCellFontDGV(DGV_REG1, "担当者", "山田太郎", fontColor:=Color.Red, isBold:=True)
+    Public Sub SetCellFontDGV(dgv As DataGridView, columnName As String, searchWord As String, Optional ByVal fontColor As Color = Nothing, Optional ByVal isBold As Boolean = False)
+        Dim columnIndex As Integer = dgv.Columns(columnName).Index
+        For Each row As DataGridViewRow In dgv.Rows
+            If row.Cells(columnIndex).Value IsNot Nothing AndAlso row.Cells(columnIndex).Value.ToString() = searchWord Then
+                Dim cell As DataGridViewCell = row.Cells(columnIndex)
+                ' フォントカラーを変更
+                If fontColor <> Nothing Then
+                    cell.Style.ForeColor = fontColor
+                End If
+                ' 太字に変更
+                If isBold Then
+                    Dim currentFont As Font = cell.Style.Font
+                    If currentFont Is Nothing Then
+                        currentFont = dgv.DefaultCellStyle.Font
+                    End If
+                    cell.Style.Font = New Font(currentFont.FontFamily, currentFont.Size, FontStyle.Bold)
+                End If
+            End If
+        Next
+    End Sub
+
+
+
     ' プログレスバー表示
     Public Sub StartPBar(progressCount As Integer)
         SCA_ProgressBar.Instance.StartProgress(progressCount)

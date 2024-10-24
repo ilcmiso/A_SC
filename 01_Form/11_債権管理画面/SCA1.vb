@@ -4,6 +4,7 @@ Imports System.Text
 Imports System.Threading
 Imports System.Drawing
 Imports DocumentFormat.OpenXml.Spreadsheet
+Imports A_SC.SCcommon
 
 Public Class SCA1
 
@@ -2222,32 +2223,27 @@ Public Class SCA1
     Public Sub ShowDGVMR() Handles CB_MRLIST.SelectedIndexChanged
         log.TimerST()
         db.UpdateOrigDT(Sqldb.TID.MRM)
-        mrcmn.InitDGVInfo(DGV_MR1, Sqldb.TID.MRM, CB_MRLIST.SelectedIndex)
-        mrcmn.LoadDGVInfo(DGV_MR1, Sqldb.TID.MR, CB_MRLIST.SelectedIndex)
+        mrcmn.InitDGVInfo(DGV_MR1, Sqldb.TID.MRM, CB_MRLIST.SelectedIndex)      ' 申請物管理DGVのカラム作成
+        mrcmn.LoadDGVInfo(DGV_MR1, Sqldb.TID.MR, CB_MRLIST.SelectedIndex)       ' 申請物管理DGVの行データ作成
         ' 完済日フィルタを完済日のカラムがあるときだけ有効
         TB_MRPaymentDate.Enabled = mrcmn.IsColumnsPaymentDate(DGV_MR1)
+        ' 申請物の移動先が、送信簿か受領簿の場合は全表示チェックをOFFにしておく。FLS三浦様要望
+        If CB_MRLIST.SelectedIndex = SCcommon.MRITEMID.MAIL_RECV Or CB_MRLIST.SelectedIndex = SCcommon.MRITEMID.MAIL_SEND Then
+            CB_MRRangeAll.Checked = False
+        End If
 
         FilterMRSearch(TB_MRSearch.Text)
-
         mrcmn.PaymentDateColor()                ' 完済日が5～13日の間は色付け
         mrcmn.HighlightRows(DGV_MR1, "キャンセル日", "", System.Drawing.Color.DarkGray)
         mrcmn.HighlightRows(DGV_MR1, "ステータス", "完了", System.Drawing.Color.GreenYellow)
-        mrcmn.HighlightRows(DGV_MR1, "抹消発送日", "", System.Drawing.Color.DarkGray)
+        mrcmn.HighlightRows(DGV_MR1, "抹消発送日", "", System.Drawing.Color.GreenYellow)
         mrcmn.HighlightRows(DGV_MR1, "ステータス", "取下げ", System.Drawing.Color.Salmon)
-
-        'Dim moneyFont As New System.Drawing.Font("メイリオ", 11, FontStyle.Bold)    ' 金額用のフォント
-        'Dim dateFont As New System.Drawing.Font("メイリオ", 9, FontStyle.Bold)      ' 日付用のフォント
-        '' 完済管理表示中
-        'If CB_MRLIST.SelectedIndex = SCcommon.MRITEMID.FULL_REPAY Then
-        '    DGV_MR1.Font = dateFont
-        'Else
-        '    DGV_MR1.Font = tmpFont
-        'End If
-        'cmn.ChangeColumnFont(DGV_MR1, "金額", moneyFont)
-        'cmn.ChangeColumnFont(DGV_MR1, "日", dateFont)
-        'cmn.ChangeColumnFont(DGV_MR1, "年月", dateFont)
-        'cmn.ChangeColumnFont(DGV_MR1, "開始月", dateFont)
-        'cmn.ChangeColumnFont(DGV_MR1, "予定月", dateFont)
+        Select Case CB_MRLIST.SelectedIndex
+            Case SCcommon.MRITEMID.REPAY
+                ' 支払不可の文字を赤色に変更
+                cmn.SetCellFontDGV(DGV_MR1, "F審査結果", "支払不可", fontColor:=System.Drawing.Color.Red)
+                cmn.SetCellFontDGV(DGV_MR1, "A審査結果", "支払不可", fontColor:=System.Drawing.Color.Red)
+        End Select
 
         cmn.SetComboBoxUniqueDGVItems(DGV_MR1, "担当者", CB_Person, "(全表示)")   ' 担当コンボボックス設定
         log.TimerED("ShowDGVMR")
