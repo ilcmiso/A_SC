@@ -28,7 +28,9 @@
         L_REGTITLE.Text = $"{ownForm.CB_MRLIST.SelectedItem} の 登録"
         ' UserListのユーザー名を配列に設定
         Dim dataTable As DataTable = ownForm.db.OrgDataTable(Sqldb.TID.USER)
-        Dim userList As String() = dataTable.AsEnumerable().Select(Function(row) row.Field(Of String)("C03")).ToArray()
+        Dim userList As String() = dataTable.AsEnumerable().Where(Function(row) row.Field(Of String)("C04") = "1") _
+                                                           .Select(Function(row) row.Field(Of String)("C03")) _
+                                                           .ToArray()
 
         FillDataGridView()
         cmn.SetCellFontDGV(DGV_REG1, "項目", "実施年月", isBold:=True)
@@ -44,7 +46,7 @@
                 SetComboBoxItemsDGV("担当者", userList)
                 SetValueDGV("担当者", xml.GetUserName)
                 If ownForm.DGV1.CurrentRow IsNot Nothing Then
-                    If ownForm.DGV1.CurrentRow.Cells(0).Value <> Common.DUMMY_NO Then
+                    If sccmn.IsDGVCurrentValid(ownForm.DGV1) Then
                         SetValueDGV("顧客番号", ownForm.DGV1.CurrentRow.Cells(0).Value)
                         SetValueDGV("主債務者名", ownForm.DGV1.CurrentRow.Cells(1).Value)
                         SetValueDGV("債務者", ownForm.DGV1.CurrentRow.Cells(1).Value)
@@ -57,7 +59,7 @@
                     Case SCcommon.MRITEMID.ACCOUNT_CHANGE  ' 口座変更
                         SetValueDGV("新口座開始月", "")
                     Case SCcommon.MRITEMID.MAIL_SEND       ' 郵便発送
-                        If ownForm.DGV1.CurrentRow.Cells(0).Value <> Common.DUMMY_NO Then
+                        If sccmn.IsDGVCurrentValid(ownForm.DGV1) Then
                             SetValueDGV("発送先", ownForm.DGV1.CurrentRow.Cells(1).Value)
                         End If
                         ' UserListにあるユーザー名をコンボボックスのItemsに設定
@@ -73,6 +75,11 @@
                 SetComboBoxItemsDGV("再鑑者", userList)
                 SetValueDGV("担当者", xml.GetUserName)
                 LoadDataGridView()
+
+                If DGV_REG1.Rows(5).Cells(0).Value = "顧客番号" And DGV_REG1.Rows(5).Cells(1).ReadOnly = True Then
+                    L_EDITCOS.Visible = True
+                End If
+
         End Select
     End Sub
 
@@ -126,6 +133,7 @@
         ' DGVに新しい行を追加
         For Each row As DataRow In dt.Rows
             Dim order As String = row("C02").ToString()  ' 表示順
+            Dim itemName As String = row("C03").ToString()  ' 項目名
             Dim width As String = row("C04").ToString()  ' 横幅
             Dim format As String = row("C05").ToString() ' 表示形式
 
@@ -149,7 +157,18 @@
                     ReplaceCell2NumericUpDown(DGV_REG1, order, 1)
 
                 Case MR_READONLY
-                    DGV_REG1.Rows(order).Cells(1).ReadOnly = True
+                    ' データ追加時、ダミーを選択している場合は、債務者と顧客番号を手入力可能にする。
+                    ' データ変更時でも、債務者と顧客番号が空欄であれば、手入力可能とする。
+                    ' 一度登録すると変更ができないが、入力誤りや誤ったデータ削除が心配とのことなので仕様。
+                    ' 202410 三浦様ご要望
+                    If (ownForm.ActiveControl.Name = BTADD) AndAlso
+                       (Not sccmn.IsDGVCurrentValid(ownForm.DGV1)) AndAlso
+                       (itemName = "債務者" Or itemName = "顧客番号") Then
+                        DGV_REG1.Rows(order).Cells(1).Style.BackColor = Color.FromArgb(255, 255, 192)
+                    Else
+                        DGV_REG1.Rows(order).Cells(1).ReadOnly = True
+                    End If
+
 
                 Case Else
                     If format.Contains(",") Then
@@ -212,6 +231,20 @@
     Private Sub BT_A2_Click(sender As Object, e As EventArgs) Handles BT_A2.Click
         Me.Close()
     End Sub
+
+    ' 債務者編集ボタン
+    Private Sub Label1_Click(sender As Object, e As EventArgs) Handles L_EDITCOS.DoubleClick
+        Dim r As DialogResult = MessageBox.Show($"債務者情報を編集しますか？",
+                                "ご確認ください",
+                                MessageBoxButtons.YesNo,
+                                MessageBoxIcon.Question)
+        If r = vbNo Then Exit Sub
+        DGV_REG1.Rows(5).Cells(1).ReadOnly = False
+        DGV_REG1.Rows(6).Cells(1).ReadOnly = False
+        DGV_REG1.Rows(5).Cells(1).Style.BackColor = Color.FromArgb(255, 255, 192)
+        DGV_REG1.Rows(6).Cells(1).Style.BackColor = Color.FromArgb(255, 255, 192)
+    End Sub
+
 #End Region
 
     ' 番号の最大値+1取得
@@ -484,18 +517,18 @@
         ' 内容
         Select Case beforeType
             Case 0  ' 団信弁済
-                DGV_REG1(1, 6).Value = contentWords(0)
-                SetValueDGV("内容", contentWords(0))
-            Case 1  ' 一部繰り上げ返済
+                DGV_REG1(1, 6).Value = contentWords(9)
+                SetValueDGV("内容", contentWords(9))
+            Case 1, 2  ' 一部繰り上げ返済
                 DGV_REG1(1, 6).Value = contentWords(1)
                 SetValueDGV("内容", contentWords(1))
-            Case 2  ' 完済管理
+            Case 3  ' 完済管理
                 DGV_REG1(1, 6).Value = contentWords(0)
                 SetValueDGV("内容", contentWords(0))
-            Case 3  ' 契約条件変更
-                DGV_REG1(1, 6).Value = contentWords(2)
-                SetValueDGV("内容", contentWords(2))
-            Case 4  ' 口座変更
+            Case 4  ' 契約条件変更
+                DGV_REG1(1, 6).Value = contentWords(10)
+                SetValueDGV("内容", contentWords(10))
+            Case 5  ' 口座変更
                 DGV_REG1(1, 6).Value = contentWords(5)
                 SetValueDGV("内容", contentWords(5))
         End Select

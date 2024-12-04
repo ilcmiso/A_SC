@@ -107,7 +107,7 @@
                 CellReport1.Cell("C1").Value = contract                                                              ' 契約名(ﾌﾗｯﾄ35)
                 CellReport1.Cell("C2").Value = SCA1.NUD_DunA1.Value                                                  ' 未納月
                 CellReport1.Cell("C3").Value = SCA1.DTP_DunA2.Value.ToString("yyyy年M月d日(ddd)")                    ' 期限日
-                CellReport1.Cell("C4").Value = StrConv(String.Format("\{0:#,0}円を", am), vbWide)                    ' 金額
+                CellReport1.Cell("C4").Value = StrConv(String.Format("{0:#,0}円を", am), vbWide)                     ' 金額
                 CellReport1.Cell("C5").Value = SCA1.DTP_DunA3.Value.ToString("yyyy年M月d日(ddd)")                    ' 口座引落期限日
                 CellReport1.Cell("C6").Value = SCA1.DTP_DunA1.Value.AddMonths(1).ToString("MMM")                     ' 未納月の翌月
                 CellReport1.Cell("C7").Value = SCA1.DTP_DunA3.Value.ToString("yyyy年M月")                            ' 振替再開月

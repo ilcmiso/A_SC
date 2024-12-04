@@ -440,7 +440,13 @@ Public Class Common
         Next
     End Sub
 
-
+    ' str1とstr2を比較して同じであればTrue、異なればFalseを返却
+    ' 半角スペースと全角スペースを除いて比較する（Nullの場合は空文字列として扱う）
+    Public Function DiffStr(str1 As String, str2 As String) As Boolean
+        Dim cleanStr1 As String = If(str1, "").Replace(" ", "").Replace("　", "")
+        Dim cleanStr2 As String = If(str2, "").Replace(" ", "").Replace("　", "")
+        Return cleanStr1 = cleanStr2
+    End Function
 
     ' プログレスバー表示
     Public Sub StartPBar(progressCount As Integer)

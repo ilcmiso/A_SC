@@ -1,9 +1,6 @@
-﻿Imports System.Data.SQLite
-Imports System.IO
+﻿Imports System.IO
 Imports System.Text
 Imports System.Threading
-Imports System.Drawing
-Imports DocumentFormat.OpenXml.Spreadsheet
 Imports A_SC.SCcommon
 
 Public Class SCA1
@@ -526,6 +523,7 @@ Public Class SCA1
                         If dr(0)(11)(0) = "6" Then L_TYPE_H.Visible = True
                     End If
 
+                    ' 総務部 物件情報欄
                     dgv(8, 1).Value = cmn.SetValueDefault(cInfo.Item(63), "")       ' 住居サイン
                     dgv(8, 2).Value = cmn.SetValueDefault(cInfo.Item(64), "")       ' 物件郵便番号
                     dgv(8, 3).Value = cmn.SetValueDefault(cInfo.Item(65), "")       ' 物件住所
@@ -533,6 +531,12 @@ Public Class SCA1
                     dgv(8, 5).Value = cmn.SetValueDefault(cInfo.Item(44), "")       ' 支店番号
                     dgv(8, 6).Value = cmn.SetValueDefault(cInfo.Item(41), "")       ' 口座番号
                     dgv(8, 7).Value = cmn.SetValueDefault(cInfo.Item(42), "")       ' 口座名義
+                    If cmn.DiffStr(cInfo.Item(16), dgv(8, 3).Value) Then
+                        dgv(8, 3).Value = "(住所と同じ)"
+                        dgv(8, 3).Style.ForeColor = Color.DarkGray
+                    Else
+                        dgv(8, 3).Style.ForeColor = Color.Red
+                    End If
 
                     ' DGV9の住所欄の幅が狭いのでテキストボックスにも表示させておく
                     TB_ADDRESS1.Text = cmn.SetValueDefault(cInfo.Item(16), "")
@@ -790,6 +794,16 @@ Public Class SCA1
             obj.enabled = sw
         Next
     End Sub
+
+    ' 物件住所をクリックして比較表示
+    Private Sub DGV9_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles DGV9.CellClick
+        If e.RowIndex = 3 AndAlso e.ColumnIndex = 8 Then
+            Dim address1 As String = DGV9.Rows(4).Cells(1).Value
+            Dim address2 As String = DGV9.Rows(3).Cells(8).Value
+            If address2 = "(住所と同じ)" Then Exit Sub
+            MsgBox($"[  住所  ]{vbCrLf}{address1}{vbCrLf}[物件住所]{vbCrLf}{address2}")
+        End If
+    End Sub
 #End Region
 
 #Region "検索オプション"
@@ -1009,15 +1023,18 @@ Public Class SCA1
             Next
 
             ' DGVデザイン 太線,背景色
-            dgv.Columns(0).DefaultCellStyle.BackColor = System.Drawing.Color.Gainsboro
-            dgv.Columns(2).DefaultCellStyle.BackColor = System.Drawing.Color.Gainsboro
-            dgv.Columns(4).DefaultCellStyle.BackColor = System.Drawing.Color.Gainsboro
-            dgv.Columns(7).DefaultCellStyle.BackColor = System.Drawing.Color.Gainsboro
+            dgv.Columns(0).DefaultCellStyle.BackColor = Color.Gainsboro
+            dgv.Columns(2).DefaultCellStyle.BackColor = Color.Gainsboro
+            dgv.Columns(4).DefaultCellStyle.BackColor = Color.Gainsboro
+            dgv.Columns(7).DefaultCellStyle.BackColor = Color.Gainsboro
             dgv.Rows(0).DividerHeight = 1
             dgv.Rows(5).DividerHeight = 1
             'dgv.Rows(10).DividerHeight = 1
             dgv.Columns(3).DividerWidth = 1
             dgv.Columns(6).DividerWidth = 1
+            ' 完済日の表示文字を赤字で強調する  202410 三浦様要望
+            dgv(5, 11).Style = New DataGridViewCellStyle() With {.ForeColor = Color.Red}
+            dgv(6, 11).Style = New DataGridViewCellStyle() With {.ForeColor = Color.Red}
         Else
             ' 顧客情報のみクリア
             Dim clearCooumns() As Integer = {1, 3, 5, 6}
@@ -2246,6 +2263,7 @@ Public Class SCA1
         End Select
 
         cmn.SetComboBoxUniqueDGVItems(DGV_MR1, "担当者", CB_Person, "(全表示)")   ' 担当コンボボックス設定
+        L_STS_MR.Text = " ( " & DGV_MR1.Rows.Count & " ) 件 表示中"
         log.TimerED("ShowDGVMR")
     End Sub
 
@@ -2495,6 +2513,7 @@ Public Class SCA1
 
     ' 発送NGのラベルカラー設定
     Private Sub ShowSendNGLabel()
+        If DGV1.Rows.Count = 0 Then Exit Sub
         Dim cid As String = DGV1.CurrentRow.Cells(0).Value
         Dim state As Integer = GetSendNGState(cid)
         L_SENDNG1.BackColor = System.Drawing.Color.Silver

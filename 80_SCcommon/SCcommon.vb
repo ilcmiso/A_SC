@@ -27,4 +27,14 @@
         ' 正常値返却
         Return GROUPCREDIT(val)
     End Function
+
+    ' 指定したDGVのカレント行の、顧客番号が有効であればTrue、ダミーもしくは無選択ならFalse
+    Public Function IsDGVCurrentValid(dgv As DataGridView) As Boolean
+        If dgv.Rows.Count > 0 AndAlso
+           dgv.CurrentRow IsNot Nothing AndAlso
+           dgv.CurrentRow.Cells(0).Value <> Common.DUMMY_NO Then
+            Return True
+        End If
+        Return False
+    End Function
 End Class
