@@ -531,7 +531,11 @@ Public Class SCA1
                     dgv(8, 5).Value = cmn.SetValueDefault(cInfo.Item(44), "")       ' 支店番号
                     dgv(8, 6).Value = cmn.SetValueDefault(cInfo.Item(41), "")       ' 口座番号
                     dgv(8, 7).Value = cmn.SetValueDefault(cInfo.Item(42), "")       ' 口座名義
-                    If cmn.DiffStr(cInfo.Item(16), dgv(8, 3).Value) Then
+
+                    ' 物件住所 主・連の住所と全て同じなら(住所と同じ)、異なれば赤字で物件住所
+                    Dim isSameAddress As Boolean = cmn.DiffStr(cInfo.Item(16), dgv(8, 3).Value)
+                    Dim isSameAdditionalInfo As Boolean = cInfo.Item(36).Length > 0 AndAlso cmn.DiffStr(cInfo.Item(36), dgv(8, 3).Value)
+                    If isSameAddress AndAlso (cInfo.Item(36).Length = 0 OrElse isSameAdditionalInfo) Then
                         dgv(8, 3).Value = "(住所と同じ)"
                         dgv(8, 3).Style.ForeColor = Color.DarkGray
                     Else
@@ -798,10 +802,17 @@ Public Class SCA1
     ' 物件住所をクリックして比較表示
     Private Sub DGV9_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles DGV9.CellClick
         If e.RowIndex = 3 AndAlso e.ColumnIndex = 8 Then
-            Dim address1 As String = DGV9.Rows(4).Cells(1).Value
+            Dim addressMain As String = DGV9.Rows(4).Cells(1).Value
+            Dim addressSub As String = DGV9.Rows(9).Cells(1).Value
             Dim address2 As String = DGV9.Rows(3).Cells(8).Value
             If address2 = "(住所と同じ)" Then Exit Sub
-            MsgBox($"[  住所  ]{vbCrLf}{address1}{vbCrLf}[物件住所]{vbCrLf}{address2}")
+
+            Dim outMsg As String = $"[主：住所]{vbCrLf}{addressMain}{vbCrLf}"
+            If addressSub.Length > 0 Then
+                outMsg += $"[連：住所]{vbCrLf}{addressSub}{vbCrLf}"
+            End If
+            outMsg += $"[物件住所]{vbCrLf}{address2}"
+            MsgBox(outMsg)
         End If
     End Sub
 #End Region
