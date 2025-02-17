@@ -2580,6 +2580,8 @@ Public Class SCA1
     ''' </summary>
     Public Sub CompareDatabasePerformance()
         Try
+            Cursor.Current = Cursors.WaitCursor  ' マウスカーソルを砂時計に
+
             ' SQL Server側の処理計測
             Dim swSQLServer As Stopwatch = Stopwatch.StartNew()
             ' Sqlsv.vbに定義したGetFKSCD()を呼び出し
