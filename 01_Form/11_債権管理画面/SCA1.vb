@@ -385,6 +385,7 @@ Public Class SCA1
                 cmn.OpenCurrentDir()
             Case Keys.F2
             Case Keys.F3
+                CompareDatabasePerformance()
             Case Keys.F4
                 db.UpdateOrigDT(Sqldb.TID.MRM)
                 ShowDGVMR()
@@ -2573,4 +2574,33 @@ Public Class SCA1
     End Sub
 
 #End Region
+
+    ''' <summary>
+    ''' SQL ServerとSQLiteそれぞれのFKSCDテーブル全件取得の処理時間を計測し、結果を出力します。
+    ''' </summary>
+    Public Sub CompareDatabasePerformance()
+        Try
+            ' SQL Server側の処理計測
+            Dim swSQLServer As Stopwatch = Stopwatch.StartNew()
+            ' Sqlsv.vbに定義したGetFKSCD()を呼び出し
+            Dim dtSQLServer As DataTable = Sqlsv.GetFKSCD()
+            swSQLServer.Stop()
+            Dim sqlServerTime As Long = swSQLServer.ElapsedMilliseconds
+
+            ' SQLite側の処理計測
+            Dim swSQLite As Stopwatch = Stopwatch.StartNew()
+            ' Sqldb.vbに定義したGetFKSCD()を呼び出し（※こちらは既存のSQLite用実装）
+            Dim dtSQLite As DataTable = db.GetSelect(Sqldb.TID.SCD, "SELECT * FROM FKSCD")
+            swSQLite.Stop()
+            Dim sqliteTime As Long = swSQLite.ElapsedMilliseconds
+
+            ' 結果をコンソールに出力（必要に応じてMessageBox等での表示も可能）
+            MessageBox.Show("SQL Server: " & sqlServerTime.ToString() & " ms" & vbCrLf &
+                             "SQLite: " & sqliteTime.ToString() & " ms", "DB Performance Comparison")
+
+        Catch ex As Exception
+            Console.WriteLine("エラーが発生しました: " & ex.Message)
+        End Try
+    End Sub
+
 End Class
