@@ -8,6 +8,7 @@ Public Class Sqldb
     Private ReadOnly log As New Log
     Private ReadOnly mtx As New Mutex
     Private ReadOnly cmn As New Common
+    Private ReadOnly xml As New XmlMng
 
     ' カレントパス
     Public ReadOnly CurrentPath_LO As String = SC.CurrentAppPath    ' ローカル
@@ -100,7 +101,62 @@ Public Class Sqldb
     Private ReadOnly loCmd(DBTbl.GetLength(0) - 1) As SQLiteCommand
     Private cmdl() As List(Of String)
 
+    '--------------------------------------------------------------
+    '【SQL Server用 FKSC_LOG専用】接続文字列（指定の条件に合わせています）
+    Private Function GetSQLServerFKSCLogConStr() As String
+        Return "Server=localhost;Database=aaa;User Id=ilc;Password=ilcmng;Encrypt=True;TrustServerCertificate=True;"
+    End Function
 
+    '【SQL Server用 FKSC_LOG専用】SELECT実行（DataTable取得）
+    Private Function SqlServerSelectFKSCLog(sqlCommand As String) As DataTable
+        Dim dt As New DataTable
+        Using connection As New SqlConnection(GetSQLServerFKSCLogConStr())
+            Try
+                connection.Open()
+                Using command As New SqlCommand(sqlCommand, connection)
+                    Using adapter As New SqlDataAdapter(command)
+                        adapter.Fill(dt)
+                    End Using
+                End Using
+            Catch ex As Exception
+                log.D(Log.ERR, $"SQLServerSelectFKSCLog Error: {sqlCommand}{vbCrLf}{ex.Message}")
+            End Try
+        End Using
+        Return dt
+    End Function
+
+    '【SQL Server用 FKSC_LOG専用】非クエリ実行（INSERT/UPDATE/DELETE 等）
+    Private Function ExeSQLServerFKSCLog(sqlCommands As List(Of String)) As Long
+        Dim newId As Long = -1 ' 失敗時またはINSERTがない場合の戻り値
+        Using con As New SqlConnection(GetSQLServerFKSCLogConStr())
+            con.Open()
+            Using tran As SqlTransaction = con.BeginTransaction()
+                Try
+                    For Each commandText In sqlCommands
+                        Using cmd As New SqlCommand(commandText, con, tran)
+                            cmd.ExecuteNonQuery()
+                            ' INSERTの場合、SCOPE_IDENTITY()で新規IDを取得
+                            If commandText.Trim().ToUpper().StartsWith("INSERT") Then
+                                cmd.CommandText = "SELECT SCOPE_IDENTITY()"
+                                Dim result As Object = cmd.ExecuteScalar()
+                                If result IsNot Nothing AndAlso Not IsDBNull(result) Then
+                                    newId = Convert.ToInt64(result)
+                                End If
+                            End If
+                        End Using
+                    Next
+                    tran.Commit()
+                    Return newId
+                Catch ex As Exception
+                    log.D(Log.ERR, $"ExeSQLServerFKSCLog Error: {sqlCommands(0)}{vbCrLf}{ex.Message}")
+                    tran.Rollback()
+                    Return newId
+                End Try
+            End Using
+        End Using
+    End Function
+
+    '--------------------------------------------------------------
     ' コンストラクタ(初期化設定)
     Sub New()
         Dim xml As New XmlMng
@@ -210,23 +266,36 @@ Public Class Sqldb
     '          複数 AddSQL(Sqldb.DBSC, "Insert ..")
     '               SQLExe(Sqldb.DBSC)
     Public Function ExeSQL(TableID As Integer, SqlCmd As String) As Long
-        AddSQL(TableID, SqlCmd)
-        Dim ret As Long
-        If DBTbl(TableID, DBID.DBSTRG) = DBLO Then
-            ret = CommonSQLExe(TableID, loCon(TableID), loCmd(TableID))
+        '【変更】対象がFKSC_LOG（TID.SCRまたはTID.SCD）かつスイッチONならSQL Serverへ切替
+        If xml.GetDBSwitch() AndAlso (TableID = TID.SCR Or TableID = TID.SCD) Then
+            Return ExeSQLServerFKSCLog(New List(Of String) From {SqlCmd})
         Else
-            ret = CommonSQLExe(TableID, svCon(TableID), svCmd(TableID))
+            AddSQL(TableID, SqlCmd)
+            Dim ret As Long
+            If DBTbl(TableID, DBID.DBSTRG) = DBLO Then
+                ret = CommonSQLExe(TableID, loCon(TableID), loCmd(TableID))
+            Else
+                ret = CommonSQLExe(TableID, svCon(TableID), svCmd(TableID))
+            End If
+            Return ret
         End If
-        Return ret
     End Function
     Public Function ExeSQL(TableID As Integer) As Long
-        Dim ret As Long
-        If DBTbl(TableID, DBID.DBSTRG) = DBLO Then
-            ret = CommonSQLExe(TableID, loCon(TableID), loCmd(TableID))
+        '【変更】対象がFKSC_LOGの場合、コマンドリスト(cmdl)のSQLをSQL Serverで実行
+        If xml.GetDBSwitch() AndAlso (TableID = TID.SCR Or TableID = TID.SCD) Then
+            Dim ret As Long = ExeSQLServerFKSCLog(cmdl(TableID))
+            cmdl(TableID).Clear()
+            RegIDList.Clear()
+            Return ret
         Else
-            ret = CommonSQLExe(TableID, svCon(TableID), svCmd(TableID))
+            Dim ret As Long
+            If DBTbl(TableID, DBID.DBSTRG) = DBLO Then
+                ret = CommonSQLExe(TableID, loCon(TableID), loCmd(TableID))
+            Else
+                ret = CommonSQLExe(TableID, svCon(TableID), svCmd(TableID))
+            End If
+            Return ret
         End If
-        Return ret
     End Function
     Private Function CommonSQLExe(TableID As Integer, con As SQLiteConnection, cmd As SQLiteCommand) As Long
         'mtx.Lock(Mutex.MTX_LOCK_W, TableID)
@@ -372,6 +441,36 @@ Public Class Sqldb
         Return dt
     End Function
 
+    '【変更】汎用SQL文結果取得：対象がFKSC_LOGの場合はSQL Serverへ切替
+    Public Function GetSelect(TableID As Integer, SqlCmd As String) As DataTable
+        If xml.GetDBSwitch() AndAlso (TableID = TID.SCR Or TableID = TID.SCD) Then
+            Return SqlServerSelectFKSCLog(SqlCmd)
+        End If
+        'mtx.Lock(Mutex.MTX_LOCK_R, TableID)
+        Dim con As SQLiteConnection = loCon(TableID)
+        Dim cmd As SQLiteCommand = loCmd(TableID)
+        Dim dtr As SQLiteDataReader = Nothing
+        Dim dt As New DataTable
+        DBFileDL(TableID)
+        For cnt = 1 To RETRYCNT
+            Try
+                con.Open()
+                cmd.CommandText = SqlCmd
+                dtr = cmd.ExecuteReader                                  ' SQL結果取得
+                dt.Load(dtr)
+            Catch ex As Exception
+                log.D(Log.ERR, String.Format("{0}{1}TableID[{2}] {3}", ex.Message, vbCrLf, TableID, SqlCmd))
+            End Try
+            If dtr IsNot Nothing Then Exit For
+            Threading.Thread.Sleep(RETRYDELAY)
+        Next
+        If dtr IsNot Nothing Then
+            If Not dtr.IsClosed Then dtr.Close()
+        End If
+        con.Close()
+        Return dt
+    End Function
+
     ' FKSCREMに指定した機構番号が存在する場合True
     Public Function IsExistREM(id As String) As Boolean
         Dim dt As DataTable = GetSelect(TID.SCR, "Select * From " & DBTbl(TID.SCR, DBID.TABLE) & " Where FKR01 = '" & id & "'")
@@ -398,35 +497,6 @@ Public Class Sqldb
     Public Sub DeleteAllData(TableID As String)
         ExeSQL(TableID, $"Delete From {DBTbl(TableID, DBID.TABLE)}")
     End Sub
-
-    ' 汎用SQL文結果取得
-    Public Function GetSelect(TableID As Integer, SqlCmd As String) As DataTable
-        'mtx.Lock(Mutex.MTX_LOCK_R, TableID)
-        Dim con As SQLiteConnection = loCon(TableID)
-        Dim cmd As SQLiteCommand = loCmd(TableID)
-        Dim dtr As SQLiteDataReader = Nothing
-        Dim dt As New DataTable
-        DBFileDL(TableID)
-        For cnt = 1 To RETRYCNT
-            Try
-                con.Open()
-                cmd.CommandText = SqlCmd
-                dtr = cmd.ExecuteReader                                  ' SQL結果取得
-                dt.Load(dtr)
-            Catch ex As Exception
-                log.D(Log.ERR, String.Format("{0}{1}TableID[{2}] {3}", ex.Message, vbCrLf, TableID, SqlCmd))
-            End Try
-            ' まれに競合更新？でcmd.ExexuteReaderでException発生するので、その場合にはリトライ
-            If dtr IsNot Nothing Then Exit For
-            Threading.Thread.Sleep(RETRYDELAY)
-        Next
-        If dtr IsNot Nothing Then
-            If Not dtr.IsClosed Then dtr.Close()
-        End If
-        con.Close()
-        'mtx.UnLock(TableID)
-        Return dt
-    End Function
 
     ' オリジナルDTの更新
     Public Sub UpdateOrigDT()

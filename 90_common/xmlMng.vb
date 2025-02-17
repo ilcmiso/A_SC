@@ -120,6 +120,13 @@ Public Class XmlMng
     Public Function GetDiv() As Integer
         Return xmlData.DivisionNo
     End Function
+    Public Function SetDBSwitch(sw As Boolean)
+        xmlData.DBSwitch = sw
+        SetXml()
+    End Function
+    Public Function GetDBSwitch() As Boolean
+        Return xmlData.DBSwitch
+    End Function
 
 End Class
 
@@ -137,4 +144,5 @@ Public Class XmlList
     Public DebugMode As Boolean  ' デバッグログ出力モード
     Public AplUpdOff As Boolean  ' アプリ自動更新OFF
     Public DivisionNo As Integer ' 部署番号 0:債権管理部 1:総務課
+    Public DBSwitch As Boolean   ' SQLite:False SQL Server:True
 End Class
