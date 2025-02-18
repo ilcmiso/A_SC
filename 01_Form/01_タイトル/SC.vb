@@ -36,6 +36,7 @@ Public Class SC
 
         ' プログレスバーのインスタンス生成
         SCA_ProgressBar.Instance = New SCA_ProgressBar()
+        SettingDBSW()
 
         log.cLog("--- SC Load完了: " & (Date.Now - loadTime).ToString("ss\.fff"))
     End Sub
@@ -110,6 +111,17 @@ Public Class SC
         Application.Restart()
     End Sub
 
+    Private Sub SettingDBSW()
+        Dim xml As New XmlMng
+        CB_DBSW.Checked = xml.GetDBSwitch
+    End Sub
+
+    Private Sub CB_DBSW_CheckedChanged(sender As Object, e As EventArgs) Handles CB_DBSW.CheckedChanged
+        Dim xml As New XmlMng
+        xml.SetDBSwitch(CB_DBSW.Checked)
+        xml.SetXml()
+    End Sub
+
     Private IlcND As New ILCNetDrive            ' ILCネットワークドライブ宣言
 
     ' ショートカット F1
@@ -128,6 +140,7 @@ Public Class SC
                 End If
         End Select
     End Sub
+
 #End Region
 
 End Class

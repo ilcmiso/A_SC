@@ -3,7 +3,7 @@
 Public Class Sqlsv
 
     ' SQL Server接続文字列
-    Private Shared connectionString As String = "Server=localhost;Database=aaa;User Id=ilc;Password=ilcmng;Encrypt=True;TrustServerCertificate=True;"
+    Private Shared connectionString As String = "Server=localhost;Database=A_SC;User Id=fls;Password=fls8088;Encrypt=True;TrustServerCertificate=True;"
 
     ' SqlConnectionオブジェクト
     Private Shared connection As SqlConnection

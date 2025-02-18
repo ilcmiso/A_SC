@@ -78,6 +78,16 @@ Public Class SCA1
         'fwatchers = New List(Of FileWatcher)
         'FWatchingStart()
 
+        ' SQL Server 変更監視を開始
+
+        ' DGVごとのデータ変換関数を設定
+        Dim dgvMappings As New Dictionary(Of DataGridView, Func(Of DataTable, DataTable)) From {
+            {DGV2, AddressOf TransformForDGV2},
+            {DGV5, AddressOf TransformForDGV5}
+        }
+        Dim updater As New ChangeTrackingUpdater(dgvMappings)
+        updater.StartMonitoring()
+
         ' 解像度が小さいPCは、左端に寄せる (横幅1600px未満なら左寄せ)
         If Screen.PrimaryScreen.Bounds.Width < 1600 Then Me.Left = 0
         cmn.EndPBar()
@@ -197,6 +207,30 @@ Public Class SCA1
         xml.SetAutoUpd(CB_AUTOUPD.Checked)
     End Sub
 
+#End Region
+
+#Region "SQL Server Event"
+
+    ' FKSCD データをそのまま適用する場合
+    Function TransformForDGV2(ByVal dt As DataTable) As DataTable
+        Return dt ' 変換なし
+    End Function
+
+    ' FKSCD データをDGV5用に変換
+    Function TransformForDGV5(ByVal dt As DataTable) As DataTable
+        Dim resultTable As New DataTable()
+        resultTable.Columns.Add("CustomColumnA")
+        resultTable.Columns.Add("CustomColumnB")
+
+        For Each row As DataRow In dt.Rows
+            Dim newRow As DataRow = resultTable.NewRow()
+            newRow("CustomColumnA") = row("OriginalColumn1") ' 必要なデータのみマッピング
+            newRow("CustomColumnB") = row("OriginalColumn3")
+            resultTable.Rows.Add(newRow)
+        Next
+
+        Return resultTable
+    End Function
 #End Region
 
 #Region " UIイベント"
@@ -622,7 +656,9 @@ Public Class SCA1
             Case dgv Is DGV2
                 TB_Remarks.Text = ""         ' 備考欄初期化
                 'LockEventHandler_LCSum = False
-                dgv.Sort(dgv.Columns(1), ComponentModel.ListSortDirection.Descending)
+                If dgv.Columns(1).DataPropertyName IsNot Nothing AndAlso dgv.Columns(1).DataPropertyName <> "" Then
+                    dgv.Sort(dgv.Columns(1), ComponentModel.ListSortDirection.Descending)
+                End If
                 If DGV2.Rows.Count > 0 Then TB_Remarks.Text = DGV2.CurrentRow.Cells(8).Value
             'Case dgv Is DGV3
             Case dgv Is DGV4

@@ -104,7 +104,7 @@ Public Class Sqldb
     '--------------------------------------------------------------
     '【SQL Server用 FKSC_LOG専用】接続文字列（指定の条件に合わせています）
     Private Function GetSQLServerFKSCLogConStr() As String
-        Return "Server=localhost;Database=aaa;User Id=ilc;Password=ilcmng;Encrypt=True;TrustServerCertificate=True;"
+        Return "Server=localhost;Database=A_SC;User Id=ilc;Password=ilcmng;Encrypt=True;TrustServerCertificate=True;"
     End Function
 
     '【SQL Server用 FKSC_LOG専用】SELECT実行（DataTable取得）

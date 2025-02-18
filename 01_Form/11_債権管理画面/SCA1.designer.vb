@@ -43,8 +43,6 @@ Partial Class SCA1
         Dim DataGridViewCellStyle17 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle18 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle20 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle21 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle22 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle23 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle24 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle25 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
@@ -63,6 +61,8 @@ Partial Class SCA1
         Dim DataGridViewCellStyle38 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle39 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle40 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle21 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle22 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(SCA1))
         Me.PBXX = New System.Windows.Forms.Button()
         Me.tt1 = New System.Windows.Forms.ToolTip(Me.components)
@@ -203,17 +203,6 @@ Partial Class SCA1
         Me.BT_B4 = New System.Windows.Forms.Button()
         Me.BT_B2 = New System.Windows.Forms.Button()
         Me.DGV2 = New System.Windows.Forms.DataGridView()
-        Me.Column9 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.DataGridViewTextBoxColumn1 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.DataGridViewTextBoxColumn2 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Column22 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Column4 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Column7 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Column23 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.督促通知日 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Column3 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Column13 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Column30 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.TB_FreeMemo = New System.Windows.Forms.TextBox()
         Me.TB_Remarks = New System.Windows.Forms.TextBox()
         Me.Button6 = New System.Windows.Forms.Button()
@@ -315,6 +304,17 @@ Partial Class SCA1
         Me.ToolStripMenuItem2 = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
         Me.ColorDialog1 = New System.Windows.Forms.ColorDialog()
+        Me.FKD01 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.FKD03 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.FKD04 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.FKD11 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.FKD05 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.FKD06 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.FKD12 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.FKD08 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.FKD07 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.FKD13 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ダミー = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Tab_4Dun.SuspendLayout()
         CType(Me.DGV4, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.GroupBox1.SuspendLayout()
@@ -2104,7 +2104,7 @@ Partial Class SCA1
         DataGridViewCellStyle20.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
         Me.DGV2.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle20
         Me.DGV2.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.DGV2.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.Column9, Me.DataGridViewTextBoxColumn1, Me.DataGridViewTextBoxColumn2, Me.Column22, Me.Column4, Me.Column7, Me.Column23, Me.督促通知日, Me.Column3, Me.Column13, Me.Column30})
+        Me.DGV2.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.FKD01, Me.FKD03, Me.FKD04, Me.FKD11, Me.FKD05, Me.FKD06, Me.FKD12, Me.FKD08, Me.FKD07, Me.FKD13, Me.ダミー})
         Me.DGV2.ImeMode = System.Windows.Forms.ImeMode.[On]
         Me.DGV2.Location = New System.Drawing.Point(523, 337)
         Me.DGV2.Name = "DGV2"
@@ -2118,105 +2118,6 @@ Partial Class SCA1
         Me.DGV2.Size = New System.Drawing.Size(843, 104)
         Me.DGV2.TabIndex = 1577
         Me.DGV2.TabStop = False
-        '
-        'Column9
-        '
-        Me.Column9.HeaderText = "識別番号"
-        Me.Column9.MinimumWidth = 6
-        Me.Column9.Name = "Column9"
-        Me.Column9.ReadOnly = True
-        Me.Column9.Visible = False
-        Me.Column9.Width = 130
-        '
-        'DataGridViewTextBoxColumn1
-        '
-        Me.DataGridViewTextBoxColumn1.HeaderText = "日時"
-        Me.DataGridViewTextBoxColumn1.MinimumWidth = 6
-        Me.DataGridViewTextBoxColumn1.Name = "DataGridViewTextBoxColumn1"
-        Me.DataGridViewTextBoxColumn1.ReadOnly = True
-        Me.DataGridViewTextBoxColumn1.Width = 130
-        '
-        'DataGridViewTextBoxColumn2
-        '
-        DataGridViewCellStyle21.BackColor = System.Drawing.Color.White
-        DataGridViewCellStyle21.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        DataGridViewCellStyle21.ForeColor = System.Drawing.Color.Black
-        Me.DataGridViewTextBoxColumn2.DefaultCellStyle = DataGridViewCellStyle21
-        Me.DataGridViewTextBoxColumn2.HeaderText = "相手"
-        Me.DataGridViewTextBoxColumn2.MinimumWidth = 6
-        Me.DataGridViewTextBoxColumn2.Name = "DataGridViewTextBoxColumn2"
-        Me.DataGridViewTextBoxColumn2.ReadOnly = True
-        Me.DataGridViewTextBoxColumn2.Width = 105
-        '
-        'Column22
-        '
-        Me.Column22.HeaderText = "概要"
-        Me.Column22.MinimumWidth = 6
-        Me.Column22.Name = "Column22"
-        Me.Column22.ReadOnly = True
-        Me.Column22.Width = 160
-        '
-        'Column4
-        '
-        Me.Column4.HeaderText = "手法（手段）"
-        Me.Column4.MinimumWidth = 6
-        Me.Column4.Name = "Column4"
-        Me.Column4.ReadOnly = True
-        Me.Column4.Width = 120
-        '
-        'Column7
-        '
-        Me.Column7.HeaderText = "担当者"
-        Me.Column7.MinimumWidth = 6
-        Me.Column7.Name = "Column7"
-        Me.Column7.ReadOnly = True
-        Me.Column7.Width = 65
-        '
-        'Column23
-        '
-        Me.Column23.HeaderText = "対応者"
-        Me.Column23.MinimumWidth = 6
-        Me.Column23.Name = "Column23"
-        Me.Column23.ReadOnly = True
-        Me.Column23.Width = 65
-        '
-        '督促通知日
-        '
-        DataGridViewCellStyle22.Format = "d"
-        DataGridViewCellStyle22.NullValue = Nothing
-        Me.督促通知日.DefaultCellStyle = DataGridViewCellStyle22
-        Me.督促通知日.HeaderText = "督促通知"
-        Me.督促通知日.MinimumWidth = 6
-        Me.督促通知日.Name = "督促通知日"
-        Me.督促通知日.ReadOnly = True
-        Me.督促通知日.Width = 90
-        '
-        'Column3
-        '
-        Me.Column3.HeaderText = "備考内容"
-        Me.Column3.MaxInputLength = 999999
-        Me.Column3.MinimumWidth = 6
-        Me.Column3.Name = "Column3"
-        Me.Column3.ReadOnly = True
-        Me.Column3.Visible = False
-        Me.Column3.Width = 125
-        '
-        'Column13
-        '
-        Me.Column13.HeaderText = "場所"
-        Me.Column13.MinimumWidth = 6
-        Me.Column13.Name = "Column13"
-        Me.Column13.ReadOnly = True
-        Me.Column13.Width = 115
-        '
-        'Column30
-        '
-        Me.Column30.HeaderText = "ダミー名"
-        Me.Column30.MinimumWidth = 6
-        Me.Column30.Name = "Column30"
-        Me.Column30.ReadOnly = True
-        Me.Column30.Visible = False
-        Me.Column30.Width = 125
         '
         'TB_FreeMemo
         '
@@ -3407,6 +3308,105 @@ Partial Class SCA1
         Me.MenuStrip1.TabIndex = 1574
         Me.MenuStrip1.Text = "MenuStrip1"
         '
+        'FKD01
+        '
+        Me.FKD01.HeaderText = "識別番号"
+        Me.FKD01.MinimumWidth = 6
+        Me.FKD01.Name = "FKD01"
+        Me.FKD01.ReadOnly = True
+        Me.FKD01.Visible = False
+        Me.FKD01.Width = 130
+        '
+        'FKD03
+        '
+        Me.FKD03.HeaderText = "日時"
+        Me.FKD03.MinimumWidth = 6
+        Me.FKD03.Name = "FKD03"
+        Me.FKD03.ReadOnly = True
+        Me.FKD03.Width = 130
+        '
+        'FKD04
+        '
+        DataGridViewCellStyle21.BackColor = System.Drawing.Color.White
+        DataGridViewCellStyle21.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        DataGridViewCellStyle21.ForeColor = System.Drawing.Color.Black
+        Me.FKD04.DefaultCellStyle = DataGridViewCellStyle21
+        Me.FKD04.HeaderText = "相手"
+        Me.FKD04.MinimumWidth = 6
+        Me.FKD04.Name = "FKD04"
+        Me.FKD04.ReadOnly = True
+        Me.FKD04.Width = 105
+        '
+        'FKD11
+        '
+        Me.FKD11.HeaderText = "概要"
+        Me.FKD11.MinimumWidth = 6
+        Me.FKD11.Name = "FKD11"
+        Me.FKD11.ReadOnly = True
+        Me.FKD11.Width = 160
+        '
+        'FKD05
+        '
+        Me.FKD05.HeaderText = "手法（手段）"
+        Me.FKD05.MinimumWidth = 6
+        Me.FKD05.Name = "FKD05"
+        Me.FKD05.ReadOnly = True
+        Me.FKD05.Width = 120
+        '
+        'FKD06
+        '
+        Me.FKD06.HeaderText = "担当者"
+        Me.FKD06.MinimumWidth = 6
+        Me.FKD06.Name = "FKD06"
+        Me.FKD06.ReadOnly = True
+        Me.FKD06.Width = 65
+        '
+        'FKD12
+        '
+        Me.FKD12.HeaderText = "対応者"
+        Me.FKD12.MinimumWidth = 6
+        Me.FKD12.Name = "FKD12"
+        Me.FKD12.ReadOnly = True
+        Me.FKD12.Width = 65
+        '
+        'FKD08
+        '
+        DataGridViewCellStyle22.Format = "d"
+        DataGridViewCellStyle22.NullValue = Nothing
+        Me.FKD08.DefaultCellStyle = DataGridViewCellStyle22
+        Me.FKD08.HeaderText = "督促通知"
+        Me.FKD08.MinimumWidth = 6
+        Me.FKD08.Name = "FKD08"
+        Me.FKD08.ReadOnly = True
+        Me.FKD08.Width = 90
+        '
+        'FKD07
+        '
+        Me.FKD07.HeaderText = "備考内容"
+        Me.FKD07.MaxInputLength = 999999
+        Me.FKD07.MinimumWidth = 6
+        Me.FKD07.Name = "FKD07"
+        Me.FKD07.ReadOnly = True
+        Me.FKD07.Visible = False
+        Me.FKD07.Width = 125
+        '
+        'FKD13
+        '
+        Me.FKD13.HeaderText = "場所"
+        Me.FKD13.MinimumWidth = 6
+        Me.FKD13.Name = "FKD13"
+        Me.FKD13.ReadOnly = True
+        Me.FKD13.Width = 115
+        '
+        'ダミー
+        '
+        Me.ダミー.HeaderText = "ダミー名"
+        Me.ダミー.MinimumWidth = 6
+        Me.ダミー.Name = "ダミー"
+        Me.ダミー.ReadOnly = True
+        Me.ダミー.Visible = False
+        Me.ダミー.Width = 125
+        '
         'SCA1
         '
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None
@@ -3691,21 +3691,21 @@ Partial Class SCA1
     Friend WithEvents Column25 As DataGridViewTextBoxColumn
     Friend WithEvents DataGridViewTextBoxColumn8 As DataGridViewTextBoxColumn
     Friend WithEvents DataGridViewTextBoxColumn9 As DataGridViewTextBoxColumn
-    Friend WithEvents Column9 As DataGridViewTextBoxColumn
-    Friend WithEvents DataGridViewTextBoxColumn1 As DataGridViewTextBoxColumn
-    Friend WithEvents DataGridViewTextBoxColumn2 As DataGridViewTextBoxColumn
-    Friend WithEvents Column22 As DataGridViewTextBoxColumn
-    Friend WithEvents Column4 As DataGridViewTextBoxColumn
-    Friend WithEvents Column7 As DataGridViewTextBoxColumn
-    Friend WithEvents Column23 As DataGridViewTextBoxColumn
-    Friend WithEvents 督促通知日 As DataGridViewTextBoxColumn
-    Friend WithEvents Column3 As DataGridViewTextBoxColumn
-    Friend WithEvents Column13 As DataGridViewTextBoxColumn
-    Friend WithEvents Column30 As DataGridViewTextBoxColumn
     Friend WithEvents データ投入ToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents Label16 As Label
     Friend WithEvents L_SENDNG2 As Label
     Friend WithEvents L_SENDNG1 As Label
     Friend WithEvents Button20 As Button
     Friend WithEvents L_STS_MR As Label
+    Friend WithEvents FKD01 As DataGridViewTextBoxColumn
+    Friend WithEvents FKD03 As DataGridViewTextBoxColumn
+    Friend WithEvents FKD04 As DataGridViewTextBoxColumn
+    Friend WithEvents FKD11 As DataGridViewTextBoxColumn
+    Friend WithEvents FKD05 As DataGridViewTextBoxColumn
+    Friend WithEvents FKD06 As DataGridViewTextBoxColumn
+    Friend WithEvents FKD12 As DataGridViewTextBoxColumn
+    Friend WithEvents FKD08 As DataGridViewTextBoxColumn
+    Friend WithEvents FKD07 As DataGridViewTextBoxColumn
+    Friend WithEvents FKD13 As DataGridViewTextBoxColumn
+    Friend WithEvents ダミー As DataGridViewTextBoxColumn
 End Class
