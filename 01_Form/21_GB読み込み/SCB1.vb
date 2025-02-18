@@ -319,12 +319,12 @@ Public Class SCB1
                     ' 連保人姓に、連保人姓、連保人名を結合して保存
                     Dim renpoSeiIdx As Integer = Array.IndexOf(headerNames, AssistHeaderTbl(12))
                     If renpoSeiIdx > -1 Then
-                        addStr(renpoSeiIdx) = (addStr(renpoSeiIdx) & addStr(renpoSeiIdx + 1)).Replace("　", "").Replace(" ", "")
+                        addStr(renpoSeiIdx) = (addStr(renpoSeiIdx) & "　" & addStr(renpoSeiIdx + 1)).Replace("　", "").Replace(" ", "")
                     End If
                     ' 連保人姓に、連保人姓、連保人名を結合して保存
                     Dim renpoSeiKanaIdx As Integer = Array.IndexOf(headerNames, AssistHeaderTbl(13))
                     If renpoSeiKanaIdx > -1 Then
-                        addStr(renpoSeiKanaIdx) = (addStr(renpoSeiKanaIdx) & addStr(renpoSeiKanaIdx + 1)).Replace("　", "").Replace(" ", "")
+                        addStr(renpoSeiKanaIdx) = (addStr(renpoSeiKanaIdx) & " " & addStr(renpoSeiKanaIdx + 1)).Replace("　", "").Replace(" ", "")
                     End If
 
                     ' 生年月日がスラッシュなし8桁になってるので区切り文字スラッシュを追加
