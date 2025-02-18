@@ -39,6 +39,8 @@ Public Class SCA1
     Private ReadOnly Thread_Entry As Thread = Nothing
     ' デリゲート
     Delegate Sub delegate_PoolingCallBack(id As String)         ' UIコールバック用Delegate宣言
+    ' ChangeTrackingUpdater のインスタンス（フィールドとして保持）
+    Private changeTracker As ChangeTrackingUpdater
 
 
 #End Region
@@ -79,14 +81,14 @@ Public Class SCA1
         'FWatchingStart()
 
         ' SQL Server 変更監視を開始
+        ' DataGridView と変換関数のマッピングを作成
+        Dim dgvMappings As New Dictionary(Of DataGridView, Func(Of DataTable, DataTable))()
+        dgvMappings.Add(DGV2, AddressOf TransformForDGV2)
+        dgvMappings.Add(DGV5, AddressOf TransformForDGV5)
 
-        ' DGVごとのデータ変換関数を設定
-        Dim dgvMappings As New Dictionary(Of DataGridView, Func(Of DataTable, DataTable)) From {
-            {DGV2, AddressOf TransformForDGV2},
-            {DGV5, AddressOf TransformForDGV5}
-        }
-        Dim updater As New ChangeTrackingUpdater(dgvMappings)
-        updater.StartMonitoring()
+        ' ChangeTrackingUpdater を作成して監視開始
+        changeTracker = New ChangeTrackingUpdater(dgvMappings)
+        changeTracker.StartMonitoring()
 
         ' 解像度が小さいPCは、左端に寄せる (横幅1600px未満なら左寄せ)
         If Screen.PrimaryScreen.Bounds.Width < 1600 Then Me.Left = 0
@@ -205,6 +207,11 @@ Public Class SCA1
         'thSC.Dispose()
         PoolingStart = False
         xml.SetAutoUpd(CB_AUTOUPD.Checked)
+
+        If changeTracker IsNot Nothing Then
+            changeTracker.StopMonitoring()
+            changeTracker = Nothing
+        End If
     End Sub
 
 #End Region
@@ -217,18 +224,16 @@ Public Class SCA1
     End Function
 
     ' FKSCD データをDGV5用に変換
-    Function TransformForDGV5(ByVal dt As DataTable) As DataTable
+    Private Function TransformForDGV5(ByVal dt As DataTable) As DataTable
+        ' DGV5 用にカスタムな変換処理を実装する例
         Dim resultTable As New DataTable()
-        resultTable.Columns.Add("CustomColumnA")
-        resultTable.Columns.Add("CustomColumnB")
-
-        For Each row As DataRow In dt.Rows
-            Dim newRow As DataRow = resultTable.NewRow()
-            newRow("CustomColumnA") = row("OriginalColumn1") ' 必要なデータのみマッピング
-            newRow("CustomColumnB") = row("OriginalColumn3")
-            resultTable.Rows.Add(newRow)
+        ' 例: 必要な列のみを抽出する、または列名を変換するなど
+        For Each col As DataColumn In dt.Columns
+            resultTable.Columns.Add(col.ColumnName, col.DataType)
         Next
-
+        For Each row As DataRow In dt.Rows
+            resultTable.ImportRow(row)
+        Next
         Return resultTable
     End Function
 #End Region
