@@ -57,9 +57,10 @@ Public Class ChangeTrackingUpdater
 
             ' 初回実行時は lastSyncVersion が 0 のため、変更検出をスキップ
             If lastSyncVersion > 0 Then
-                Dim query As String = "SELECT CT.SYS_CHANGE_OPERATION, T.* " &
+                ' LEFT JOIN を使用して、DELETE イベントも含める
+                Dim query As String = "SELECT CT.SYS_CHANGE_OPERATION, CT.FKD01, T.* " &
                                       "FROM CHANGETABLE(CHANGES dbo.FKSCD, @lastSyncVersion) AS CT " &
-                                      "JOIN dbo.FKSCD AS T ON T.FKD01 = CT.FKD01"
+                                      "LEFT JOIN dbo.FKSCD AS T ON T.FKD01 = CT.FKD01"
                 Using cmd As New SqlCommand(query, connection)
                     cmd.Parameters.AddWithValue("@lastSyncVersion", lastSyncVersion)
                     Using adapter As New SqlDataAdapter(cmd)
@@ -69,7 +70,7 @@ Public Class ChangeTrackingUpdater
 
                 ' 変更が検出された場合
                 If changesTable.Rows.Count > 0 Then
-                    log.cLog("POLLING:変更検出")
+                    log.cLog($"POLLING:変更検出[{lastSyncVersion}]")
                     For Each kvp In dgvMapping
                         Dim dgv As DataGridView = kvp.Key
                         Dim transformFunc As Func(Of DataTable, DataTable) = kvp.Value
@@ -85,35 +86,52 @@ Public Class ChangeTrackingUpdater
                         If dgv.IsHandleCreated AndAlso Not dgv.Disposing AndAlso Not dgv.IsDisposed Then
                             dgv.Invoke(Sub()
                                            For Each updatedRow As DataRow In updatedTable.Rows
+                                               Dim op As String = updatedRow("SYS_CHANGE_OPERATION").ToString()
                                                Dim key As String = updatedRow("FKD01").ToString()
-                                               Dim targetRow As DataGridViewRow = Nothing
-
-                                               If dgv.Columns.Contains("FKD01") Then
-                                                   targetRow = dgv.Rows.Cast(Of DataGridViewRow)().FirstOrDefault(Function(r) r.Cells("FKD01").Value?.ToString() = key)
-                                               Else
-                                                   log.cLog("Column 'FKD01' not found in DataGridView: " & dgv.Name)
-                                                   Continue For
-                                               End If
-
-                                               If targetRow IsNot Nothing Then
-                                                   ' 既存行を更新
-                                                   For Each col As DataColumn In updatedTable.Columns
-                                                       ' SYS_CHANGE_OPERATION などシステム列や、現在のDataTableに存在しない列はスキップする
-                                                       If col.ColumnName = "SYS_CHANGE_OPERATION" Then Continue For
-                                                       If dgv.Columns.Contains(col.ColumnName) AndAlso CType(dgv.DataSource, DataTable).Columns.Contains(col.ColumnName) Then
-                                                           targetRow.Cells(col.ColumnName).Value = updatedRow(col.ColumnName)
+                                               If op = "D" Then
+                                                   ' DELETE: DataGridView のデータソースから該当行を削除
+                                                   Dim targetRow As DataGridViewRow = dgv.Rows.Cast(Of DataGridViewRow)() _
+                                                                           .FirstOrDefault(Function(r) r.Cells("FKD01").Value?.ToString() = key)
+                                                   If targetRow IsNot Nothing Then
+                                                       ' DataBoundItem は DataRowView であるため、DataRow を削除
+                                                       Dim drv As DataRowView = TryCast(targetRow.DataBoundItem, DataRowView)
+                                                       If drv IsNot Nothing Then
+                                                           currentTable.Rows.Remove(drv.Row)
+                                                           log.cLog("POLLING: DGV (" & dgv.Name & ") 行削除 key=" & key)
                                                        End If
-                                                   Next
+                                                   End If
                                                Else
-                                                   ' 新しい行を追加
-                                                   Dim newRow As DataRow = currentTable.NewRow()
-                                                   For Each col As DataColumn In updatedTable.Columns
-                                                       If col.ColumnName = "SYS_CHANGE_OPERATION" Then Continue For
-                                                       If currentTable.Columns.Contains(col.ColumnName) Then
-                                                           newRow(col.ColumnName) = updatedRow(col.ColumnName)
-                                                       End If
-                                                   Next
-                                                   currentTable.Rows.Add(newRow)
+                                                   ' INSERT / UPDATE: 行の更新または追加
+                                                   Dim targetRow As DataGridViewRow = Nothing
+                                                   If dgv.Columns.Contains("FKD01") Then
+                                                       targetRow = dgv.Rows.Cast(Of DataGridViewRow)() _
+                                                                      .FirstOrDefault(Function(r) r.Cells("FKD01").Value?.ToString() = key)
+                                                   Else
+                                                       log.cLog("Column 'FKD01' not found in DataGridView: " & dgv.Name)
+                                                       Continue For
+                                                   End If
+
+                                                   If targetRow IsNot Nothing Then
+                                                       ' 既存行を更新
+                                                       For Each col As DataColumn In updatedTable.Columns
+                                                           ' システム列はスキップ
+                                                           If col.ColumnName = "SYS_CHANGE_OPERATION" Then Continue For
+                                                           If dgv.Columns.Contains(col.ColumnName) AndAlso currentTable.Columns.Contains(col.ColumnName) Then
+                                                               targetRow.Cells(col.ColumnName).Value = updatedRow(col.ColumnName)
+                                                           End If
+                                                       Next
+                                                   Else
+                                                       ' 新しい行を追加
+                                                       Dim newRow As DataRow = currentTable.NewRow()
+                                                       For Each col As DataColumn In updatedTable.Columns
+                                                           If col.ColumnName = "SYS_CHANGE_OPERATION" Then Continue For
+                                                           If currentTable.Columns.Contains(col.ColumnName) Then
+                                                               newRow(col.ColumnName) = updatedRow(col.ColumnName)
+                                                           End If
+                                                       Next
+                                                       currentTable.Rows.Add(newRow)
+                                                       log.cLog("POLLING: DGV (" & dgv.Name & ") 行追加 key=" & key)
+                                                   End If
                                                End If
                                            Next
                                            dgv.Refresh() ' UI更新
