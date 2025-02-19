@@ -11,8 +11,12 @@ Public Class ChangeTrackingUpdater
     Private trackingTimer As Timer  ' ポーリング用タイマー
 
     ''' <summary>
-    ''' コンストラクタ: 反映対象のDGVと、それぞれのデータ変換ロジックを受け取る
+    ''' コンストラクタ: 反映対象の DataGridView と、それぞれのデータ変換ロジックを受け取る
     ''' </summary>
+    ''' <param name="mappings">
+    ''' キー: 更新対象の DataGridView
+    ''' 値: 変更データの変換関数
+    ''' </param>
     Public Sub New(ByVal mappings As Dictionary(Of DataGridView, Func(Of DataTable, DataTable)))
         dgvMapping = mappings
     End Sub
@@ -88,28 +92,50 @@ Public Class ChangeTrackingUpdater
                                            For Each updatedRow As DataRow In updatedTable.Rows
                                                Dim op As String = updatedRow("SYS_CHANGE_OPERATION").ToString()
                                                Dim key As String = updatedRow("FKD01").ToString()
+
+                                               ' DGV2 の場合のみ、グローバル変数 SCA1.CurrentCID と更新レコードの顧客ID(FKD02) を比較
+                                               If dgv.Name = "DGV2" Then
+                                                   ' SCA1.CurrentCID が設定されている前提
+                                                   If String.IsNullOrEmpty(SCA1.CurrentCID) Then
+                                                       Continue For
+                                                   End If
+                                                   ' DELETE でなければ、更新された顧客IDをチェック
+                                                   If op <> "D" Then
+                                                       Dim updatedCustomerId As String = updatedRow("FKD02").ToString()
+                                                       If updatedCustomerId <> SCA1.CurrentCID Then
+                                                           Continue For
+                                                       End If
+                                                   End If
+                                               End If
+
+                                               ' DELETE の場合の処理
                                                If op = "D" Then
-                                                   ' DELETE: DataGridView のデータソースから該当行を削除
+                                                   ' DataGridView から該当行を削除するため、DataPropertyName "FKD01" を基準に検索
+                                                   Dim colIndex As Integer = GetColumnIndexByDataPropertyName(dgv, "FKD01")
+                                                   If colIndex = -1 Then
+                                                       log.cLog("DataPropertyName 'FKD01' not found in DataGridView: " & dgv.Name)
+                                                       Continue For
+                                                   End If
                                                    Dim targetRow As DataGridViewRow = dgv.Rows.Cast(Of DataGridViewRow)() _
-                                                                           .FirstOrDefault(Function(r) r.Cells("FKD01").Value?.ToString() = key)
+                                                       .FirstOrDefault(Function(r) r.Cells(colIndex).Value?.ToString() = key)
                                                    If targetRow IsNot Nothing Then
                                                        ' DataBoundItem は DataRowView であるため、DataRow を削除
                                                        Dim drv As DataRowView = TryCast(targetRow.DataBoundItem, DataRowView)
                                                        If drv IsNot Nothing Then
                                                            currentTable.Rows.Remove(drv.Row)
-                                                           log.cLog("POLLING: DGV (" & dgv.Name & ") 行削除 key=" & key)
+                                                           log.cLog("POLLING: " & dgv.Name & " 行削除 key=" & key)
                                                        End If
                                                    End If
                                                Else
-                                                   ' INSERT / UPDATE: 行の更新または追加
-                                                   Dim targetRow As DataGridViewRow = Nothing
-                                                   If dgv.Columns.Contains("FKD01") Then
-                                                       targetRow = dgv.Rows.Cast(Of DataGridViewRow)() _
-                                                                      .FirstOrDefault(Function(r) r.Cells("FKD01").Value?.ToString() = key)
-                                                   Else
-                                                       log.cLog("Column 'FKD01' not found in DataGridView: " & dgv.Name)
+                                                   ' INSERT / UPDATE の場合
+                                                   Dim colIndex As Integer = GetColumnIndexByDataPropertyName(dgv, "FKD01")
+                                                   If colIndex = -1 Then
+                                                       log.cLog("DataPropertyName 'FKD01' not found in DataGridView: " & dgv.Name)
                                                        Continue For
                                                    End If
+
+                                                   Dim targetRow As DataGridViewRow = dgv.Rows.Cast(Of DataGridViewRow)() _
+                                                                                      .FirstOrDefault(Function(r) r.Cells(colIndex).Value?.ToString() = key)
 
                                                    If targetRow IsNot Nothing Then
                                                        ' 既存行を更新
@@ -130,7 +156,7 @@ Public Class ChangeTrackingUpdater
                                                            End If
                                                        Next
                                                        currentTable.Rows.Add(newRow)
-                                                       log.cLog("POLLING: DGV (" & dgv.Name & ") 行追加 key=" & key)
+                                                       log.cLog("POLLING: " & dgv.Name & " 行追加 key=" & key)
                                                    End If
                                                End If
                                            Next
@@ -148,4 +174,15 @@ Public Class ChangeTrackingUpdater
             lastSyncVersion = currentVersion
         End Using
     End Sub
+
+    ' DataPropertyName に一致する列を返すヘルパー関数
+    Private Function GetColumnIndexByDataPropertyName(dgv As DataGridView, dataPropName As String) As Integer
+        For Each col As DataGridViewColumn In dgv.Columns
+            If col.DataPropertyName = dataPropName Then
+                Return col.Index
+            End If
+        Next
+        Return -1
+    End Function
+
 End Class

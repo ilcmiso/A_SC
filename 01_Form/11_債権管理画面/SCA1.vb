@@ -41,6 +41,8 @@ Public Class SCA1
     Delegate Sub delegate_PoolingCallBack(id As String)         ' UIコールバック用Delegate宣言
     ' ChangeTrackingUpdater のインスタンス（フィールドとして保持）
     Private changeTracker As ChangeTrackingUpdater
+    ' 選択中顧客番号
+    Public CurrentCID As String
 
 
 #End Region
@@ -89,6 +91,8 @@ Public Class SCA1
         ' ChangeTrackingUpdater を作成して監視開始
         changeTracker = New ChangeTrackingUpdater(dgvMappings)
         changeTracker.StartMonitoring()
+        CurrentCID = DGV1.CurrentRow.Cells(0).Value
+        log.cLog($"CurrentCID:{CurrentCID}")
 
         ' 解像度が小さいPCは、左端に寄せる (横幅1600px未満なら左寄せ)
         If Screen.PrimaryScreen.Bounds.Width < 1600 Then Me.Left = 0
@@ -246,6 +250,8 @@ Public Class SCA1
         If e.RowIndex < 0 Then Exit Sub
         If e.RowIndex = lastIdx Then Exit Sub
         lastIdx = e.RowIndex        ' 最後に選択した位置を保存
+        CurrentCID = DGV1.CurrentRow.Cells(0).Value
+        log.cLog($"CurrentCID:{CurrentCID}")
         DGV1_ClickShow()
     End Sub
     ' DGV選択時の表示
@@ -2645,5 +2651,4 @@ Public Class SCA1
             Console.WriteLine("エラーが発生しました: " & ex.Message)
         End Try
     End Sub
-
 End Class
