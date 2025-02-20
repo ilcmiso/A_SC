@@ -28,7 +28,7 @@ Partial Class SC
         Me.Button3 = New System.Windows.Forms.Button()
         Me.TB_History = New System.Windows.Forms.TextBox()
         Me.Button4 = New System.Windows.Forms.Button()
-        Me.CB_DBSW = New System.Windows.Forms.CheckBox()
+        Me.BT_APPUPDATE = New System.Windows.Forms.Button()
         Me.SuspendLayout()
         '
         'Button1
@@ -87,20 +87,22 @@ Partial Class SC
         Me.Button4.Text = "顧客交渉経過記録"
         Me.Button4.UseVisualStyleBackColor = False
         '
-        'CB_DBSW
+        'BT_APPUPDATE
         '
-        Me.CB_DBSW.AutoSize = True
-        Me.CB_DBSW.Location = New System.Drawing.Point(349, 241)
-        Me.CB_DBSW.Name = "CB_DBSW"
-        Me.CB_DBSW.Size = New System.Drawing.Size(64, 16)
-        Me.CB_DBSW.TabIndex = 5
-        Me.CB_DBSW.Text = "DB切替"
-        Me.CB_DBSW.UseVisualStyleBackColor = True
+        Me.BT_APPUPDATE.BackColor = System.Drawing.Color.Fuchsia
+        Me.BT_APPUPDATE.Font = New System.Drawing.Font("メイリオ", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.BT_APPUPDATE.Location = New System.Drawing.Point(7, 240)
+        Me.BT_APPUPDATE.Name = "BT_APPUPDATE"
+        Me.BT_APPUPDATE.Size = New System.Drawing.Size(92, 26)
+        Me.BT_APPUPDATE.TabIndex = 6
+        Me.BT_APPUPDATE.Text = "アプリ更新"
+        Me.BT_APPUPDATE.UseVisualStyleBackColor = False
+        Me.BT_APPUPDATE.Visible = False
         '
         'SC
         '
-        Me.ClientSize = New System.Drawing.Size(434, 259)
-        Me.Controls.Add(Me.CB_DBSW)
+        Me.ClientSize = New System.Drawing.Size(434, 267)
+        Me.Controls.Add(Me.BT_APPUPDATE)
         Me.Controls.Add(Me.Button4)
         Me.Controls.Add(Me.TB_History)
         Me.Controls.Add(Me.Button3)
@@ -122,5 +124,5 @@ Partial Class SC
     Friend WithEvents Button3 As Button
     Friend WithEvents TB_History As TextBox
     Friend WithEvents Button4 As Button
-    Friend WithEvents CB_DBSW As CheckBox
+    Friend WithEvents BT_APPUPDATE As Button
 End Class

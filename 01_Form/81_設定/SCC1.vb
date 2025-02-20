@@ -32,6 +32,8 @@ Public Class SCC1
         IconInit()
         title = Me.Text
 
+        SettingDBSW()
+
         ' データ格納パスを読み込み
         RadioButton2.Checked = (xml.xmlData.CPathSW = "2")
         TextBox1.Text = xml.xmlData.CPath1
@@ -307,6 +309,18 @@ Public Class SCC1
     End Sub
 
 #End Region
+
+
+    Private Sub SettingDBSW()
+        Dim xml As New XmlMng
+        CB_DBSW.Checked = xml.GetDBSwitch
+    End Sub
+
+    Private Sub CB_DBSW_CheckedChanged(sender As Object, e As EventArgs) Handles CB_DBSW.CheckedChanged
+        Dim xml As New XmlMng
+        xml.SetDBSwitch(CB_DBSW.Checked)
+        xml.SetXml()
+    End Sub
 
 #Region "便利関数"
     ' ファイル書き込み

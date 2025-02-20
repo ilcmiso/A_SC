@@ -4,19 +4,17 @@ Imports System.Text
 Public Class SC
 
 #Region " Open Close "
-    Public Const SCVer As String = "2412C"                         ' A_SC バージョン
+    Public Const SCVer As String = "2503A"                         ' A_SC バージョン
     ' 起動アプリパス
     Public ReadOnly CurrentAppPath As String = Path.GetDirectoryName(Reflection.Assembly.GetExecutingAssembly().Location) & "\"
     Private ReadOnly HISTORY As String = CurrentAppPath & "History.txt"
     Private log As Log
-    Private vup As Verup
     Public DEBUG_MODE = False
 
     Private Sub ME_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
         Dim loadTime = Now
         log = New Log
-        vup = New Verup
 
         Me.Text = String.Format(" {0}  Ver {1}", Common.APPNAME, SCVer)     ' タイトルのバージョン設定
 
@@ -31,12 +29,11 @@ Public Class SC
             End Using
         End If
 
-        ' アプリケーション自動バージョンアップ ＆ 再起動
-        If vup.Update(SCVer) Then RestartApl()
+        ' アプリ最新版があればアプリ更新ボタンを表示
+        BT_APPUPDATE.Visible = AppUpdate.IsUpdateAvailable
 
         ' プログレスバーのインスタンス生成
         SCA_ProgressBar.Instance = New SCA_ProgressBar()
-        SettingDBSW()
 
         log.cLog("--- SC Load完了: " & (Date.Now - loadTime).ToString("ss\.fff"))
     End Sub
@@ -111,17 +108,6 @@ Public Class SC
         Application.Restart()
     End Sub
 
-    Private Sub SettingDBSW()
-        Dim xml As New XmlMng
-        CB_DBSW.Checked = xml.GetDBSwitch
-    End Sub
-
-    Private Sub CB_DBSW_CheckedChanged(sender As Object, e As EventArgs) Handles CB_DBSW.CheckedChanged
-        Dim xml As New XmlMng
-        xml.SetDBSwitch(CB_DBSW.Checked)
-        xml.SetXml()
-    End Sub
-
     Private IlcND As New ILCNetDrive            ' ILCネットワークドライブ宣言
 
     ' ショートカット F1
@@ -139,6 +125,13 @@ Public Class SC
                     If DEBUG_MODE Then Process.Start(CurrentAppPath & "DebugLog.log")
                 End If
         End Select
+    End Sub
+
+    ' アプリ更新ボタン
+    Private Sub Button5_Click(sender As Object, e As EventArgs) Handles BT_APPUPDATE.Click
+        If AppUpdate.PerformUpdate() Then
+            AppUpdate.AppRestart()
+        End If
     End Sub
 
 #End Region

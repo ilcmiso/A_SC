@@ -276,6 +276,7 @@
     <Compile Include="80_SCcommon\ChangeTrackingUpdater.vb" />
     <Compile Include="80_SCcommon\SCcommon.vb" />
     <Compile Include="80_SCcommon\SCMRcommon.vb" />
+    <Compile Include="90_common\AppUpdate.vb" />
     <Compile Include="90_common\ExcelExp.vb" />
     <Compile Include="90_common\ExcelManager.vb" />
     <Compile Include="90_common\FileWatcher.vb" />

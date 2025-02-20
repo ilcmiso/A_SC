@@ -38,6 +38,8 @@ Partial Class SCC1
         Me.Button3 = New System.Windows.Forms.Button()
         Me.RadioButton1 = New System.Windows.Forms.RadioButton()
         Me.RadioButton2 = New System.Windows.Forms.RadioButton()
+        Me.CB_DBSW = New System.Windows.Forms.CheckBox()
+        Me.Label4 = New System.Windows.Forms.Label()
         Me.SuspendLayout()
         '
         'SP
@@ -94,7 +96,7 @@ Partial Class SCC1
         'TextBox1
         '
         Me.TextBox1.Font = New System.Drawing.Font("MS UI Gothic", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.TextBox1.Location = New System.Drawing.Point(32, 204)
+        Me.TextBox1.Location = New System.Drawing.Point(32, 259)
         Me.TextBox1.Name = "TextBox1"
         Me.TextBox1.Size = New System.Drawing.Size(344, 19)
         Me.TextBox1.TabIndex = 16
@@ -115,7 +117,7 @@ Partial Class SCC1
         Me.Label3.AutoSize = True
         Me.Label3.Font = New System.Drawing.Font("メイリオ", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.Label3.ForeColor = System.Drawing.Color.Blue
-        Me.Label3.Location = New System.Drawing.Point(15, 185)
+        Me.Label3.Location = New System.Drawing.Point(15, 240)
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(146, 18)
         Me.Label3.TabIndex = 18
@@ -124,7 +126,7 @@ Partial Class SCC1
         'Button2
         '
         Me.Button2.Font = New System.Drawing.Font("MS UI Gothic", 9.0!)
-        Me.Button2.Location = New System.Drawing.Point(375, 203)
+        Me.Button2.Location = New System.Drawing.Point(375, 258)
         Me.Button2.Name = "Button2"
         Me.Button2.Size = New System.Drawing.Size(47, 21)
         Me.Button2.TabIndex = 19
@@ -134,7 +136,7 @@ Partial Class SCC1
         'TextBox2
         '
         Me.TextBox2.Font = New System.Drawing.Font("MS UI Gothic", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.TextBox2.Location = New System.Drawing.Point(32, 230)
+        Me.TextBox2.Location = New System.Drawing.Point(32, 285)
         Me.TextBox2.Name = "TextBox2"
         Me.TextBox2.Size = New System.Drawing.Size(344, 19)
         Me.TextBox2.TabIndex = 20
@@ -142,7 +144,7 @@ Partial Class SCC1
         'Button3
         '
         Me.Button3.Font = New System.Drawing.Font("MS UI Gothic", 9.0!)
-        Me.Button3.Location = New System.Drawing.Point(375, 229)
+        Me.Button3.Location = New System.Drawing.Point(375, 284)
         Me.Button3.Name = "Button3"
         Me.Button3.Size = New System.Drawing.Size(47, 21)
         Me.Button3.TabIndex = 21
@@ -153,7 +155,7 @@ Partial Class SCC1
         '
         Me.RadioButton1.AutoSize = True
         Me.RadioButton1.Checked = True
-        Me.RadioButton1.Location = New System.Drawing.Point(15, 207)
+        Me.RadioButton1.Location = New System.Drawing.Point(15, 262)
         Me.RadioButton1.Name = "RadioButton1"
         Me.RadioButton1.Size = New System.Drawing.Size(14, 13)
         Me.RadioButton1.TabIndex = 22
@@ -163,17 +165,40 @@ Partial Class SCC1
         'RadioButton2
         '
         Me.RadioButton2.AutoSize = True
-        Me.RadioButton2.Location = New System.Drawing.Point(15, 232)
+        Me.RadioButton2.Location = New System.Drawing.Point(15, 287)
         Me.RadioButton2.Name = "RadioButton2"
         Me.RadioButton2.Size = New System.Drawing.Size(14, 13)
         Me.RadioButton2.TabIndex = 23
         Me.RadioButton2.UseVisualStyleBackColor = True
         '
+        'CB_DBSW
+        '
+        Me.CB_DBSW.AutoSize = True
+        Me.CB_DBSW.Location = New System.Drawing.Point(15, 210)
+        Me.CB_DBSW.Name = "CB_DBSW"
+        Me.CB_DBSW.Size = New System.Drawing.Size(64, 16)
+        Me.CB_DBSW.TabIndex = 24
+        Me.CB_DBSW.Text = "DB切替"
+        Me.CB_DBSW.UseVisualStyleBackColor = True
+        '
+        'Label4
+        '
+        Me.Label4.AutoSize = True
+        Me.Label4.Font = New System.Drawing.Font("メイリオ", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.Label4.ForeColor = System.Drawing.Color.Blue
+        Me.Label4.Location = New System.Drawing.Point(16, 189)
+        Me.Label4.Name = "Label4"
+        Me.Label4.Size = New System.Drawing.Size(146, 18)
+        Me.Label4.TabIndex = 25
+        Me.Label4.Text = "[ データベース切り替え ]"
+        '
         'SCC1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 12.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(434, 254)
+        Me.ClientSize = New System.Drawing.Size(434, 312)
+        Me.Controls.Add(Me.Label4)
+        Me.Controls.Add(Me.CB_DBSW)
         Me.Controls.Add(Me.RadioButton2)
         Me.Controls.Add(Me.RadioButton1)
         Me.Controls.Add(Me.Button3)
@@ -211,4 +236,6 @@ Partial Class SCC1
     Friend WithEvents Button3 As Button
     Friend WithEvents RadioButton1 As RadioButton
     Friend WithEvents RadioButton2 As RadioButton
+    Friend WithEvents CB_DBSW As CheckBox
+    Friend WithEvents Label4 As Label
 End Class
