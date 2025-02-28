@@ -1635,6 +1635,9 @@ Public Class SCA1
         ShowDGV_FPLIST(0)
     End Sub
     Private Sub ShowDGV_FPLIST(pageIndex As Integer)
+        ' 債権管理部モード以外は表示されない
+        If xml.GetDiv <> Common.DIV.SC Then Exit Sub
+
         log.TimerST()
         ' ダミー顧客選択では物件情報を非表示
         If DGV1.Rows.Count = 0 OrElse (DGV1.CurrentRow IsNot Nothing AndAlso DGV1.CurrentRow.Cells(0).Value = Common.DUMMY_NO) Then
@@ -2565,6 +2568,8 @@ Public Class SCA1
         Dim ret As Integer = 0
         Dim dt As DataTable = db.GetSelect(Sqldb.TID.SCR, $"SELECT FKR04 FROM FKSCREM WHERE FKR01 = '{cid}'")
         If dt.Rows.Count > 0 Then
+            ' 過去に使われていたFKR04に残骸が残ってたら、未設定0とする。IntでExceptionでると処理遅延になるから防止してreturn
+            If dt(0)(0).ToString.Length > 1 Then Return 0
             ret = cmn.Int(dt(0)(0))
         End If
         Return ret
@@ -2628,11 +2633,12 @@ Public Class SCA1
     Public Sub CompareDatabasePerformance()
         Try
             Cursor.Current = Cursors.WaitCursor  ' マウスカーソルを砂時計に
+            Dim sqlsv As New Sqlsv
 
             ' SQL Server側の処理計測
             Dim swSQLServer As Stopwatch = Stopwatch.StartNew()
             ' Sqlsv.vbに定義したGetFKSCD()を呼び出し
-            Dim dtSQLServer As DataTable = Sqlsv.GetFKSCD()
+            Dim dtSQLServer As DataTable = sqlsv.SqlServerSelectFKSCLog("SELECT * FROM FKSCD")
             swSQLServer.Stop()
             Dim sqlServerTime As Long = swSQLServer.ElapsedMilliseconds
 

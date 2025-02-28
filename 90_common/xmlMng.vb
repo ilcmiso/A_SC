@@ -120,12 +120,19 @@ Public Class XmlMng
     Public Function GetDiv() As Integer
         Return xmlData.DivisionNo
     End Function
-    Public Function SetDBSwitch(sw As Boolean)
+    Public Sub SetDBSwitch(sw As Boolean)
         xmlData.DBSwitch = sw
         SetXml()
-    End Function
+    End Sub
     Public Function GetDBSwitch() As Boolean
         Return xmlData.DBSwitch
+    End Function
+    Public Sub SetSQLSvAddr(addr As String)
+        xmlData.SQLSvAddr = addr
+        SetXml()
+    End Sub
+    Public Function GetSQLSvAddr() As String
+        Return xmlData.SQLSvAddr
     End Function
 
 End Class
@@ -145,4 +152,5 @@ Public Class XmlList
     Public AplUpdOff As Boolean  ' アプリ自動更新OFF
     Public DivisionNo As Integer ' 部署番号 0:債権管理部 1:総務課
     Public DBSwitch As Boolean   ' SQLite:False SQL Server:True
+    Public SQLSvAddr As String   ' SQL Serverアドレス 
 End Class

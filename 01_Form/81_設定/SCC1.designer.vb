@@ -40,6 +40,7 @@ Partial Class SCC1
         Me.RadioButton2 = New System.Windows.Forms.RadioButton()
         Me.CB_DBSW = New System.Windows.Forms.CheckBox()
         Me.Label4 = New System.Windows.Forms.Label()
+        Me.TB_SQLAddr = New System.Windows.Forms.TextBox()
         Me.SuspendLayout()
         '
         'SP
@@ -192,11 +193,20 @@ Partial Class SCC1
         Me.Label4.TabIndex = 25
         Me.Label4.Text = "[ データベース切り替え ]"
         '
+        'TB_SQLAddr
+        '
+        Me.TB_SQLAddr.Font = New System.Drawing.Font("MS UI Gothic", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.TB_SQLAddr.Location = New System.Drawing.Point(85, 207)
+        Me.TB_SQLAddr.Name = "TB_SQLAddr"
+        Me.TB_SQLAddr.Size = New System.Drawing.Size(291, 19)
+        Me.TB_SQLAddr.TabIndex = 26
+        '
         'SCC1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 12.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(434, 312)
+        Me.Controls.Add(Me.TB_SQLAddr)
         Me.Controls.Add(Me.Label4)
         Me.Controls.Add(Me.CB_DBSW)
         Me.Controls.Add(Me.RadioButton2)
@@ -238,4 +248,5 @@ Partial Class SCC1
     Friend WithEvents RadioButton2 As RadioButton
     Friend WithEvents CB_DBSW As CheckBox
     Friend WithEvents Label4 As Label
+    Friend WithEvents TB_SQLAddr As TextBox
 End Class

@@ -362,7 +362,6 @@
     <Compile Include="90_common\Log.vb" />
     <Compile Include="90_common\Mutex.vb" />
     <Compile Include="90_common\Sqldb.vb" />
-    <Compile Include="90_common\Verup.vb" />
     <Compile Include="90_common\XmlMng.vb" />
     <Compile Include="Settings.vb" />
     <Compile Include="VBReport_Form\VBR_Send.designer.vb">

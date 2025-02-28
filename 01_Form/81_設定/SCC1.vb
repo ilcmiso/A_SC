@@ -38,6 +38,7 @@ Public Class SCC1
         RadioButton2.Checked = (xml.xmlData.CPathSW = "2")
         TextBox1.Text = xml.xmlData.CPath1
         TextBox2.Text = xml.xmlData.CPath2
+        TB_SQLAddr.Text = xml.xmlData.SQLSvAddr
         PATH_TEL = xml.GetCPath() & Common.DIR_TEL & Common.FILE_TEL
     End Sub
 
@@ -97,6 +98,7 @@ Public Class SCC1
         ' 固有情報の保存処理
         If Not TextBox1.Text.EndsWith("\") Then TextBox1.Text += "\"    ' ディレクトリの末尾が\じゃなければ\つける
         If Not TextBox2.Text.EndsWith("\") Then TextBox2.Text += "\"    ' ディレクトリの末尾が\じゃなければ\つける
+        If Not TB_SQLAddr.Text.EndsWith("\") Then TB_SQLAddr.Text += "\"
         If Not IO.Directory.Exists(TextBox1.Text) Then
             MsgBox("着信記録ファイルの保存場所" & vbCrLf &
                    TextBox1.Text & " が見つかりません。" & vbCrLf &
@@ -105,6 +107,7 @@ Public Class SCC1
         xml.GetXml()
         xml.xmlData.CPath1 = TextBox1.Text
         xml.xmlData.CPath2 = TextBox2.Text
+        xml.xmlData.SQLSvAddr = TB_SQLAddr.Text
         If RadioButton1.Checked Then xml.xmlData.CPathSW = 1
         If RadioButton2.Checked Then xml.xmlData.CPathSW = 2
         xml.SetXml()        ' 固有情報(Xml)に保存

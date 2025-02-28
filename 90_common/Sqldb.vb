@@ -8,7 +8,7 @@ Public Class Sqldb
     Private ReadOnly log As New Log
     Private ReadOnly mtx As New Mutex
     Private ReadOnly cmn As New Common
-    Private ReadOnly xml As New XmlMng
+    Private ReadOnly sqlsv As New Sqlsv
 
     ' カレントパス
     Public ReadOnly CurrentPath_LO As String = SC.CurrentAppPath    ' ローカル
@@ -101,62 +101,6 @@ Public Class Sqldb
     Private ReadOnly loCmd(DBTbl.GetLength(0) - 1) As SQLiteCommand
     Private cmdl() As List(Of String)
 
-    '--------------------------------------------------------------
-    '【SQL Server用 FKSC_LOG専用】接続文字列（指定の条件に合わせています）
-    Private Function GetSQLServerFKSCLogConStr() As String
-        Return "Server=localhost;Database=A_SC;User Id=ilc;Password=ilcmng;Encrypt=True;TrustServerCertificate=True;"
-    End Function
-
-    '【SQL Server用 FKSC_LOG専用】SELECT実行（DataTable取得）
-    Private Function SqlServerSelectFKSCLog(sqlCommand As String) As DataTable
-        Dim dt As New DataTable
-        Using connection As New SqlConnection(GetSQLServerFKSCLogConStr())
-            Try
-                connection.Open()
-                Using command As New SqlCommand(sqlCommand, connection)
-                    Using adapter As New SqlDataAdapter(command)
-                        adapter.Fill(dt)
-                    End Using
-                End Using
-            Catch ex As Exception
-                log.D(Log.ERR, $"SQLServerSelectFKSCLog Error: {sqlCommand}{vbCrLf}{ex.Message}")
-            End Try
-        End Using
-        Return dt
-    End Function
-
-    '【SQL Server用 FKSC_LOG専用】非クエリ実行（INSERT/UPDATE/DELETE 等）
-    Private Function ExeSQLServerFKSCLog(sqlCommands As List(Of String)) As Long
-        Dim newId As Long = -1 ' 失敗時またはINSERTがない場合の戻り値
-        Using con As New SqlConnection(GetSQLServerFKSCLogConStr())
-            con.Open()
-            Using tran As SqlTransaction = con.BeginTransaction()
-                Try
-                    For Each commandText In sqlCommands
-                        Using cmd As New SqlCommand(commandText, con, tran)
-                            cmd.ExecuteNonQuery()
-                            ' INSERTの場合、SCOPE_IDENTITY()で新規IDを取得
-                            If commandText.Trim().ToUpper().StartsWith("INSERT") Then
-                                cmd.CommandText = "SELECT SCOPE_IDENTITY()"
-                                Dim result As Object = cmd.ExecuteScalar()
-                                If result IsNot Nothing AndAlso Not IsDBNull(result) Then
-                                    newId = Convert.ToInt64(result)
-                                End If
-                            End If
-                        End Using
-                    Next
-                    tran.Commit()
-                    Return newId
-                Catch ex As Exception
-                    log.D(Log.ERR, $"ExeSQLServerFKSCLog Error: {sqlCommands(0)}{vbCrLf}{ex.Message}")
-                    tran.Rollback()
-                    Return newId
-                End Try
-            End Using
-        End Using
-    End Function
-
-    '--------------------------------------------------------------
     ' コンストラクタ(初期化設定)
     Sub New()
         Dim xml As New XmlMng
@@ -267,8 +211,8 @@ Public Class Sqldb
     '               SQLExe(Sqldb.DBSC)
     Public Function ExeSQL(TableID As Integer, SqlCmd As String) As Long
         '【変更】対象がFKSC_LOG（TID.SCRまたはTID.SCD）かつスイッチONならSQL Serverへ切替
-        If xml.GetDBSwitch() AndAlso (TableID = TID.SCR Or TableID = TID.SCD) Then
-            Return ExeSQLServerFKSCLog(New List(Of String) From {SqlCmd})
+        If IsSQLServerDB(TableID) Then
+            Return sqlsv.ExeSQLServerFKSCLog(New List(Of String) From {SqlCmd})
         Else
             AddSQL(TableID, SqlCmd)
             Dim ret As Long
@@ -282,8 +226,8 @@ Public Class Sqldb
     End Function
     Public Function ExeSQL(TableID As Integer) As Long
         '【変更】対象がFKSC_LOGの場合、コマンドリスト(cmdl)のSQLをSQL Serverで実行
-        If xml.GetDBSwitch() AndAlso (TableID = TID.SCR Or TableID = TID.SCD) Then
-            Dim ret As Long = ExeSQLServerFKSCLog(cmdl(TableID))
+        If IsSQLServerDB(TableID) Then
+            Dim ret As Long = sqlsv.ExeSQLServerFKSCLog(cmdl(TableID))
             cmdl(TableID).Clear()
             RegIDList.Clear()
             Return ret
@@ -443,8 +387,8 @@ Public Class Sqldb
 
     '【変更】汎用SQL文結果取得：対象がFKSC_LOGの場合はSQL Serverへ切替
     Public Function GetSelect(TableID As Integer, SqlCmd As String) As DataTable
-        If xml.GetDBSwitch() AndAlso (TableID = TID.SCR Or TableID = TID.SCD) Then
-            Return SqlServerSelectFKSCLog(SqlCmd)
+        If IsSQLServerDB(TableID) Then
+            Return sqlsv.SqlServerSelectFKSCLog(SqlCmd)
         End If
         'mtx.Lock(Mutex.MTX_LOCK_R, TableID)
         Dim con As SQLiteConnection = loCon(TableID)
@@ -681,12 +625,6 @@ Public Class Sqldb
         Return num
     End Function
 
-    Public Sub MRDBFixTemp0730()
-        ExeSQL(TID.MR, "UPDATE TBL SET C09 = '' WHERE C09 = '無';")
-        ExeSQL(TID.MR, "UPDATE TBL SET C15 = '' WHERE C15 = '無';")
-        ExeSQL(TID.MR, "UPDATE TBL SET C17 = '' WHERE C17 = '未';")
-    End Sub
-
     ' 物件情報(FPIB) 顧客番号からの顧客キーを取得
     Public Function GetFPCOSKeyId(cid As String) As Integer
         Dim dt As DataTable = GetSelect(Sqldb.TID.FPCOS, $"Select C01 From {DBTbl(Sqldb.TID.FPCOS, Sqldb.DBID.TABLE)} Where C02 = '{cid}'")
@@ -707,212 +645,17 @@ Public Class Sqldb
         Return DBTbl(tid, Sqldb.DBID.CNUM)
     End Function
 
-    '#### Async 関連     #################################################
-    ' 非同期でUpdateOrigDTを実行するメソッド
-    Public Async Function UpdateOrigDTAsync(tid As TID) As Task
-        ' Task.Runでバックグラウンドスレッドで実行
-        Await Task.Run(Sub() UpdateOrigDT(tid))
-        ' 処理完了後にメッセージボックスを表示
-        MessageBox.Show("UpdateOrigDT has completed.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information)
-    End Function
-
     '#### SQL Server関連 #################################################
-    Private SqlServerCon As String
 
-    ' SQL Server ConnectionString生成
-    Private Sub InitSQLServerConnection()
-        ' SQL Server設定
-        Dim localPath As String
-        Dim serverPath As String
-
-        Dim serverName1 = "MISO"
-        Dim serverName2 = "MISO-NOTE\ILCSERVER"
-        Dim dbName = "A_SCDB"
-        Dim userName = "fls"
-        Dim password = "flsuser"
-
-        ' 接続文字列の設定
-        serverPath = $"Server={serverName2};Database={dbName};User Id={userName};Password={password};"
-        localPath = $"Server={serverName1};Database={dbName};Integrated Security=True;"
-        SqlServerCon = localPath
-
-        ' serverPathでの接続テストで成功したらサーバーパスを設定
-        'If TestSQLConnection(serverPath) Then SQLServerConnectionStr = serverPath
-        log.cLog($"SQL Server connection = '{SqlServerCon}'")
-    End Sub
-
-    Private Function TestSQLConnection(ByVal connString As String) As Boolean
-        Using conn As New SqlConnection(connString)
-            Try
-                conn.Open()
-                Return True
-            Catch ex As Exception
-                Return False
-            End Try
-        End Using
+    ' 指定したTableIDがSQL Server対象かどうか判定
+    Public Function IsSQLServerDB(TableID As TID) As Boolean
+        Dim xml As New XmlMng()
+        ' SQL Server 対象の TableID 一覧
+        Dim sqlServerTargetIDs As TID() = {
+            TID.SCR,
+            TID.SCD
+        }
+        Return xml.GetDBSwitch() AndAlso sqlServerTargetIDs.Contains(TableID)
     End Function
-
-
-    Public Sub RestoreSQLServer()
-        Dim dt As DataTable
-
-        ' 全てのDBを読み込み、SQL ServerにInsertする
-        'For Each value As Sqldb.TID In [Enum].GetValues(GetType(Sqldb.TID))
-        Dim value As Sqldb.TID = TID.SCD
-        Console.WriteLine(value.ToString & " = " & value.ToString("D"))
-        dt = GetSelect(value, $"SELECT * FROM {DBTbl(value, Sqldb.DBID.TABLE)}")
-        ExeInsertDataTable(dt, value.ToString)
-        'Next
-    End Sub
-
-    Public Function ExeInsertDataTable(dt As DataTable, tableName As String) As Boolean
-        Using connection As New SqlConnection(SqlServerCon)
-            connection.Open()
-
-            ' 新規テーブル作成用のコマンド文字列を生成
-            Dim createTableCommandText As String = GenerateCreateTableCommand(dt, tableName)
-
-            ' テーブル作成
-            Using createTableCommand As New SqlCommand(createTableCommandText, connection)
-                createTableCommand.ExecuteNonQuery()
-            End Using
-
-            ' SqlBulkCopyを使用してDataTableのデータを新規テーブルにコピー
-            Using bulkCopy As New SqlBulkCopy(connection)
-                bulkCopy.DestinationTableName = tableName
-                Try
-                    bulkCopy.WriteToServer(dt)
-                    Return True
-                Catch ex As Exception
-                    Console.WriteLine(ex.Message)
-                    Return False
-                End Try
-            End Using
-        End Using
-    End Function
-
-    ' DataTableのスキーマからCREATE TABLEコマンド文字列を生成するメソッド
-    Private Function GenerateCreateTableCommand(dt As DataTable, tableName As String) As String
-        Dim command As New Text.StringBuilder($"CREATE TABLE [{tableName}] (")
-        Dim columnDefinitions As New List(Of String)
-
-        For Each column As DataColumn In dt.Columns
-            Dim columnType As String = GetSqlColumnType(column.DataType)
-            columnDefinitions.Add($"[{column.ColumnName}] {columnType}")
-        Next
-
-        command.Append(String.Join(", ", columnDefinitions))
-        command.Append(")")
-
-        Return command.ToString()
-    End Function
-
-    ' .NETのデータ型をSQL Serverのデータ型にマッピングするメソッド
-    Private Function GetSqlColumnType(type As Type) As String
-        If type Is GetType(Integer) Then
-            Return "INT"
-        ElseIf type Is GetType(String) Then
-            Return "NVARCHAR(MAX)"
-        ElseIf type Is GetType(Boolean) Then
-            Return "BIT"
-        ElseIf type Is GetType(DateTime) Then
-            Return "DATETIME"
-            ' 他のデータ型についても必要に応じてマッピングを追加
-        Else
-            Return "NVARCHAR(MAX)"
-        End If
-    End Function
-
-    Public Function SqlServerSelect_Manual(sqlCommand As String) As DataTable
-        Dim dt As New DataTable
-        Using connection As New SqlConnection(SqlServerCon)
-            Try
-                connection.Open()
-                Using command As New SqlCommand(sqlCommand, connection)
-                    Using reader As SqlDataReader = command.ExecuteReader()
-                        ' 列の構造を設定する
-                        For i As Integer = 0 To reader.FieldCount - 1
-                            Dim columnName As String = reader.GetName(i)
-                            Dim columnType As Type = reader.GetFieldType(i)
-                            dt.Columns.Add(columnName, columnType)
-                        Next
-
-                        ' データを読み込む
-                        While reader.Read()
-                            Dim row As DataRow = dt.NewRow()
-                            For i As Integer = 0 To reader.FieldCount - 1
-                                row(i) = reader(i)
-                            Next
-                            dt.Rows.Add(row)
-                        End While
-                    End Using
-                End Using
-            Catch ex As Exception
-                log.D(Log.ERR, $"SQLServerSelect Error: {sqlCommand}{vbCrLf}{ex.Message}")
-            End Try
-        End Using
-        Return dt
-    End Function
-
-    Public Function SqlServerSelect(sqlCommand As String) As DataTable
-        Dim dt As New DataTable
-        Using connection As New SqlConnection(SqlServerCon)
-            Try
-                connection.Open()
-                Using command As New SqlCommand(sqlCommand, connection)
-                    Using adapter As New SqlDataAdapter(command)
-                        adapter.Fill(dt)
-                    End Using
-                End Using
-            Catch ex As Exception
-                log.D(Log.ERR, $"SQLServerSelect Error: {sqlCommand}{vbCrLf}{ex.Message}")
-            End Try
-        End Using
-        Return dt
-    End Function
-
-    Public Function ExeSQLServer(connectionString As String, sqlCommands As List(Of String)) As Long
-        Dim newId As Long = -1 ' 失敗した場合またはINSERT文がない場合に返す値
-        Using con As New SqlConnection(connectionString)
-            con.Open()
-            Using tran As SqlTransaction = con.BeginTransaction()
-                Try
-                    For Each commandText In sqlCommands
-                        Using cmd As New SqlCommand(commandText, con, tran)
-                            cmd.ExecuteNonQuery()
-
-                            ' INSERT文の後でSCOPE_IDENTITY()を実行してIDを取得
-                            If commandText.Trim().ToUpper().StartsWith("INSERT") Then
-                                cmd.CommandText = "SELECT SCOPE_IDENTITY()"
-                                Dim result As Object = cmd.ExecuteScalar()
-                                If result IsNot Nothing Then
-                                    newId = Convert.ToInt64(result)
-                                End If
-                            End If
-                        End Using
-                    Next
-                    tran.Commit()
-                    Return newId ' 最後に挿入されたIDを返す
-                Catch ex As Exception
-                    log.D(Log.ERR, $"ExeSQLServer Error: {sqlCommands(0)}{vbCrLf}{ex.Message}")
-                    tran.Rollback()
-                    Return newId ' エラーが発生した場合は-1を返す
-                End Try
-            End Using
-        End Using
-    End Function
-
-    Public Sub SQLServerSpeedDiff()
-        Dim tid As TID = TID.SCD
-        log.TimerST()
-        ReadOrgDtSelect(tid)
-        log.TimerED("SQLite")
-        log.TimerST()
-        SqlServerSelect_Manual($"SELECT * FROM SCD")
-        log.TimerED("SQL Server(手動)")
-        log.TimerST()
-        SqlServerSelect($"SELECT * FROM SCD")
-        log.TimerED("SQL Server(Fill)")
-    End Sub
 
 End Class

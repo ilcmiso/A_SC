@@ -44,11 +44,8 @@ Public Class SCC1_S1_MNG
     Private Sub InitCommandList()
         Dim commandNames As String() = {
             "サーバーのSC.exeのタイムスタンプ更新",
-            "db3ファイル新規作成 (Value値)",
-            "SQLite2SQLServer",
-            "SQL速度比較",
-            "DB変換0730"
-            }
+            "db3ファイル新規作成 (Value値)"
+        }
         ListBox2.Items.Clear()
         For Each cl In commandNames
             ListBox2.Items.Add(cl)
@@ -105,13 +102,6 @@ Public Class SCC1_S1_MNG
                         End If
                     End Try
                 End Using
-
-            Case 2
-                db.RestoreSQLServer()
-            Case 3
-                db.SQLServerSpeedDiff()
-            Case 4
-                db.MRDBFixTemp0730()
 
         End Select
         MsgBox("完了")
