@@ -57,7 +57,7 @@ Public Class Sqldb
         {DB_FKSCFPI, "DATA2", 35, "C", DBSV, True},
         {DB_FKSCFPI, TBL_ITEM, 5, "C", DBSV, True},
         {DB_FKSCPI, TBL_ITEM, 5, "C", DBSV, True},
-        {DB_FKSCASSIST, TBL_STANDARD, 28, "C", DBLO, True},
+        {DB_FKSCASSIST, TBL_STANDARD, 32, "C", DBLO, True},
         {DB_AUTOCALL, TBL_STANDARD, 4, "C", DBSV, True},
         {DB_MNGREQ, TBL_STANDARD, 22, "C", DBSV, True},
         {DB_MRITEM, TBL_STANDARD, 5, "C", DBSV, True},
@@ -475,8 +475,13 @@ Public Class Sqldb
                     .Item(58) = aRow.Item(27)   ' アシスト 金消契約日
                     .Item(59) = aRow.Item(23)   ' 貸付金額
                     .Item(60) = aRow.Item(24)   ' 延滞回数
-                    .Item(61) = aRow.Item(25)   ' 入金額
+                    .Item(61) = aRow.Item(25)   ' 返済額
                     .Item(62) = aRow.Item(26)   ' 貸付残高
+
+                    .Item(21) = aRow.Item(28)   ' アシスト 貸付金額(B) 2025/02/28 add
+                    .Item(22) = aRow.Item(29)   ' アシスト 残高(B)     2025/02/28 add
+                    .Item(23) = aRow.Item(30)   ' アシスト 返済額(B)   2025/02/28 add
+                    .Item(24) = aRow.Item(31)   ' アシスト 完済日      2025/02/28 add
                 End With
             Else
                 ' 存在しない    DataTableに債権者情報を追加
@@ -522,9 +527,14 @@ Public Class Sqldb
                     .Item(58) = aRow.Item(27)               ' アシスト 金消契約日
                     .Item(59) = aRow.Item(23)               ' アシスト 貸付金額
                     .Item(60) = aRow.Item(24)               ' アシスト 延滞回数
-                    .Item(61) = aRow.Item(25)               ' アシスト 入金額
+                    .Item(61) = aRow.Item(25)               ' アシスト 返済額
                     .Item(62) = aRow.Item(26)               ' アシスト 貸付残高
                     .Item(68) = dt.Rows.Count               ' [後付] DataTableのIndex値
+
+                    .Item(21) = aRow.Item(28)               ' アシスト 貸付金額(B) 2025/02/28 add
+                    .Item(22) = aRow.Item(29)               ' アシスト 残高(B)     2025/02/28 add
+                    .Item(23) = aRow.Item(30)               ' アシスト 返済額(B)   2025/02/28 add
+                    .Item(24) = aRow.Item(31)               ' アシスト 完済日      2025/02/28 add
                 End With
                 dt.Rows.Add(newRow)
             End If

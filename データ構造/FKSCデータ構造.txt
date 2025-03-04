@@ -22,10 +22,10 @@ FKS.FKSC_R.FK18          ' 債務者 勤務先
 FKS.FKSC_R.FK19          ' 債務者 勤務先TEL1 
 FKS.FKSC_R.FK20          ' 債務者 勤務先TEL2	(使ってない)
 FKS.FKSC_R.FK21          ' 債務者 団信加入サイン 2023/06 add
-FKS.FKSC_R.FK22          ' 
-FKS.FKSC_R.FK23          ' 
-FKS.FKSC_R.FK24          ' 
-FKS.FKSC_R.FK25          ' 
+FKS.FKSC_R.FK22          ' アシスト 債権総額半年賦元本(貸付金額B)	2025/03/04 add
+FKS.FKSC_R.FK23          ' アシスト 月末残高半年賦元本(残高B)		2025/03/04 add
+FKS.FKSC_R.FK24          ' アシスト 支払額半年賦(返済額B)			2025/03/04 add
+FKS.FKSC_R.FK25          ' アシスト 完済日(完済日)					2025/03/04 add
 FKS.FKSC_R.FK26          ' 
 FKS.FKSC_R.FK27          ' 
 FKS.FKSC_R.FK28          ' 
@@ -63,8 +63,8 @@ FKS.FKSC_R.FK59          ' 償還残回数(使ってない) → アシスト 金消契約日 2022/07
 
 FKS.FKSC_R.FK60          ' アシスト 貸付金額
 FKS.FKSC_R.FK61          ' アシスト 延滞回数
-FKS.FKSC_R.FK62          ' アシスト 入金額
-FKS.FKSC_R.FK63          ' アシスト 貸付残高
+FKS.FKSC_R.FK62          ' アシスト 返済額
+FKS.FKSC_R.FK63          ' アシスト 残高
 FKS.FKSC_R.FK64          ' 物件情報 住居サイン 2021/08追加
 FKS.FKSC_R.FK65          ' 物件情報 郵便番号   2021/08追加
 FKS.FKSC_R.FK66          ' 物件情報 漢字住所   2021/08追加
@@ -97,14 +97,15 @@ TBL.C20					 ' 連債者勤務先名称カナ
 TBL.C21					 ' 連債者勤務先電話番号
 TBL.C22					 ' -
 TBL.C23					 ' 延滞合計額
-TBL.C24					 ' 貸付金額
+TBL.C24					 ' 債権総額月賦元本    2025/03/04 変更
 TBL.C25					 ' 延滞回数
-TBL.C26					 ' 入金額
-TBL.C27					 ' 貸付残高
+TBL.C26					 ' 支払額月賦          2025/03/04 変更
+TBL.C27					 ' 月末残高月賦元本	   2025/03/04 変更
 TBL.C28					 ' 金消契約年月日
-
-
-
+TBL.C29                  ' 債権総額半年賦元本  2025/03/04 追加
+TBL.C30                  ' 月末残高半年賦元本  2025/03/04 追加
+TBL.C31                  ' 支払額半年賦        2025/03/04 追加
+TBL.C32                  ' 完済日              2025/03/04 追加
 
 ' 交渉記録
 FKS.FKSCD_R.FKD01        ' 識別番号+millsecond ユニーク情報

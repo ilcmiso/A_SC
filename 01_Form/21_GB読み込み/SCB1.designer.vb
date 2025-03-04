@@ -119,8 +119,8 @@ Partial Class SCB1
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(298, 130)
         Me.Label4.TabIndex = 27
-        Me.Label4.Text = "SQL Makerから、以下の4つのファイルを「CSVフォーマット」で取り出して、右側のアイコンにドラッグ＆ドロップしてください。" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "　・機構借入申込情報還元デー" &
-    "タ" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "　・督促状出力" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "　・債務者" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "　・連保人"
+        Me.Label4.Text = "SQL Makerから、以下の項目を「CSVフォーマット」で取り出し、右側のアイコンに入れてください。" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "　・機構借入申込情報還元データ" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "　・督促状出力" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "　・" &
+    "債務者" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "　・連保人" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "　・残高情報"
         '
         'L_UptimeTXT
         '

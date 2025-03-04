@@ -31,11 +31,24 @@ Public Class SCC1_S1_MNG
         ShowListbox1()
     End Sub
 
-
     Private Sub ShowListbox1()
         ListBox1.Items.Clear()
         For Each tid In [Enum].GetValues(GetType(Sqldb.TID))
-            Dim dt As DataTable = db.GetSelect(tid, "PRAGMA table_info('" & db.DBTbl(tid, Sqldb.DBID.TABLE) & "')")
+            Dim tableName As String = db.DBTbl(tid, Sqldb.DBID.TABLE)
+            Dim sqlCommand As String = ""
+            Dim dt As DataTable
+
+            ' SQLiteとSQL ServerでSQL文を分岐する
+            If db.IsSQLServerDB(tid) Then
+                ' SQL Server用の定義取得クエリ（必要な項目に応じて調整すること）
+                sqlCommand = "SELECT COLUMN_NAME, DATA_TYPE, CHARACTER_MAXIMUM_LENGTH FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '" & tableName & "'"
+            Else
+                ' SQLite用の定義取得コマンド
+                sqlCommand = "PRAGMA table_info('" & tableName & "')"
+            End If
+
+            ' 定義情報を取得する
+            dt = db.GetSelect(tid, sqlCommand)
             ListBox1.Items.Add(tid.ToString & vbTab & " 定義[" & db.DBTbl(tid, Sqldb.DBID.CNUM) & "]" & vbTab & "DB[" & dt.Rows.Count & "]")
         Next
     End Sub

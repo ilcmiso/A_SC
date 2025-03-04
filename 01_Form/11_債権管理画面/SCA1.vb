@@ -620,14 +620,14 @@ Public Class SCA1
                         End If
                         dgv(6, 2).Value = cmn.Int(cInfo.Item(59)).ToString("#,0")     ' 貸付金額
                         dgv(6, 3).Value = cmn.Int(cInfo.Item(62)).ToString("#,0")     ' 更新日残高
-                        'dgv(6, 4).Value = ""                                         ' 貸付金額(B)
-                        'dgv(6, 5).Value = cmn.Int(cInfo.Item(62)).ToString("#,0")     ' 更新日残高(B)
+                        dgv(6, 4).Value = cmn.Int(cInfo.Item(21)).ToString("#,0")     ' 貸付金額(B)
+                        dgv(6, 5).Value = cmn.Int(cInfo.Item(22)).ToString("#,0")     ' 更新日残高(B)
                         'dgv(6, 6).Value = ""                                         ' 残高更新日
                         dgv(6, 7).Value = cmn.Int(cInfo.Item(61)).ToString("#,0")     ' 返済額
-                        'dgv(6, 8).Value = ""                                         ' 返済額(B)
+                        dgv(6, 8).Value = cmn.Int(cInfo.Item(23)).ToString("#,0")     ' 返済額(B)
                         dgv(6, 9).Value = cmn.Int(cInfo.Item(60)).ToString("#,0")     ' 延滞回数
                         'dgv(6, 10).Value = ""                                         ' 延滞合計額
-                        'dgv(6, 11).Value = cInfo.Item(57)                             ' 完済日
+                        dgv(6, 11).Value = cInfo.Item(24)                             ' 完済日
                     End If
                 End If
 

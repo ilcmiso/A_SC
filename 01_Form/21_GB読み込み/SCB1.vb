@@ -293,11 +293,15 @@ Public Class SCB1
         "連保人勤務先電話番号",                  ' C21
         "-",                                     ' C22
         "延滞合計額",                            ' C23
-        "貸付金額",                              ' C24
+        "債権総額月賦元本",                      ' C24  ※2025/03/04 貸付金額 → 取得元を変更
         "延滞回数",                              ' C25
-        "入金額",                                ' C26
-        "貸付残高",                              ' C27
-        "金消契約年月日"                         ' C28
+        "支払額月賦",                            ' C26  ※2025/03/04 入金額   → 取得元を変更
+        "月末残高月賦元本",                      ' C27  ※2025/03/04 貸付残高 → 取得元を変更
+        "金消契約年月日",                        ' C28
+        "債権総額半年賦元本",                    ' C29  ※2025/03/04 追加
+        "月末残高半年賦元本",                    ' C30  ※2025/03/04 追加
+        "支払額半年賦",                          ' C31  ※2025/03/04 追加
+        "完済日"                                 ' C32  ※2025/03/04 追加
     }
     Const NOT_FOUND As Integer = -1
     ' アシストデータ読み込み
@@ -336,6 +340,11 @@ Public Class SCB1
                     Dim birth2Idx As Integer = Array.IndexOf(headerNames, AssistHeaderTbl(14))
                     If birth2Idx > -1 Then
                         addStr(birth2Idx) = cmn.ToDate(addStr(birth2Idx))
+                    End If
+                    ' 完済日の日付にスラッシュを追加
+                    Dim birth3Idx As Integer = Array.IndexOf(headerNames, AssistHeaderTbl(31))
+                    If birth3Idx > -1 Then
+                        addStr(birth3Idx) = cmn.ToDate(addStr(birth3Idx))
                     End If
 
                     costomInfo.Add(addStr)
@@ -584,6 +593,7 @@ Public Class SCB1
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
+        Cursor.Current = Cursors.WaitCursor  ' マウスカーソルを砂時計に
         db.ExeSQL(Sqldb.TID.SCAS, "Delete From TBL Where C02 = ''")
         CopyCDBtoServer(Sqldb.DB_FKSCASSIST)            ' DBファイルをローカルからサーバーにコピー
     End Sub
