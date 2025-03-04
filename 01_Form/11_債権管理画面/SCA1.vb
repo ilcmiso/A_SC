@@ -578,6 +578,9 @@ Public Class SCA1
                     dgv(8, 6).Value = cmn.SetValueDefault(cInfo.Item(41), "")       ' 口座番号
                     dgv(8, 7).Value = cmn.SetValueDefault(cInfo.Item(42), "")       ' 口座名義
 
+                    ' メモ欄
+                    dgv(8, 11).Value = cmn.SetValueDefault(cInfo.Item(46), "")       ' メモ欄
+
                     ' 物件住所 主・連の住所と全て同じなら(住所と同じ)、異なれば赤字で物件住所
                     Dim isSameAddress As Boolean = cmn.DiffStr(cInfo.Item(16), dgv(8, 3).Value)
                     Dim isSameAdditionalInfo As Boolean = cInfo.Item(36).Length > 0 AndAlso cmn.DiffStr(cInfo.Item(36), dgv(8, 3).Value)
@@ -1067,7 +1070,7 @@ Public Class SCA1
                     {"郵便番号", "", "旧団信加入", "", "返済額(B)", "", "", "", ""},
                     {"住所", "", "", "", "延滞月数", "", "", "", ""},
                     {"勤務先", "", "勤務先TEL", "", "延滞合計額", "", "", "", ""},
-                    {"", "", "", "", "完済日", "", "", "", ""}
+                    {"", "", "", "", "完済日", "", "", "メモ欄", ""}
                 }
             '{"住居サイン", "", "物件〒", "", "完済日", ""},
             '{"物件住所", "", "", "", "", ""},

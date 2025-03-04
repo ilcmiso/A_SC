@@ -47,7 +47,7 @@ FKS.FKSC_R.FK43          ' 償還金口座情報 口座名義人ｶﾅ
 FKS.FKSC_R.FK44          ' 償還金口座情報 金融機関口座コード
 FKS.FKSC_R.FK45          ' 償還金口座情報 金融機関口座支店コード
 FKS.FKSC_R.FK46          ' 
-FKS.FKSC_R.FK47          ' 
+FKS.FKSC_R.FK47          ' メモ欄                    2025/03/04 add
 FKS.FKSC_R.FK48          ' 更新日残高(ボーナス)
 FKS.FKSC_R.FK49          ' 返済額2(顧客番号05始まりの人用。返済額に加算される)
 FKS.FKSC_R.FK50          ' 返済額

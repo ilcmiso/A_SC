@@ -81,12 +81,12 @@ Public Class Common
 
     ' Cintのカバー、引数が不正文字列でエラーになった場合0を返す
     Public Function Int(str As String) As Integer
-        If str = "" Then Return 0
-        Try
-            Return CInt(str)
-        Catch ex As Exception
+        Dim result As Integer
+        If Integer.TryParse(str, result) Then
+            Return result
+        Else
             Return 0
-        End Try
+        End If
     End Function
 
     ' DGVのちらつき防止
