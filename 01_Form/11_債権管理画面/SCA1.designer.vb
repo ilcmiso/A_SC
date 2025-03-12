@@ -229,7 +229,6 @@ Partial Class SCA1
         Me.Column8 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Column6 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Column5 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Button3 = New System.Windows.Forms.Button()
         Me.TB_SearchInput = New System.Windows.Forms.TextBox()
         Me.Button1 = New System.Windows.Forms.Button()
         Me.TAB_A1 = New System.Windows.Forms.TabControl()
@@ -315,6 +314,8 @@ Partial Class SCA1
         Me.ToolStripMenuItem2 = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
         Me.ColorDialog1 = New System.Windows.Forms.ColorDialog()
+        Me.CB_SEARCHOPT = New System.Windows.Forms.ComboBox()
+        Me.Label14 = New System.Windows.Forms.Label()
         Me.Tab_4Dun.SuspendLayout()
         CType(Me.DGV4, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.GroupBox1.SuspendLayout()
@@ -1535,6 +1536,7 @@ Partial Class SCA1
         '
         'Tab_1SC
         '
+        Me.Tab_1SC.Controls.Add(Me.CB_SEARCHOPT)
         Me.Tab_1SC.Controls.Add(Me.Label16)
         Me.Tab_1SC.Controls.Add(Me.L_SENDNG2)
         Me.Tab_1SC.Controls.Add(Me.L_SENDNG1)
@@ -1563,9 +1565,9 @@ Partial Class SCA1
         Me.Tab_1SC.Controls.Add(Me.BT_B3)
         Me.Tab_1SC.Controls.Add(Me.L_TELADD)
         Me.Tab_1SC.Controls.Add(Me.DGV1)
-        Me.Tab_1SC.Controls.Add(Me.Button3)
         Me.Tab_1SC.Controls.Add(Me.TB_SearchInput)
         Me.Tab_1SC.Controls.Add(Me.Button1)
+        Me.Tab_1SC.Controls.Add(Me.Label14)
         Me.Tab_1SC.Location = New System.Drawing.Point(4, 20)
         Me.Tab_1SC.Name = "Tab_1SC"
         Me.Tab_1SC.Padding = New System.Windows.Forms.Padding(3)
@@ -2023,7 +2025,7 @@ Partial Class SCA1
         Me.CB_AUTOUPD.AutoSize = True
         Me.CB_AUTOUPD.Checked = True
         Me.CB_AUTOUPD.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.CB_AUTOUPD.Location = New System.Drawing.Point(367, 6)
+        Me.CB_AUTOUPD.Location = New System.Drawing.Point(1183, 6)
         Me.CB_AUTOUPD.Name = "CB_AUTOUPD"
         Me.CB_AUTOUPD.Size = New System.Drawing.Size(72, 16)
         Me.CB_AUTOUPD.TabIndex = 1773
@@ -2439,20 +2441,6 @@ Partial Class SCA1
         Me.Column5.ReadOnly = True
         Me.Column5.Visible = False
         Me.Column5.Width = 125
-        '
-        'Button3
-        '
-        Me.Button3.BackColor = System.Drawing.SystemColors.ActiveCaption
-        Me.Button3.FlatAppearance.BorderColor = System.Drawing.Color.Black
-        Me.Button3.Font = New System.Drawing.Font("MS UI Gothic", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.Button3.ForeColor = System.Drawing.Color.Black
-        Me.Button3.Location = New System.Drawing.Point(237, 2)
-        Me.Button3.Name = "Button3"
-        Me.Button3.Size = New System.Drawing.Size(80, 24)
-        Me.Button3.TabIndex = 1573
-        Me.Button3.TabStop = False
-        Me.Button3.Text = "検索オプション"
-        Me.Button3.UseVisualStyleBackColor = False
         '
         'TB_SearchInput
         '
@@ -3427,6 +3415,30 @@ Partial Class SCA1
         Me.MenuStrip1.TabIndex = 1574
         Me.MenuStrip1.Text = "MenuStrip1"
         '
+        'CB_SEARCHOPT
+        '
+        Me.CB_SEARCHOPT.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.CB_SEARCHOPT.Font = New System.Drawing.Font("MS UI Gothic", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.CB_SEARCHOPT.FormattingEnabled = True
+        Me.CB_SEARCHOPT.ImeMode = System.Windows.Forms.ImeMode.Hiragana
+        Me.CB_SEARCHOPT.Items.AddRange(New Object() {"氏名", "債務番号", "TEL", "住所", "勤務先", "返済額", "生年月日"})
+        Me.CB_SEARCHOPT.Location = New System.Drawing.Point(308, 1)
+        Me.CB_SEARCHOPT.Name = "CB_SEARCHOPT"
+        Me.CB_SEARCHOPT.Size = New System.Drawing.Size(128, 23)
+        Me.CB_SEARCHOPT.TabIndex = 1786
+        '
+        'Label14
+        '
+        Me.Label14.AutoSize = True
+        Me.Label14.BackColor = System.Drawing.Color.WhiteSmoke
+        Me.Label14.Font = New System.Drawing.Font("メイリオ", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.Label14.ForeColor = System.Drawing.Color.Blue
+        Me.Label14.Location = New System.Drawing.Point(245, 5)
+        Me.Label14.Name = "Label14"
+        Me.Label14.Size = New System.Drawing.Size(68, 18)
+        Me.Label14.TabIndex = 1787
+        Me.Label14.Text = "検索対象："
+        '
         'SCA1
         '
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None
@@ -3501,7 +3513,6 @@ Partial Class SCA1
     Friend WithEvents Button6 As Button
     Friend WithEvents L_TELADD As Label
     Friend WithEvents DGV1 As DataGridView
-    Friend WithEvents Button3 As Button
     Friend WithEvents TB_SearchInput As TextBox
     Friend WithEvents BT_B4 As Button
     Friend WithEvents TB_FreeMemo As TextBox
@@ -3728,4 +3739,6 @@ Partial Class SCA1
     Friend WithEvents FKD07 As DataGridViewTextBoxColumn
     Friend WithEvents FKD13 As DataGridViewTextBoxColumn
     Friend WithEvents ダミー As DataGridViewTextBoxColumn
+    Friend WithEvents CB_SEARCHOPT As ComboBox
+    Friend WithEvents Label14 As Label
 End Class

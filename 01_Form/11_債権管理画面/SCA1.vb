@@ -29,7 +29,6 @@ Public Class SCA1
     ' フリーメモ変更前バッファ(変更されたか検知したい)
     Private BeforeFreeTxt As String = ""
     ' 外付けフォーム
-    Private SearchForm As SCA1_S3_Search = Nothing                  ' 検索オプションフォーム
     Public AddTelForm As SCA1_S4_TEL = Nothing                      ' 電話追加フォーム
     Public EditForm As SCE_S2 = Nothing                           ' 交渉記録フォーム
     ' イベントハンドラーロック 記録一覧チェックリストボックス
@@ -106,7 +105,7 @@ Public Class SCA1
 
         ' イベントハンドラ設定
         AddHandler DGV1.CellEnter, AddressOf DGV1_CellEnter
-        SearchOptionInit()          ' 検索オプションフォーム初期設定
+        CB_SEARCHOPT.SelectedIndex = 0
         SC.Visible = False
     End Sub
 
@@ -347,15 +346,8 @@ Public Class SCA1
     ' 検索でEnterキー
     Private Sub TB_A1_KeyPress(sender As Object, e As KeyPressEventArgs) Handles TB_SearchInput.KeyPress
         If e.KeyChar = ChrW(Keys.Enter) Then
-            Dim STtime = Date.Now
-            log.cLog("検索開始")
             e.Handled = True
-            ' Cursor.Current = Cursors.WaitCursor             ' マウスカーソルを砂時計に
-            cmn.StartPBar(4)
-            ShowDGVList(DGV1, TB_SearchInput.Text)
-            DGV1_ClickShow()
-            cmn.EndPBar()
-            log.cLog($"検索完了 : {(Date.Now - STtime).ToString("ss\.fff")}")
+            SearchKeyEnterEvent()
         End If
     End Sub
 
@@ -401,7 +393,6 @@ Public Class SCA1
 
     ' タブ移動時、検索欄選択時に検索オプションを非表示にする
     Private Sub TAB_A1_SelectedIndexChanged() Handles TAB_A1.SelectedIndexChanged, TB_SearchInput.Enter, Tab_4Dun.Enter, Tab_2Record.Enter
-        SearchForm.Visible = False
         AddTelForm.Visible = False
     End Sub
 
@@ -415,6 +406,10 @@ Public Class SCA1
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles BT_PI2.Click
         If DGV_FPLIST.CurrentCell.ColumnIndex <> 2 Then Exit Sub
         DGV_FPLIST.CurrentCell.Value = ""
+    End Sub
+
+    Private Sub CB_SEARCHOPT_SelectedIndexChanged(sender As Object, e As EventArgs) Handles CB_SEARCHOPT.SelectedIndexChanged
+        SearchKeyEnterEvent()
     End Sub
 
     ' ショートカット F1
@@ -477,14 +472,26 @@ Public Class SCA1
                 DGV1.AutoGenerateColumns = False
 
                 Dim dv As New DataView(db.OrgDataTablePlusAssist)
-                Dim list() As String = {"FK02", "FK10", "FK11", "FK30", "FK31", "FK14", "FK19", "FK34", "FK39", "FK17", "FK38", "FK18", "FK49", "FK12", "FK32"}
+
+                ' Filter
+                Dim filterList As String(,) = {{"FK10", "FK11", "FK30", "FK31", ""},        ' 氏名
+                                               {"FK02", "", "", "", ""},                    ' 債権番号
+                                               {"FK14", "FK19", "FK34", "FK39", "FK67"},    ' TEL
+                                               {"FK17", "FK37", "", "", ""},                ' 住所
+                                               {"FK18", "FK38", "", "", ""},                ' 勤務先
+                                               {"(FK49 + FK50)", "FK53", "FK62", "", ""},   ' 返済額
+                                               {"FK12", "FK32", "", "", ""}}                ' 生年月日
                 Dim conditions As New List(Of String)
-
-                For Each col As String In list
-                    conditions.Add(col & " LIKE '%" & FilterWord & "%'")
-                Next
-
-                dv.RowFilter = String.Join(" OR ", conditions)
+                Dim selectedIndex As Integer = CB_SEARCHOPT.SelectedIndex
+                If selectedIndex >= 0 Then
+                    For i As Integer = 0 To filterList.GetLength(1) - 1
+                        Dim colName As String = filterList(selectedIndex, i)
+                        If Not String.IsNullOrEmpty(colName) Then
+                            conditions.Add(colName & " LIKE '%" & FilterWord & "%'")
+                        End If
+                    Next
+                    dv.RowFilter = String.Join(" OR ", conditions)
+                End If
 
                 ' Bind設定
                 Dim BindList() As String = {"FK02", "FK10", "FK11", "FK51", "FK12", "FK55"}
@@ -497,9 +504,9 @@ Public Class SCA1
 
                 dgv.SuspendLayout()
                 dgv.DataSource = dv
+                dgv.Sort(dgv.Columns(5), ComponentModel.ListSortDirection.Descending)
                 dgv.ResumeLayout()
 
-                DGV1.Sort(DGV1.Columns(5), ComponentModel.ListSortDirection.Descending)
                 L_STS.Text = $" ( {DGV1.Rows.Count} / {MaxCosCount} ) 件 表示中"
                 EnableObjects(dgv.Rows.Count <> 0)              ' もしDGV1のメンバーが0なら編集できなくする
                 Exit Sub
@@ -719,6 +726,18 @@ Public Class SCA1
             Next
         Next
     End Sub
+
+    ' 検索欄でEnterキー押下イベント
+    Private Sub SearchKeyEnterEvent()
+        Dim STtime = Date.Now
+        log.cLog("検索開始")
+        Cursor.Current = Cursors.WaitCursor             ' マウスカーソルを砂時計に
+        cmn.StartPBar(4)
+        ShowDGVList(DGV1, TB_SearchInput.Text)
+        DGV1_ClickShow()
+        cmn.EndPBar()
+        log.cLog($"検索完了 : {(Date.Now - STtime).ToString("ss\.fff")}")
+    End Sub
     ' 検索ワードフィルタ
     Private Sub FilterWordsDGV(ByRef dt As DataTable, FilterWord As String, dgv As DataGridView)
         If FilterWord = "" Then Exit Sub
@@ -748,49 +767,6 @@ Public Class SCA1
 
             ' 検索したときの検索対象列 DGV毎
             Select Case True
-                Case dgv Is DGV1
-                    With sb
-                        ' 検索オプションによって検索対象を追加する
-                        If SearchForm.CB_ID.Checked Then
-                            .Append(dt.Rows(r).Item(1).ToString).Append(",")                           ' 機構番号
-                        End If
-                        If SearchForm.CB_NAME.Checked Then
-                            .Append(dt.Rows(r).Item(9).ToString).Append(",")                           ' 債務者 氏名
-                            .Append(dt.Rows(r).Item(10).ToString).Append(",")                          ' 債務者 ﾖﾐｶﾅ
-                            .Append(dt.Rows(r).Item(29).ToString).Append(",")                          ' 連帯債務者 氏名
-                            .Append(dt.Rows(r).Item(30).ToString).Append(",")                          ' 連帯債務者 ﾖﾐｶﾅ
-                        End If
-                        If SearchForm.CB_TEL.Checked Then
-                            .Append(dt.Rows(r).Item(13).ToString).Append(",")                          ' 債務者 TEL1
-                            '.Append(dt.Rows(r).Item(14).ToString).Append(",")                          ' 債務者 TEL2
-                            .Append(dt.Rows(r).Item(18).ToString).Append(",")                          ' 債務者勤務先 TEL1
-                            '.Append(dt.Rows(r).Item(19).ToString).Append(",")                          ' 債務者勤務先 TEL2
-                            .Append(dt.Rows(r).Item(33).ToString).Append(",")                          ' 連帯債務者 TEL1
-                            '.Append(dt.Rows(r).Item(34).ToString).Append(",")                          ' 連帯債務者 TEL2
-                            .Append(dt.Rows(r).Item(38).ToString).Append(",")                          ' 連帯債務者勤務先 TEL1
-                            '.Append(dt.Rows(r).Item(39).ToString).Append(",")                          ' 連帯債務者勤務先 TEL2
-                            '.Append(dt.Rows(r).Item(67).ToString).Append(",")                          ' 追加電話番号
-                            '.Append(dt.Rows(r).Item(66).ToString).Append(",")                          ' 追加電話番号(複数)
-                        End If
-                        If SearchForm.CB_WORK.Checked Then
-                            .Append(dt.Rows(r).Item(16).ToString.Replace("-", "ｰ")).Append(",")        ' 債務者 住所
-                        End If
-                        If SearchForm.CB_ADDR.Checked Then
-                            .Append(dt.Rows(r).Item(37).ToString.Replace("-", "ｰ")).Append(",")        ' 連帯債務者勤務先
-                            .Append(dt.Rows(r).Item(17).ToString.Replace("-", "ｰ")).Append(",")        ' 債務者勤務先 
-                        End If
-                        If SearchForm.CB_REPAY.Checked Then
-                            .Append(cmn.Int(dt.Rows(r).Item(48).ToString) + cmn.Int(dt.Rows(r).Item(49).ToString)).Append(",")        ' 返済額
-                        End If
-                        If SearchForm.CB_BIRTH.Checked Then
-                            .Append(dt.Rows(r).Item(11).ToString).Append(",")                          ' 債務者 生年月日
-                            .Append(dt.Rows(r).Item(31).ToString).Append(",")                          ' 連帯債務者 生年月日
-                        End If
-
-                        .Replace(" ", "").Replace("　", "").Replace("-", "")
-                    End With
-                    word = sb.ToString
-                    sb.Clear()
                 Case dgv Is DGV2
                     Exit Sub
                 'Case dgv Is DGV3
@@ -884,25 +860,6 @@ Public Class SCA1
 #End Region
 
 #Region "検索オプション"
-    ' 検索オプションのフォームを生成
-    Private Sub SearchOptionInit()
-        SearchForm = New SCA1_S3_Search()
-        With SearchForm
-            .TopLevel = False
-            Me.Controls.Add(SearchForm)
-            .Show()
-            .BringToFront()
-            .Left = 60
-            .Top = 63
-            .Visible = False
-        End With
-    End Sub
-
-    ' 検索オプションの表示/非表示
-    Private Sub ShowSwitchSearchForm() Handles Button3.Click
-        SearchForm.Visible = Not SearchForm.Visible
-    End Sub
-
     ' ツールチップの設定
     Private Sub SetToolTips()
         tt1.SetToolTip(TB_SearchInput, "「債権番号」「債務者名」「連帯債務者名」「各電話番号」から検索できます。")   ' ツールチップ
