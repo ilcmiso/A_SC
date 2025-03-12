@@ -408,8 +408,11 @@ Public Class SCA1
         DGV_FPLIST.CurrentCell.Value = ""
     End Sub
 
+    ' 検索条件の変更
     Private Sub CB_SEARCHOPT_SelectedIndexChanged(sender As Object, e As EventArgs) Handles CB_SEARCHOPT.SelectedIndexChanged
-        SearchKeyEnterEvent()
+        If TB_SearchInput.Text.Length > 0 Then
+            SearchKeyEnterEvent()
+        End If
     End Sub
 
     ' ショートカット F1
@@ -471,19 +474,56 @@ Public Class SCA1
                 MaxCosCount = db.OrgDataTablePlusAssist.Rows.Count
                 DGV1.AutoGenerateColumns = False
 
-                Dim dv As New DataView(db.OrgDataTablePlusAssist)
-
-                ' Filter
-                Dim filterList As String(,) = {{"FK10", "FK11", "FK30", "FK31", ""},        ' 氏名
-                                               {"FK02", "", "", "", ""},                    ' 債権番号
-                                               {"FK14", "FK19", "FK34", "FK39", "FK67"},    ' TEL
-                                               {"FK17", "FK37", "", "", ""},                ' 住所
-                                               {"FK18", "FK38", "", "", ""},                ' 勤務先
-                                               {"(FK49 + FK50)", "FK53", "FK62", "", ""},   ' 返済額
-                                               {"FK12", "FK32", "", "", ""}}                ' 生年月日
-                Dim conditions As New List(Of String)
                 Dim selectedIndex As Integer = CB_SEARCHOPT.SelectedIndex
+                Dim dtAssist As DataTable = db.OrgDataTablePlusAssist
+                Dim dv As New DataView(dtAssist)
+
+                ' 取得する SCR テーブル
+                Dim dtSCR As DataTable = db.OrgDataTable(Sqldb.TID.SCR)
+                Dim relationName As String = "AssistSCRRel"
+                Dim ds As DataSet
+
                 If selectedIndex >= 0 Then
+                    ' dtAssist が既に DataSet に所属しているか確認。なければ、一時的に DataSet を作成
+                    If dtAssist.DataSet Is Nothing Then
+                        ds = New DataSet()
+                        ds.Tables.Add(dtAssist)
+                        ds.Tables.Add(dtSCR)
+                    Else
+                        ds = dtAssist.DataSet
+                        If Not ds.Tables.Contains(dtSCR.TableName) Then
+                            ds.Tables.Add(dtSCR)
+                        End If
+                    End If
+
+                    ' DataRelation を作成（既に存在しなければ）
+                    If ds.Relations.IndexOf(relationName) = -1 Then
+                        ds.Relations.Add(relationName, dtAssist.Columns("FK02"), dtSCR.Columns("FKR01"), False)
+                    End If
+
+                    ' computed 列として SCR の値を取得する列を追加（未追加の場合）
+                    If Not dtAssist.Columns.Contains("SCR_FKR05") Then
+                        Dim colSCR05 As New DataColumn("SCR_FKR05", GetType(String), "Min(Child([" & relationName & "]).FKR05)")
+                        dtAssist.Columns.Add(colSCR05)
+                    End If
+                    If Not dtAssist.Columns.Contains("SCR_FKR06") Then
+                        Dim colSCR06 As New DataColumn("SCR_FKR06", GetType(String), "Min(Child([" & relationName & "]).FKR06)")
+                        dtAssist.Columns.Add(colSCR06)
+                    End If
+
+                    ' --- フィルタ処理 ---
+                    ' SCR の computed 列を対象とするフィルタ条件を作成
+                    Dim filterList As String(,) = {
+                    {"FK10", "FK11", "FK30", "FK31", ""},        ' 氏名
+                    {"FK02", "", "", "", ""},                      ' 債権番号
+                    {"FK14", "FK19", "FK34", "FK39", "FK67"},      ' TEL
+                    {"FK17", "FK37", "", "", ""},                  ' 住所
+                    {"FK18", "FK38", "", "", ""},                  ' 勤務先
+                    {"(FK49 + FK50)", "FK53", "FK62", "", ""},     ' 返済額
+                    {"FK12", "FK32", "", "", ""},                  ' 生年月日
+                    {"SCR_FKR05", "SCR_FKR06", "", "", ""}
+                }
+                    Dim conditions As New List(Of String)
                     For i As Integer = 0 To filterList.GetLength(1) - 1
                         Dim colName As String = filterList(selectedIndex, i)
                         If Not String.IsNullOrEmpty(colName) Then

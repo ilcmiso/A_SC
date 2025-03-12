@@ -3421,10 +3421,10 @@ Partial Class SCA1
         Me.CB_SEARCHOPT.Font = New System.Drawing.Font("MS UI Gothic", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.CB_SEARCHOPT.FormattingEnabled = True
         Me.CB_SEARCHOPT.ImeMode = System.Windows.Forms.ImeMode.Hiragana
-        Me.CB_SEARCHOPT.Items.AddRange(New Object() {"氏名", "債務番号", "TEL", "住所", "勤務先", "返済額", "生年月日"})
-        Me.CB_SEARCHOPT.Location = New System.Drawing.Point(308, 1)
+        Me.CB_SEARCHOPT.Items.AddRange(New Object() {"氏名", "債務番号", "TEL", "住所", "勤務先", "返済額", "生年月日", "追加電話番号(名前と番号)"})
+        Me.CB_SEARCHOPT.Location = New System.Drawing.Point(297, 1)
         Me.CB_SEARCHOPT.Name = "CB_SEARCHOPT"
-        Me.CB_SEARCHOPT.Size = New System.Drawing.Size(128, 23)
+        Me.CB_SEARCHOPT.Size = New System.Drawing.Size(139, 23)
         Me.CB_SEARCHOPT.TabIndex = 1786
         '
         'Label14
@@ -3433,7 +3433,7 @@ Partial Class SCA1
         Me.Label14.BackColor = System.Drawing.Color.WhiteSmoke
         Me.Label14.Font = New System.Drawing.Font("メイリオ", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.Label14.ForeColor = System.Drawing.Color.Blue
-        Me.Label14.Location = New System.Drawing.Point(245, 5)
+        Me.Label14.Location = New System.Drawing.Point(238, 5)
         Me.Label14.Name = "Label14"
         Me.Label14.Size = New System.Drawing.Size(68, 18)
         Me.Label14.TabIndex = 1787
