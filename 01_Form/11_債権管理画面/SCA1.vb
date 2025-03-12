@@ -384,14 +384,9 @@ Public Class SCA1
 
     ' 手動でアップデート実行
     Private Sub L_UPDMsg_Click(sender As Object, e As EventArgs) Handles L_UPDMsg.Click
-        Dim r = MessageBox.Show("債権管理アプリのアップデートを行います。" & vbCrLf &
-                                "「はい」を押すと、アプリを自動で再起動しますのでしばらくお待ち下さい。",
-                                "ご確認ください",
-                                MessageBoxButtons.YesNo,
-                                MessageBoxIcon.Question)
-        If r = vbNo Then Exit Sub
-        Cursor.Current = Cursors.WaitCursor             ' マウスカーソルを砂時計に
-        SC.RestartApl()
+        MsgBox("債権管理アプリのアップデートがあります。" & vbCrLf &
+               "右上のＸボタンで画面を閉じると、アプリ更新ボタンがありますので、" & vbCrLf &
+               "必要に応じてアプリを更新してください。")
     End Sub
 
     ' 記録一覧 検索でEnterキー
@@ -852,6 +847,14 @@ Public Class SCA1
 
     ' 物件住所をクリックして比較表示
     Private Sub DGV9_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles DGV9.CellClick
+        ' メモ欄
+        If e.RowIndex = 3 AndAlso e.ColumnIndex = 11 Then
+            If DGV9.Rows(3).Cells(11).Value.ToString.Length > 0 Then
+                MsgBox(DGV9.Rows(3).Cells(11).Value)
+            End If
+        End If
+
+        ' 物件住所
         If e.RowIndex = 3 AndAlso e.ColumnIndex = 8 Then
             Dim addressMain As String = DGV9.Rows(4).Cells(1).Value
             Dim addressSub As String = DGV9.Rows(9).Cells(1).Value

@@ -90,7 +90,7 @@ Public Class SCB1
                                    "'" & Trim(SCList(i + 41)) & "'," &               ' FK44 償還金口座情報 金融機関口座コード
                                    "'" & Trim(SCList(i + 42)) & "'," &               ' FK45 償還金口座情報 金融機関口座支店コード
                                    "''," &                                           ' FK46
-                                   "'" & SCList(i + 43) & "'," &                     ' FK47 メモ欄
+                                   "'" & cmn.TrimSpaces(SCList(i + 43)) & "'," &     ' FK47 メモ欄
                                    "'" & cmn.Int(SCList(i + 36)) & "'," &          ' FK48 更新日残高(ボーナス)
                                    "'" & cmn.Int(SCList(i + 18)) & "'," &          ' FK49 返済額2(顧客番号05始まり用)
                                    "'" & cmn.Int(SCList(i + 19)) & "'," &          ' FK50 返済額

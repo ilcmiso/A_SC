@@ -98,7 +98,6 @@ Public Class SCC1
         ' 固有情報の保存処理
         If Not TextBox1.Text.EndsWith("\") Then TextBox1.Text += "\"    ' ディレクトリの末尾が\じゃなければ\つける
         If Not TextBox2.Text.EndsWith("\") Then TextBox2.Text += "\"    ' ディレクトリの末尾が\じゃなければ\つける
-        If Not TB_SQLAddr.Text.EndsWith("\") Then TB_SQLAddr.Text += "\"
         If Not IO.Directory.Exists(TextBox1.Text) Then
             MsgBox("着信記録ファイルの保存場所" & vbCrLf &
                    TextBox1.Text & " が見つかりません。" & vbCrLf &

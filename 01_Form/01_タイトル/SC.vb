@@ -38,6 +38,11 @@ Public Class SC
         log.cLog("--- SC Load完了: " & (Date.Now - loadTime).ToString("ss\.fff"))
     End Sub
 
+    ' SCA1が閉じた後にアプリ更新ボタンの状態を更新
+    Private Sub SCA1_Closed(sender As Object, e As FormClosedEventArgs) 
+        BT_APPUPDATE.Visible = AppUpdate.IsUpdateAvailable
+    End Sub
+
     Private Sub ME_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
         If Button3.Enabled = False Then
             Dim r = MessageBox.Show("電話接続中です。" & vbCrLf &
@@ -59,8 +64,9 @@ Public Class SC
         Dim fm As New Form
         Select Case sender.name
             Case Button1.Name   ' 顧客検索メイン画面
-                CheckUserName
+                CheckUserName()
                 fm = SCA1
+                AddHandler fm.FormClosed, AddressOf SCA1_Closed ' フォーム閉じたときの処理を追加
             Case Button2.Name   ' F35読み込み画面
                 fm = SCB1
                 fm.ShowInTaskbar = False

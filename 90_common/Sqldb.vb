@@ -543,22 +543,15 @@ Public Class Sqldb
     End Sub
 
     ' DB最適化
-    Public Function SQLReflesh(TableID As Integer)
-        'mtx.Lock(Mutex.MTX_LOCK_W, TableID)
-        Dim con As SQLiteConnection = svCon(TableID)
-        Dim cmd As SQLiteCommand = svCmd(TableID)
-        Dim ret As Boolean = True
-        Try
-            con.Open()
-            cmd.CommandText = "VACUUM"
-            cmd.ExecuteNonQuery()
-        Catch ex As Exception
-            MsgBox("DB書き込みで異常が見つかりました。" & vbCrLf & ex.Message)
-        End Try
-        con.Close()
-        'mtx.UnLock(TableID)
-        Return ret
-    End Function
+    Public Sub SQLReflesh(TableID As Integer)
+        Using con As SQLiteConnection = svCon(TableID)
+            Using cmd As SQLiteCommand = svCmd(TableID)
+                con.Open()
+                cmd.CommandText = "VACUUM"
+                cmd.ExecuteNonQuery()
+            End Using
+        End Using
+    End Sub
 
     ' 簡易Insert/Update
     ' Insert - 可変引数で、DB定義より不足した項目は空白登録

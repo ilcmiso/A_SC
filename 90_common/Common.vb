@@ -448,6 +448,11 @@ Public Class Common
         Return cleanStr1 = cleanStr2
     End Function
 
+    ' 変数の先頭と末尾にある半角スペースと全角スペースを取り除く
+    Public Function TrimSpaces(ByVal input As String) As String
+        Return input.Trim(" "c, "　"c)
+    End Function
+
     ' プログレスバー表示
     Public Sub StartPBar(progressCount As Integer)
         SCA_ProgressBar.Instance.StartProgress(progressCount)

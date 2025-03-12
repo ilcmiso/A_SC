@@ -38,7 +38,7 @@ Public Class Sqlsv
                     ' 成功したらDataTableを返して終了
                     Return dt
                 Catch ex As Exception
-                    log.D(Log.ERR, $"SQLServerSelectFKSCLog Error: {sqlCommand}{vbCrLf}{ex.Message}")
+                    log.cLog($"SQLServerSelectFKSCLog Error: {sqlCommand}{vbCrLf}{ex.Message}")
                     retryCount += 1
                 End Try
             End Using
