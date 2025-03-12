@@ -262,9 +262,6 @@ Public Class SCA1
 
         ShowAssignee()                                  ' 物件情報の受任者マークの表示設定
         ShowSendNGLabel()
-
-        L_STS.Text = " ( " & DGV1.Rows.Count & " / " & db.OrgDataTablePlusAssist.Rows.Count & " ) 件 表示中  -  " &
-                     DGV1.SelectedRows.Count & " 人を選択中"
     End Sub
     ' DGV2選択時に記録情報を表示
     Private Sub DGV2_CellEnter(sender As Object, e As DataGridViewCellEventArgs) Handles DGV2.CellEnter
@@ -350,6 +347,7 @@ Public Class SCA1
     ' 検索でEnterキー
     Private Sub TB_A1_KeyPress(sender As Object, e As KeyPressEventArgs) Handles TB_SearchInput.KeyPress
         If e.KeyChar = ChrW(Keys.Enter) Then
+            Dim STtime = Date.Now
             log.cLog("検索開始")
             e.Handled = True
             ' Cursor.Current = Cursors.WaitCursor             ' マウスカーソルを砂時計に
@@ -357,6 +355,7 @@ Public Class SCA1
             ShowDGVList(DGV1, TB_SearchInput.Text)
             DGV1_ClickShow()
             cmn.EndPBar()
+            log.cLog($"検索完了 : {(Date.Now - STtime).ToString("ss\.fff")}")
         End If
     End Sub
 
@@ -474,21 +473,37 @@ Public Class SCA1
 
         Select Case True
             Case dgv Is DGV1                                ' ## 顧客情報タブ リスト
-                bindID = 0
-                dt = db.OrgDataTablePlusAssist.Copy         ' DataTableをオリジナルからコピー
                 MaxCosCount = db.OrgDataTablePlusAssist.Rows.Count
-                ' AddREMtoDGV1(dt)                            ' REMをDGVに追加
+                DGV1.AutoGenerateColumns = False
 
-                ' ダミー顧客を生成
-                Dim newRow As DataRow = dt.NewRow
-                With newRow
-                    .Item(0) = Common.DUMMY_NO & "_000"
-                    .Item(1) = Common.DUMMY_NO
-                    .Item(9) = "ダミー"
-                    .Item(10) = "ダミー"
-                    .Item(54) = "999999999"
-                End With
-                dt.Rows.Add(newRow)
+                Dim dv As New DataView(db.OrgDataTablePlusAssist)
+                Dim list() As String = {"FK02", "FK10", "FK11", "FK30", "FK31", "FK14", "FK19", "FK34", "FK39", "FK17", "FK38", "FK18", "FK49", "FK12", "FK32"}
+                Dim conditions As New List(Of String)
+
+                For Each col As String In list
+                    conditions.Add(col & " LIKE '%" & FilterWord & "%'")
+                Next
+
+                dv.RowFilter = String.Join(" OR ", conditions)
+
+                ' Bind設定
+                Dim BindList() As String = {"FK02", "FK10", "FK11", "FK51", "FK12", "FK55"}
+                For i As Integer = 0 To BindList.Length - 1
+                    Dim colName As String = BindList(i)
+                    If dv.Table.Columns.Contains(colName) Then
+                        dgv.Columns(i).DataPropertyName = colName
+                    End If
+                Next
+
+                dgv.SuspendLayout()
+                dgv.DataSource = dv
+                dgv.ResumeLayout()
+
+                DGV1.Sort(DGV1.Columns(5), ComponentModel.ListSortDirection.Descending)
+                L_STS.Text = $" ( {DGV1.Rows.Count} / {MaxCosCount} ) 件 表示中"
+                EnableObjects(dgv.Rows.Count <> 0)              ' もしDGV1のメンバーが0なら編集できなくする
+                Exit Sub
+
             Case dgv Is DGV2                                ' ## 顧客情報タブ 交渉記録
                 bindID = 1
                 ' DGV1の選択した顧客の交渉記録をフィルタ表示
@@ -518,8 +533,9 @@ Public Class SCA1
                 ' DGV生成
                 InitDGV9()
 
-                ' DGV情報表示
                 If DGV1.Rows.Count = 0 Then Exit Sub
+                If DGV1.CurrentRow.Cells(0).Value = Common.DUMMY_NO Then Exit Sub
+                ' DGV情報表示
                 Dim cid As String = DGV1.CurrentRow.Cells(0).Value
                 TB_FreeMemo.Text = ""
 
@@ -618,7 +634,7 @@ Public Class SCA1
                         End If
                         dgv(6, 2).Value = cmn.Int(cInfo.Item(59)).ToString("#,0")     ' 貸付金額
                         dgv(6, 3).Value = cmn.Int(cInfo.Item(62)).ToString("#,0")     ' 更新日残高
-                        dgv(6, 4).Value = cmn.Int(cInfo.Item(21)).ToString("#,0")     ' 貸付金額(B)
+                        dgv(6, 4).Value = cmn.Int(cInfo.Item(21)).ToString("#,0")     ' 貸付金額(B
                         dgv(6, 5).Value = cmn.Int(cInfo.Item(22)).ToString("#,0")     ' 更新日残高(B)
                         'dgv(6, 6).Value = ""                                         ' 残高更新日
                         dgv(6, 7).Value = cmn.Int(cInfo.Item(61)).ToString("#,0")     ' 返済額
@@ -658,10 +674,6 @@ Public Class SCA1
 
         ' DGV毎の後処理
         Select Case True
-            Case dgv Is DGV1
-                DGV1.Sort(DGV1.Columns(5), ComponentModel.ListSortDirection.Descending)
-                L_STS.Text = " ( " & DGV1.Rows.Count & " / " & MaxCosCount & " ) 件 表示中"
-                EnableObjects(dgv.Rows.Count <> 0)              ' もしDGV1のメンバーが0なら編集できなくする
             Case dgv Is DGV2
                 TB_Remarks.Text = ""         ' 備考欄初期化
                 'LockEventHandler_LCSum = False
@@ -1102,7 +1114,7 @@ Public Class SCA1
             dgv(6, 11).Style = New DataGridViewCellStyle() With {.ForeColor = Color.Red}
         Else
             ' 顧客情報のみクリア
-            Dim clearCooumns() As Integer = {1, 3, 5, 6}
+            Dim clearCooumns() As Integer = {1, 3, 5, 6, 8}
             For Each col In clearCooumns
                 For n = 0 To dgv.Rows.Count - 1
                     dgv(col, n).Value = ""
@@ -1706,7 +1718,6 @@ Public Class SCA1
         ShowAssignee()      ' 受任マークの表示
         ShowDGV_FPLIST(GetFPPage())
         ShowDGV_FPMNG()
-        HintSet($"物件情報を保存しました。 {DGV9(1, 2).Value}様 [{DGV_PIMENU.CurrentRow.Cells(0).Value}]")
         cmn.EndPBar()
     End Sub
 
@@ -2089,7 +2100,6 @@ Public Class SCA1
         If DGV1.Rows.Count = 0 Then Exit Sub
         If DGV1.CurrentRow.Cells(0).Value = Common.DUMMY_NO Then Exit Sub
         Dim eBt As Label = CType(sender, Label)
-        HintSet("必要事項を入力して、編集確定ボタンを押してください。")
 
         If DGV_PIMENU.CurrentRow.Index <> 4 Then
             DGV_PIMENU(0, 4).Selected = True
@@ -2115,10 +2125,6 @@ Public Class SCA1
             Case System.Drawing.Color.Black        ' 受任OFFにする
                 MsgBox(String.Format("受任を解除します。{0}必要事項(赤い項目)のいずれかに入力して確定してください。", vbCrLf))
         End Select
-    End Sub
-
-    Private Sub HintSet(str As String)
-        L_STS.Text = str
     End Sub
 
     Private Sub ShowDGV_FPMNG()

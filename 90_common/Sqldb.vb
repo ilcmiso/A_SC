@@ -462,6 +462,17 @@ Public Class Sqldb
         log.cLog("UpdateOrigDT:Assist")
 
         Dim dt As DataTable = OrgDataTable(TID.SC).Copy
+        ' ダミー顧客を生成
+        Dim newr As DataRow = dt.NewRow
+        With newr
+            .Item(0) = Common.DUMMY_NO & "_000"
+            .Item(1) = Common.DUMMY_NO
+            .Item(9) = "ダミー"
+            .Item(10) = "ダミー"
+            .Item(54) = "999999999"
+        End With
+        dt.Rows.Add(newr)
+
         Dim fk02dt As DataTable = dt.DefaultView.ToTable(False, {"FK02", "FK69"})   ' FKSCから顧客番号(FK02)とIndex値(FK69)のみ抽出
         For Each aRow As DataRow In OrgDataTable(Sqldb.TID.SCAS).Rows     'FKSC_ASSISTを全て参照
             ' 既にDataTableに同じ機構番号が存在するか確認
@@ -469,6 +480,12 @@ Public Class Sqldb
             If dupRows.Length > 0 Then
                 ' 既に存在する  必要項目だけ追加する
                 Dim idx As Integer = dupRows(0).Item(1)
+
+                ' DBNullだったら空欄におきかえる
+                For i As Integer = 0 To aRow.ItemArray.Length - 1
+                    If IsDBNull(aRow(i)) Then aRow(i) = ""
+                Next
+
                 With dt.Rows(idx)
                     .Item(2) = "3"              ' ローン識別子 1=FKのみ 2=アシストのみ 3=FK,アシスト
                     .Item(8) = aRow.Item(11)   ' アシスト 証券番号

@@ -132,6 +132,7 @@ Public Class XmlMng
         SetXml()
     End Sub
     Public Function GetSQLSvAddr() As String
+        If xmlData.SQLSvAddr Is Nothing Then Return ""
         Return xmlData.SQLSvAddr
     End Function
 
