@@ -477,14 +477,16 @@ Public Class Sqldb
         For Each aRow As DataRow In OrgDataTable(Sqldb.TID.SCAS).Rows     'FKSC_ASSISTを全て参照
             ' 既にDataTableに同じ機構番号が存在するか確認
             Dim dupRows As DataRow() = fk02dt.Select(String.Format("FK02 = '{0}'", aRow.Item(1)))
+
+            ' DBNullだったら空欄におきかえる
+            For i As Integer = 0 To aRow.ItemArray.Length - 1
+                If IsDBNull(aRow(i)) Then aRow(i) = ""
+            Next
+
             If dupRows.Length > 0 Then
                 ' 既に存在する  必要項目だけ追加する
                 Dim idx As Integer = dupRows(0).Item(1)
 
-                ' DBNullだったら空欄におきかえる
-                For i As Integer = 0 To aRow.ItemArray.Length - 1
-                    If IsDBNull(aRow(i)) Then aRow(i) = ""
-                Next
 
                 With dt.Rows(idx)
                     .Item(2) = "3"              ' ローン識別子 1=FKのみ 2=アシストのみ 3=FK,アシスト

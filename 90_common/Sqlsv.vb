@@ -1,4 +1,5 @@
 ﻿Imports System.Data.SqlClient
+Imports System.Windows
 
 Public Class Sqlsv
 
@@ -12,6 +13,8 @@ Public Class Sqlsv
 
     Public Sub New()
         Dim xml As New XmlMng
+        If Not xml.GetDBSwitch Then Exit Sub
+
         serverAddr = xml.GetSQLSvAddr()
         If serverAddr.Length <= 3 Then serverAddr = "localhost"
         connectionString = $"Server={serverAddr};Database={databaseID};User Id={UserID};Password={UserPW};Encrypt=True;TrustServerCertificate=True;"

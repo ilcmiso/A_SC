@@ -94,6 +94,7 @@ Public Class VBR_DGV2
         CellReport1.Cell("E6").Value = SCA1.DGV9(6, 6).Value         ' 残高更新日
         CellReport1.Cell("E7").Value = SCA1.DGV9(6, 9).Value         ' 延滞月数
         CellReport1.Cell("E8").Value = SCA1.DGV9(6, 10).Value        ' 延滞合計額
+        CellReport1.Cell("E9").Value = SCA1.DGV9(6, 11).Value        ' 完済日
 
         CellReport1.Cell("E10").Value = SCA1.DGV9(8, 1).Value       ' 居住サイン
         CellReport1.Cell("E11").Value = SCA1.DGV9(8, 2).Value       ' 物件郵便番号
@@ -104,6 +105,7 @@ Public Class VBR_DGV2
         CellReport1.Cell("E16").Value = SCA1.DGV9(8, 7).Value       ' 口座名義
 
         CellReport1.Cell("G1").Value = SCA1.TB_FreeMemo.Text          ' フリーメモ
+        CellReport1.Cell("G2").Value = SCA1.DGV9(8, 11).Value         ' メモ欄
 
         If SCA1.DGV2.Rows.Count > 0 Then    ' 交渉記録が1件でもある場合のみ
             Dim hassouType As String = ""

@@ -88,8 +88,10 @@ Public Class SCA1
         dgvMappings.Add(DGV5, AddressOf TransformForDGV5)
 
         ' ChangeTrackingUpdater を作成して監視開始
-        changeTracker = New ChangeTrackingUpdater(dgvMappings)
-        changeTracker.StartMonitoring()
+        If xml.GetDBSwitch Then
+            changeTracker = New ChangeTrackingUpdater(dgvMappings)
+            changeTracker.StartMonitoring()
+        End If
         CurrentCID = DGV1.CurrentRow.Cells(0).Value
         log.cLog($"CurrentCID:{CurrentCID}")
 
@@ -473,7 +475,6 @@ Public Class SCA1
             Case dgv Is DGV1                                ' ## 顧客情報タブ リスト
                 MaxCosCount = db.OrgDataTablePlusAssist.Rows.Count
                 DGV1.AutoGenerateColumns = False
-
                 Dim selectedIndex As Integer = CB_SEARCHOPT.SelectedIndex
                 Dim dtAssist As DataTable = db.OrgDataTablePlusAssist
                 Dim dv As New DataView(dtAssist)
@@ -512,43 +513,69 @@ Public Class SCA1
                     End If
 
                     ' --- フィルタ処理 ---
-                    ' SCR の computed 列を対象とするフィルタ条件を作成
-                    Dim filterList As String(,) = {
-                    {"FK10", "FK11", "FK30", "FK31", ""},        ' 氏名
-                    {"FK02", "", "", "", ""},                      ' 債権番号
-                    {"FK14", "FK19", "FK34", "FK39", "FK67"},      ' TEL
-                    {"FK17", "FK37", "", "", ""},                  ' 住所
-                    {"FK18", "FK38", "", "", ""},                  ' 勤務先
-                    {"(FK49 + FK50)", "FK53", "FK62", "", ""},     ' 返済額
-                    {"FK12", "FK32", "", "", ""},                  ' 生年月日
-                    {"SCR_FKR05", "SCR_FKR06", "", "", ""}
-                }
+                    ' 条件設定のためのフィルタ配列を定義
+                    Dim filterList As String()() = {
+                        New String() {"FK10", "FK11", "FK30", "FK31", "FK10", "FK11", "FK30", "FK31", "FK02", "FK14", "FK19", "FK34", "FK39", "FK67", "FK17", "FK37", "FK18", "FK38", "(FK49 + FK50)", "FK53", "FK62", "FK12", "FK32", "FK09"},   ' 全対象
+                        New String() {"FK10", "FK11", "FK30", "FK31", ""},            ' 氏名
+                        New String() {"FK02", "FK09", "", "", ""},                    ' 債権番号(証券番号)
+                        New String() {"FK14", "FK19", "FK34", "FK39", "FK67"},        ' TEL
+                        New String() {"FK17", "FK37", "", "", ""},                    ' 住所
+                        New String() {"FK18", "FK38", "", "", ""},                    ' 勤務先
+                        New String() {"(FK49 + FK50)", "FK53", "FK62", "", ""},       ' 返済額
+                        New String() {"FK12", "FK32", "", "", ""},                    ' 生年月日
+                        New String() {"SCR_FKR05", "SCR_FKR06", "", "", ""}           ' その他
+                    }
                     Dim conditions As New List(Of String)
-                    For i As Integer = 0 To filterList.GetLength(1) - 1
-                        Dim colName As String = filterList(selectedIndex, i)
+                    FilterWord = FilterWord.Replace(" ", "").Replace("　", "").Replace(",", "")   ' 検索ワードから半角全角のスペースとカンマを除去
+
+                    ' FilterWord の半角カタカナ変換（ひらがなで入力された場合も対応）
+                    Dim halfKat As String = StrConv(FilterWord, VbStrConv.Katakana Or VbStrConv.Narrow)
+
+                    ' 選択された行の配列要素分ループ
+                    For i As Integer = 0 To filterList(selectedIndex).Length - 1
+                        Dim colName As String = filterList(selectedIndex)(i)
                         If Not String.IsNullOrEmpty(colName) Then
-                            conditions.Add(colName & " LIKE '%" & FilterWord & "%'")
+                            Dim condition As String = ""
+                            If selectedIndex = 3 Then
+                                ' TEL検索の場合：Replace() は使用できないので、事前にハイフン除去版の列を作成
+                                Dim noHyphenCol As String = "NoHyphen_" & colName
+                                If Not dtAssist.Columns.Contains(noHyphenCol) Then
+                                    dtAssist.Columns.Add(noHyphenCol, GetType(String))
+                                    ' dtAssist の各行に対して更新
+                                    For Each row As DataRow In dtAssist.Rows
+                                        Dim originalVal As String = row(colName).ToString()
+                                        row(noHyphenCol) = originalVal.Replace("-", "")
+                                    Next
+                                End If
+                                condition = "(" & colName & " LIKE '%" & FilterWord & "%' OR " & noHyphenCol & " LIKE '%" & FilterWord & "%' OR " & colName & " LIKE '%" & halfKat & "%' OR " & noHyphenCol & " LIKE '%" & halfKat & "%')"
+                            Else
+                                condition = "(" & colName & " LIKE '%" & FilterWord & "%' OR " & colName & " LIKE '%" & halfKat & "%')"
+                            End If
+                            conditions.Add(condition)
+                            log.cLog($"FilterWord:{condition}")
                         End If
                     Next
+
                     dv.RowFilter = String.Join(" OR ", conditions)
                 End If
 
+                DGV1.AutoGenerateColumns = False
                 ' Bind設定
                 Dim BindList() As String = {"FK02", "FK10", "FK11", "FK51", "FK12", "FK55"}
                 For i As Integer = 0 To BindList.Length - 1
                     Dim colName As String = BindList(i)
                     If dv.Table.Columns.Contains(colName) Then
-                        dgv.Columns(i).DataPropertyName = colName
+                        DGV1.Columns(i).DataPropertyName = colName
                     End If
                 Next
 
-                dgv.SuspendLayout()
-                dgv.DataSource = dv
-                dgv.Sort(dgv.Columns(5), ComponentModel.ListSortDirection.Descending)
-                dgv.ResumeLayout()
+                DGV1.SuspendLayout()
+                DGV1.DataSource = dv
+                DGV1.Sort(DGV1.Columns(5), ComponentModel.ListSortDirection.Descending)
+                DGV1.ResumeLayout()
 
                 L_STS.Text = $" ( {DGV1.Rows.Count} / {MaxCosCount} ) 件 表示中"
-                EnableObjects(dgv.Rows.Count <> 0)              ' もしDGV1のメンバーが0なら編集できなくする
+                EnableObjects(DGV1.Rows.Count <> 0) ' もしDGV1のメンバーが0なら編集できなくする
                 Exit Sub
 
             Case dgv Is DGV2                                ' ## 顧客情報タブ 交渉記録
@@ -876,9 +903,9 @@ Public Class SCA1
     ' 物件住所をクリックして比較表示
     Private Sub DGV9_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles DGV9.CellClick
         ' メモ欄
-        If e.RowIndex = 3 AndAlso e.ColumnIndex = 11 Then
-            If DGV9.Rows(3).Cells(11).Value.ToString.Length > 0 Then
-                MsgBox(DGV9.Rows(3).Cells(11).Value)
+        If e.RowIndex = 11 AndAlso e.ColumnIndex = 8 Then
+            If DGV9.Rows(11).Cells(8).Value.ToString.Length > 0 Then
+                MsgBox(DGV9.Rows(11).Cells(8).Value)
             End If
         End If
 
@@ -1135,8 +1162,15 @@ Public Class SCA1
         TAB_A1.SelectedTab = Tab_1SC
 
         ' フィルタかけられて、DGVに非表示になっていたら予め解除しておく
-        Dim dt As DataTable = CType(DGV1.DataSource, DataTable)
-        If dt.Select("[FK02] = '" & cid & "'").Length = 0 Then
+        Dim dv As DataView = CType(DGV1.DataSource, DataView)
+        Dim found As Boolean = False
+        For Each drv As DataRowView In dv
+            If drv("FK02").ToString() = cid Then
+                found = True
+                Exit For
+            End If
+        Next
+        If Not found Then
             TB_SearchInput.Text = ""
             ShowDGVList(DGV1, "")
         End If
