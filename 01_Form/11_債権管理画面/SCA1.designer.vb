@@ -1580,13 +1580,13 @@ Partial Class SCA1
         '
         Me.CB_SEARCHOPT.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(192, Byte), Integer))
         Me.CB_SEARCHOPT.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.CB_SEARCHOPT.Font = New System.Drawing.Font("メイリオ", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.CB_SEARCHOPT.Font = New System.Drawing.Font("ＭＳ ゴシック", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.CB_SEARCHOPT.FormattingEnabled = True
         Me.CB_SEARCHOPT.ImeMode = System.Windows.Forms.ImeMode.Hiragana
-        Me.CB_SEARCHOPT.Items.AddRange(New Object() {"全対象(追加電話番号除く)", "氏名", "債務番号(証券番号)", "TEL", "住所", "勤務先", "返済額", "生年月日", "追加電話番号(名前と番号)"})
-        Me.CB_SEARCHOPT.Location = New System.Drawing.Point(297, 1)
+        Me.CB_SEARCHOPT.Items.AddRange(New Object() {"全対象", "氏名", "債務番号(証券番号)", "TEL", "住所", "勤務先", "返済額", "生年月日", "追加電話番号(名前と番号)"})
+        Me.CB_SEARCHOPT.Location = New System.Drawing.Point(297, 2)
         Me.CB_SEARCHOPT.Name = "CB_SEARCHOPT"
-        Me.CB_SEARCHOPT.Size = New System.Drawing.Size(139, 25)
+        Me.CB_SEARCHOPT.Size = New System.Drawing.Size(139, 21)
         Me.CB_SEARCHOPT.TabIndex = 1786
         '
         'Label16

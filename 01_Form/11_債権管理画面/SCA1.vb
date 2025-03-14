@@ -473,110 +473,10 @@ Public Class SCA1
 
         Select Case True
             Case dgv Is DGV1                                ' ## 顧客情報タブ リスト
+                bindID = 0
+                dt = db.OrgDataTablePlusAssist.Copy         ' DataTableをオリジナルからコピー
                 MaxCosCount = db.OrgDataTablePlusAssist.Rows.Count
-                DGV1.AutoGenerateColumns = False
-                Dim selectedIndex As Integer = CB_SEARCHOPT.SelectedIndex
-                Dim dtAssist As DataTable = db.OrgDataTablePlusAssist
-                Dim dv As New DataView(dtAssist)
-
-                ' 取得する SCR テーブル
-                Dim dtSCR As DataTable = db.OrgDataTable(Sqldb.TID.SCR)
-                Dim relationName As String = "AssistSCRRel"
-                Dim ds As DataSet
-
-                If selectedIndex >= 0 Then
-                    ' dtAssist が既に DataSet に所属しているか確認。なければ、一時的に DataSet を作成
-                    If dtAssist.DataSet Is Nothing Then
-                        ds = New DataSet()
-                        ds.Tables.Add(dtAssist)
-                        ds.Tables.Add(dtSCR)
-                    Else
-                        ds = dtAssist.DataSet
-                        If Not ds.Tables.Contains(dtSCR.TableName) Then
-                            ds.Tables.Add(dtSCR)
-                        End If
-                    End If
-
-                    ' DataRelation を作成（既に存在しなければ）
-                    If ds.Relations.IndexOf(relationName) = -1 Then
-                        ds.Relations.Add(relationName, dtAssist.Columns("FK02"), dtSCR.Columns("FKR01"), False)
-                    End If
-
-                    ' computed 列として SCR の値を取得する列を追加（未追加の場合）
-                    If Not dtAssist.Columns.Contains("SCR_FKR05") Then
-                        Dim colSCR05 As New DataColumn("SCR_FKR05", GetType(String), "Min(Child([" & relationName & "]).FKR05)")
-                        dtAssist.Columns.Add(colSCR05)
-                    End If
-                    If Not dtAssist.Columns.Contains("SCR_FKR06") Then
-                        Dim colSCR06 As New DataColumn("SCR_FKR06", GetType(String), "Min(Child([" & relationName & "]).FKR06)")
-                        dtAssist.Columns.Add(colSCR06)
-                    End If
-
-                    ' --- フィルタ処理 ---
-                    ' 条件設定のためのフィルタ配列を定義
-                    Dim filterList As String()() = {
-                        New String() {"FK10", "FK11", "FK30", "FK31", "FK10", "FK11", "FK30", "FK31", "FK02", "FK14", "FK19", "FK34", "FK39", "FK67", "FK17", "FK37", "FK18", "FK38", "(FK49 + FK50)", "FK53", "FK62", "FK12", "FK32", "FK09"},   ' 全対象
-                        New String() {"FK10", "FK11", "FK30", "FK31", ""},            ' 氏名
-                        New String() {"FK02", "FK09", "", "", ""},                    ' 債権番号(証券番号)
-                        New String() {"FK14", "FK19", "FK34", "FK39", "FK67"},        ' TEL
-                        New String() {"FK17", "FK37", "", "", ""},                    ' 住所
-                        New String() {"FK18", "FK38", "", "", ""},                    ' 勤務先
-                        New String() {"(FK49 + FK50)", "FK53", "FK62", "", ""},       ' 返済額
-                        New String() {"FK12", "FK32", "", "", ""},                    ' 生年月日
-                        New String() {"SCR_FKR05", "SCR_FKR06", "", "", ""}           ' その他
-                    }
-                    Dim conditions As New List(Of String)
-                    FilterWord = FilterWord.Replace(" ", "").Replace("　", "").Replace(",", "")   ' 検索ワードから半角全角のスペースとカンマを除去
-
-                    ' FilterWord の半角カタカナ変換（ひらがなで入力された場合も対応）
-                    Dim halfKat As String = StrConv(FilterWord, VbStrConv.Katakana Or VbStrConv.Narrow)
-
-                    ' 選択された行の配列要素分ループ
-                    For i As Integer = 0 To filterList(selectedIndex).Length - 1
-                        Dim colName As String = filterList(selectedIndex)(i)
-                        If Not String.IsNullOrEmpty(colName) Then
-                            Dim condition As String = ""
-                            If selectedIndex = 3 Then
-                                ' TEL検索の場合：Replace() は使用できないので、事前にハイフン除去版の列を作成
-                                Dim noHyphenCol As String = "NoHyphen_" & colName
-                                If Not dtAssist.Columns.Contains(noHyphenCol) Then
-                                    dtAssist.Columns.Add(noHyphenCol, GetType(String))
-                                    ' dtAssist の各行に対して更新
-                                    For Each row As DataRow In dtAssist.Rows
-                                        Dim originalVal As String = row(colName).ToString()
-                                        row(noHyphenCol) = originalVal.Replace("-", "")
-                                    Next
-                                End If
-                                condition = "(" & colName & " LIKE '%" & FilterWord & "%' OR " & noHyphenCol & " LIKE '%" & FilterWord & "%' OR " & colName & " LIKE '%" & halfKat & "%' OR " & noHyphenCol & " LIKE '%" & halfKat & "%')"
-                            Else
-                                condition = "(" & colName & " LIKE '%" & FilterWord & "%' OR " & colName & " LIKE '%" & halfKat & "%')"
-                            End If
-                            conditions.Add(condition)
-                            log.cLog($"FilterWord:{condition}")
-                        End If
-                    Next
-
-                    dv.RowFilter = String.Join(" OR ", conditions)
-                End If
-
-                DGV1.AutoGenerateColumns = False
-                ' Bind設定
-                Dim BindList() As String = {"FK02", "FK10", "FK11", "FK51", "FK12", "FK55"}
-                For i As Integer = 0 To BindList.Length - 1
-                    Dim colName As String = BindList(i)
-                    If dv.Table.Columns.Contains(colName) Then
-                        DGV1.Columns(i).DataPropertyName = colName
-                    End If
-                Next
-
-                DGV1.SuspendLayout()
-                DGV1.DataSource = dv
-                DGV1.Sort(DGV1.Columns(5), ComponentModel.ListSortDirection.Descending)
-                DGV1.ResumeLayout()
-
-                L_STS.Text = $" ( {DGV1.Rows.Count} / {MaxCosCount} ) 件 表示中"
-                EnableObjects(DGV1.Rows.Count <> 0) ' もしDGV1のメンバーが0なら編集できなくする
-                Exit Sub
+                ' AddREMtoDGV1(dt)                            ' REMをDGVに追加
 
             Case dgv Is DGV2                                ' ## 顧客情報タブ 交渉記録
                 bindID = 1
@@ -607,9 +507,9 @@ Public Class SCA1
                 ' DGV生成
                 InitDGV9()
 
+                ' DGV情報表示
                 If DGV1.Rows.Count = 0 Then Exit Sub
                 If DGV1.CurrentRow.Cells(0).Value = Common.DUMMY_NO Then Exit Sub
-                ' DGV情報表示
                 Dim cid As String = DGV1.CurrentRow.Cells(0).Value
                 TB_FreeMemo.Text = ""
 
@@ -708,7 +608,7 @@ Public Class SCA1
                         End If
                         dgv(6, 2).Value = cmn.Int(cInfo.Item(59)).ToString("#,0")     ' 貸付金額
                         dgv(6, 3).Value = cmn.Int(cInfo.Item(62)).ToString("#,0")     ' 更新日残高
-                        dgv(6, 4).Value = cmn.Int(cInfo.Item(21)).ToString("#,0")     ' 貸付金額(B
+                        dgv(6, 4).Value = cmn.Int(cInfo.Item(21)).ToString("#,0")     ' 貸付金額(B)
                         dgv(6, 5).Value = cmn.Int(cInfo.Item(22)).ToString("#,0")     ' 更新日残高(B)
                         'dgv(6, 6).Value = ""                                         ' 残高更新日
                         dgv(6, 7).Value = cmn.Int(cInfo.Item(61)).ToString("#,0")     ' 返済額
@@ -748,6 +648,10 @@ Public Class SCA1
 
         ' DGV毎の後処理
         Select Case True
+            Case dgv Is DGV1
+                DGV1.Sort(DGV1.Columns(5), ComponentModel.ListSortDirection.Descending)
+                L_STS.Text = " ( " & DGV1.Rows.Count & " / " & MaxCosCount & " ) 件 表示中"
+                EnableObjects(dgv.Rows.Count <> 0)              ' もしDGV1のメンバーが0なら編集できなくする
             Case dgv Is DGV2
                 TB_Remarks.Text = ""         ' 備考欄初期化
                 'LockEventHandler_LCSum = False
@@ -831,13 +735,35 @@ Public Class SCA1
             Next
             If addTelHit Then Continue For
 
-
             ' 検索したときの検索対象列 DGV毎
             Select Case True
-                Case dgv Is DGV2
-                    Exit Sub
-                'Case dgv Is DGV3
-                Case dgv Is DGV4
+                Case dgv Is DGV1
+                    With sb
+                        ' 検索オプションによって検索対象を追加する
+                        If CB_SEARCHOPT.SelectedIndex = 0 Then
+                            .Append(dt.Rows(r).Item(1).ToString).Append(",")                           ' 機構番号
+
+                            .Append(dt.Rows(r).Item(9).ToString).Append(",")                           ' 債務者 氏名
+                            .Append(dt.Rows(r).Item(10).ToString).Append(",")                          ' 債務者 ﾖﾐｶﾅ
+                            .Append(dt.Rows(r).Item(29).ToString).Append(",")                          ' 連帯債務者 氏名
+                            .Append(dt.Rows(r).Item(30).ToString).Append(",")                          ' 連帯債務者 ﾖﾐｶﾅ
+                            .Append(dt.Rows(r).Item(13).ToString).Append(",")                          ' 債務者 TEL1
+                            .Append(dt.Rows(r).Item(18).ToString).Append(",")                          ' 債務者勤務先 TEL1
+                            .Append(dt.Rows(r).Item(33).ToString).Append(",")                          ' 連帯債務者 TEL1
+                            .Append(dt.Rows(r).Item(38).ToString).Append(",")                          ' 連帯債務者勤務先 TEL1
+                            .Append(dt.Rows(r).Item(16).ToString.Replace("-", "ｰ")).Append(",")        ' 債務者 住所
+                            .Append(dt.Rows(r).Item(37).ToString.Replace("-", "ｰ")).Append(",")        ' 連帯債務者勤務先
+                            .Append(dt.Rows(r).Item(17).ToString.Replace("-", "ｰ")).Append(",")        ' 債務者勤務先 
+                            .Append(cmn.Int(dt.Rows(r).Item(48).ToString) + cmn.Int(dt.Rows(r).Item(49).ToString)).Append(",")        ' 返済額
+                            .Append(dt.Rows(r).Item(11).ToString).Append(",")                          ' 債務者 生年月日
+                            .Append(dt.Rows(r).Item(31).ToString).Append(",")                          ' 連帯債務者 生年月日
+                            .Append(dt.Rows(r).Item(8).ToString).Append(",")                           ' 証券番号
+                        End If
+                        .Replace(" ", "").Replace("　", "").Replace("-", "")
+                    End With
+                    word = sb.ToString
+                    sb.Clear()
+                Case dgv Is DGV2, dgv Is DGV4
                     Exit Sub
                 Case dgv Is DGV5
                     word = dt.Rows(r).Item(1).ToString & "," &                          ' 顧客番号
@@ -1162,15 +1088,8 @@ Public Class SCA1
         TAB_A1.SelectedTab = Tab_1SC
 
         ' フィルタかけられて、DGVに非表示になっていたら予め解除しておく
-        Dim dv As DataView = CType(DGV1.DataSource, DataView)
-        Dim found As Boolean = False
-        For Each drv As DataRowView In dv
-            If drv("FK02").ToString() = cid Then
-                found = True
-                Exit For
-            End If
-        Next
-        If Not found Then
+        Dim dt As DataTable = CType(DGV1.DataSource, DataTable)
+        If dt.Select("[FK02] = '" & cid & "'").Length = 0 Then
             TB_SearchInput.Text = ""
             ShowDGVList(DGV1, "")
         End If
