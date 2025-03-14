@@ -426,8 +426,6 @@ Public Class SCA1
             Case Keys.F3
                 CompareDatabasePerformance()
             Case Keys.F4
-                db.UpdateOrigDT(Sqldb.TID.MRM)
-                ShowDGVMR()
         End Select
     End Sub
 
@@ -716,72 +714,80 @@ Public Class SCA1
         log.TimerST()
 
         ' 検索ワードが追加電話番号でヒットした場合、その顧客番号は次の検索対象チェックで無条件ヒットにする
-        ' db.UpdateOrigDT(Sqldb.TID.SCR)
-        Dim dr As DataRow() = db.OrgDataTable(Sqldb.TID.SCR).Select("FKR04 like '%" & FilterWord & "%' Or FKR05 like '%" & FilterWord & "%' Or FKR06 like '%" & FilterWord & "%'")
-        log.cLog("検索ワード追加電話番号 cnt:" & dr.Length)
+        Dim dr As DataRow() = db.OrgDataTable(Sqldb.TID.SCR).Select("FKR05 like '%" & FilterWord & "%' Or FKR06 like '%" & FilterWord & "%'")
 
         ' 検索対象チェックがついた情報を1行の文字列sbに設定して、検索ワードがヒットするか確認する
         ' 検索ワードがヒットしなかった場合は、dtの該当行を削除することで除外
         ' ex) sb 「12345678, 山田太郎, ﾔﾏﾀﾞﾀﾛｳ, ...」
         FilterWord = FilterWord.Replace(" ", "").Replace("　", "").Replace(",", "")   ' 検索ワードから半角全角のスペースを除去
-        Dim word As String
-        Dim sb As New StringBuilder
+
+        ' 事前にフィルタワードを正規化（ひらがな→カタカナ変換も一度だけ）
+        Dim normalizedFilterWord As String = NormalizeText(FilterWord)
+        Dim normalizedFilterWordKana As String = NormalizeText(StrConv(FilterWord, VbStrConv.Katakana Or VbStrConv.Narrow))
+
+        '  DataTableからの逐次削除の改善（フィルタ済みの新しいDataTable作成）
+        Dim keepRows As New List(Of DataRow)()
+
+        ' dr 配列から顧客番号をHashSetに格納する
+        Dim addTelSet As New HashSet(Of String)()
+        For Each addRow As DataRow In dr
+            addTelSet.Add(addRow(0).ToString())
+        Next
+
         For r = dt.Rows.Count - 1 To 0 Step -1
+            ' 追加電話番号でヒットしてる場合はスキップ
+            If addTelSet.Contains(dt.Rows(r).Item(1).ToString()) Then Continue For
 
-            ' 追加電話番号でヒットした顧客番号を無条件ヒット(Continue)にする
-            Dim addTelHit = False
-            For addNum = 0 To dr.Length - 1
-                If dt.Rows(r).Item(1).ToString = dr(addNum)(0) Then addTelHit = True
-            Next
-            If addTelHit Then Continue For
-
-            ' 検索したときの検索対象列 DGV毎
+            Dim concatenatedString As String = ""
             Select Case True
                 Case dgv Is DGV1
-                    With sb
-                        ' 検索オプションによって検索対象を追加する
-                        If CB_SEARCHOPT.SelectedIndex = 0 Then
-                            .Append(dt.Rows(r).Item(1).ToString).Append(",")                           ' 機構番号
-
-                            .Append(dt.Rows(r).Item(9).ToString).Append(",")                           ' 債務者 氏名
-                            .Append(dt.Rows(r).Item(10).ToString).Append(",")                          ' 債務者 ﾖﾐｶﾅ
-                            .Append(dt.Rows(r).Item(29).ToString).Append(",")                          ' 連帯債務者 氏名
-                            .Append(dt.Rows(r).Item(30).ToString).Append(",")                          ' 連帯債務者 ﾖﾐｶﾅ
-                            .Append(dt.Rows(r).Item(13).ToString).Append(",")                          ' 債務者 TEL1
-                            .Append(dt.Rows(r).Item(18).ToString).Append(",")                          ' 債務者勤務先 TEL1
-                            .Append(dt.Rows(r).Item(33).ToString).Append(",")                          ' 連帯債務者 TEL1
-                            .Append(dt.Rows(r).Item(38).ToString).Append(",")                          ' 連帯債務者勤務先 TEL1
-                            .Append(dt.Rows(r).Item(16).ToString.Replace("-", "ｰ")).Append(",")        ' 債務者 住所
-                            .Append(dt.Rows(r).Item(37).ToString.Replace("-", "ｰ")).Append(",")        ' 連帯債務者勤務先
-                            .Append(dt.Rows(r).Item(17).ToString.Replace("-", "ｰ")).Append(",")        ' 債務者勤務先 
-                            .Append(cmn.Int(dt.Rows(r).Item(48).ToString) + cmn.Int(dt.Rows(r).Item(49).ToString)).Append(",")        ' 返済額
-                            .Append(dt.Rows(r).Item(11).ToString).Append(",")                          ' 債務者 生年月日
-                            .Append(dt.Rows(r).Item(31).ToString).Append(",")                          ' 連帯債務者 生年月日
-                            .Append(dt.Rows(r).Item(8).ToString).Append(",")                           ' 証券番号
-                        End If
-                        .Replace(" ", "").Replace("　", "").Replace("-", "")
-                    End With
-                    word = sb.ToString
-                    sb.Clear()
-                Case dgv Is DGV2, dgv Is DGV4
-                    Exit Sub
+                    concatenatedString = NormalizeText(
+                        dt.Rows(r).Item(1).ToString() & "," &
+                        dt.Rows(r).Item(9).ToString() & "," &
+                        dt.Rows(r).Item(10).ToString() & "," &
+                        dt.Rows(r).Item(29).ToString() & "," &
+                        dt.Rows(r).Item(30).ToString() & "," &
+                        dt.Rows(r).Item(13).ToString() & "," &
+                        dt.Rows(r).Item(18).ToString() & "," &
+                        dt.Rows(r).Item(33).ToString() & "," &
+                        dt.Rows(r).Item(38).ToString() & "," &
+                        dt.Rows(r).Item(16).ToString().Replace("-", "ｰ") & "," &
+                        dt.Rows(r).Item(37).ToString().Replace("-", "ｰ") & "," &
+                        dt.Rows(r).Item(17).ToString().Replace("-", "ｰ") & "," &
+                        (cmn.Int(dt.Rows(r).Item(48).ToString()) + cmn.Int(dt.Rows(r).Item(49).ToString())).ToString() & "," &
+                        dt.Rows(r).Item(11).ToString() & "," &
+                        dt.Rows(r).Item(31).ToString() & "," &
+                        dt.Rows(r).Item(8).ToString())
                 Case dgv Is DGV5
-                    word = dt.Rows(r).Item(1).ToString & "," &                          ' 顧客番号
-                           dt.Rows(r).Item(4).ToString & "," &                          ' 手法
-                           dt.Rows(r).Item(8).ToString & "," &                          ' 債務者氏名
-                           dt.Rows(r).Item(9).ToString & "," &                          ' 債務者カナ
-                           dt.Rows(r).Item(10).ToString                                 ' 概要
-                    word = word.Replace(" ", "").Replace("　", "").Replace("-", "")
+                    concatenatedString = NormalizeText(
+                        dt.Rows(r).Item(1).ToString() & "," &
+                        dt.Rows(r).Item(4).ToString() & "," &
+                        dt.Rows(r).Item(8).ToString() & "," &
+                        dt.Rows(r).Item(9).ToString() & "," &
+                        dt.Rows(r).Item(10).ToString())
                 Case Else
-                    Exit Sub
+                    Continue For
             End Select
-            If (word.IndexOf(FilterWord) < 0) And
-               (word.IndexOf(StrConv(FilterWord, VbStrConv.Katakana Or VbStrConv.Narrow)) < 0) Then
-                dt.Rows(r).Delete()        ' 含まれていなければ削除(非表示)
+
+            ' ヒットしてたらkeepRowsに追加
+            If concatenatedString.IndexOf(normalizedFilterWord) >= 0 Or concatenatedString.IndexOf(normalizedFilterWordKana) >= 0 Then
+                keepRows.Add(dt.Rows(r))
             End If
         Next
+        ' 新しいDataTableにフィルタ済みの行だけを取り込む
+        Dim newDt As DataTable = dt.Clone()
+        For Each row As DataRow In keepRows
+            newDt.ImportRow(row)
+        Next
+        dt = newDt
+
         log.TimerED("検索終了")
     End Sub
+
+    ' ヘルパー関数：入力文字列から半角・全角スペースとハイフンを除去
+    Private Function NormalizeText(ByVal input As String) As String
+        Return input.Replace(" ", "").Replace("　", "").Replace("-", "")
+    End Function
 
     ' 顧客情報詳細のテキストボックス位置調整
     Private Sub DataGridView1_Scroll(sender As Object, e As ScrollEventArgs) Handles DGV9.Scroll
