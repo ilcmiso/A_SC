@@ -65,6 +65,10 @@ Public Class SCA1
         db.DBFileDL(Sqldb.TID.SCD)
         db.UpdateOrigDT()
         db.UpdateOrigDT_ASsist()
+
+        ' DGV1の初期設定
+        InitDGV1()
+
         ShowDGVList(DGV1)
         ShowDGVList(DGV2)
         ShowDGVList(DGV9)
@@ -471,10 +475,12 @@ Public Class SCA1
 
         Select Case True
             Case dgv Is DGV1                                ' ## 顧客情報タブ リスト
-                bindID = 0
-                dt = db.OrgDataTablePlusAssist.Copy         ' DataTableをオリジナルからコピー
                 MaxCosCount = db.OrgDataTablePlusAssist.Rows.Count
-                ' AddREMtoDGV1(dt)                            ' REMをDGVに追加
+                FilterWordsDGV1(FilterWord)
+                dgv.Sort(dgv.Columns(5), ComponentModel.ListSortDirection.Descending)
+                L_STS.Text = " ( " & DGV1.Rows.Count & " / " & MaxCosCount & " ) 件 表示中"
+                EnableObjects(dgv.Rows.Count <> 0)              ' もしDGV1のメンバーが0なら編集できなくする
+                Exit Sub
 
             Case dgv Is DGV2                                ' ## 顧客情報タブ 交渉記録
                 bindID = 1
@@ -646,10 +652,6 @@ Public Class SCA1
 
         ' DGV毎の後処理
         Select Case True
-            Case dgv Is DGV1
-                DGV1.Sort(DGV1.Columns(5), ComponentModel.ListSortDirection.Descending)
-                L_STS.Text = " ( " & DGV1.Rows.Count & " / " & MaxCosCount & " ) 件 表示中"
-                EnableObjects(dgv.Rows.Count <> 0)              ' もしDGV1のメンバーが0なら編集できなくする
             Case dgv Is DGV2
                 TB_Remarks.Text = ""         ' 備考欄初期化
                 'LockEventHandler_LCSum = False
@@ -740,24 +742,6 @@ Public Class SCA1
 
             Dim concatenatedString As String = ""
             Select Case True
-                Case dgv Is DGV1
-                    concatenatedString = NormalizeText(
-                        dt.Rows(r).Item(1).ToString() & "," &
-                        dt.Rows(r).Item(9).ToString() & "," &
-                        dt.Rows(r).Item(10).ToString() & "," &
-                        dt.Rows(r).Item(29).ToString() & "," &
-                        dt.Rows(r).Item(30).ToString() & "," &
-                        dt.Rows(r).Item(13).ToString() & "," &
-                        dt.Rows(r).Item(18).ToString() & "," &
-                        dt.Rows(r).Item(33).ToString() & "," &
-                        dt.Rows(r).Item(38).ToString() & "," &
-                        dt.Rows(r).Item(16).ToString().Replace("-", "ｰ") & "," &
-                        dt.Rows(r).Item(37).ToString().Replace("-", "ｰ") & "," &
-                        dt.Rows(r).Item(17).ToString().Replace("-", "ｰ") & "," &
-                        (cmn.Int(dt.Rows(r).Item(48).ToString()) + cmn.Int(dt.Rows(r).Item(49).ToString())).ToString() & "," &
-                        dt.Rows(r).Item(11).ToString() & "," &
-                        dt.Rows(r).Item(31).ToString() & "," &
-                        dt.Rows(r).Item(8).ToString())
                 Case dgv Is DGV5
                     concatenatedString = NormalizeText(
                         dt.Rows(r).Item(1).ToString() & "," &
@@ -782,6 +766,113 @@ Public Class SCA1
         dt = newDt
 
         log.TimerED("検索終了")
+    End Sub
+
+    ' DGV1初期設定
+    Private Sub InitDGV1()
+        Buildg_SearchCache(db.OrgDataTablePlusAssist)
+        DGV1.AutoGenerateColumns = False
+        Dim dgv1propList As String() = {"FK02", "FK10", "FK11", "FK51", "FK12", "FK55"}
+        For p = 0 To dgv1propList.Length - 1
+            DGV1.Columns(p).DataPropertyName = dgv1propList(p)
+        Next
+    End Sub
+
+    ' FilterWordsDGV: キャッシュテーブルからフィルタしてDGV1に表示する処理
+    Private Sub FilterWordsDGV1(ByVal FilterWord As String)
+        If db.g_SearchCache Is Nothing Then Exit Sub
+        Dim dv As New DataView(db.g_SearchCache)
+
+        ' DataView を用いて検索キャッシュテーブルからフィルタする
+        If FilterWord <> "" Then
+            ' FilterWord の正規化（スペース、カンマ除去）
+            FilterWord = FilterWord.Replace(" ", "").Replace("　", "").Replace(",", "")
+            Dim normalizedFilterWord As String = NormalizeText(FilterWord)
+            Dim normalizedFilterWordKana As String = NormalizeText(StrConv(FilterWord, VbStrConv.Katakana Or VbStrConv.Narrow))
+
+            ' g_SearchCache列は既に NormalizeText() で正規化済みなので、LIKE 演算子でフィルタ
+            dv.RowFilter = $"g_SearchCache LIKE '%{normalizedFilterWord}%' OR g_SearchCache LIKE '%{normalizedFilterWordKana}%'"
+        End If
+        ' フィルタ結果をDataTableに変換
+        Dim filteredCacheDt As DataTable = dv.ToTable()
+
+        ' ここでJoinOrgAndCache()を呼び出し、結合結果を取得する（例: Orgテーブルとキャッシュテーブルを結合）
+        Dim joinedDt As DataTable = JoinOrgAndCache(db.OrgDataTablePlusAssist, filteredCacheDt)
+
+        ' joinedDtをDGV1にバインドする
+        DGV1.DataSource = joinedDt
+    End Sub
+
+
+    ' DGV1用DataTableの結合
+    Private Function JoinOrgAndCache(ByVal orgDt As DataTable, ByVal cacheDt As DataTable) As DataTable
+        ' 結合キーは、orgDtの "FK02" とcacheDtの "CustNo" とする
+        Dim query = From orgRow In orgDt.AsEnumerable()
+                    Join cacheRow In cacheDt.AsEnumerable()
+                  On orgRow.Field(Of String)("FK02") Equals cacheRow.Field(Of String)("CustNo")
+                    Select orgRow
+
+        ' 結合結果を新しいDataTableにインポートする
+        Dim joinedDt As DataTable = orgDt.Clone()
+        For Each row In query
+            joinedDt.ImportRow(row)
+        Next
+        Return joinedDt
+    End Function
+
+    ' キャッシュテーブルを作成して更新する処理
+    Public Sub Buildg_SearchCache(ByVal dt As DataTable)
+        ' db.g_SearchCacheが未初期化なら新規作成、既にあればクリア
+        If db.g_SearchCache Is Nothing Then
+            db.g_SearchCache = New DataTable()
+            db.g_SearchCache.Columns.Add("CustNo", GetType(String))
+            db.g_SearchCache.Columns.Add("g_SearchCache", GetType(String))
+        Else
+            db.g_SearchCache.Clear()
+        End If
+
+        ' SCRテーブルから顧客番号をキーとしたDictionaryを作成
+        Dim scrTable As DataTable = db.OrgDataTable(Sqldb.TID.SCR)
+        Dim scrDict As New Dictionary(Of String, DataRow)()
+        For Each scrRow As DataRow In scrTable.Rows
+            Dim custKey As String = scrRow(0).ToString()
+            If Not scrDict.ContainsKey(custKey) Then
+                scrDict.Add(custKey, scrRow)
+            End If
+        Next
+
+        ' dtの各行について、キャッシュ文字列を作成し、db.g_SearchCache に追加
+        For Each row As DataRow In dt.Rows
+            Dim custNo As String = row(1).ToString()
+            Dim cacheString As String = ""
+            cacheString = NormalizeText(
+            custNo & "," &
+            row(9).ToString() & "," &
+            row(10).ToString() & "," &
+            row(29).ToString() & "," &
+            row(30).ToString() & "," &
+            row(13).ToString() & "," &
+            row(18).ToString() & "," &
+            row(33).ToString() & "," &
+            row(38).ToString() & "," &
+            row(16).ToString().Replace("-", "ｰ") & "," &
+            row(37).ToString().Replace("-", "ｰ") & "," &
+            row(17).ToString().Replace("-", "ｰ") & "," &
+            (cmn.Int(row(48).ToString()) + cmn.Int(row(49).ToString())).ToString() & "," &
+            row(11).ToString() & "," &
+            row(31).ToString() & "," &
+            row(8).ToString())
+            ' SCRテーブルのFKR05, FKR06を追加
+            If scrDict.ContainsKey(custNo) Then
+                cacheString = cacheString & "," & scrDict(custNo)("FKR05").ToString() & "," & scrDict(custNo)("FKR06").ToString()
+            End If
+
+            ' db.g_SearchCacheに行を追加
+            Dim newRow As DataRow = db.g_SearchCache.NewRow()
+            newRow("CustNo") = custNo
+            newRow("g_SearchCache") = cacheString
+            db.g_SearchCache.Rows.Add(newRow)
+        Next
     End Sub
 
     ' ヘルパー関数：入力文字列から半角・全角スペースとハイフンを除去

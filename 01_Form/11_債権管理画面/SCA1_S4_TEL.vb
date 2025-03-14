@@ -23,6 +23,7 @@
             ' 編集されていたらDB更新する
             BeforeVal = val
             SaveDB(val)
+            'SCA1.Buildg_SearchCache(db.OrgDataTablePlusAssist)
 
             SCA1.db.UpdateOrigDT(Sqldb.TID.SCR)
             'Dim dt As DataTable = CType(SCA1.DGV1.DataSource, DataTable)
