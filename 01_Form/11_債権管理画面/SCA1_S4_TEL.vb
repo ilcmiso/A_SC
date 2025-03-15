@@ -23,12 +23,8 @@
             ' 編集されていたらDB更新する
             BeforeVal = val
             SaveDB(val)
-            'SCA1.Buildg_SearchCache(db.OrgDataTablePlusAssist)
-
             SCA1.db.UpdateOrigDT(Sqldb.TID.SCR)
-            'Dim dt As DataTable = CType(SCA1.DGV1.DataSource, DataTable)
-            'SCA1.AddREMtoDGV1(dt)
-            'SCA1.DGV1.DataSource = dt
+            SCA1.Buildg_SearchCache()
         End If
         Me.Visible = False
     End Sub
@@ -44,7 +40,7 @@
     ' DB Save
     Private Sub SaveDB(val As String)
         log.cLog("SaveDB")
-        Dim id As String = SCA1.DGV1.CurrentRow.Cells(0).Value      ' 債権番号
+        Dim id As String = SCA1.CurrentCID      ' 債権番号
 
         ' 追加電話番号の更新
         If db.IsExistREM(id) Then

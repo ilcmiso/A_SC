@@ -332,6 +332,9 @@ Public Class Sqldb
         Return ReadOrgDtSelect(TableID, "Select * From " & DBTbl(TableID, DBID.TABLE))
     End Function
     Public Function ReadOrgDtSelect(TableID As Integer, WhereCmd As String) As DataTable
+        If IsSQLServerDB(TableID) Then
+            Return GetSelect(TableID, WhereCmd)
+        End If
 
         'mtx.Lock(Mutex.MTX_LOCK_R, TableID)
         DBFileDL(TableID)                               ' ローカルを最新にする

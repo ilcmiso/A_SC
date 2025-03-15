@@ -41,7 +41,7 @@ Public Class SCA1
     ' ChangeTrackingUpdater のインスタンス（フィールドとして保持）
     Private changeTracker As ChangeTrackingUpdater
     ' 選択中顧客番号
-    Public CurrentCID As String
+    Public Shared CurrentCID As String
 
 
 #End Region
@@ -770,7 +770,7 @@ Public Class SCA1
 
     ' DGV1初期設定
     Private Sub InitDGV1()
-        Buildg_SearchCache(db.OrgDataTablePlusAssist)
+        Buildg_SearchCache()
         DGV1.AutoGenerateColumns = False
         Dim dgv1propList As String() = {"FK02", "FK10", "FK11", "FK51", "FK12", "FK55"}
         For p = 0 To dgv1propList.Length - 1
@@ -821,7 +821,7 @@ Public Class SCA1
     End Function
 
     ' キャッシュテーブルを作成して更新する処理
-    Public Sub Buildg_SearchCache(ByVal dt As DataTable)
+    Public Sub Buildg_SearchCache()
         ' db.g_SearchCacheが未初期化なら新規作成、既にあればクリア
         If db.g_SearchCache Is Nothing Then
             db.g_SearchCache = New DataTable()
@@ -842,37 +842,39 @@ Public Class SCA1
         Next
 
         ' dtの各行について、キャッシュ文字列を作成し、db.g_SearchCache に追加
-        For Each row As DataRow In dt.Rows
+        db.g_SearchCache.BeginLoadData()
+        For Each row As DataRow In db.OrgDataTablePlusAssist.Rows
             Dim custNo As String = row(1).ToString()
-            Dim cacheString As String = ""
-            cacheString = NormalizeText(
-            custNo & "," &
-            row(9).ToString() & "," &
-            row(10).ToString() & "," &
-            row(29).ToString() & "," &
-            row(30).ToString() & "," &
-            row(13).ToString() & "," &
-            row(18).ToString() & "," &
-            row(33).ToString() & "," &
-            row(38).ToString() & "," &
-            row(16).ToString().Replace("-", "ｰ") & "," &
-            row(37).ToString().Replace("-", "ｰ") & "," &
-            row(17).ToString().Replace("-", "ｰ") & "," &
-            (cmn.Int(row(48).ToString()) + cmn.Int(row(49).ToString())).ToString() & "," &
-            row(11).ToString() & "," &
-            row(31).ToString() & "," &
-            row(8).ToString())
+            Dim sb As New System.Text.StringBuilder(256)
+            sb.Append(custNo).Append(",")
+            sb.Append(row(9).ToString()).Append(",")                       ' 主 氏名
+            sb.Append(row(10).ToString()).Append(",")                      ' 主 ﾖﾐｶﾅ
+            sb.Append(row(29).ToString()).Append(",")                      ' 連 氏名
+            sb.Append(row(30).ToString()).Append(",")                      ' 連 ﾖﾐｶﾅ
+            sb.Append(row(13).ToString()).Append(",")                      ' 主 TEL1
+            sb.Append(row(18).ToString()).Append(",")                      ' 主 勤務先TEL1
+            sb.Append(row(33).ToString()).Append(",")                      ' 連 TEL1
+            sb.Append(row(38).ToString()).Append(",")                      ' 連 勤務先TEL1
+            sb.Append(row(16).ToString().Replace("-", "ｰ")).Append(",")    ' 主 住所
+            sb.Append(row(37).ToString().Replace("-", "ｰ")).Append(",")    ' 連 勤務先
+            sb.Append(row(17).ToString().Replace("-", "ｰ")).Append(",")    ' 主 勤務先
+            sb.Append((cmn.Int(row(48).ToString()) + cmn.Int(row(49).ToString())).ToString()).Append(",")  ' 返済額 + 返済額2
+            sb.Append(row(11).ToString()).Append(",")                      ' 主 生年月日
+            sb.Append(row(31).ToString()).Append(",")                      ' 連 生年月日
+            sb.Append(row(8).ToString())                                   ' 証券番号
+
             ' SCRテーブルのFKR05, FKR06を追加
             If scrDict.ContainsKey(custNo) Then
-                cacheString = cacheString & "," & scrDict(custNo)("FKR05").ToString() & "," & scrDict(custNo)("FKR06").ToString()
+                sb.Append(",").Append(scrDict(custNo)("FKR05").ToString()).Append(",").Append(scrDict(custNo)("FKR06").ToString())
             End If
 
-            ' db.g_SearchCacheに行を追加
+            Dim cacheString As String = NormalizeText(sb.ToString())
             Dim newRow As DataRow = db.g_SearchCache.NewRow()
             newRow("CustNo") = custNo
             newRow("g_SearchCache") = cacheString
             db.g_SearchCache.Rows.Add(newRow)
         Next
+        db.g_SearchCache.EndLoadData()
     End Sub
 
     ' ヘルパー関数：入力文字列から半角・全角スペースとハイフンを除去
