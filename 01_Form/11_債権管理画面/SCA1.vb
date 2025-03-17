@@ -712,7 +712,7 @@ Public Class SCA1
         log.TimerST()
 
         ' 検索ワードが追加電話番号でヒットした場合、その顧客番号は次の検索対象チェックで無条件ヒットにする
-        Dim dr As DataRow() = db.OrgDataTable(Sqldb.TID.SCR).Select("FKR05 like '%" & FilterWord & "%' Or FKR06 like '%" & FilterWord & "%'")
+        Dim dr As DataRow() = db.OrgDataTable(Sqldb.TID.SCR).Select($"FKR05 like '%{FilterWord}%' Or FKR06 like '%{FilterWord}%'")
 
         ' 検索対象チェックがついた情報を1行の文字列sbに設定して、検索ワードがヒットするか確認する
         ' 検索ワードがヒットしなかった場合は、dtの該当行を削除することで除外
@@ -777,28 +777,22 @@ Public Class SCA1
     ' キャッシュテーブルからフィルタしてDGV1に表示する処理
     Private Sub FilterWordsDGV1(ByVal FilterWord As String)
         If db.gDGV1SearchCache Is Nothing Then Exit Sub
-        Dim dv As New DataView(db.gDGV1SearchCache)
-
-        ' DataView を用いて検索キャッシュテーブルからフィルタする
         If FilterWord <> "" Then
-            ' FilterWord の正規化（スペース、カンマ除去）
-            FilterWord = FilterWord.Replace(" ", "").Replace("　", "").Replace(",", "")
-            Dim normalizedFilterWord As String = NormalizeText(FilterWord)
-            Dim normalizedFilterWordKana As String = NormalizeText(StrConv(FilterWord, VbStrConv.Katakana Or VbStrConv.Narrow))
+            ' DataView を用いて検索キャッシュテーブルからフィルタする
+            Dim dv As New DataView(db.gDGV1SearchCache)
+            FilterWord = FilterWord.Replace(" ", "").Replace("　", "").Replace(",", "")     ' FilterWord の正規化（スペース、カンマ除去）
+            FilterWord = cmn.ConvertSmallKana(FilterWord)                                   ' あいまい検索用に小文字かなを大文字かなに変換。 ex)りょうた→りようた
 
-            ' g_SearchCache列は既に NormalizeText() で正規化済みなので、LIKE 演算子でフィルタ
-            dv.RowFilter = $"g_SearchCache LIKE '%{normalizedFilterWord}%' OR g_SearchCache LIKE '%{normalizedFilterWordKana}%'"
+            ' フィルタ設定 フィルタ文字と半角カナフィルタ文字を同時検索
+            dv.RowFilter = $"g_SearchCache LIKE '%{NormalizeText(FilterWord)}%' OR g_SearchCache LIKE '%{NormalizeText(StrConv(FilterWord, VbStrConv.Katakana Or VbStrConv.Narrow))}%'"
+            ' gDGV1SearchCacheのフィルタ結果から、FKデータを取得すためにOrgDataTablePlusAssistとマージしてDGV1に設定
+            Dim margeDt As DataTable = JoinOrgAndCache(db.OrgDataTablePlusAssist, dv.ToTable())
+            DGV1.DataSource = margeDt
+        Else
+            ' 検索ワードがなければフィルタせず全表示
+            DGV1.DataSource = db.OrgDataTablePlusAssist
         End If
-        ' フィルタ結果をDataTableに変換
-        Dim filteredCacheDt As DataTable = dv.ToTable()
-
-        ' ここでJoinOrgAndCache()を呼び出し、結合結果を取得する（例: Orgテーブルとキャッシュテーブルを結合）
-        Dim joinedDt As DataTable = JoinOrgAndCache(db.OrgDataTablePlusAssist, filteredCacheDt)
-
-        ' joinedDtをDGV1にバインドする
-        DGV1.DataSource = joinedDt
     End Sub
-
 
     ' DGV1用DataTableの結合
     Private Function JoinOrgAndCache(ByVal orgDt As DataTable, ByVal cacheDt As DataTable) As DataTable

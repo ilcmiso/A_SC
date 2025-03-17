@@ -36,6 +36,9 @@ Public Class Common
     Public Const PARTITION As String = "`"
     Private ReadOnly culture As CultureInfo
     Public ReadOnly CurrentPath As String
+    ' 変換用マッピングを静的に初期化。複数ループでも再利用できるので高速
+    Private ReadOnly smallToLarge As Dictionary(Of Char, Char) = InitializeMapping()
+
 
     ' 部署一覧
     Public Enum DIV As Integer
@@ -451,6 +454,53 @@ Public Class Common
     ' 変数の先頭と末尾にある半角スペースと全角スペースを取り除く
     Public Function TrimSpaces(ByVal input As String) As String
         Return input.Trim(" "c, "　"c)
+    End Function
+
+    ' マッピング初期化用関数
+    Private Function InitializeMapping() As Dictionary(Of Char, Char)
+        Dim map As New Dictionary(Of Char, Char)()
+        ' ひらがな小文字 -> 大文字
+        map("ぁ"c) = "あ"c
+        map("ぃ"c) = "い"c
+        map("ぅ"c) = "う"c
+        map("ぇ"c) = "え"c
+        map("ぉ"c) = "お"c
+        map("っ"c) = "つ"c
+        map("ゃ"c) = "や"c
+        map("ゅ"c) = "ゆ"c
+        map("ょ"c) = "よ"c
+        map("ゎ"c) = "わ"c
+        map("ゕ"c) = "か"c
+        map("ゖ"c) = "け"c
+
+        ' 全角カタカナ小文字 -> 大文字
+        map("ァ"c) = "ア"c
+        map("ィ"c) = "イ"c
+        map("ゥ"c) = "ウ"c
+        map("ェ"c) = "エ"c
+        map("ォ"c) = "オ"c
+        map("ッ"c) = "ツ"c
+        map("ャ"c) = "ヤ"c
+        map("ュ"c) = "ユ"c
+        map("ョ"c) = "ヨ"c
+        map("ヮ"c) = "ワ"c
+        map("ヵ"c) = "カ"c
+        map("ヶ"c) = "ケ"c
+
+        Return map
+    End Function
+
+    ' 小さいかなを大文字に変換する関数
+    Public Function ConvertSmallKana(ByVal input As String) As String
+        Dim sb As New System.Text.StringBuilder(input.Length)
+        For Each ch As Char In input
+            If smallToLarge.ContainsKey(ch) Then
+                sb.Append(smallToLarge(ch))
+            Else
+                sb.Append(ch)
+            End If
+        Next
+        Return sb.ToString()
     End Function
 
     ' プログレスバー表示
