@@ -86,21 +86,19 @@ Public Class SCA1
         'FWatchingStart()
 
         ' SQL Server 変更監視を開始
-        ' DataGridView と変換関数のマッピングを作成
-        Dim dgvMappings As New Dictionary(Of DataGridView, Func(Of DataTable, DataTable))()
-        dgvMappings.Add(DGV2, AddressOf TransformForDGV2)
-        dgvMappings.Add(DGV5, AddressOf TransformForDGV5)
-
-        ' ChangeTrackingUpdater を作成して監視開始
         If xml.GetDBSwitch Then
+            ' DataGridView と変換関数のマッピングを作成
+            ' ChangeTrackingUpdater を作成して監視開始
+            Dim dgvMappings As New Dictionary(Of DataGridView, Func(Of DataTable, DataTable))()
+            dgvMappings.Add(DGV2, AddressOf TransformForDGV2)
+            dgvMappings.Add(DGV5, AddressOf TransformForDGV5)
+
             changeTracker = New ChangeTrackingUpdater(dgvMappings)
             changeTracker.StartMonitoring()
         End If
         CurrentCID = DGV1.CurrentRow.Cells(0).Value
         log.cLog($"CurrentCID:{CurrentCID}")
 
-        ' 解像度が小さいPCは、左端に寄せる (横幅1600px未満なら左寄せ)
-        If Screen.PrimaryScreen.Bounds.Width < 1600 Then Me.Left = 0
         cmn.EndPBar()
         log.cLog("--- Load完了: " & (Date.Now - loadTime).ToString("ss\.fff"))
     End Sub
@@ -111,7 +109,6 @@ Public Class SCA1
 
         ' イベントハンドラ設定
         AddHandler DGV1.CellEnter, AddressOf DGV1_CellEnter
-        CB_SEARCHOPT.SelectedIndex = 0
         SC.Visible = False
     End Sub
 
@@ -415,7 +412,7 @@ Public Class SCA1
     End Sub
 
     ' 検索条件の変更
-    Private Sub CB_SEARCHOPT_SelectedIndexChanged(sender As Object, e As EventArgs) Handles CB_SEARCHOPT.SelectedIndexChanged
+    Private Sub CB_SEARCHOPT_SelectedIndexChanged(sender As Object, e As EventArgs)
         If TB_SearchInput.Text.Length > 0 Then
             SearchKeyEnterEvent()
         End If
@@ -428,7 +425,6 @@ Public Class SCA1
                 cmn.OpenCurrentDir()
             Case Keys.F2
             Case Keys.F3
-                CompareDatabasePerformance()
             Case Keys.F4
         End Select
     End Sub
@@ -770,7 +766,7 @@ Public Class SCA1
 
     ' DGV1初期設定
     Private Sub InitDGV1()
-        Buildg_SearchCache()
+        BuildDGV1SearchCache()
         DGV1.AutoGenerateColumns = False
         Dim dgv1propList As String() = {"FK02", "FK10", "FK11", "FK51", "FK12", "FK55"}
         For p = 0 To dgv1propList.Length - 1
@@ -778,10 +774,10 @@ Public Class SCA1
         Next
     End Sub
 
-    ' FilterWordsDGV: キャッシュテーブルからフィルタしてDGV1に表示する処理
+    ' キャッシュテーブルからフィルタしてDGV1に表示する処理
     Private Sub FilterWordsDGV1(ByVal FilterWord As String)
-        If db.g_SearchCache Is Nothing Then Exit Sub
-        Dim dv As New DataView(db.g_SearchCache)
+        If db.gDGV1SearchCache Is Nothing Then Exit Sub
+        Dim dv As New DataView(db.gDGV1SearchCache)
 
         ' DataView を用いて検索キャッシュテーブルからフィルタする
         If FilterWord <> "" Then
@@ -821,14 +817,16 @@ Public Class SCA1
     End Function
 
     ' キャッシュテーブルを作成して更新する処理
-    Public Sub Buildg_SearchCache()
+    ' OrgDataTablePlusAssistの主要な要素、更にKFSCREM SCR05,SCR06を連結した文字列のテーブル
+    ' 文字列からはハイフンとスペースを取り除いて、あいまい検索に対応させている
+    Public Sub BuildDGV1SearchCache()
         ' db.g_SearchCacheが未初期化なら新規作成、既にあればクリア
-        If db.g_SearchCache Is Nothing Then
-            db.g_SearchCache = New DataTable()
-            db.g_SearchCache.Columns.Add("CustNo", GetType(String))
-            db.g_SearchCache.Columns.Add("g_SearchCache", GetType(String))
+        If db.gDGV1SearchCache Is Nothing Then
+            db.gDGV1SearchCache = New DataTable()
+            db.gDGV1SearchCache.Columns.Add("CustNo", GetType(String))
+            db.gDGV1SearchCache.Columns.Add("g_SearchCache", GetType(String))
         Else
-            db.g_SearchCache.Clear()
+            db.gDGV1SearchCache.Clear()
         End If
 
         ' SCRテーブルから顧客番号をキーとしたDictionaryを作成
@@ -842,7 +840,7 @@ Public Class SCA1
         Next
 
         ' dtの各行について、キャッシュ文字列を作成し、db.g_SearchCache に追加
-        db.g_SearchCache.BeginLoadData()
+        db.gDGV1SearchCache.BeginLoadData()
         For Each row As DataRow In db.OrgDataTablePlusAssist.Rows
             Dim custNo As String = row(1).ToString()
             Dim sb As New System.Text.StringBuilder(256)
@@ -869,12 +867,12 @@ Public Class SCA1
             End If
 
             Dim cacheString As String = NormalizeText(sb.ToString())
-            Dim newRow As DataRow = db.g_SearchCache.NewRow()
+            Dim newRow As DataRow = db.gDGV1SearchCache.NewRow()
             newRow("CustNo") = custNo
             newRow("g_SearchCache") = cacheString
-            db.g_SearchCache.Rows.Add(newRow)
+            db.gDGV1SearchCache.Rows.Add(newRow)
         Next
-        db.g_SearchCache.EndLoadData()
+        db.gDGV1SearchCache.EndLoadData()
     End Sub
 
     ' ヘルパー関数：入力文字列から半角・全角スペースとハイフンを除去
@@ -1088,8 +1086,8 @@ Public Class SCA1
 #End Region
 
 #Region "追加電話番号"
-    Const FORM_LEFT As Integer = 870
-    Const FORM_TOP As Integer = 55
+    Const FORM_LEFT As Integer = 1120
+    Const FORM_TOP As Integer = 40
 
     ' フォーム初期化共通処理
     Private Sub InitForm(form As Form)

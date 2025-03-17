@@ -72,7 +72,7 @@ Partial Class SCA1_S4_TEL
         '
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None
         Me.BackColor = System.Drawing.Color.White
-        Me.ClientSize = New System.Drawing.Size(275, 47)
+        Me.ClientSize = New System.Drawing.Size(253, 47)
         Me.Controls.Add(Me.DGV1)
         Me.Controls.Add(Me.PBXX)
         Me.ForeColor = System.Drawing.Color.Black

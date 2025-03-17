@@ -162,7 +162,6 @@ Partial Class SCA1
         Me.DataGridViewTextBoxColumn8 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.DataGridViewTextBoxColumn9 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Tab_1SC = New System.Windows.Forms.TabPage()
-        Me.CB_SEARCHOPT = New System.Windows.Forms.ComboBox()
         Me.Label16 = New System.Windows.Forms.Label()
         Me.L_SENDNG2 = New System.Windows.Forms.Label()
         Me.L_SENDNG1 = New System.Windows.Forms.Label()
@@ -232,7 +231,6 @@ Partial Class SCA1
         Me.Column5 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.TB_SearchInput = New System.Windows.Forms.TextBox()
         Me.Button1 = New System.Windows.Forms.Button()
-        Me.Label14 = New System.Windows.Forms.Label()
         Me.TAB_A1 = New System.Windows.Forms.TabControl()
         Me.Tab_6GA = New System.Windows.Forms.TabPage()
         Me.L_STS_MR = New System.Windows.Forms.Label()
@@ -1536,7 +1534,6 @@ Partial Class SCA1
         '
         'Tab_1SC
         '
-        Me.Tab_1SC.Controls.Add(Me.CB_SEARCHOPT)
         Me.Tab_1SC.Controls.Add(Me.Label16)
         Me.Tab_1SC.Controls.Add(Me.L_SENDNG2)
         Me.Tab_1SC.Controls.Add(Me.L_SENDNG1)
@@ -1567,7 +1564,6 @@ Partial Class SCA1
         Me.Tab_1SC.Controls.Add(Me.DGV1)
         Me.Tab_1SC.Controls.Add(Me.TB_SearchInput)
         Me.Tab_1SC.Controls.Add(Me.Button1)
-        Me.Tab_1SC.Controls.Add(Me.Label14)
         Me.Tab_1SC.Location = New System.Drawing.Point(4, 20)
         Me.Tab_1SC.Name = "Tab_1SC"
         Me.Tab_1SC.Padding = New System.Windows.Forms.Padding(3)
@@ -1575,19 +1571,6 @@ Partial Class SCA1
         Me.Tab_1SC.TabIndex = 0
         Me.Tab_1SC.Text = "債権情報"
         Me.Tab_1SC.UseVisualStyleBackColor = True
-        '
-        'CB_SEARCHOPT
-        '
-        Me.CB_SEARCHOPT.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(192, Byte), Integer))
-        Me.CB_SEARCHOPT.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.CB_SEARCHOPT.Font = New System.Drawing.Font("ＭＳ ゴシック", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.CB_SEARCHOPT.FormattingEnabled = True
-        Me.CB_SEARCHOPT.ImeMode = System.Windows.Forms.ImeMode.Hiragana
-        Me.CB_SEARCHOPT.Items.AddRange(New Object() {"全対象", "氏名", "債務番号(証券番号)", "TEL", "住所", "勤務先", "返済額", "生年月日", "追加電話番号(名前と番号)"})
-        Me.CB_SEARCHOPT.Location = New System.Drawing.Point(297, 2)
-        Me.CB_SEARCHOPT.Name = "CB_SEARCHOPT"
-        Me.CB_SEARCHOPT.Size = New System.Drawing.Size(139, 21)
-        Me.CB_SEARCHOPT.TabIndex = 1786
         '
         'Label16
         '
@@ -2483,18 +2466,6 @@ Partial Class SCA1
         Me.Button1.TabStop = False
         Me.Button1.Text = "更　新"
         Me.Button1.UseVisualStyleBackColor = False
-        '
-        'Label14
-        '
-        Me.Label14.AutoSize = True
-        Me.Label14.BackColor = System.Drawing.Color.WhiteSmoke
-        Me.Label14.Font = New System.Drawing.Font("メイリオ", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.Label14.ForeColor = System.Drawing.Color.Blue
-        Me.Label14.Location = New System.Drawing.Point(238, 5)
-        Me.Label14.Name = "Label14"
-        Me.Label14.Size = New System.Drawing.Size(68, 18)
-        Me.Label14.TabIndex = 1787
-        Me.Label14.Text = "検索対象："
         '
         'TAB_A1
         '
@@ -3740,6 +3711,4 @@ Partial Class SCA1
     Friend WithEvents FKD07 As DataGridViewTextBoxColumn
     Friend WithEvents FKD13 As DataGridViewTextBoxColumn
     Friend WithEvents ダミー As DataGridViewTextBoxColumn
-    Friend WithEvents CB_SEARCHOPT As ComboBox
-    Friend WithEvents Label14 As Label
 End Class

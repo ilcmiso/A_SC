@@ -24,7 +24,7 @@
             BeforeVal = val
             SaveDB(val)
             SCA1.db.UpdateOrigDT(Sqldb.TID.SCR)
-            SCA1.Buildg_SearchCache()
+            SCA1.BuildDGV1SearchCache()
         End If
         Me.Visible = False
     End Sub
@@ -44,9 +44,8 @@
 
         ' 追加電話番号の更新
         If db.IsExistREM(id) Then
-            ' 既存に存在するので05と06だけ更新
-            db.ExeSQL(Sqldb.TID.SCR, "Update FKSCREM Set FKR05 = '" & val & "' Where FKR01 = '" & id & "'")                      ' 05 追加電話番号
-            db.ExeSQL(Sqldb.TID.SCR, "Update FKSCREM Set FKR06 = '" & val.Replace("-", "") & "' Where FKR01 = '" & id & "'")     ' 06 追加電話番号のハイフンなし
+            ' 既存に存在するので05と06だけ更新 ※06はハイフン無しの文字列
+            db.ExeSQL(Sqldb.TID.SCR, $"UPDATE FKSCREM SET FKR05 = '{val}', FKR06 = '{val.Replace("-", "")}' WHERE FKR01 = '{id}'")
         Else
             ' 新規は05、06だけ更新して他は空白にしておく
             db.ExeSQL(Sqldb.TID.SCR, "Insert Into FKSCREM Values('" & id & "','','','','" & val & "','" & val.Replace("-", "") & "')")

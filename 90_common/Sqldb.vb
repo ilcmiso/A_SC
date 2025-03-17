@@ -94,8 +94,8 @@ Public Class Sqldb
     End Enum
 
     Public OrgDataTable(DBTbl.GetLength(0) - 1) As DataTable               ' 各DBテーブルのマスターテーブル
-    Public OrgDataTablePlusAssist As DataTable                                  ' FKSC+Assist のマスターテーブル
-    Public g_SearchCache As DataTable                                      ' DGV1の検索用キャッシュ
+    Public OrgDataTablePlusAssist As DataTable                             ' FKSC+Assist のマスターテーブル
+    Public gDGV1SearchCache As DataTable                                   ' DGV1の検索用キャッシュ
 
     Private ReadOnly svCon(DBTbl.GetLength(0) - 1) As SQLiteConnection     ' サーバーコネクション
     Private ReadOnly svCmd(DBTbl.GetLength(0) - 1) As SQLiteCommand
