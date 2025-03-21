@@ -184,7 +184,7 @@ Partial Class SCB1
         Me.Button1.Size = New System.Drawing.Size(129, 24)
         Me.Button1.TabIndex = 1569
         Me.Button1.TabStop = False
-        Me.Button1.Text = "アシスト4ファイル完了"
+        Me.Button1.Text = "取り込みを完了"
         Me.Button1.UseVisualStyleBackColor = False
         '
         'Label5

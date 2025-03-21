@@ -72,7 +72,7 @@ Public Class Sqldb
         PI           '  3 PINFO
         FPCOS        '  4 FPINFO 融資物件 顧客情報
         FPDATA       '  5 FPINFO 融資物件 登録情報
-        FPDATA2      '  6 FPINFO 融資物件 登録情報
+        FPDATA2      '  6 FPINFO 融資物件 登録情報 移行で使ったが現在は使われてない
         FPITEM       '  7 FPINFO ITEM
         PIM          '  8 PINFO MASTER(ITEM)
         SCAS         '  9 ASSIST

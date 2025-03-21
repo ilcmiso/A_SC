@@ -45,9 +45,4 @@ Public Class SCGA_OVIEW
             If DGV.Rows.Count = ROWMAXCOUNT Then Exit For
         Next
     End Sub
-
-    ' 参照中データ移動ボタン
-    Private Sub BT_PI4FIX_Click(sender As Object, e As EventArgs) Handles BT_PI4FIX.Click
-        SCA1.ViewSelectedMR(DGV.CurrentRow.Cells(3).Value, DGV.CurrentRow.Cells(0).Value)
-    End Sub
 End Class

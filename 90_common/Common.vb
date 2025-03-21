@@ -354,6 +354,34 @@ Public Class Common
         cbox.SelectedIndex = 0
     End Sub
 
+    ' OrgDataTableからC02がmrIndexと一致する行のC05列の重複しないデータを取得し、コンボボックスに設定する
+    Public Sub SetComboBoxUniqueDB(ByRef cbox As Windows.Forms.ComboBox, topItemName As String, mrIndex As String)
+        ' データ取得
+        Dim dt As DataTable = SCA1.db.OrgDataTable(Sqldb.TID.MR)
+
+        ' LINQを使用して、C02がmrIndexと一致する行から、C05列の値を抽出し、空白でない重複なしの文字列を取得
+        Dim uniqueItems As String() = dt.AsEnumerable() _
+                                     .Where(Function(row) row.Field(Of String)("C02") = mrIndex) _
+                                     .Select(Function(row) row.Field(Of String)("C05")) _
+                                     .Where(Function(value) Not String.IsNullOrWhiteSpace(value)) _
+                                     .Distinct() _
+                                     .ToArray()
+
+        ' コンボボックスの更新を停止し、一括でアイテムを設定
+        cbox.BeginUpdate()
+        cbox.Items.Clear()
+        If Not String.IsNullOrEmpty(topItemName) Then
+            cbox.Items.Add(topItemName)
+        End If
+        cbox.Items.AddRange(uniqueItems)
+        cbox.EndUpdate()
+
+        ' アイテムがある場合は最初の項目を選択
+        If cbox.Items.Count > 0 Then
+            cbox.SelectedIndex = 0
+        End If
+    End Sub
+
     ' クラスレベルで非表示にしたタブとそのインデックスを保持するDictionaryを定義
     Private Shared hiddenTabs As New Dictionary(Of String, Tuple(Of TabPage, Integer))
 

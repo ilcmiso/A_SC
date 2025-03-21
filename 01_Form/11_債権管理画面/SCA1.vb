@@ -34,6 +34,7 @@ Public Class SCA1
     ' イベントハンドラーロック 記録一覧チェックリストボックス
     Private LockEventHandler_CLB As Boolean = False
     Private LockEventHandler_FP As Boolean = False
+    Private LockEventHandler_MR As Boolean = False
     ' スレッド
     Private ReadOnly Thread_Entry As Thread = Nothing
     ' デリゲート
@@ -474,7 +475,7 @@ Public Class SCA1
                 MaxCosCount = db.OrgDataTablePlusAssist.Rows.Count
                 FilterWordsDGV1(FilterWord)
                 dgv.Sort(dgv.Columns(5), ComponentModel.ListSortDirection.Descending)
-                L_STS.Text = " ( " & DGV1.Rows.Count & " / " & MaxCosCount & " ) 件 表示中"
+                L_STS.Text = $" ( {DGV1.Rows.Count} / {MaxCosCount} ) 件 表示中"
                 EnableObjects(dgv.Rows.Count <> 0)              ' もしDGV1のメンバーが0なら編集できなくする
                 Exit Sub
 
@@ -660,7 +661,7 @@ Public Class SCA1
                 dgv.Sort(dgv.Columns(2), ComponentModel.ListSortDirection.Descending)
             Case dgv Is DGV5
                 DGV5_CellClick()
-                L_STS_Rec.Text = " ( " & DGV5.Rows.Count & " / " & MaxCosCount & " ) 件 表示中"
+                L_STS_Rec.Text = $" ( {DGV5.Rows.Count} / {MaxCosCount} ) 件 表示中"
                 'Case dgv Is DGV7
 
             Case Else
@@ -2353,19 +2354,54 @@ Public Class SCA1
     End Sub
 
     Public Sub ShowDGVMR() Handles CB_MRLIST.SelectedIndexChanged
+        Static mrlist As Integer = -1   ' 担当者コンボボックスの生成を、申請物リスト変更時に限定するためのメモリ
+        Dim rowCount As Integer         ' 申請物別の最大件数
         log.TimerST()
+        DGV_MR1.Columns.Clear()
         db.UpdateOrigDT(Sqldb.TID.MRM)
-        mrcmn.InitDGVInfo(DGV_MR1, Sqldb.TID.MRM, CB_MRLIST.SelectedIndex)      ' 申請物管理DGVのカラム作成
-        mrcmn.LoadDGVInfo(DGV_MR1, Sqldb.TID.MR, CB_MRLIST.SelectedIndex)       ' 申請物管理DGVの行データ作成
-        ' 完済日フィルタを完済日のカラムがあるときだけ有効
-        TB_MRPaymentDate.Enabled = mrcmn.IsColumnsPaymentDate(DGV_MR1)
-        ' 申請物の移動先が、送信簿か受領簿の場合は全表示チェックをOFFにしておく。FLS三浦様要望
-        If CB_MRLIST.SelectedIndex = SCcommon.MRITEMID.MAIL_RECV Or CB_MRLIST.SelectedIndex = SCcommon.MRITEMID.MAIL_SEND Then
-            CB_MRRangeAll.Checked = False
-        End If
 
-        FilterMRSearch(TB_MRSearch.Text)
-        mrcmn.PaymentDateColor()                ' 完済日が5～13日の間は色付け
+        Dim dv As New DataView(db.OrgDataTable(Sqldb.TID.MR))
+        mrcmn.LoadDataViewInfo(dv, CB_MRLIST.SelectedIndex)      ' 申請物管理DGVの行データ作成
+        rowCount = dv.Table.Rows.Count
+        dv.Sort = $"{dv.Table.Columns(0).ColumnName} DESC"       ' 降順ソート
+
+        ' フィルタ設定
+        Dim filterList As New List(Of String)
+        ' 完済日フィル
+        If dv.Table.Columns.Contains("完済日") Then
+            filterList.Add($"[完済日] LIKE '%{TB_MRPaymentDate.Text}%'")
+        End If
+        ' 全期間ではなければ、期間指定条件をつける
+        If Not CB_MRRangeAll.Checked Then
+            Dim columnName As String
+            If dv.Table.Columns.Contains("受付日") Then
+                columnName = "受付日"
+            Else
+                columnName = "発送日"
+            End If
+            filterList.Add($"[{columnName}] >= #{DTP_MRST.Value:yyyy/MM/dd}# AND [{columnName}] <= #{DTP_MRED.Value:yyyy/MM/dd}#")
+        End If
+        ' 担当者フィルタ
+        If CB_Person.SelectedIndex > 0 Then
+            filterList.Add($"[担当者] = '{CB_Person.SelectedItem}'")
+        End If
+        ' 検索欄フィルタ
+        If TB_MRSearch.Text.Length > 0 Then
+            filterList.Add($"[担当者] = '{CB_Person.SelectedItem}'")
+
+            Dim conditions As New List(Of String)
+            For Each col As DataColumn In dv.Table.Columns
+                conditions.Add($"([{col.ColumnName}] LIKE '%{TB_MRSearch.Text}%')")
+            Next
+            filterList.Add(String.Join(" OR ", conditions))
+        End If
+        dv.RowFilter = String.Join(" AND ", filterList)     ' すべてのフィルタ条件を " AND " で連結して RowFilter に設定
+
+        ' DataViewをDGVに設定
+        DGV_MR1.DataSource = dv.ToTable
+
+        ' DGVに対して、カラーリング設定
+        mrcmn.PaymentDateColor(DGV_MR1)                ' 完済日が5～13日の間は警告のために赤色設定
         mrcmn.HighlightRows(DGV_MR1, "キャンセル日", "", System.Drawing.Color.DarkGray)
         mrcmn.HighlightRows(DGV_MR1, "ステータス", "完了", System.Drawing.Color.GreenYellow)
         mrcmn.HighlightRows(DGV_MR1, "抹消発送日", "", System.Drawing.Color.GreenYellow)
@@ -2377,8 +2413,22 @@ Public Class SCA1
                 cmn.SetCellFontDGV(DGV_MR1, "A審査結果", "支払不可", fontColor:=System.Drawing.Color.Red)
         End Select
 
-        cmn.SetComboBoxUniqueDGVItems(DGV_MR1, "担当者", CB_Person, "(全表示)")   ' 担当コンボボックス設定
-        L_STS_MR.Text = " ( " & DGV_MR1.Rows.Count & " ) 件 表示中"
+        ' DataViewに設定したカラム幅を、DGVに設定して反映する
+        For Each dgvCol As DataGridViewColumn In DGV_MR1.Columns
+            Dim dtCol As DataColumn = dv.Table.Columns(dgvCol.DataPropertyName)
+            If dtCol IsNot Nothing AndAlso dtCol.ExtendedProperties.Contains("Width") Then
+                dgvCol.Width = Convert.ToInt32(dtCol.ExtendedProperties("Width"))
+            End If
+        Next
+
+        ' 申請物リストの識別子に変化があれば担当者コンボボックスを再生成
+        If mrlist <> CB_MRLIST.SelectedIndex Then
+            LockEventHandler_MR = True
+            cmn.SetComboBoxUniqueDB(CB_Person, "(全表示)", CB_MRLIST.SelectedIndex)
+            LockEventHandler_MR = False
+            mrlist = CB_MRLIST.SelectedIndex
+        End If
+        L_STS_MR.Text = $" ( {DGV_MR1.Rows.Count} / {rowCount} ) 件 表示中"
         log.TimerED("ShowDGVMR")
     End Sub
 
@@ -2426,89 +2476,6 @@ Public Class SCA1
         End If
     End Sub
 
-    Private Sub FilterMRSearch(word As String)
-        FilterMRSearch(word, "")
-    End Sub
-    ' DGV_MRフィルタ
-    Private Sub FilterMRSearch(word As String, SelectRegNo As String)
-        Dim searchText As String = word.ToLower()
-        Dim selectedPerson As String = If(CB_Person.SelectedItem IsNot Nothing, CB_Person.SelectedItem.ToString(), String.Empty)
-        Dim startDate As Date = DTP_MRST.Value.Date
-        Dim endDate As Date = DTP_MRED.Value.Date
-        Dim searchHit As Integer = 0
-
-        ' DataGridViewの各行を走査
-        For Each row As DataGridViewRow In DGV_MR1.Rows
-            row.Visible = False
-
-            ' 日付の範囲チェック
-            If Not CB_MRRangeAll.Checked Then
-                Dim dateValue As Date = DateTime.Parse(row.Cells(3).Value.ToString())
-                If dateValue < startDate OrElse dateValue > endDate Then Continue For
-            End If
-
-            ' "担当者"カラムのフィルタリングを行うかどうかのチェック
-            If selectedPerson <> "(全表示)" Then
-                Dim person As String = row.Cells("担当者").Value.ToString()
-                If Not selectedPerson.Equals(String.Empty) AndAlso Not person.Equals(selectedPerson) Then Continue For
-                If selectedPerson.Equals(String.Empty) AndAlso Not person.Equals(String.Empty) Then Continue For
-            End If
-
-            ' 文字列の検索
-            Dim containsSearchText As Boolean = False
-            For Each cell As DataGridViewCell In row.Cells
-                If cell.Value IsNot Nothing AndAlso cell.Value.ToString().ToLower().Contains(searchText) Then
-                    containsSearchText = True
-                    Exit For
-                End If
-            Next
-            ' 検索文字列が含まれていなければ次の行へ
-            If Not containsSearchText Then Continue For
-
-            ' 完済日文字列の検索
-            Dim columnsIdx As Integer = cmn.GetColumnIndexByName(DGV_MR1, "完済日")
-            If columnsIdx >= 0 Then
-                If Not row.Cells(columnsIdx).Value.ToString().ToLower().Contains(TB_MRPaymentDate.Text) Then
-                    Continue For
-                End If
-            End If
-
-            ' 条件に一致する行を表示
-            row.Visible = True
-            searchHit += 1
-
-            ' 行を選択中にする
-            If DGV_MR1.CurrentCell Is Nothing And row.Cells(2).Visible Then DGV_MR1.CurrentCell = row.Cells(2)
-
-            ' SelectRegNoに一致する行を選択
-            If SelectRegNo.Length > 0 Then
-                If row.Cells(0).Value IsNot Nothing AndAlso row.Cells(0).Value.ToString().Equals(SelectRegNo) Then
-                    If row.Cells(2).Visible Then DGV_MR1.CurrentCell = row.Cells(2)
-                    DGV_MR1.FirstDisplayedScrollingRowIndex = row.Index
-                End If
-            End If
-        Next
-        L_MRSearchHit.Text = $"{searchHit} 件 表示中"
-    End Sub
-
-
-    ' OVIEWで選択中のデータに参照移動
-    Public Sub ViewSelectedMR(TargetType As String, TargetNo As String)
-        ' OVIEWで選択中の申請書種別と申請書登録番号から表示する行を算出
-        Dim index As Integer = Array.IndexOf(sccmn.MRITEMLIST, TargetType)
-        If index < 0 Then Exit Sub
-        cmn.DummyPBar()
-
-        ' 検索でフィルタがかからない状態にしておく
-        CB_MRLIST.SelectedIndex = index                     ' 申請書の種類変更
-        CB_MRRangeAll.Checked = True                        ' 全期間のチェックON
-        CB_Person.Text = "(全表示)"                         ' 担当者を全表示
-        TAB_A1.SelectedTab = TAB_A1.TabPages("Tab_6GA")     ' タブ移動
-
-        ' 一致したデータの表示
-        FilterMRSearch("", TargetNo)
-    End Sub
-
     ' Excel全出力ボタン
     Private Sub Button5_Click(sender As Object, e As EventArgs) Handles Button5.Click
         MRExcelOutputAll()
@@ -2553,20 +2520,27 @@ Public Class SCA1
 
 
     ' 検索欄
-    Private Sub TB_MRSearch_TextChanged(sender As Object, e As EventArgs) Handles TB_MRSearch.TextChanged, TB_MRPaymentDate.TextChanged
-        FilterMRSearch(TB_MRSearch.Text)
+    Private Sub TB_MRSearch_KeyPress(sender As Object, e As KeyPressEventArgs) Handles TB_MRSearch.KeyPress
+        If e.KeyChar = ChrW(Keys.Enter) Then
+            e.Handled = True
+            ShowDGVMR()
+        End If
+    End Sub
+    Private Sub TB_MRSearch_TextChanged(sender As Object, e As EventArgs) Handles TB_MRPaymentDate.TextChanged
+        ShowDGVMR()
     End Sub
     ' 開始・終了期間
     Private Sub DTP_MRST_CloseUp(sender As Object, e As EventArgs) Handles DTP_MRST.CloseUp, DTP_MRED.CloseUp
-        FilterMRSearch(TB_MRSearch.Text)
+        CB_MRRangeAll.Checked = False
     End Sub
     ' 全期間チェックボックス
     Private Sub CB_MRRangeAll_CheckedChanged(sender As Object, e As EventArgs) Handles CB_MRRangeAll.CheckedChanged
-        FilterMRSearch(TB_MRSearch.Text)
+        ShowDGVMR()
     End Sub
     ' 担当者コンボボックス
     Private Sub CB_Person_SelectedIndexChanged(sender As Object, e As EventArgs) Handles CB_Person.SelectedIndexChanged
-        FilterMRSearch(TB_MRSearch.Text)
+        If LockEventHandler_MR Then Exit Sub
+        ShowDGVMR()
     End Sub
 #End Region
 

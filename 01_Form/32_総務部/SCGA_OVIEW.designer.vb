@@ -27,8 +27,6 @@ Partial Class SCGA_OVIEW
         Dim DataGridViewCellStyle3 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Me.PBXX = New System.Windows.Forms.Button()
         Me.DGV = New System.Windows.Forms.DataGridView()
-        Me.BT_PI4FIX = New System.Windows.Forms.Button()
-        Me.Button1 = New System.Windows.Forms.Button()
         Me.Column5 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.DataGridViewTextBoxColumn11 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Column4 = New System.Windows.Forms.DataGridViewTextBoxColumn()
@@ -36,6 +34,7 @@ Partial Class SCGA_OVIEW
         Me.DataGridViewTextBoxColumn12 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Column2 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Column3 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.BT_PI4FIX = New System.Windows.Forms.Button()
         CType(Me.DGV, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
@@ -83,33 +82,6 @@ Partial Class SCGA_OVIEW
         Me.DGV.Size = New System.Drawing.Size(514, 231)
         Me.DGV.TabIndex = 1182
         Me.DGV.TabStop = False
-        '
-        'BT_PI4FIX
-        '
-        Me.BT_PI4FIX.BackColor = System.Drawing.Color.SteelBlue
-        Me.BT_PI4FIX.FlatAppearance.BorderColor = System.Drawing.Color.Black
-        Me.BT_PI4FIX.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.BT_PI4FIX.ForeColor = System.Drawing.Color.White
-        Me.BT_PI4FIX.Location = New System.Drawing.Point(357, 2)
-        Me.BT_PI4FIX.Name = "BT_PI4FIX"
-        Me.BT_PI4FIX.Size = New System.Drawing.Size(156, 31)
-        Me.BT_PI4FIX.TabIndex = 1612
-        Me.BT_PI4FIX.Text = "選択中の申請書に移動"
-        Me.BT_PI4FIX.UseVisualStyleBackColor = False
-        '
-        'Button1
-        '
-        Me.Button1.BackColor = System.Drawing.Color.SteelBlue
-        Me.Button1.FlatAppearance.BorderColor = System.Drawing.Color.Black
-        Me.Button1.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.Button1.ForeColor = System.Drawing.Color.White
-        Me.Button1.Location = New System.Drawing.Point(199, 2)
-        Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(152, 31)
-        Me.Button1.TabIndex = 1613
-        Me.Button1.Text = "選択中の債務者を表示"
-        Me.Button1.UseVisualStyleBackColor = False
-        Me.Button1.Visible = False
         '
         'Column5
         '
@@ -166,12 +138,25 @@ Partial Class SCGA_OVIEW
         Me.Column3.ReadOnly = True
         Me.Column3.Width = 110
         '
+        'BT_PI4FIX
+        '
+        Me.BT_PI4FIX.BackColor = System.Drawing.Color.SteelBlue
+        Me.BT_PI4FIX.Enabled = False
+        Me.BT_PI4FIX.FlatAppearance.BorderColor = System.Drawing.Color.Black
+        Me.BT_PI4FIX.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.BT_PI4FIX.ForeColor = System.Drawing.Color.White
+        Me.BT_PI4FIX.Location = New System.Drawing.Point(357, 2)
+        Me.BT_PI4FIX.Name = "BT_PI4FIX"
+        Me.BT_PI4FIX.Size = New System.Drawing.Size(156, 31)
+        Me.BT_PI4FIX.TabIndex = 1612
+        Me.BT_PI4FIX.Text = "選択中の申請書に移動"
+        Me.BT_PI4FIX.UseVisualStyleBackColor = False
+        '
         'SCGA_OVIEW
         '
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None
         Me.BackColor = System.Drawing.SystemColors.ControlLight
         Me.ClientSize = New System.Drawing.Size(515, 330)
-        Me.Controls.Add(Me.Button1)
         Me.Controls.Add(Me.BT_PI4FIX)
         Me.Controls.Add(Me.DGV)
         Me.Controls.Add(Me.PBXX)
@@ -189,8 +174,6 @@ Partial Class SCGA_OVIEW
 
     Friend WithEvents PBXX As Button
     Friend WithEvents DGV As DataGridView
-    Friend WithEvents BT_PI4FIX As Button
-    Friend WithEvents Button1 As Button
     Friend WithEvents Column5 As DataGridViewTextBoxColumn
     Friend WithEvents DataGridViewTextBoxColumn11 As DataGridViewTextBoxColumn
     Friend WithEvents Column4 As DataGridViewTextBoxColumn
@@ -198,4 +181,5 @@ Partial Class SCGA_OVIEW
     Friend WithEvents DataGridViewTextBoxColumn12 As DataGridViewTextBoxColumn
     Friend WithEvents Column2 As DataGridViewTextBoxColumn
     Friend WithEvents Column3 As DataGridViewTextBoxColumn
+    Friend WithEvents BT_PI4FIX As Button
 End Class

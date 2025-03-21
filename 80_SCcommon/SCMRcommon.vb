@@ -14,11 +14,11 @@ Public Class SCMRcommon
     End Sub
 
     ' 完済日を見つけ、5日～13日（※14日以降が土日祝日なら範囲とする）だった場合に赤色にする
-    Public Sub PaymentDateColor()
-        Dim columnIndex As Integer = cmn.FindColumnIndex(SCA1.DGV_MR1, "完済日")
+    Public Sub PaymentDateColor(dgv As DataGridView)
+        Dim columnIndex As Integer = cmn.FindColumnIndex(dgv, "完済日")
         If columnIndex = -1 Then Return
 
-        For Each row As DataGridViewRow In SCA1.DGV_MR1.Rows
+        For Each row As DataGridViewRow In dgv.Rows
             If Not IsDBNull(row.Cells(columnIndex).Value) AndAlso Not String.IsNullOrEmpty(row.Cells(columnIndex).Value.ToString()) Then
                 Dim dateValue As Date
                 If Date.TryParse(row.Cells(columnIndex).Value.ToString(), dateValue) Then
@@ -69,18 +69,16 @@ Public Class SCMRcommon
         Return holidays
     End Function
 
-    ' 申請物管理DGVのカラム作成
-    Public Sub InitDGVInfo(dgv As DataGridView, tid As Integer, index As Integer)
-        ' SQLiteからデータを取得
-        Dim dr As DataRow() = SCA1.db.OrgDataTable(tid).Select($"C01 = {index}")
+    ' 申請物管理DataViewの行データ作成
+    Public Function LoadDataViewInfo(ByRef dv As DataView, category As String) As DataView
 
-        ' DGVを初期化
-        dgv.Columns.Clear()
+        ' SQLiteからカラムデータを取得
+        Dim dr As DataRow() = SCA1.db.OrgDataTable(Sqldb.TID.MRM).Select($"C01 = {category}", "C02 ASC")
+        Dim dtNew As New DataTable("TBL")
+        Dim setColumnsName As New List(Of String)       ' カラム幅0以外の項目名(C01,C02など)を保持して、カラム0幅以外のみdtNewに設定する
+        Dim columnsIndex As Integer = 1
 
-        ' DataRowをソート（C02値により昇順）
-        Array.Sort(dr, Function(x, y) x("C02").CompareTo(y("C02")))
-
-        ' DGVにデータをセット
+        ' カラム情報を設定
         For Each row As DataRow In dr
             Dim columnName As String = row("C03").ToString()
             Dim columnWidthStr As String = row("C04").ToString()
@@ -92,35 +90,32 @@ Public Class SCMRcommon
                 columnWidth = Integer.Parse(columnWidthStr)
             End If
 
-            Dim newColumn As New DataGridViewTextBoxColumn()
-            newColumn.Name = columnName
-            newColumn.HeaderText = columnName
-            newColumn.Width = columnWidth
-            newColumn.Visible = columnWidth <> 0
-
-            dgv.Columns.Add(newColumn)
+            ' カラム幅が0なら、非表示扱いとして追加しない（必要なら別途フラグ管理）
+            If columnWidth > 0 Then
+                Dim dc As New DataColumn(columnName, GetType(String))
+                ' カラム幅など、UI側の情報はExtendedPropertiesに保持しておく
+                dc.ExtendedProperties("Width") = columnWidth
+                dtNew.Columns.Add(dc)
+                setColumnsName.Add($"C{columnsIndex:D2}")       ' 幅0以外の有効なカラム名をリストに保持
+            End If
+            columnsIndex += 1
         Next
-    End Sub
 
-    ' 申請物管理DGVの行データ作成
-    Public Sub LoadDGVInfo(dgv As DataGridView, tid As Sqldb.TID, category As String)
-        ' SQLiteからデータを取得
-        Dim dt As DataTable = SCA1.db.GetSelect(tid, $"SELECT * FROM {SCA1.db.GetTable(tid)} WHERE C02 = '{category}'")
-        ' DGVを初期化
-        dgv.Rows.Clear()
-
-        ' DGVのカラム数に応じてデータを表示
-        For row = 0 To dt.Rows.Count - 1
-            Dim newRow As New DataGridViewRow()
-            For i As Integer = 0 To dgv.ColumnCount - 1
-                Dim cell As New DataGridViewTextBoxCell()
-                cell.Value = dt.Rows(row)($"C{i + 1:D2}")
-                newRow.Cells.Add(cell)
+        ' SQLiteから申請物データを取得
+        Dim dtSource As DataTable = SCA1.db.GetSelect(Sqldb.TID.MR, $"SELECT * FROM {SCA1.db.GetTable(Sqldb.TID.MR)} WHERE C02 = '{category}'")
+        ' 行データを設定
+        For row = 0 To dtSource.Rows.Count - 1
+            Dim newRow As DataRow = dtNew.NewRow()
+            For i As Integer = 0 To dtNew.Columns.Count - 1
+                newRow(i) = dtSource.Rows(row)(setColumnsName(i))
             Next
-            dgv.Rows.Add(newRow)
+            dtNew.Rows.Add(newRow)
         Next
-        dgv.Sort(dgv.Columns(2), ComponentModel.ListSortDirection.Descending)
-    End Sub
+
+        dv = New DataView(dtNew)
+        Return dv
+    End Function
+
 
     ' DataGridViewの指定カラムに指定文字列が含まれる場合、その行の全セルの背景色を変更する汎用メソッド
     Public Sub HighlightRows(dgv As DataGridView, columnName As String, hitWords As String, color As System.Drawing.Color)
