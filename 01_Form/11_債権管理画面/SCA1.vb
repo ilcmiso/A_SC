@@ -2420,6 +2420,10 @@ Public Class SCA1
                 dgvCol.Width = Convert.ToInt32(dtCol.ExtendedProperties("Width"))
             End If
         Next
+        ' カラム幅が0なら非表示にする ※DGVカラム幅の最低値が5なので5以下であれば非表示
+        For n = 0 To DGV_MR1.ColumnCount - 1
+            If DGV_MR1.Columns(n).Width <= 5 Then DGV_MR1.Columns(n).Visible = False
+        Next
 
         ' 申請物リストの識別子に変化があれば担当者コンボボックスを再生成
         If mrlist <> CB_MRLIST.SelectedIndex Then
@@ -2428,6 +2432,12 @@ Public Class SCA1
             LockEventHandler_MR = False
             mrlist = CB_MRLIST.SelectedIndex
         End If
+
+        ' DGV表示後にCurrentRowがNothingになっているため、CurrentRowを設定するためにSelected
+        If DGV_MR1.Rows.Count > 0 Then
+            DGV_MR1(3, 0).Selected = True
+        End If
+
         L_STS_MR.Text = $" ( {DGV_MR1.Rows.Count} / {rowCount} ) 件 表示中"
         log.TimerED("ShowDGVMR")
     End Sub

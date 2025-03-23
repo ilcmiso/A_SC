@@ -75,8 +75,6 @@ Public Class SCMRcommon
         ' SQLiteからカラムデータを取得
         Dim dr As DataRow() = SCA1.db.OrgDataTable(Sqldb.TID.MRM).Select($"C01 = {category}", "C02 ASC")
         Dim dtNew As New DataTable("TBL")
-        Dim setColumnsName As New List(Of String)       ' カラム幅0以外の項目名(C01,C02など)を保持して、カラム0幅以外のみdtNewに設定する
-        Dim columnsIndex As Integer = 1
 
         ' カラム情報を設定
         For Each row As DataRow In dr
@@ -90,15 +88,10 @@ Public Class SCMRcommon
                 columnWidth = Integer.Parse(columnWidthStr)
             End If
 
-            ' カラム幅が0なら、非表示扱いとして追加しない（必要なら別途フラグ管理）
-            If columnWidth > 0 Then
-                Dim dc As New DataColumn(columnName, GetType(String))
-                ' カラム幅など、UI側の情報はExtendedPropertiesに保持しておく
-                dc.ExtendedProperties("Width") = columnWidth
-                dtNew.Columns.Add(dc)
-                setColumnsName.Add($"C{columnsIndex:D2}")       ' 幅0以外の有効なカラム名をリストに保持
-            End If
-            columnsIndex += 1
+            ' カラム幅など、UI側の情報はExtendedPropertiesに保持しておく
+            Dim dc As New DataColumn(columnName, GetType(String))
+            dc.ExtendedProperties("Width") = columnWidth
+            dtNew.Columns.Add(dc)
         Next
 
         ' SQLiteから申請物データを取得
@@ -107,7 +100,7 @@ Public Class SCMRcommon
         For row = 0 To dtSource.Rows.Count - 1
             Dim newRow As DataRow = dtNew.NewRow()
             For i As Integer = 0 To dtNew.Columns.Count - 1
-                newRow(i) = dtSource.Rows(row)(setColumnsName(i))
+                newRow(i) = dtSource.Rows(row)($"C{i + 1:D2}")
             Next
             dtNew.Rows.Add(newRow)
         Next
