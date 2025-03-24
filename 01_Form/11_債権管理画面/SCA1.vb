@@ -1763,6 +1763,20 @@ Public Class SCA1
         cmn.EndPBar()
     End Sub
 
+    ' 削除ボタン(物件情報)
+    Private Sub Button3_Click(sender As Object, e As EventArgs) Handles Button3.Click
+        Dim r = MessageBox.Show("物件情報を削除してよろしいですか？",
+                            "ご確認ください",
+                            MessageBoxButtons.YesNo,
+                            MessageBoxIcon.Question)
+        If r = vbNo Then Exit Sub
+        Dim keyId As Integer = db.GetFPCOSKeyId(CurrentCID)
+        db.ExeSQL(Sqldb.TID.FPDATA, $"DELETE FROM DATA WHERE C03 = '{keyId}'")
+        db.ExeSQL(Sqldb.TID.FPCOS, $"DELETE FROM TBL WHERE C01 = '{keyId}'")
+        ShowDGV_FPLIST()
+        MsgBox("削除しました。")
+    End Sub
+
     ' ジャンプボタン
     Private Sub BT_FPMNG_JUMP_Click(sender As Object, e As EventArgs) Handles BT_FPMNG_JUMP.Click
         ' 該当する物件情報を表示

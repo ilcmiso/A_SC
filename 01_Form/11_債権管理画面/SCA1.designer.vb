@@ -293,6 +293,7 @@ Partial Class SCA1
         Me.ToolStripMenuItem2 = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
         Me.ColorDialog1 = New System.Windows.Forms.ColorDialog()
+        Me.Button3 = New System.Windows.Forms.Button()
         Me.Tab_4Dun.SuspendLayout()
         CType(Me.DGV4, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.GroupBox1.SuspendLayout()
@@ -1647,6 +1648,7 @@ Partial Class SCA1
         '
         'PAN_A
         '
+        Me.PAN_A.Controls.Add(Me.Button3)
         Me.PAN_A.Controls.Add(Me.BT_FP_PAGE)
         Me.PAN_A.Controls.Add(Me.DGV_FPLIST)
         Me.PAN_A.Controls.Add(Me.DTP_PI1)
@@ -3228,6 +3230,19 @@ Partial Class SCA1
         Me.MenuStrip1.TabIndex = 1574
         Me.MenuStrip1.Text = "MenuStrip1"
         '
+        'Button3
+        '
+        Me.Button3.BackColor = System.Drawing.Color.Red
+        Me.Button3.FlatAppearance.BorderColor = System.Drawing.Color.Black
+        Me.Button3.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.Button3.ForeColor = System.Drawing.Color.White
+        Me.Button3.Location = New System.Drawing.Point(100, 14)
+        Me.Button3.Name = "Button3"
+        Me.Button3.Size = New System.Drawing.Size(67, 29)
+        Me.Button3.TabIndex = 1770
+        Me.Button3.Text = "削除"
+        Me.Button3.UseVisualStyleBackColor = False
+        '
         'SCA1
         '
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None
@@ -3509,4 +3524,5 @@ Partial Class SCA1
     Friend WithEvents C09 As DataGridViewTextBoxColumn
     Friend WithEvents C08 As DataGridViewTextBoxColumn
     Friend WithEvents C07 As DataGridViewTextBoxColumn
+    Friend WithEvents Button3 As Button
 End Class
