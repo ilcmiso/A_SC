@@ -166,7 +166,7 @@ Public Class SCB1
         ' CopyCDBtoServer(Sqldb.DB_FKSCASSIST)            ' DBファイルをローカルからサーバーにコピー
         ' Close()
         MsgBox("アシストファイルの読み込みが完了しました。" & vbCrLf &
-               "4ファイル全て読み込みが完了したら、下のボタンを押してください。")
+               "5ファイル全て読み込みが完了したら、下のボタンを押してください。")
         ShowLastUpdateTimes()
     End Sub
     ' オートコール D&D
@@ -272,80 +272,79 @@ Public Class SCB1
     End Sub
 
     Private ReadOnly AssistHeaderTbl() As String = {
-        "顧客番号",                              ' C01
-        "機構顧客番号",                          ' C02
-        "債務者名漢字",                          ' C03
-        "債務者名カナ",                          ' C04
-        "生年月日",                              ' C05  ※19870626の形式なのでスラッシュを追加 1987/06/26
-        "電話番号１",                            ' C06
-        "携帯電話番号",                          ' C07
-        "郵便番号",                              ' C08
-        "住所１",                                ' C09  ※住所1,2,3をあわせたもの
-        "勤務先名",                              ' C10
-        "勤務先電話番号",                        ' C11
-        "証書番号",                              ' C12
-        "連保人氏姓",                            ' C13  ※連保人姓,名をあわせたもの
-        "連保人氏姓カナ",                        ' C14  ※連保人姓カナ,名カナをあわせたもの
-        "連保人生年月日",                        ' C15  ※19870626の形式なのでスラッシュを追加 1987/06/26
-        "連保人自宅電話番号",                    ' C16
-        "連保人携帯電話番号",                    ' C17
-        "連保人郵便番号",                        ' C18
-        "連保人住所",                            ' C19
-        "連保人勤務先",                          ' C20
-        "連保人勤務先電話番号",                  ' C21
-        "-",                                     ' C22
-        "延滞合計額",                            ' C23
-        "債権総額月賦元本",                      ' C24  ※2025/03/04 貸付金額 → 取得元を変更
-        "延滞回数",                              ' C25
-        "支払額月賦",                            ' C26  ※2025/03/04 入金額   → 取得元を変更
-        "月末残高月賦元本",                      ' C27  ※2025/03/04 貸付残高 → 取得元を変更
-        "金消契約年月日",                        ' C28
-        "債権総額半年賦元本",                    ' C29  ※2025/03/04 追加
-        "月末残高半年賦元本",                    ' C30  ※2025/03/04 追加
-        "支払額半年賦",                          ' C31  ※2025/03/04 追加
-        "完済日"                                 ' C32  ※2025/03/04 追加
-    }
+    "顧客番号",                              ' C01
+    "機構顧客番号",                          ' C02
+    "債務者名漢字",                          ' C03
+    "債務者名カナ",                          ' C04
+    "生年月日",                              ' C05  ※19870626の形式なのでスラッシュを追加 1987/06/26
+    "電話番号１",                            ' C06
+    "携帯電話番号",                          ' C07
+    "郵便番号",                              ' C08
+    "住所１",                                ' C09  ※住所1,2,3をあわせたもの
+    "勤務先名",                              ' C10
+    "勤務先電話番号",                        ' C11
+    "証書番号",                              ' C12
+    "連保人氏姓",                            ' C13  ※連保人姓,名をあわせたもの
+    "連保人氏姓カナ",                        ' C14  ※連保人姓カナ,名カナをあわせたもの
+    "連保人生年月日",                        ' C15  ※19870626の形式なのでスラッシュを追加 1987/06/26
+    "連保人自宅電話番号",                    ' C16
+    "連保人携帯電話番号",                    ' C17
+    "連保人郵便番号",                        ' C18
+    "連保人住所",                            ' C19
+    "連保人勤務先",                          ' C20
+    "連保人勤務先電話番号",                  ' C21
+    "-",                                     ' C22
+    "延滞合計額",                            ' C23
+    "債権総額月賦元本",                      ' C24  ※2025/03/04 貸付金額 → 取得元を変更
+    "延滞回数",                              ' C25
+    "支払額月賦",                            ' C26  ※2025/03/04 入金額   → 取得元を変更
+    "月末残高月賦元本",                      ' C27  ※2025/03/04 貸付残高 → 取得元を変更
+    "金消契約年月日",                        ' C28
+    "債権総額半年賦元本",                    ' C29  ※2025/03/04 追加
+    "月末残高半年賦元本",                    ' C30  ※2025/03/04 追加
+    "支払額半年賦",                          ' C31  ※2025/03/04 追加
+    "完済日"                                 ' C32  ※2025/03/04 追加
+}
     Const NOT_FOUND As Integer = -1
     ' アシストデータ読み込み
     Private Sub ReadAssistData(fname As String)
-        Dim AssistCmdList As New List(Of String)                        ' アシストデータDB書き込みリスト
         Try
-            Using sr As StreamReader = New StreamReader(fname, Encoding.GetEncoding("Shift_JIS"))
-                Dim tableNames() As String = sr.ReadLine().Split(","c)      ' 1行目 テーブル名(使う?)
-                Dim headerNames() As String = sr.ReadLine().Split(","c)     ' 2行目 ヘッダー(項目)名
+            Using sr As New StreamReader(fname, Encoding.GetEncoding("Shift_JIS"))
+                Dim tableNames() As String = sr.ReadLine().Split(","c)      ' 1行目 テーブル名（使用するかは不明）
+                Dim headerNames() As String = sr.ReadLine().Split(","c)     ' 2行目 ヘッダー（項目名）
                 Dim costomInfo As New List(Of String())                     ' 3行目以降 顧客情報
                 While (sr.Peek() > -1)
                     ' 債務者情報の一部が分割されている項目があるので、もしあれば結合するためヘッダーから検索する
                     Dim addStr() As String = sr.ReadLine().Split(","c)
                     ' 住所１に、住所１＋２＋３を結合して保存
                     Dim jusho1Idx As Integer = Array.IndexOf(headerNames, AssistHeaderTbl(8))
-                    If jusho1Idx > -1 Then
+                    If jusho1Idx > -1 AndAlso addStr.Length > jusho1Idx + 2 Then
                         addStr(jusho1Idx) = (addStr(jusho1Idx) & addStr(jusho1Idx + 1) & addStr(jusho1Idx + 2)).Replace("　", "").Replace(" ", "")
                     End If
                     ' 連保人姓に、連保人姓、連保人名を結合して保存
                     Dim renpoSeiIdx As Integer = Array.IndexOf(headerNames, AssistHeaderTbl(12))
-                    If renpoSeiIdx > -1 Then
+                    If renpoSeiIdx > -1 AndAlso addStr.Length > renpoSeiIdx + 1 Then
                         addStr(renpoSeiIdx) = (addStr(renpoSeiIdx) & "　" & addStr(renpoSeiIdx + 1)).Replace("　", "").Replace(" ", "")
                     End If
                     ' 連保人姓に、連保人姓、連保人名を結合して保存
                     Dim renpoSeiKanaIdx As Integer = Array.IndexOf(headerNames, AssistHeaderTbl(13))
-                    If renpoSeiKanaIdx > -1 Then
+                    If renpoSeiKanaIdx > -1 AndAlso addStr.Length > renpoSeiKanaIdx + 1 Then
                         addStr(renpoSeiKanaIdx) = (addStr(renpoSeiKanaIdx) & " " & addStr(renpoSeiKanaIdx + 1)).Replace("　", "").Replace(" ", "")
                     End If
 
                     ' 生年月日がスラッシュなし8桁になってるので区切り文字スラッシュを追加
                     Dim birthIdx As Integer = Array.IndexOf(headerNames, AssistHeaderTbl(4))
-                    If birthIdx > -1 Then
+                    If birthIdx > -1 AndAlso addStr(birthIdx).Length = 8 Then
                         addStr(birthIdx) = cmn.ToDate(addStr(birthIdx))
                     End If
                     ' 連保人生年月日がスラッシュなし8桁になってるので区切り文字スラッシュを追加
                     Dim birth2Idx As Integer = Array.IndexOf(headerNames, AssistHeaderTbl(14))
-                    If birth2Idx > -1 Then
+                    If birth2Idx > -1 AndAlso addStr(birth2Idx).Length = 8 Then
                         addStr(birth2Idx) = cmn.ToDate(addStr(birth2Idx))
                     End If
                     ' 完済日の日付にスラッシュを追加
                     Dim birth3Idx As Integer = Array.IndexOf(headerNames, AssistHeaderTbl(31))
-                    If birth3Idx > -1 Then
+                    If birth3Idx > -1 AndAlso addStr(birth3Idx).Length = 8 Then
                         addStr(birth3Idx) = cmn.ToDate(addStr(birth3Idx))
                     End If
 
@@ -365,69 +364,85 @@ Public Class SCB1
                 Next
 
                 db.UpdateOrigDT(Sqldb.TID.SCAS)
-                Dim dupList As New List(Of String)                      ' 重複登録防止用、登録者リスト
-                ' 3行目以降の加入者情報を全て読み出す(最後尾から順に)
-                For n = costomInfo.Count - 1 To 0 Step -1
-                    Dim cId As String                                   ' 顧客番号          ex 10000000021
-                    Dim mecId As String = ""                            ' 機構顧客番号      ex 251511060002258
-                    cId = costomInfo(n)(Array.IndexOf(headerNames, AssistHeaderTbl(0))).Trim           ' [顧客番号] の文字が含まれるヘッダーindexから顧客番号の値取得してる  主キー必須param
-                    If Array.IndexOf(headerNames, AssistHeaderTbl(1)) > -1 Then
-                        mecId = costomInfo(n)(Array.IndexOf(headerNames, AssistHeaderTbl(1))).Trim     ' [機構顧客番号] の文字が含まれるヘッダーindexから顧客番号の値取得してる  任意parma
+
+                ' mecIdごとに最大のcidを持つレコードを選別
+                Dim bestRecords As New Dictionary(Of String, String())
+                Dim recordsWithoutMec As New List(Of String())
+                Dim cidIdx As Integer = Array.IndexOf(headerNames, AssistHeaderTbl(0))
+                Dim mecIdx As Integer = Array.IndexOf(headerNames, AssistHeaderTbl(1))
+
+                For Each rec As String() In costomInfo
+                    Dim cId As String = ""
+                    If cidIdx <> NOT_FOUND Then
+                        cId = rec(cidIdx).Trim
                     End If
 
-                    ' アシストデータの生年月日が、1900/1/1(-2日)からの経過日数になっているのでyyyy/mm/dd形式に変換する
-                    Dim chgItems() As String = {"申込人生年月日", "連債者生年月日", "金消契約年月日"}
-                    Dim cVal As String
-                    Dim arridx As Integer
-                    For Each itm In chgItems
-                        arridx = Array.IndexOf(headerNames, itm)
-                        If arridx < 0 Then Continue For
-                        cVal = costomInfo(n)(arridx)
-                        If cVal <> "" Then costomInfo(n)(Array.IndexOf(headerNames, itm)) = CDate("1899/12/30").AddDays(cVal).ToShortDateString
-                    Next
+                    Dim mecId As String = ""
+                    If mecIdx <> NOT_FOUND Then
+                        mecId = rec(mecIdx).Trim
+                    End If
 
-                    ' たまに同じ機構顧客番号で二度申込み登録されている。(恐らく入力誤りの訂正？)
-                    ' 二重登録しないように、既に登録した機構顧客番号と重複している場合は登録しない。 ※最後尾データから参照してるので、顧客番号の大きいが優先される
-                    If (mecId <> "") And (dupList.IndexOf(mecId) >= 0) Then Continue For
-                    dupList.Add(mecId)
+                    If mecId <> "" Then
+                        Dim currentCid As Long = 0
+                        Long.TryParse(cId, currentCid)
+                        If bestRecords.ContainsKey(mecId) Then
+                            Dim existingRecord As String() = bestRecords(mecId)
+                            Dim existingCid As Long = 0
+                            Long.TryParse(existingRecord(cidIdx).Trim, existingCid)
+                            If currentCid > existingCid Then
+                                bestRecords(mecId) = rec
+                            End If
+                        Else
+                            bestRecords.Add(mecId, rec)
+                        End If
+                    Else
+                        recordsWithoutMec.Add(rec)
+                    End If
+                Next
 
-                    Dim cmd As String = ""                          ' 各顧客の登録or更新コマンド作成
+                ' 登録対象の最終レコードリストを作成（mecIdがある場合は重複排除済み、ない場合はそのまま）
+                Dim finalRecords As New List(Of String())
+                finalRecords.AddRange(bestRecords.Values)
+                finalRecords.AddRange(recordsWithoutMec)
+
+                Dim AssistCmdList As New List(Of String)
+                For Each rec As String() In finalRecords
+                    Dim cId As String = ""
+                    If cidIdx <> NOT_FOUND Then
+                        cId = rec(cidIdx).Trim
+                    End If
+
+                    Dim cmd As String = ""
                     If db.OrgDataTable(Sqldb.TID.SCAS).Select(String.Format("C01 = {0}", cId)).Length > 0 Then
                         ' 既にDBに存在するのでUpdate
-                        cmd += "Update TBL Set "
+                        cmd = "Update TBL Set "
                         For idx As Integer = 0 To idxList.Count - 1
-                            If idx = 0 Then Continue For                    ' C01でDBの主キーだから更新しない
-                            If idxList(idx) = NOT_FOUND Then Continue For   ' 読み込みデータに存在しない項目は更新できない
-                            ' アポストロフィが含まれていた場合SQL構文エラーになるので削除する
-                            If costomInfo(n)(idxList(idx)).IndexOf("'") >= 0 Then costomInfo(n)(idxList(idx)) = cmn.RegReplace(costomInfo(n)(idxList(idx)), "'", "")
-
-                            cmd += "C" & (idx + 1).ToString("D2") & "='" & costomInfo(n)(idxList(idx)).Trim & "',"
+                            If idx = 0 Then Continue For  ' C01は主キーのため更新しない
+                            If idxList(idx) = NOT_FOUND Then Continue For
+                            If rec(idxList(idx)).IndexOf("'") >= 0 Then rec(idxList(idx)) = cmn.RegReplace(rec(idxList(idx)), "'", "")
+                            cmd += "C" & (idx + 1).ToString("D2") & "='" & rec(idxList(idx)).Trim & "',"
                         Next
-
-                        cmd = cmd.TrimEnd(CType(",", Char))     ' 余分なカンマを削除
+                        cmd = cmd.TrimEnd(","c)
                         cmd += " Where C01 ='" & cId & "'"
                     Else
-                        ' DBにないのでInsert
-                        cmd += "Insert Into TBL Values("
+                        ' DBに存在しないのでInsert
+                        cmd = "Insert Into TBL Values("
                         For Each idx As Integer In idxList
                             If idx = NOT_FOUND Then
                                 cmd += "'',"
                                 Continue For
                             End If
-                            ' アポストロフィが含まれていた場合SQL構文エラーになるので削除する
-                            If costomInfo(n)(idx).IndexOf("'") >= 0 Then costomInfo(n)(idx) = cmn.RegReplace(costomInfo(n)(idx), "'", "")
-
-                            cmd += "'" & costomInfo(n)(idx).Trim & "',"
+                            If rec(idx).IndexOf("'") >= 0 Then rec(idx) = cmn.RegReplace(rec(idx), "'", "")
+                            cmd += "'" & rec(idx).Trim & "',"
                         Next
-                        cmd = cmd.TrimEnd(CType(",", Char))     ' 余分なカンマを削除
+                        cmd = cmd.TrimEnd(","c)
                         cmd += ")"
                     End If
                     AssistCmdList.Add(cmd)   ' アシストレコードデータを設定
                 Next
                 log.TimerED("CreateCmd")
+                WriteAssist(AssistCmdList)
             End Using
-            ' DB書き込み
-            WriteAssist(AssistCmdList)
         Catch ex As Exception
             MsgBox("アシストデータのファイル形式が正しくありません。" & vbCrLf & ex.Message)
         End Try
