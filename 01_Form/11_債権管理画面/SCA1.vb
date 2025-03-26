@@ -2401,16 +2401,14 @@ Public Class SCA1
         End If
         ' 検索欄フィルタ
         If TB_MRSearch.Text.Length > 0 Then
-            filterList.Add($"[担当者] = '{CB_Person.SelectedItem}'")
-
             Dim conditions As New List(Of String)
             For Each col As DataColumn In dv.Table.Columns
                 conditions.Add($"([{col.ColumnName}] LIKE '%{TB_MRSearch.Text}%')")
             Next
-            filterList.Add(String.Join(" OR ", conditions))
+            filterList.Add($"({String.Join(" OR ", conditions)})")
         End If
         dv.RowFilter = String.Join(" AND ", filterList)     ' すべてのフィルタ条件を " AND " で連結して RowFilter に設定
-
+        log.cLog($"DGV_MR1.RowFilter:{dv.RowFilter}")
         ' DataViewをDGVに設定
         DGV_MR1.DataSource = dv.ToTable
 
