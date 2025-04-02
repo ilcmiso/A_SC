@@ -39,8 +39,9 @@
 
     ' DB Save
     Private Sub SaveDB(val As String)
-        log.cLog("SaveDB")
-        Dim id As String = SCA1.CurrentCID      ' 債権番号
+        If SCA1.DGV1.Rows.Count = 0 Then Exit Sub
+        Dim id As String = SCA1.DGV1.CurrentRow.Cells(0).Value      ' 債権番号
+        log.cLog($"SaveDB ID:{id} Val:{val}")
 
         ' 追加電話番号の更新
         If db.IsExistREM(id) Then
@@ -54,7 +55,6 @@
 
     ' DBから読み取ってDGVに設定する
     Public Sub LoadDB()
-        log.cLog("AddTell LoadDB")
         log.TimerST()
         If SCA1.DGV1.Rows.Count = 0 Then Exit Sub
         SCA1.AddTelForm.DGV1.Rows.Clear()
@@ -65,7 +65,7 @@
         ' 「#名称#番号」の繰り返し形式データを読み出してDGVに設定
         Dim arr() As String = dt.Rows(0).Item(0).ToString.Split(Sqldb.DELIMITER)
         If arr.Length < 2 Then Exit Sub ' データが保存されてない場合は終了
-        log.cLog("LoadDB SQL:" & dt.Rows(0).Item(0).ToString)
+        log.cLog($"LoadDB ID:{id} Val:{dt.Rows(0).Item(0)}")
         For c = 0 To arr.Length - 1 Step 2      ' 2カラム分処理するから余分な回スキップ
             SCA1.AddTelForm.DGV1.Rows.Add()
             SCA1.AddTelForm.DGV1.Rows(c / 2).Cells(0).Value = arr(c)
@@ -83,7 +83,6 @@
             val += row.Cells(0).Value & Sqldb.DELIMITER & row.Cells(1).Value & Sqldb.DELIMITER
         Next
         If val.EndsWith(Sqldb.DELIMITER) Then val = val.Remove(val.Length - 1, 1)     ' 余分な区切り文字を削除
-        log.cLog("GetDGVVal:" & val)
         Return val
     End Function
 

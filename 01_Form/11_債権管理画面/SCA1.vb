@@ -98,7 +98,6 @@ Public Class SCA1
             changeTracker.StartMonitoring()
         End If
         CurrentCID = DGV1.CurrentRow.Cells(0).Value
-        log.cLog($"CurrentCID:{CurrentCID}")
 
         cmn.EndPBar()
         log.cLog("--- Load完了: " & (Date.Now - loadTime).ToString("ss\.fff"))
@@ -254,7 +253,6 @@ Public Class SCA1
         If e.RowIndex = lastIdx Then Exit Sub
         lastIdx = e.RowIndex        ' 最後に選択した位置を保存
         CurrentCID = DGV1.CurrentRow.Cells(0).Value
-        log.cLog($"CurrentCID:{CurrentCID}")
         DGV1_ClickShow()
     End Sub
     ' DGV選択時の表示
@@ -427,6 +425,7 @@ Public Class SCA1
             Case Keys.F2
             Case Keys.F3
             Case Keys.F4
+                log.cLog(CurrentCID)
         End Select
     End Sub
 
@@ -477,6 +476,7 @@ Public Class SCA1
                 dgv.Sort(dgv.Columns(5), ComponentModel.ListSortDirection.Descending)
                 L_STS.Text = $" ( {DGV1.Rows.Count} / {MaxCosCount} ) 件 表示中"
                 EnableObjects(dgv.Rows.Count <> 0)              ' もしDGV1のメンバーが0なら編集できなくする
+                CurrentCID = DGV1.CurrentRow.Cells(0).Value
                 Exit Sub
 
             Case dgv Is DGV2                                ' ## 顧客情報タブ 交渉記録
@@ -1770,7 +1770,7 @@ Public Class SCA1
                             MessageBoxButtons.YesNo,
                             MessageBoxIcon.Question)
         If r = vbNo Then Exit Sub
-        Dim keyId As Integer = db.GetFPCOSKeyId(CurrentCID)
+        Dim keyId As Integer = db.GetFPCOSKeyId(DGV1.CurrentRow.Cells(0).Value)
         db.ExeSQL(Sqldb.TID.FPDATA, $"DELETE FROM DATA WHERE C03 = '{keyId}'")
         db.ExeSQL(Sqldb.TID.FPCOS, $"DELETE FROM TBL WHERE C01 = '{keyId}'")
         ShowDGV_FPLIST()
