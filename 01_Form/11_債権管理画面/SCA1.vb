@@ -476,7 +476,9 @@ Public Class SCA1
                 dgv.Sort(dgv.Columns(5), ComponentModel.ListSortDirection.Descending)
                 L_STS.Text = $" ( {DGV1.Rows.Count} / {MaxCosCount} ) 件 表示中"
                 EnableObjects(dgv.Rows.Count <> 0)              ' もしDGV1のメンバーが0なら編集できなくする
-                CurrentCID = DGV1.CurrentRow.Cells(0).Value
+
+                CurrentCID = If(DGV1.CurrentRow?.Cells(0)?.Value, "")
+
                 Exit Sub
 
             Case dgv Is DGV2                                ' ## 顧客情報タブ 交渉記録

@@ -1,6 +1,7 @@
 ﻿Public Class SCA1_S4_TEL
     Private ReadOnly log As New Log
     Private ReadOnly db As New Sqldb
+    Private ReadOnly cmn As New Common
     Private fHeight As Integer
 
     Private BeforeVal As String
@@ -66,6 +67,17 @@
         Dim arr() As String = dt.Rows(0).Item(0).ToString.Split(Sqldb.DELIMITER)
         If arr.Length < 2 Then Exit Sub ' データが保存されてない場合は終了
         log.cLog($"LoadDB ID:{id} Val:{dt.Rows(0).Item(0)}")
+
+        ' 区切り文字#が、含まれてエラーになってしまわないようにする措置
+        If arr.Length Mod 2 = 1 Then
+            MsgBox($"入力欄に、使用できない文字「{Sqldb.DELIMITER}」が含まれていたようです。{vbCrLf}「{Sqldb.DELIMITER}」を削除して保存してください。{vbCrLf}「{dt.Rows(0).Item(0)}」{vbCrLf}")
+
+            ' 配列のサイズを1つ増やす
+            ReDim Preserve arr(UBound(arr) + 1)
+            ' 末尾の要素に新しい値を設定する
+            arr(UBound(arr)) = ""
+        End If
+
         For c = 0 To arr.Length - 1 Step 2      ' 2カラム分処理するから余分な回スキップ
             SCA1.AddTelForm.DGV1.Rows.Add()
             SCA1.AddTelForm.DGV1.Rows(c / 2).Cells(0).Value = arr(c)
@@ -80,6 +92,13 @@
         Dim val As String = ""
         For Each row As DataGridViewRow In DGV1.Rows
             If row.Cells(0).Value = "" And row.Cells(1).Value = "" Then Continue For  ' 空白行は保存しない
+
+            ' 入力欄に区切り文字が含まれていたら変換する
+            If (row.Cells(0).Value & row.Cells(1).Value).ToString.IndexOf(Sqldb.DELIMITER) > 0 Then
+                MsgBox($"半角シャープ「{Sqldb.DELIMITER}」は入力できません。{vbCrLf}全角シャープ「＃」に変換して保存します。")
+                row.Cells(0).Value = cmn.RegReplace(row.Cells(0).Value, Sqldb.DELIMITER, "＃")
+                row.Cells(1).Value = cmn.RegReplace(row.Cells(1).Value, Sqldb.DELIMITER, "＃")
+            End If
             val += row.Cells(0).Value & Sqldb.DELIMITER & row.Cells(1).Value & Sqldb.DELIMITER
         Next
         If val.EndsWith(Sqldb.DELIMITER) Then val = val.Remove(val.Length - 1, 1)     ' 余分な区切り文字を削除
