@@ -516,19 +516,24 @@
 
         ' 内容
         Select Case beforeType
-            Case 0  ' 団信弁済
+            Case SCcommon.MRITEMID.REPAY_F, SCcommon.MRITEMID.REPAY_A
+                ' 団信弁済
                 DGV_REG1(1, 6).Value = contentWords(9)
                 SetValueDGV("内容", contentWords(9))
-            Case 1, 2  ' 一部繰り上げ返済
+            Case SCcommon.MRITEMID.PARTIAL_REPAY_F, SCcommon.MRITEMID.PARTIAL_REPAY_A
+                ' 一部繰り上げ返済
                 DGV_REG1(1, 6).Value = contentWords(1)
                 SetValueDGV("内容", contentWords(1))
-            Case 3  ' 完済管理
+            Case SCcommon.MRITEMID.FULL_REPAY
+                ' 完済管理
                 DGV_REG1(1, 6).Value = contentWords(0)
                 SetValueDGV("内容", contentWords(0))
-            Case 4  ' 契約条件変更
+            Case SCcommon.MRITEMID.CONTACT_CHANGE
+                ' 契約条件変更
                 DGV_REG1(1, 6).Value = contentWords(10)
                 SetValueDGV("内容", contentWords(10))
-            Case 5  ' 口座変更
+            Case SCcommon.MRITEMID.ACCOUNT_CHANGE
+                ' 口座変更
                 DGV_REG1(1, 6).Value = contentWords(5)
                 SetValueDGV("内容", contentWords(5))
         End Select

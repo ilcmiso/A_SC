@@ -2421,9 +2421,11 @@ Public Class SCA1
         mrcmn.HighlightRows(DGV_MR1, "抹消発送日", "", System.Drawing.Color.GreenYellow)
         mrcmn.HighlightRows(DGV_MR1, "ステータス", "取下げ", System.Drawing.Color.Salmon)
         Select Case CB_MRLIST.SelectedIndex
-            Case SCcommon.MRITEMID.REPAY
+            Case SCcommon.MRITEMID.REPAY_F
                 ' 支払不可の文字を赤色に変更
                 cmn.SetCellFontDGV(DGV_MR1, "F審査結果", "支払不可", fontColor:=System.Drawing.Color.Red)
+            Case SCcommon.MRITEMID.REPAY_A
+                ' 支払不可の文字を赤色に変更
                 cmn.SetCellFontDGV(DGV_MR1, "A審査結果", "支払不可", fontColor:=System.Drawing.Color.Red)
         End Select
 
