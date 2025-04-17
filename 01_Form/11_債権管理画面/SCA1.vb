@@ -1863,61 +1863,6 @@ Public Class SCA1
         excelManager.OpenFile()
     End Sub
 
-    '' Excel全出力
-    'Private Sub BT_FPMNG_AllOutExcel_Click(sender As Object, e As EventArgs) Handles BT_FPMNG_AllOutExcel.Click
-    '    Dim path As String = cmn.DialogSaveFile("融資物件一覧_全出力.xlsx")
-    '    If path = String.Empty Then Exit Sub
-    '    Dim excelManager As New ExcelManager(path)
-
-    '    ' TBLテーブルとDATAテーブルから全てのレコードを読み込む
-    '    Dim dtCos As DataTable = db.GetSelect(Sqldb.TID.FPCOS, $"SELECT * FROM {db.GetTable(Sqldb.TID.FPCOS)}")
-    '    Dim dtData As DataTable = db.GetSelect(Sqldb.TID.FPDATA, $"SELECT * FROM {db.GetTable(Sqldb.TID.FPDATA)}")
-
-    '    ' 出力するデータのリストを作成
-    '    Dim exportData As New List(Of List(Of String))
-    '    Dim colRow As New List(Of String)
-    '    ' 見出し行を追加
-    '    Dim colNameList As String() = {"", "顧客番号", "顧客名", "居住有無", "融資物件〒", "融資物件住所", "延滞原因", "フラット期失日", "任売同意期限", "競売申立期限", "アシスト期失日", "買戻日", "一部代位日", "フラット管理事務停止日", "アシスト管理事務停止日", "内容", "担当者", "最終対応日", "次回対応日", "ステータス", "概要", "汎用1", "汎用2", "汎用3", "汎用4", "汎用5", "汎用6", "汎用7", "汎用8", "汎用9", "汎用10", "汎用11", "汎用12", "汎用13", "汎用14", "汎用15", "汎用16", "汎用17", "汎用18", "汎用19", "汎用20", "汎用21", "汎用22", "汎用23", "汎用24", "汎用25", "汎用26"}
-    '    exportData.Add(colNameList.ToList())
-
-    '    ' DATAのデータを行ごとに処理し、それに基づいてTBLのデータをExcelに出力
-    '    For Each rowData As DataRow In dtData.Rows
-    '        Dim exportRow As New List(Of String)
-
-    '        ' TBLテーブルから対応するレコードを検索
-    '        Dim keyNumber As String = rowData("C03").ToString()
-    '        Dim rowTbl As DataRow = dtCos.Select($"C01 = '{keyNumber}'").FirstOrDefault()
-
-    '        If rowTbl IsNot Nothing Then
-    '            ' TBLのC01～C15をリストに追加
-    '            For i As Integer = 0 To 14
-    '                exportRow.Add(rowTbl($"C{i + 1:00}").ToString())
-    '            Next
-    '        End If
-
-    '        ' DATAテーブルのC04～C35をリストに追加（C04はSCcommon.FPITEMLISTから取得）
-    '        For i As Integer = 3 To 34 ' C04～C35
-    '            If i = 3 Then ' C04の場合はSCcommon.FPITEMLIST()から文字列を取得
-    '                Dim index As Integer = Convert.ToInt32(rowData($"C{i + 1:00}"))
-    '                If index >= 0 AndAlso index < sccmn.FPITEMLIST.Length Then
-    '                    exportRow.Add(sccmn.FPITEMLIST(index + 1))
-    '                Else
-    '                    exportRow.Add("") ' 該当するインデックスがない場合は空文字を追加
-    '                End If
-    '            Else
-    '                exportRow.Add(rowData($"C{i + 1:00}").ToString())
-    '            End If
-    '        Next
-    '        ' Excelに出力するためのリストにこの行のデータを追加
-    '        exportData.Add(exportRow)
-    '    Next
-
-    '    ' Excelにデータを出力し、ファイルを開く
-    '    excelManager.ExportToExcel(exportData, "Sheet1")
-    '    excelManager.SaveAndClose()
-    '    excelManager.OpenFile()
-    'End Sub
-
     ' ページボタン
     Private Sub BT_FP_PAGE_Click(sender As Object, e As EventArgs) Handles BT_FP_PAGE.Click
         If DGV1.Rows.Count = 0 Then Exit Sub
@@ -2301,13 +2246,12 @@ Public Class SCA1
     Private mrcmn As New SCMRcommon
     Private Sub MRInit()
         mrcmn.GetHolidayDate()
-        oview = New SCGA_OVIEW
         CB_MRLIST.Items.AddRange(sccmn.MRITEMLIST)
         CB_MRLIST.SelectedIndex = 0
         DTP_MRED.Value = Today.AddYears(1).Date         ' 1年後を指定
-        ShowDGVMR()
+        oview = New SCGA_OVIEW
         TB_MRPaymentDate.Text = Today.Date.ToString("yyyy/MM")
-
+        ShowDGVMR()
 
         DivMode(xml.GetDiv)
     End Sub
@@ -2370,6 +2314,7 @@ Public Class SCA1
     End Sub
 
     Public Sub ShowDGVMR() Handles CB_MRLIST.SelectedIndexChanged
+        If xml.GetDiv <> Common.DIV.GA Then Exit Sub
         Static mrlist As Integer = -1   ' 担当者コンボボックスの生成を、申請物リスト変更時に限定するためのメモリ
         Dim rowCount As Integer         ' 申請物別の最大件数
         log.TimerST()
