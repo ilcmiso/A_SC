@@ -16,11 +16,14 @@
     Private Const MR_READONLY As String = "ReadOnly"
     Private Const NUMBER_LENGTH As Integer = 3
 
+    Private AddRepayFACount As Integer         ' 団信弁済のフラットorアシストを追加しますか？のメッセージボックスを1度しか表示しないためのカウント
+
 #Region " OPEN CLOSE "
     Private Sub FLS_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         ownForm = DirectCast(Me.Owner, SCA1)
         MRType = ownForm.CB_MRLIST.SelectedIndex
         ShowDGV()
+        AddRepayFACount = 0
     End Sub
 
     Private Sub ShowDGV()
@@ -67,6 +70,7 @@
                     Case SCcommon.MRITEMID.MAIL_RECV       ' 郵便受領
                         ' UserListにあるユーザー名をコンボボックスのItemsに設定
                         SetComboBoxItemsDGV("受領者", userList)
+                        SetValueDGV("受領者", xml.GetUserName)
                 End Select
 
             Case BTEDIT ' 編集ボタン契機
@@ -209,9 +213,24 @@
         ownForm.db.ExeSQLInsUpd(Sqldb.TID.MR, commandText)
         ownForm.db.ExeSQL(Sqldb.TID.MR)
 
-        ' 追加後、発送届けが基本セットになるため、発送届けが必要か確認するダイアログ表示
+        ' 追加後、他の追加登録が必要か確認
         If ownForm.ActiveControl.Name = BTADD AndAlso MRType < SCcommon.MRITEMID.MAIL_SEND Then
             Dim r As Integer
+            ' 団信弁済を追加するとき、対となる項目(フラットとアシスト)が必要か確認するダイアログ表示
+            If AddRepayFACount = 0 AndAlso (MRType = SCcommon.MRITEMID.REPAY_A OrElse MRType = SCcommon.MRITEMID.REPAY_F) Then
+                Dim msg As String = If((MRType = SCcommon.MRITEMID.REPAY_F), "アシスト", "フラット")
+                r = MessageBox.Show($"登録しました。{vbCrLf}併せて「団信弁済({msg})」を追加しますか？",
+                                    "ご確認ください",
+                                    MessageBoxButtons.YesNo,
+                                    MessageBoxIcon.Question)
+                If r = vbYes Then
+                    AddRepayFACount = 1
+                    AddRepayFA()
+                    Exit Sub
+                End If
+            End If
+
+            ' 発送届けが基本セットになるため、発送届けが必要か確認するダイアログ表示
             r = MessageBox.Show($"登録しました。{vbCrLf}併せて「郵便発送簿」を追加しますか？",
                                 "ご確認ください",
                                 MessageBoxButtons.YesNo,
@@ -516,7 +535,7 @@
 
         ' 内容
         Select Case beforeType
-            Case SCcommon.MRITEMID.REPAY_F, SCcommon.MRITEMID.REPAY_A
+            Case SCcommon.MRITEMID.REPAY, SCcommon.MRITEMID.REPAY_F, SCcommon.MRITEMID.REPAY_A
                 ' 団信弁済
                 DGV_REG1(1, 6).Value = contentWords(9)
                 SetValueDGV("内容", contentWords(9))
@@ -541,7 +560,20 @@
         'ローン種類
         DGV_REG1(1, 7).Value = flatType
         SetValueDGV("ローン種類", flatType)
+    End Sub
 
+    ' 追加の団信弁済(ForA)
+    Private Sub AddRepayFA()
+        If MRType = SCcommon.MRITEMID.REPAY_A Then
+            MRType = SCcommon.MRITEMID.REPAY_F
+        Else
+            MRType = SCcommon.MRITEMID.REPAY_A
+        End If
+        ownForm.CB_MRLIST.SelectedIndex = MRType
+
+        ' 追加画面を再構成するためにオブジェクト削除して表示
+        RemoveControlsFromDGV(DGV_REG1)
+        ShowDGV()
     End Sub
 
     ' ショートカット F1

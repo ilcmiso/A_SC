@@ -2131,6 +2131,7 @@ Public Class SCA1
     End Sub
 
     Private Sub ShowDGV_FPMNG()
+        If xml.GetDiv <> Common.DIV.SC Then Exit Sub
         log.TimerST()
         LockEventHandler_FP = True
         Dim dtFPCOS As DataTable = db.GetSelect(Sqldb.TID.FPCOS, $"SELECT * FROM {db.GetTable(Sqldb.TID.FPCOS)}")
@@ -2366,12 +2367,16 @@ Public Class SCA1
         mrcmn.HighlightRows(DGV_MR1, "抹消発送日", "", System.Drawing.Color.GreenYellow)
         mrcmn.HighlightRows(DGV_MR1, "ステータス", "取下げ", System.Drawing.Color.Salmon)
         Select Case CB_MRLIST.SelectedIndex
-            Case SCcommon.MRITEMID.REPAY_F
+            Case SCcommon.MRITEMID.REPAY
                 ' 支払不可の文字を赤色に変更
                 cmn.SetCellFontDGV(DGV_MR1, "F審査結果", "支払不可", fontColor:=System.Drawing.Color.Red)
-            Case SCcommon.MRITEMID.REPAY_A
-                ' 支払不可の文字を赤色に変更
                 cmn.SetCellFontDGV(DGV_MR1, "A審査結果", "支払不可", fontColor:=System.Drawing.Color.Red)
+
+            Case SCcommon.MRITEMID.REPAY_F, SCcommon.MRITEMID.REPAY_A
+                ' 支払不可の文字を赤色に変更
+                cmn.SetCellFontDGV(DGV_MR1, "審査結果", "支払不可", fontColor:=System.Drawing.Color.Red)
+                mrcmn.HighlightRows(DGV_MR1, "審査結果", "支払不可", System.Drawing.Color.DarkGray)
+                mrcmn.HighlightRows(DGV_MR1, "審査結果", "取下げ", System.Drawing.Color.DarkGray)
         End Select
 
         ' DataViewに設定したカラム幅を、DGVに設定して反映する
@@ -2445,6 +2450,17 @@ Public Class SCA1
                 ShowSelectUser(cellValue)
             End If
         End If
+    End Sub
+
+    ' F/A対の顧客検索ボタン
+    Private Sub Button21_Click(sender As Object, e As EventArgs) Handles Button21.Click
+        Dim columnIndex As Integer = cmn.FindColumnIndex(DGV_MR1, "顧客番号")
+        If columnIndex = -1 Then Exit Sub ' カラムが見つからなければ何もしない
+        Dim cid As String = DGV_MR1.SelectedRows(0).Cells(columnIndex).Value
+        If cid.Length = 0 Then Exit Sub
+
+        TB_MRSearch.Text = DGV_MR1.SelectedRows(0).Cells(columnIndex).Value
+        CB_MRLIST.SelectedIndex = If((CB_MRLIST.SelectedIndex = SCcommon.MRITEMID.REPAY_F), SCcommon.MRITEMID.REPAY_A, SCcommon.MRITEMID.REPAY_F)
     End Sub
 
     ' Excel全出力ボタン
@@ -2655,4 +2671,5 @@ Public Class SCA1
             Console.WriteLine("エラーが発生しました: " & ex.Message)
         End Try
     End Sub
+
 End Class

@@ -169,6 +169,7 @@ Partial Class SCA1
         Me.TB_ADDRESS3 = New System.Windows.Forms.TextBox()
         Me.L_STS = New System.Windows.Forms.Label()
         Me.PAN_A = New System.Windows.Forms.Panel()
+        Me.Button3 = New System.Windows.Forms.Button()
         Me.BT_FP_PAGE = New System.Windows.Forms.Button()
         Me.DGV_FPLIST = New System.Windows.Forms.DataGridView()
         Me.Column26 = New System.Windows.Forms.DataGridViewTextBoxColumn()
@@ -231,6 +232,7 @@ Partial Class SCA1
         Me.Button1 = New System.Windows.Forms.Button()
         Me.TAB_A1 = New System.Windows.Forms.TabControl()
         Me.Tab_6GA = New System.Windows.Forms.TabPage()
+        Me.Button21 = New System.Windows.Forms.Button()
         Me.L_STS_MR = New System.Windows.Forms.Label()
         Me.Button17 = New System.Windows.Forms.Button()
         Me.TB_MRPaymentDate = New System.Windows.Forms.TextBox()
@@ -293,7 +295,6 @@ Partial Class SCA1
         Me.ToolStripMenuItem2 = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
         Me.ColorDialog1 = New System.Windows.Forms.ColorDialog()
-        Me.Button3 = New System.Windows.Forms.Button()
         Me.Tab_4Dun.SuspendLayout()
         CType(Me.DGV4, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.GroupBox1.SuspendLayout()
@@ -1661,6 +1662,19 @@ Partial Class SCA1
         Me.PAN_A.Size = New System.Drawing.Size(517, 330)
         Me.PAN_A.TabIndex = 1778
         '
+        'Button3
+        '
+        Me.Button3.BackColor = System.Drawing.Color.Red
+        Me.Button3.FlatAppearance.BorderColor = System.Drawing.Color.Black
+        Me.Button3.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.Button3.ForeColor = System.Drawing.Color.White
+        Me.Button3.Location = New System.Drawing.Point(100, 14)
+        Me.Button3.Name = "Button3"
+        Me.Button3.Size = New System.Drawing.Size(67, 29)
+        Me.Button3.TabIndex = 1770
+        Me.Button3.Text = "削除"
+        Me.Button3.UseVisualStyleBackColor = False
+        '
         'BT_FP_PAGE
         '
         Me.BT_FP_PAGE.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
@@ -2467,6 +2481,7 @@ Partial Class SCA1
         'Tab_6GA
         '
         Me.Tab_6GA.BackColor = System.Drawing.Color.LightBlue
+        Me.Tab_6GA.Controls.Add(Me.Button21)
         Me.Tab_6GA.Controls.Add(Me.L_STS_MR)
         Me.Tab_6GA.Controls.Add(Me.Button17)
         Me.Tab_6GA.Controls.Add(Me.TB_MRPaymentDate)
@@ -2495,6 +2510,20 @@ Partial Class SCA1
         Me.Tab_6GA.TabIndex = 5
         Me.Tab_6GA.Text = "申請物管理"
         '
+        'Button21
+        '
+        Me.Button21.BackColor = System.Drawing.Color.SteelBlue
+        Me.Button21.FlatAppearance.BorderColor = System.Drawing.Color.Black
+        Me.Button21.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Bold)
+        Me.Button21.ForeColor = System.Drawing.Color.White
+        Me.Button21.Location = New System.Drawing.Point(448, 621)
+        Me.Button21.Name = "Button21"
+        Me.Button21.Size = New System.Drawing.Size(154, 27)
+        Me.Button21.TabIndex = 1802
+        Me.Button21.TabStop = False
+        Me.Button21.Text = "団信F/A対の顧客検索"
+        Me.Button21.UseVisualStyleBackColor = False
+        '
         'L_STS_MR
         '
         Me.L_STS_MR.AutoSize = True
@@ -2513,7 +2542,7 @@ Partial Class SCA1
         Me.Button17.FlatAppearance.BorderColor = System.Drawing.Color.Black
         Me.Button17.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Bold)
         Me.Button17.ForeColor = System.Drawing.Color.White
-        Me.Button17.Location = New System.Drawing.Point(300, 622)
+        Me.Button17.Location = New System.Drawing.Point(300, 621)
         Me.Button17.Name = "Button17"
         Me.Button17.Size = New System.Drawing.Size(142, 27)
         Me.Button17.TabIndex = 1800
@@ -2549,7 +2578,7 @@ Partial Class SCA1
         Me.Button5.FlatAppearance.BorderColor = System.Drawing.Color.Black
         Me.Button5.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.Button5.ForeColor = System.Drawing.Color.White
-        Me.Button5.Location = New System.Drawing.Point(558, 623)
+        Me.Button5.Location = New System.Drawing.Point(708, 622)
         Me.Button5.Name = "Button5"
         Me.Button5.Size = New System.Drawing.Size(92, 27)
         Me.Button5.TabIndex = 1793
@@ -2563,7 +2592,7 @@ Partial Class SCA1
         Me.Button2.FlatAppearance.BorderColor = System.Drawing.Color.Black
         Me.Button2.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.Button2.ForeColor = System.Drawing.Color.White
-        Me.Button2.Location = New System.Drawing.Point(460, 623)
+        Me.Button2.Location = New System.Drawing.Point(610, 622)
         Me.Button2.Name = "Button2"
         Me.Button2.Size = New System.Drawing.Size(92, 27)
         Me.Button2.TabIndex = 1792
@@ -2701,7 +2730,7 @@ Partial Class SCA1
         Me.BT_MRDel.FlatAppearance.BorderColor = System.Drawing.Color.Black
         Me.BT_MRDel.Font = New System.Drawing.Font("MS UI Gothic", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.BT_MRDel.ForeColor = System.Drawing.Color.White
-        Me.BT_MRDel.Location = New System.Drawing.Point(202, 622)
+        Me.BT_MRDel.Location = New System.Drawing.Point(202, 621)
         Me.BT_MRDel.Name = "BT_MRDel"
         Me.BT_MRDel.Size = New System.Drawing.Size(92, 27)
         Me.BT_MRDel.TabIndex = 1784
@@ -2715,7 +2744,7 @@ Partial Class SCA1
         Me.BT_MREdit.FlatAppearance.BorderColor = System.Drawing.Color.Black
         Me.BT_MREdit.Font = New System.Drawing.Font("MS UI Gothic", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.BT_MREdit.ForeColor = System.Drawing.Color.White
-        Me.BT_MREdit.Location = New System.Drawing.Point(104, 622)
+        Me.BT_MREdit.Location = New System.Drawing.Point(104, 621)
         Me.BT_MREdit.Name = "BT_MREdit"
         Me.BT_MREdit.Size = New System.Drawing.Size(92, 27)
         Me.BT_MREdit.TabIndex = 1783
@@ -2729,7 +2758,7 @@ Partial Class SCA1
         Me.BT_MRAdd.FlatAppearance.BorderColor = System.Drawing.Color.Black
         Me.BT_MRAdd.Font = New System.Drawing.Font("MS UI Gothic", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.BT_MRAdd.ForeColor = System.Drawing.Color.Cyan
-        Me.BT_MRAdd.Location = New System.Drawing.Point(6, 622)
+        Me.BT_MRAdd.Location = New System.Drawing.Point(6, 621)
         Me.BT_MRAdd.Name = "BT_MRAdd"
         Me.BT_MRAdd.Size = New System.Drawing.Size(92, 27)
         Me.BT_MRAdd.TabIndex = 1782
@@ -3230,19 +3259,6 @@ Partial Class SCA1
         Me.MenuStrip1.TabIndex = 1574
         Me.MenuStrip1.Text = "MenuStrip1"
         '
-        'Button3
-        '
-        Me.Button3.BackColor = System.Drawing.Color.Red
-        Me.Button3.FlatAppearance.BorderColor = System.Drawing.Color.Black
-        Me.Button3.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.Button3.ForeColor = System.Drawing.Color.White
-        Me.Button3.Location = New System.Drawing.Point(100, 14)
-        Me.Button3.Name = "Button3"
-        Me.Button3.Size = New System.Drawing.Size(67, 29)
-        Me.Button3.TabIndex = 1770
-        Me.Button3.Text = "削除"
-        Me.Button3.UseVisualStyleBackColor = False
-        '
         'SCA1
         '
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None
@@ -3525,4 +3541,5 @@ Partial Class SCA1
     Friend WithEvents C08 As DataGridViewTextBoxColumn
     Friend WithEvents C07 As DataGridViewTextBoxColumn
     Friend WithEvents Button3 As Button
+    Friend WithEvents Button21 As Button
 End Class
