@@ -1781,11 +1781,13 @@ Public Class SCA1
 
     ' ジャンプボタン
     Private Sub BT_FPMNG_JUMP_Click(sender As Object, e As EventArgs) Handles BT_FPMNG_JUMP.Click
+        If DGV_FPMNG.CurrentRow Is Nothing Then Exit Sub
+        Cursor.Current = Cursors.WaitCursor             ' マウスカーソルを砂時計に
         ' 該当する物件情報を表示
         ShowSelectUser(DGV_FPMNG.CurrentRow.Cells(2).Value, Array.IndexOf(sccmn.FPITEMLIST, DGV_FPMNG.CurrentRow.Cells(4).Value))
     End Sub
-    Private Sub BT_FPMNG_JUMP_Click(sender As Object, e As DataGridViewCellEventArgs) Handles DGV_FPMNG.CellDoubleClick, BT_FPMNG_JUMP.Click
-        If DGV_FPMNG.Rows.Count = 0 Then Exit Sub
+    Private Sub BT_FPMNG_JUMP_Click(sender As Object, e As DataGridViewCellEventArgs) Handles DGV_FPMNG.CellDoubleClick
+        If DGV_FPMNG.CurrentRow Is Nothing Then Exit Sub
         If e.RowIndex < 0 Then Exit Sub
         Cursor.Current = Cursors.WaitCursor             ' マウスカーソルを砂時計に
         ' 該当する物件情報を表示
