@@ -1767,14 +1767,19 @@ Public Class SCA1
 
     ' 削除ボタン(物件情報)
     Private Sub Button3_Click(sender As Object, e As EventArgs) Handles Button3.Click
-        Dim r = MessageBox.Show("物件情報を削除してよろしいですか？",
+        Dim r = MessageBox.Show($"「{DGV1.CurrentRow.Cells(1).Value}」 様の 【 {DGV_PIMENU.CurrentRow.Cells(0).Value} 】 情報を削除してよろしいですか？",
                             "ご確認ください",
                             MessageBoxButtons.YesNo,
                             MessageBoxIcon.Question)
         If r = vbNo Then Exit Sub
         Dim keyId As Integer = db.GetFPCOSKeyId(DGV1.CurrentRow.Cells(0).Value)
-        db.ExeSQL(Sqldb.TID.FPDATA, $"DELETE FROM DATA WHERE C03 = '{keyId}'")
-        db.ExeSQL(Sqldb.TID.FPCOS, $"DELETE FROM TBL WHERE C01 = '{keyId}'")
+        Dim rowIndex As Integer = DGV_PIMENU.CurrentRow.Index
+        If rowIndex > 0 Then
+            ' C04が指定したタグ 且つ C04が同じ値の項目が複数あるので、C01を昇順して現在のページ数番目(OFFSET)のデータを削除
+            db.ExeSQL(Sqldb.TID.FPDATA, $"DELETE FROM {db.GetTable(Sqldb.TID.FPDATA)} WHERE C01 = (SELECT C01 FROM {db.GetTable(Sqldb.TID.FPDATA)} WHERE C03 = '{keyId}' AND C04 = '{rowIndex - 1}' ORDER BY C01 ASC LIMIT 1 OFFSET {FPPageNo})")
+        Else
+            db.ExeSQL(Sqldb.TID.FPCOS, $"DELETE FROM TBL WHERE C01 = '{keyId}'")
+        End If
         ShowDGV_FPLIST()
         MsgBox("削除しました。")
     End Sub
