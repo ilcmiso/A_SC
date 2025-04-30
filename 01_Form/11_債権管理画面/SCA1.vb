@@ -67,6 +67,9 @@ Public Class SCA1
         db.UpdateOrigDT()
         db.UpdateOrigDT_ASsist()
 
+        ' ユーザー名の登録確認
+        CheckUserName()
+
         ' DGV1の初期設定
         InitDGV1()
 
@@ -2644,6 +2647,20 @@ Public Class SCA1
         fm.ShowInTaskbar = False
         fm.ShowDialog()
         fm.Dispose()
+    End Sub
+
+    ' ユーザーリストの登録済み確認
+    Private Sub CheckUserName()
+        Dim uName As String = xml.GetUserName()
+        If uName.Length = 0 Then
+            MsgBox($"ユーザー名を設定する必要があります。{vbCrLf}ユーザー名を入力してください。")
+            Dim fm As Form = SCA_SetUserName
+            fm.ShowInTaskbar = False
+            fm.ShowDialog()
+            fm.Dispose()
+        Else
+            db.RegUserList(uName)
+        End If
     End Sub
 
 #End Region

@@ -12,7 +12,7 @@
             MsgBox($"空欄は設定できません。{vbCrLf}ご自身の名前を設定してください。")
             Exit Sub
         End If
-        SCA1.xml.SetUserName(TB_UserName.Text)
+        SCA1.db.RegUserList(TB_UserName.Text)
         MsgBox("ユーザー名を設定しました。")
         Me.Close()
     End Sub

@@ -61,27 +61,6 @@ Public Class XmlMng
 
     ' 提供IF
     Public Sub SetUserName(uName As String)
-        Dim db As Sqldb = SCA1.db
-        db.UpdateOrigDT(Sqldb.TID.USER)
-        Dim regList As String() = {
-            My.Computer.Name,
-            "",
-            uName,
-            GetDiv(),
-            ""
-        }
-        Dim dr As DataRow() = db.OrgDataTable(Sqldb.TID.USER).Select($"C01 = '{My.Computer.Name}'")
-        If dr.Length > 0 Then
-            ' 既に登録済みユーザーは、ユーザー識別子をそのままの値で設定
-            regList(1) = dr(0)(1)       ' 
-        Else
-            ' 新規ユーザーの場合は、ユーザー識別子を最大値+1の値を設定
-            regList(1) = db.GetNextID(Sqldb.TID.USER, "C02").ToString("D5")
-        End If
-
-        ' UserListDB更新
-        db.ExeSQLInsUpd(Sqldb.TID.USER, regList)
-        db.ExeSQL(Sqldb.TID.USER)
         xmlData.UserName = uName
         SetXml()
     End Sub

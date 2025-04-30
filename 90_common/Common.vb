@@ -5,6 +5,7 @@ Imports System.Text.RegularExpressions
 Imports Microsoft.SqlServer
 Imports System.Windows.Controls
 Imports System.Windows.Forms
+Imports System.Net.NetworkInformation
 
 Public Class Common
     ' ディレクトリ名
@@ -529,6 +530,19 @@ Public Class Common
             End If
         Next
         Return sb.ToString()
+    End Function
+
+    ' MACアドレス取得
+    Public Function GetMacAddress() As String
+        For Each nic As NetworkInterface In NetworkInterface.GetAllNetworkInterfaces()
+            If nic.NetworkInterfaceType <> NetworkInterfaceType.Loopback AndAlso nic.OperationalStatus = OperationalStatus.Up Then
+                Dim mac = nic.GetPhysicalAddress().ToString()
+                If Not String.IsNullOrEmpty(mac) AndAlso mac.Length >= 12 Then
+                    Return String.Join("-", Enumerable.Range(0, mac.Length \ 2).Select(Function(i) mac.Substring(i * 2, 2)))
+                End If
+            End If
+        Next
+        Return "(未取得)"
     End Function
 
     ' プログレスバー表示

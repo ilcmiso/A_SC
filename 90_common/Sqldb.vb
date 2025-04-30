@@ -672,6 +672,32 @@ Public Class Sqldb
         Return DBTbl(tid, Sqldb.DBID.CNUM)
     End Function
 
+    ' ユーザーリスト登録
+    Public Sub RegUserList(uName As String)
+        Dim macAddr As String = cmn.GetMacAddress
+        Dim pcName As String = My.Computer.Name
+        ' ユーザーデータ取得
+        Dim dr() As DataRow = OrgDataTable(Sqldb.TID.USER).Select($"C05 = '{macAddr}'")
+        If dr.Length = 0 Then
+            ' MACアドレスでHITしない
+            dr = OrgDataTable(Sqldb.TID.USER).Select($"C01 = '{pcName}'")
+            If dr.Length = 0 Then
+                ' 新規ユーザー登録 ユーザー識別子を最大値+1の値を設定
+                ExeSQL(Sqldb.TID.USER, $"INSERT INTO {GetTable(Sqldb.TID.USER)} VALUES('{pcName}','{GetNextID(Sqldb.TID.USER, "C02"):D5}','{uName}','{SCA1.xml.GetDiv}','{macAddr}')")
+            Else
+                ' MACアドレスを追記する
+                ExeSQL(Sqldb.TID.USER, $"UPDATE {GetTable(Sqldb.TID.USER)} SET C05 = '{macAddr}' WHERE C02 = '{dr(0)(1)}'")
+            End If
+        Else
+            ' 既に登録済み
+            If uName <> dr(0)(2) Then
+                ' ユーザー名が変更されていたら更新
+                ExeSQL(Sqldb.TID.USER, $"UPDATE {GetTable(Sqldb.TID.USER)} SET C03 = '{uName}' WHERE C05 = '{macAddr}'")
+            End If
+        End If
+        SCA1.xml.SetUserName(uName)
+    End Sub
+
     '#### SQL Server関連 #################################################
 
     ' 指定したTableIDがSQL Server対象かどうか判定
