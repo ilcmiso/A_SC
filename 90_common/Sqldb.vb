@@ -102,6 +102,8 @@ Public Class Sqldb
     Private ReadOnly loCon(DBTbl.GetLength(0) - 1) As SQLiteConnection     ' ローカルコネクション
     Private ReadOnly loCmd(DBTbl.GetLength(0) - 1) As SQLiteCommand
     Private cmdl() As List(Of String)
+    ' GetCosName用FK02をキーに、最初に見つかった1行を保持
+    Private FK02Index As Dictionary(Of String, DataRow)
 
     ' コンストラクタ(初期化設定)
     Sub New()
@@ -564,6 +566,9 @@ Public Class Sqldb
             End If
         Next
         OrgDataTablePlusAssist = dt
+
+        ' 主キーを設定
+        InitFK02Index()
     End Sub
 
     ' DB最適化
@@ -660,6 +665,36 @@ Public Class Sqldb
             ret = dt.Rows(0)(0)
         End If
         Return ret
+    End Function
+
+    ' GetCosName用インデックスを作成
+    Private Sub InitFK02Index()
+        FK02Index = New Dictionary(Of String, DataRow)
+
+        For Each row As DataRow In OrgDataTablePlusAssist.Rows
+            Dim key As String = row("FK02").ToString()
+            ' 最初の1件だけ登録（重複無視）
+            If Not FK02Index.ContainsKey(key) Then
+                FK02Index.Add(key, row)
+            End If
+        Next
+    End Sub
+
+    ' 顧客番号から顧客氏名を取得
+    ' [Ret] String(0):顧客氏名(漢字)
+    '       String(1):顧客氏名(半角カナ)
+    Public Function GetCosName(cid As String) As String()
+        If FK02Index Is Nothing Then InitFK02Index()
+
+        Dim cName(1) As String
+        If FK02Index.ContainsKey(cid) Then
+            Dim row = FK02Index(cid)
+            cName(0) = row(9).ToString()   ' 氏名（漢字）
+            cName(1) = row(10).ToString()  ' 氏名（カナ）
+            Return cName
+        End If
+
+        Return Nothing
     End Function
 
     ' TIDからテーブル名取得

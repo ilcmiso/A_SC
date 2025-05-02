@@ -31,10 +31,13 @@ Public Class SCA_InputData
                     HandleZipFile(filePath)
                 Case ".txt"
                     HandleTextFile(filePath)
+                Case ".xlsm"
+                    HandleXlsmFile(filePath)
                 Case Else
                     MessageBox.Show("サポートされていないファイル形式です。", "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error)
             End Select
         End If
+        Me.Close()
     End Sub
 
     Private Sub HandleZipFile(zipPath As String)
@@ -70,6 +73,65 @@ Public Class SCA_InputData
                 End If
             Next
         End Using
+    End Sub
+
+    ' Excel交渉記録の登録
+    Private Sub HandleXlsmFile(xlsmPath As String)
+        Dim dataList As List(Of String) = ExcelDataReaderUtil.ExcelToList(xlsmPath)
+        Dim cnt As Integer = 0
+        Dim NGList As New List(Of String)
+
+        dataList.RemoveRange(0, 5)  ' Excelの読み込みたくない先頭5行を削除
+        For Each line As String In dataList
+            Dim inData As List(Of String) = line.Split(","c).ToList()
+            Dim cid As String = inData(1)
+            Dim cName As String() = SCA1.db.GetCosName(cid)
+
+            ' 顧客番号ば存在しない場合はNGリスト追加
+            If cName Is Nothing Then
+                NGList.Add(cid)
+                Continue For
+            End If
+
+            ' ExcelのLF改行だとVBでは改行を認識できないため、vbCrLfに変換
+            ' inData(6)は「内容」欄のみ変換
+            If inData(6).Contains(vbLf) Then inData(6) = inData(6).Replace(vbLf, vbCrLf)
+
+            ' 「日時」と「督促日」の形式を整える
+            Try
+                Dim dt As DateTime
+                If Not String.IsNullOrWhiteSpace(inData(2)) Then
+                    If DateTime.TryParse(inData(2), dt) Then inData(2) = dt.ToString("yyyy/MM/dd HH:mm")
+                End If
+                If Not String.IsNullOrWhiteSpace(inData(7)) Then
+                    If DateTime.TryParse(inData(7), dt) Then inData(7) = dt.ToString("yyyy/MM/dd")
+                End If
+            Catch
+                ' 日付の変換が失敗
+                NGList.Add(cid)
+                Continue For
+            End Try
+
+            ' FKD01 にユニークIDを付加
+            inData(0) = $"{Now:yyyyMMddHHmmss}_{Now.Millisecond:D3}_{cnt:D3}"
+
+            ' FKD09,10 に氏名とカナ
+            inData(8) = If(cName IsNot Nothing, cName(0), "")
+            inData(9) = If(cName IsNot Nothing, cName(1), "")
+
+            ' DBに追加登録
+            SCA1.db.ExeSQLInsert(Sqldb.TID.SCD, inData.ToArray)
+            cnt += 1
+        Next
+
+        Dim r = MessageBox.Show($"{dataList.Count - NGList.Count} 件のデータを読み込みます。{vbCrLf}{vbCrLf}読み込みできない顧客[ {NGList.Count} ]件{vbCrLf}{String.Join(vbCrLf, NGList)}",
+                                "ご確認ください",
+                                MessageBoxButtons.YesNo,
+                                MessageBoxIcon.Question)
+        If r = vbNo Then Exit Sub
+
+        SCA1.db.ExeSQL(Sqldb.TID.SCD)
+        MessageBox.Show("ファイルの更新が完了しました。", "成功", MessageBoxButtons.OK, MessageBoxIcon.Information)
     End Sub
 
     Private Sub HandleTextFile(txtPath As String)
