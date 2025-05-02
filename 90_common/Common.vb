@@ -545,6 +545,29 @@ Public Class Common
         Return "(未取得)"
     End Function
 
+    ' Shift-JIS UTF-8自動判別
+    Public Function GetSmartEncoding(filePath As String) As Encoding
+        Dim bytes() As Byte = File.ReadAllBytes(filePath)
+
+        ' BOMチェック：UTF-8 BOM付き（EF BB BF）
+        If bytes.Length >= 3 AndAlso bytes(0) = &HEF AndAlso bytes(1) = &HBB AndAlso bytes(2) = &HBF Then
+            Return New UTF8Encoding(True) ' BOM付きUTF-8
+        End If
+
+        ' BOMなしのUTF-8を仮定してチェック（文字化け確認）
+        Try
+            Dim utf8Text As String = Encoding.UTF8.GetString(bytes)
+            If Not utf8Text.Contains("�") Then ' � は文字化けの代表
+                Return New UTF8Encoding(False) ' BOMなしUTF-8
+            End If
+        Catch
+            ' 無視してフォールバック
+        End Try
+
+        ' 最後は Shift-JIS にフォールバック
+        Return Encoding.GetEncoding("Shift-JIS")
+    End Function
+
     ' プログレスバー表示
     Public Sub StartPBar(progressCount As Integer)
         SCA_ProgressBar.Instance.StartProgress(progressCount)

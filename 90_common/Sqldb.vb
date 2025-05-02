@@ -245,6 +245,12 @@ Public Class Sqldb
             Return ret
         End If
     End Function
+    Public Function ExeSQL()
+        For i As Integer = 0 To [Enum].GetValues(GetType(TID)).Length - 1
+            If cmdl(i).Count > 0 Then ExeSQL(i)
+        Next
+    End Function
+
     Private Function CommonSQLExe(TableID As Integer, con As SQLiteConnection, cmd As SQLiteCommand) As Long
         'mtx.Lock(Mutex.MTX_LOCK_W, TableID)
         If cmdl(TableID) Is Nothing Then Return -1

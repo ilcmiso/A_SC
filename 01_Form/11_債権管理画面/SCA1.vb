@@ -2258,7 +2258,7 @@ Public Class SCA1
     Private Sub MRInit()
         mrcmn.GetHolidayDate()
         CB_MRLIST.Items.AddRange(sccmn.MRITEMLIST)
-        CB_MRLIST.SelectedIndex = 0
+        CB_MRLIST.SelectedIndex = 1
         DTP_MRED.Value = Today.AddYears(1).Date         ' 1年後を指定
         oview = New SCGA_OVIEW
         TB_MRPaymentDate.Text = Today.Date.ToString("yyyy/MM")

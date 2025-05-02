@@ -130,27 +130,30 @@ Public Class SCA_InputData
                                 MessageBoxIcon.Question)
         If r = vbNo Then Exit Sub
 
+        Cursor.Current = Cursors.WaitCursor             ' マウスカーソルを砂時計に
         SCA1.db.ExeSQL(Sqldb.TID.SCD)
         MessageBox.Show("ファイルの更新が完了しました。", "成功", MessageBoxButtons.OK, MessageBoxIcon.Information)
     End Sub
 
     Private Sub HandleTextFile(txtPath As String)
-        Dim lines() As String = File.ReadAllLines(txtPath, Encoding.GetEncoding("Shift-JIS")) ' Shift-JISエンコーディングを指定
+        Dim db As New Sqldb
+        Dim lines() As String = File.ReadAllLines(txtPath, cmn.GetSmartEncoding(txtPath))
 
         For Each line As String In lines
             Dim parts() As String = line.Split(New Char() {":"c}, 2)
             If parts.Length = 2 Then
                 Dim tableNo As Integer = Integer.Parse(parts(0).Trim())
-                Dim sql As String = parts(1).Trim()
+                Dim sql As String = parts(1).Trim().Replace("<BR>", vbCrLf)     ' テキストに<BR>があれば改行(CRLF)するために置換する
                 ExecuteSQLCommand(tableNo, sql)
+                db.AddSQL(tableNo, sql)
             End If
         Next
+        Cursor.Current = Cursors.WaitCursor             ' マウスカーソルを砂時計に
+        db.ExeSQL()
         MessageBox.Show("データベースの更新が完了しました。", "完了", MessageBoxButtons.OK, MessageBoxIcon.Information)
     End Sub
 
     Private Sub ExecuteSQLCommand(TableNo As Integer, sql As String)
-        Dim db As New Sqldb
-        db.ExeSQL(TableNo, sql)
     End Sub
 
     Private Sub CopyDirectory(sourceDir As String, destDir As String)
