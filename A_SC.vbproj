@@ -102,9 +102,6 @@
     <ApplicationManifest>My Project\app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ClosedXML, Version=0.95.4.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\ClosedXML.0.95.4\lib\net46\ClosedXML.dll</HintPath>
-    </Reference>
     <Reference Include="DBReport.Core, Version=1.0.5270.1830, Culture=neutral, PublicKeyToken=4bd68b0bc5c61378, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\VB-Report8\Bin\DBReport.Core.dll</HintPath>
@@ -119,6 +116,12 @@
     <Reference Include="ExcelCreator.Xls.Core.v10, Version=10.0.5270.2017, Culture=neutral, PublicKeyToken=53fa96998d653c73" />
     <Reference Include="ExcelCreator.Xlsx.Core.v10, Version=10.0.5270.2017, Culture=neutral, PublicKeyToken=afb069e70259a56a" />
     <Reference Include="ExcelCreator.Xlsx.CreatorExpress.v10, Version=10.0.5270.2017, Culture=neutral, PublicKeyToken=9b83eaf7c36ffa11, processorArchitecture=MSIL" />
+    <Reference Include="ExcelDataReader, Version=3.8.0.0, Culture=neutral, PublicKeyToken=93517dbe6a4012fa, processorArchitecture=MSIL">
+      <HintPath>packages\ExcelDataReader.3.8.0-develop00474\lib\netstandard2.0\ExcelDataReader.dll</HintPath>
+    </Reference>
+    <Reference Include="ExcelDataReader.DataSet, Version=3.8.0.0, Culture=neutral, PublicKeyToken=93517dbe6a4012fa, processorArchitecture=MSIL">
+      <HintPath>packages\ExcelDataReader.DataSet.3.8.0-develop00474\lib\netstandard2.0\ExcelDataReader.DataSet.dll</HintPath>
+    </Reference>
     <Reference Include="ExcelNumberFormat, Version=1.0.10.0, Culture=neutral, PublicKeyToken=23c6f5d73be07eca, processorArchitecture=MSIL">
       <HintPath>packages\ExcelNumberFormat.1.0.10\lib\net20\ExcelNumberFormat.dll</HintPath>
     </Reference>
@@ -148,14 +151,11 @@
     </Reference>
     <Reference Include="System.Deployment" />
     <Reference Include="System.Drawing" />
-    <Reference Include="System.IO.Compression, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\40-System.IO.Compression.1.0.0.2\lib\net40-client\System.IO.Compression.dll</HintPath>
-    </Reference>
-    <Reference Include="System.IO.Compression.FileSystem, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\40-System.IO.Compression.FileSystem.1.0.0.2\lib\net40-client\System.IO.Compression.FileSystem.dll</HintPath>
-    </Reference>
+    <Reference Include="System.IO.Compression.FileSystem" />
     <Reference Include="System.IO.Compression.ZipFile, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>packages\System.IO.Compression.ZipFile.4.3.0\lib\net46\System.IO.Compression.ZipFile.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System.IO.FileSystem.Primitives, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>packages\System.IO.FileSystem.Primitives.4.0.1\lib\net46\System.IO.FileSystem.Primitives.dll</HintPath>
@@ -277,6 +277,7 @@
     <Compile Include="80_SCcommon\SCcommon.vb" />
     <Compile Include="80_SCcommon\SCMRcommon.vb" />
     <Compile Include="90_common\AppUpdate.vb" />
+    <Compile Include="90_common\ExcelDataReader.vb" />
     <Compile Include="90_common\ExcelExp.vb" />
     <Compile Include="90_common\ExcelManager.vb" />
     <Compile Include="90_common\FileWatcher.vb" />
