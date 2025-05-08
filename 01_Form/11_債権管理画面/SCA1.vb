@@ -2370,24 +2370,7 @@ Public Class SCA1
         ' DataViewをDGVに設定
         DGV_MR1.DataSource = dv.ToTable
 
-        ' DGVに対して、カラーリング設定
-        mrcmn.PaymentDateColor(DGV_MR1)                ' 完済日が5～13日の間は警告のために赤色設定
-        mrcmn.HighlightRows(DGV_MR1, "キャンセル日", "", System.Drawing.Color.DarkGray)
-        mrcmn.HighlightRows(DGV_MR1, "ステータス", "完了", System.Drawing.Color.GreenYellow)
-        mrcmn.HighlightRows(DGV_MR1, "抹消発送日", "", System.Drawing.Color.GreenYellow)
-        mrcmn.HighlightRows(DGV_MR1, "ステータス", "取下げ", System.Drawing.Color.Salmon)
-        Select Case CB_MRLIST.SelectedIndex
-            Case SCcommon.MRITEMID.REPAY
-                ' 支払不可の文字を赤色に変更
-                cmn.SetCellFontDGV(DGV_MR1, "F審査結果", "支払不可", fontColor:=System.Drawing.Color.Red)
-                cmn.SetCellFontDGV(DGV_MR1, "A審査結果", "支払不可", fontColor:=System.Drawing.Color.Red)
-
-            Case SCcommon.MRITEMID.REPAY_F, SCcommon.MRITEMID.REPAY_A
-                ' 支払不可の文字を赤色に変更
-                cmn.SetCellFontDGV(DGV_MR1, "審査結果", "支払不可", fontColor:=System.Drawing.Color.Red)
-                mrcmn.HighlightRows(DGV_MR1, "審査結果", "支払不可", System.Drawing.Color.DarkGray)
-                mrcmn.HighlightRows(DGV_MR1, "審査結果", "取下げ", System.Drawing.Color.DarkGray)
-        End Select
+        ColorlingDGVMR()
 
         ' DataViewに設定したカラム幅を、DGVに設定して反映する
         For Each dgvCol As DataGridViewColumn In DGV_MR1.Columns
@@ -2416,6 +2399,32 @@ Public Class SCA1
 
         L_STS_MR.Text = $" ( {DGV_MR1.Rows.Count} / {rowCount} ) 件 表示中"
         log.TimerED("ShowDGVMR")
+    End Sub
+
+    ' DGV_MR1がソートクリックされたときにセルの色設定
+    Private Sub DGV_MR1_SortCompare() Handles DGV_MR1.SortCompare, DGV_MR1.ColumnHeaderMouseClick
+        ColorlingDGVMR()
+    End Sub
+
+    Private Sub ColorlingDGVMR()
+        ' DGVに対して、カラーリング設定
+        mrcmn.PaymentDateColor(DGV_MR1)                ' 完済日が5～13日の間は警告のために赤色設定
+        mrcmn.HighlightRows(DGV_MR1, "キャンセル日", "", System.Drawing.Color.DarkGray)
+        mrcmn.HighlightRows(DGV_MR1, "ステータス", "完了", System.Drawing.Color.GreenYellow)
+        mrcmn.HighlightRows(DGV_MR1, "抹消発送日", "", System.Drawing.Color.GreenYellow)
+        mrcmn.HighlightRows(DGV_MR1, "ステータス", "取下げ", System.Drawing.Color.Salmon)
+        Select Case CB_MRLIST.SelectedIndex
+            Case SCcommon.MRITEMID.REPAY
+                ' 支払不可の文字を赤色に変更
+                cmn.SetCellFontDGV(DGV_MR1, "F審査結果", "支払不可", fontColor:=System.Drawing.Color.Red)
+                cmn.SetCellFontDGV(DGV_MR1, "A審査結果", "支払不可", fontColor:=System.Drawing.Color.Red)
+
+            Case SCcommon.MRITEMID.REPAY_F, SCcommon.MRITEMID.REPAY_A
+                ' 支払不可の文字を赤色に変更
+                cmn.SetCellFontDGV(DGV_MR1, "審査結果", "支払不可", fontColor:=System.Drawing.Color.Red)
+                mrcmn.HighlightRows(DGV_MR1, "審査結果", "支払不可", System.Drawing.Color.DarkGray)
+                mrcmn.HighlightRows(DGV_MR1, "審査結果", "取下げ", System.Drawing.Color.DarkGray)
+        End Select
     End Sub
 
     ' 追加・編集ボタン
