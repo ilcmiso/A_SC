@@ -198,7 +198,7 @@ Public Class SCA1
             Me.Invoke(New MethodInvoker(AddressOf CBWatcherUpdMR))
         Else
             ' メインスレッド処理
-            oview.ShowOVIEW()
+            'oview.ShowOVIEW()
             ShowDGVMR()
         End If
     End Sub
@@ -257,6 +257,7 @@ Public Class SCA1
         lastIdx = e.RowIndex        ' 最後に選択した位置を保存
         CurrentCID = DGV1.CurrentRow.Cells(0).Value
         DGV1_ClickShow()
+        If xml.GetDiv = Common.DIV.GA Then oview.ShowOVIEW(CurrentCID)
     End Sub
     ' DGV選択時の表示
     Private Sub DGV1_ClickShow()
@@ -1213,6 +1214,21 @@ Public Class SCA1
         TAB_A1.SelectedTab = Tab_1SC
     End Sub
 
+    ' 指定した記録情報を表示する DGV_MR1
+    Public Sub ShowSelectMR1(regid As String, type As String)
+        CB_MRLIST.Text = type
+        CB_MRRangeAll.Checked = True
+        For Each row As DataGridViewRow In DGV_MR1.Rows
+            If row.Cells(0).Value = regid Then
+                DGV_MR1.CurrentCell = DGV_MR1(3, row.Index)
+                Exit For
+            End If
+        Next
+        TAB_A1.SelectedTab = Tab_6GA
+        TB_MRSearch.Text = DGV1.CurrentRow.Cells(1).Value
+        ShowDGVMR()
+    End Sub
+
 #Region "記録一覧"
     Private Sub CheckedListBoxInit()
         DTP_Rec1ST.Value = Today.AddDays(-7)
@@ -1794,7 +1810,7 @@ Public Class SCA1
         ' 該当する物件情報を表示
         ShowSelectUser(DGV_FPMNG.CurrentRow.Cells(2).Value, Array.IndexOf(sccmn.FPITEMLIST, DGV_FPMNG.CurrentRow.Cells(4).Value))
     End Sub
-    Private Sub BT_FPMNG_JUMP_Click(sender As Object, e As DataGridViewCellEventArgs) Handles DGV_FPMNG.CellDoubleClick
+    Private Sub BT_FPMNG_JUMP2_Click(sender As Object, e As DataGridViewCellEventArgs) Handles DGV_FPMNG.CellDoubleClick
         If DGV_FPMNG.CurrentRow Is Nothing Then Exit Sub
         If e.RowIndex < 0 Then Exit Sub
         Cursor.Current = Cursors.WaitCursor             ' マウスカーソルを砂時計に
@@ -2332,6 +2348,9 @@ Public Class SCA1
         DGV_MR1.Columns.Clear()
         db.UpdateOrigDT(Sqldb.TID.MRM)
 
+        ' F/A対の検索ボタンの表示
+        Button21.Visible = (CB_MRLIST.SelectedIndex = SCcommon.MRITEMID.REPAY_F Or CB_MRLIST.SelectedIndex = SCcommon.MRITEMID.REPAY_A)
+
         Dim dv As New DataView(db.OrgDataTable(Sqldb.TID.MR))
         mrcmn.LoadDataViewInfo(dv, CB_MRLIST.SelectedIndex)      ' 申請物管理DGVの行データ作成
         rowCount = dv.Table.Rows.Count
@@ -2473,6 +2492,7 @@ Public Class SCA1
 
     ' F/A対の顧客検索ボタン
     Private Sub Button21_Click(sender As Object, e As EventArgs) Handles Button21.Click
+        If DGV_MR1.Rows.Count = 0 Then Exit Sub
         Dim columnIndex As Integer = cmn.FindColumnIndex(DGV_MR1, "顧客番号")
         If columnIndex = -1 Then Exit Sub ' カラムが見つからなければ何もしない
         Dim cid As String = DGV_MR1.SelectedRows(0).Cells(columnIndex).Value

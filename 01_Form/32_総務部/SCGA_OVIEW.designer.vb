@@ -27,6 +27,7 @@ Partial Class SCGA_OVIEW
         Dim DataGridViewCellStyle3 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Me.PBXX = New System.Windows.Forms.Button()
         Me.DGV = New System.Windows.Forms.DataGridView()
+        Me.BT_PI4FIX = New System.Windows.Forms.Button()
         Me.Column5 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.DataGridViewTextBoxColumn11 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Column4 = New System.Windows.Forms.DataGridViewTextBoxColumn()
@@ -34,7 +35,6 @@ Partial Class SCGA_OVIEW
         Me.DataGridViewTextBoxColumn12 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Column2 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Column3 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.BT_PI4FIX = New System.Windows.Forms.Button()
         CType(Me.DGV, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
@@ -83,6 +83,19 @@ Partial Class SCGA_OVIEW
         Me.DGV.TabIndex = 1182
         Me.DGV.TabStop = False
         '
+        'BT_PI4FIX
+        '
+        Me.BT_PI4FIX.BackColor = System.Drawing.Color.SteelBlue
+        Me.BT_PI4FIX.FlatAppearance.BorderColor = System.Drawing.Color.Black
+        Me.BT_PI4FIX.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.BT_PI4FIX.ForeColor = System.Drawing.Color.White
+        Me.BT_PI4FIX.Location = New System.Drawing.Point(357, 2)
+        Me.BT_PI4FIX.Name = "BT_PI4FIX"
+        Me.BT_PI4FIX.Size = New System.Drawing.Size(156, 31)
+        Me.BT_PI4FIX.TabIndex = 1612
+        Me.BT_PI4FIX.Text = "選択中の申請書に移動"
+        Me.BT_PI4FIX.UseVisualStyleBackColor = False
+        '
         'Column5
         '
         Me.Column5.HeaderText = "登録番号"
@@ -98,21 +111,21 @@ Partial Class SCGA_OVIEW
         Me.DataGridViewTextBoxColumn11.MinimumWidth = 6
         Me.DataGridViewTextBoxColumn11.Name = "DataGridViewTextBoxColumn11"
         Me.DataGridViewTextBoxColumn11.ReadOnly = True
-        Me.DataGridViewTextBoxColumn11.Width = 80
+        Me.DataGridViewTextBoxColumn11.Width = 72
         '
         'Column4
         '
         Me.Column4.HeaderText = "番号"
         Me.Column4.Name = "Column4"
         Me.Column4.ReadOnly = True
-        Me.Column4.Width = 50
+        Me.Column4.Width = 60
         '
         'Column1
         '
         Me.Column1.HeaderText = "申請書種類"
         Me.Column1.Name = "Column1"
         Me.Column1.ReadOnly = True
-        Me.Column1.Width = 107
+        Me.Column1.Width = 120
         '
         'DataGridViewTextBoxColumn12
         '
@@ -122,35 +135,21 @@ Partial Class SCGA_OVIEW
         Me.DataGridViewTextBoxColumn12.MinimumWidth = 6
         Me.DataGridViewTextBoxColumn12.Name = "DataGridViewTextBoxColumn12"
         Me.DataGridViewTextBoxColumn12.ReadOnly = True
-        Me.DataGridViewTextBoxColumn12.Width = 80
+        Me.DataGridViewTextBoxColumn12.Width = 55
         '
         'Column2
         '
-        Me.Column2.HeaderText = "債務者/宛名"
+        Me.Column2.HeaderText = "内容1"
         Me.Column2.Name = "Column2"
         Me.Column2.ReadOnly = True
-        Me.Column2.Width = 85
+        Me.Column2.Width = 95
         '
         'Column3
         '
-        Me.Column3.HeaderText = "ステータス/内容"
+        Me.Column3.HeaderText = "内容2"
         Me.Column3.Name = "Column3"
         Me.Column3.ReadOnly = True
         Me.Column3.Width = 110
-        '
-        'BT_PI4FIX
-        '
-        Me.BT_PI4FIX.BackColor = System.Drawing.Color.SteelBlue
-        Me.BT_PI4FIX.Enabled = False
-        Me.BT_PI4FIX.FlatAppearance.BorderColor = System.Drawing.Color.Black
-        Me.BT_PI4FIX.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.BT_PI4FIX.ForeColor = System.Drawing.Color.White
-        Me.BT_PI4FIX.Location = New System.Drawing.Point(357, 2)
-        Me.BT_PI4FIX.Name = "BT_PI4FIX"
-        Me.BT_PI4FIX.Size = New System.Drawing.Size(156, 31)
-        Me.BT_PI4FIX.TabIndex = 1612
-        Me.BT_PI4FIX.Text = "選択中の申請書に移動"
-        Me.BT_PI4FIX.UseVisualStyleBackColor = False
         '
         'SCGA_OVIEW
         '
@@ -174,6 +173,7 @@ Partial Class SCGA_OVIEW
 
     Friend WithEvents PBXX As Button
     Friend WithEvents DGV As DataGridView
+    Friend WithEvents BT_PI4FIX As Button
     Friend WithEvents Column5 As DataGridViewTextBoxColumn
     Friend WithEvents DataGridViewTextBoxColumn11 As DataGridViewTextBoxColumn
     Friend WithEvents Column4 As DataGridViewTextBoxColumn
@@ -181,5 +181,4 @@ Partial Class SCGA_OVIEW
     Friend WithEvents DataGridViewTextBoxColumn12 As DataGridViewTextBoxColumn
     Friend WithEvents Column2 As DataGridViewTextBoxColumn
     Friend WithEvents Column3 As DataGridViewTextBoxColumn
-    Friend WithEvents BT_PI4FIX As Button
 End Class
