@@ -2286,7 +2286,7 @@ Public Class SCA1
     ' 部署毎フォーム表示切り替え
     Private Sub DivMode(divNo As Common.DIV)
         cmn.DummyPBar()
-        Dim labelStr As String() = {"物件情報", "直近の申請書一覧"}
+        Dim labelStr As String() = {"物件情報", "登録済みの申請書一覧"}
         Label33.Text = labelStr(divNo)  ' ラベル文字の切り替え
         xml.SetDiv(divNo)               ' 部署xml記録
         db.ExeSQL(Sqldb.TID.USER, $"Update TBL Set C04 = '{CType(divNo, Integer)}' Where C01 = '{My.Computer.Name}'")
