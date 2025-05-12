@@ -326,6 +326,7 @@ Public Class SCA1
         db.DBFileFDL(Sqldb.TID.SCD)                     ' ファイル強制ダウンロード
         'db.UpdateOrigDT(Sqldb.TID.SCD)
         db.UpdateOrigDT(Sqldb.TID.SCR)
+        db.UpdateOrigDT(Sqldb.TID.MR)
 
         ShowDGVList(DGV2)
         'ShowDGVList(DGV4)      ' ShowDunLBを選択した契機で更新されるためここではしない
@@ -2471,6 +2472,7 @@ Public Class SCA1
         ' DGV2の指定行を削除
         Cursor.Current = Cursors.WaitCursor             ' マウスカーソルを砂時計に
         db.ExeSQL(Sqldb.TID.MR, $"Delete From TBL Where C01 = '{DGV_MR1.CurrentRow.Cells(0).Value}'")
+        db.DBFileDLAndUpdate(Sqldb.TID.MR)
         ShowDGVMR()
     End Sub
 

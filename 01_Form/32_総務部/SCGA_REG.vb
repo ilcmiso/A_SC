@@ -212,6 +212,7 @@
 
         ownForm.db.ExeSQLInsUpd(Sqldb.TID.MR, commandText)
         ownForm.db.ExeSQL(Sqldb.TID.MR)
+        ownForm.db.DBFileDLAndUpdate(Sqldb.TID.MR)
 
         ' 追加後、他の追加登録が必要か確認
         If ownForm.ActiveControl.Name = BTADD AndAlso MRType < SCcommon.MRITEMID.MAIL_SEND Then

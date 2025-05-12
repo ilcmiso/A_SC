@@ -300,13 +300,11 @@ Public Class Sqldb
     Public Sub DBFileDL(TableID As Integer)
         Dim svPath = CurrentPath_SV & Common.DIR_DB3 & DBTbl(TableID, DBID.DBNAME)
         Dim loPath = CurrentPath_LO & DBTbl(TableID, DBID.DBNAME)
-        log.TimerST()
         If Not File.Exists(svPath) Then Exit Sub  ' ファイルがサーバーになければ終了
         If File.GetLastWriteTime(svPath) <> File.GetLastWriteTime(loPath) Then
-            File.Copy(svPath, loPath, True)       ' 更新時刻が異なればダウンロード
             log.cLog("DB-DL Comp: " & loPath)
+            File.Copy(svPath, loPath, True)       ' 更新時刻が異なればダウンロード
         End If
-        'log.TimerED("DBFileDL:" & loPath)
     End Sub
 
     ' DBファイル強制ダウンロード
@@ -319,6 +317,18 @@ Public Class Sqldb
         End If
         File.Copy(svPath, loPath, True)
         log.cLog("DB-DL Comp: " & loPath)
+    End Sub
+
+    ' DBファイルの更新とデータ更新
+    Public Sub DBFileDLAndUpdate(TableID As Integer)
+        Dim svPath = CurrentPath_SV & Common.DIR_DB3 & DBTbl(TableID, DBID.DBNAME)
+        Dim loPath = CurrentPath_LO & DBTbl(TableID, DBID.DBNAME)
+        If Not File.Exists(svPath) Then Exit Sub  ' ファイルがサーバーになければ終了
+        If File.GetLastWriteTime(svPath) <> File.GetLastWriteTime(loPath) Then
+            log.cLog("DB-DL Update: " & loPath)
+            File.Copy(svPath, loPath, True)       ' 更新時刻が異なればダウンロード
+            UpdateOrigDT(TableID)
+        End If
     End Sub
 
     ' DBファイルアップロード
