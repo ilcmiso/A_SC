@@ -272,7 +272,7 @@
         Return GetNextMaxValue(Today.ToString("yyMM"))
     End Function
     Private Function GetNextMaxValue(sDate_yymm As String) As String
-        Dim val As String = $"{sDate_yymm}{MRType}{1.ToString("D" & NUMBER_LENGTH)}"
+        Dim val As String = $"{sDate_yymm}{sccmn.MRIDXLIST(MRType)}{1.ToString("D" & NUMBER_LENGTH)}"
         Dim filter As String = ""
         Dim dt As DataTable
         ' 口座変更(4)の場合のみ、5000番からのインクリメントを大嶋様が希望
@@ -536,7 +536,7 @@
 
         ' 内容
         Select Case beforeType
-            Case SCcommon.MRITEMID.REPAY, SCcommon.MRITEMID.REPAY_F, SCcommon.MRITEMID.REPAY_A
+            Case SCcommon.MRITEMID.REPAY_F, SCcommon.MRITEMID.REPAY_A
                 ' 団信弁済
                 DGV_REG1(1, 6).Value = contentWords(9)
                 SetValueDGV("内容", contentWords(9))
