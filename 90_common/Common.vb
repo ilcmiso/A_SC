@@ -452,6 +452,7 @@ Public Class Common
     ' ex) SetCellFontDGV(DGV_REG1, "担当者", "山田太郎", isBold:=True)
     ' ex) SetCellFontDGV(DGV_REG1, "担当者", "山田太郎", fontColor:=Color.Red, isBold:=True)
     Public Sub SetCellFontDGV(dgv As DataGridView, columnName As String, searchWord As String, Optional ByVal fontColor As Color = Nothing, Optional ByVal isBold As Boolean = False)
+        If dgv.Columns(columnName) Is Nothing Then Exit Sub
         Dim columnIndex As Integer = dgv.Columns(columnName).Index
         For Each row As DataGridViewRow In dgv.Rows
             If row.Cells(columnIndex).Value IsNot Nothing AndAlso row.Cells(columnIndex).Value.ToString() = searchWord Then

@@ -6,6 +6,7 @@ Imports System.Text
 Public Class SCA_InputData
 
     Private ReadOnly cmn As New Common
+    Private ReadOnly log As New Log
 
     Private Sub MainForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         ' フォームの設定
@@ -25,6 +26,8 @@ Public Class SCA_InputData
         If files.Length > 0 Then
             Dim filePath As String = files(0)
             Dim extension As String = Path.GetExtension(filePath).ToLower()
+            log.cLog($"XXX - START")
+            log.cLog($"{extension}")
 
             Select Case extension
                 Case ".zip"
@@ -81,14 +84,20 @@ Public Class SCA_InputData
         Dim cnt As Integer = 0
         Dim NGList As New List(Of String)
 
+        log.cLog($"HandleXlsmFile[xlsmPath] {xlsmPath}")
+        log.cLog($"HandleXlsmFile[dataList] {dataList.Count}")
+
         dataList.RemoveRange(0, 5)  ' Excelの読み込みたくない先頭5行を削除
         For Each line As String In dataList
             Dim inData As List(Of String) = line.Split(","c).ToList()
             Dim cid As String = inData(1)
             Dim cName As String() = SCA1.db.GetCosName(cid)
+            log.cLog($"HandleXlsmFile[cid:{cnt}]  {cid}")
+            log.cLog($"HandleXlsmFile[cName]    {cName(0)}:{cName(1)}")
 
             ' 顧客番号ば存在しない場合はNGリスト追加
             If cName Is Nothing Then
+                log.cLog($"HandleXlsmFile[NGList1]  {cid}")
                 NGList.Add(cid)
                 Continue For
             End If
@@ -108,6 +117,7 @@ Public Class SCA_InputData
                 End If
             Catch
                 ' 日付の変換が失敗
+                log.cLog($"HandleXlsmFile[NGList2]  {cid}")
                 NGList.Add(cid)
                 Continue For
             End Try
@@ -123,6 +133,7 @@ Public Class SCA_InputData
             SCA1.db.ExeSQLInsert(Sqldb.TID.SCD, inData.ToArray)
             cnt += 1
         Next
+        log.cLog($"XXX - END")
 
         Dim r = MessageBox.Show($"{dataList.Count - NGList.Count} 件のデータを読み込みます。{vbCrLf}{vbCrLf}読み込みできない顧客[ {NGList.Count} ]件{vbCrLf}{String.Join(vbCrLf, NGList)}",
                                 "ご確認ください",

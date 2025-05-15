@@ -30,7 +30,6 @@ Partial Class SCGA_OVIEW
         Me.BT_PI4FIX = New System.Windows.Forms.Button()
         Me.Column5 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.DataGridViewTextBoxColumn11 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Column4 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Column1 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.DataGridViewTextBoxColumn12 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Column2 = New System.Windows.Forms.DataGridViewTextBoxColumn()
@@ -68,7 +67,7 @@ Partial Class SCGA_OVIEW
         DataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
         Me.DGV.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle1
         Me.DGV.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.DGV.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.Column5, Me.DataGridViewTextBoxColumn11, Me.Column4, Me.Column1, Me.DataGridViewTextBoxColumn12, Me.Column2, Me.Column3})
+        Me.DGV.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.Column5, Me.DataGridViewTextBoxColumn11, Me.Column1, Me.DataGridViewTextBoxColumn12, Me.Column2, Me.Column3})
         Me.DGV.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter
         Me.DGV.Location = New System.Drawing.Point(0, 35)
         Me.DGV.MultiSelect = False
@@ -113,43 +112,36 @@ Partial Class SCGA_OVIEW
         Me.DataGridViewTextBoxColumn11.ReadOnly = True
         Me.DataGridViewTextBoxColumn11.Width = 72
         '
-        'Column4
-        '
-        Me.Column4.HeaderText = "番号"
-        Me.Column4.Name = "Column4"
-        Me.Column4.ReadOnly = True
-        Me.Column4.Width = 60
-        '
         'Column1
         '
         Me.Column1.HeaderText = "申請書種類"
         Me.Column1.Name = "Column1"
         Me.Column1.ReadOnly = True
-        Me.Column1.Width = 120
+        Me.Column1.Width = 130
         '
         'DataGridViewTextBoxColumn12
         '
         DataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
         Me.DataGridViewTextBoxColumn12.DefaultCellStyle = DataGridViewCellStyle3
-        Me.DataGridViewTextBoxColumn12.HeaderText = "担当者"
+        Me.DataGridViewTextBoxColumn12.HeaderText = "実施年月"
         Me.DataGridViewTextBoxColumn12.MinimumWidth = 6
         Me.DataGridViewTextBoxColumn12.Name = "DataGridViewTextBoxColumn12"
         Me.DataGridViewTextBoxColumn12.ReadOnly = True
-        Me.DataGridViewTextBoxColumn12.Width = 55
+        Me.DataGridViewTextBoxColumn12.Width = 75
         '
         'Column2
         '
-        Me.Column2.HeaderText = "内容1"
+        Me.Column2.HeaderText = "進捗内容"
         Me.Column2.Name = "Column2"
         Me.Column2.ReadOnly = True
-        Me.Column2.Width = 95
+        Me.Column2.Width = 130
         '
         'Column3
         '
-        Me.Column3.HeaderText = "内容2"
+        Me.Column3.HeaderText = "結果/ｷｬﾝｾﾙ日"
         Me.Column3.Name = "Column3"
         Me.Column3.ReadOnly = True
-        Me.Column3.Width = 110
+        Me.Column3.Width = 105
         '
         'SCGA_OVIEW
         '
@@ -176,7 +168,6 @@ Partial Class SCGA_OVIEW
     Friend WithEvents BT_PI4FIX As Button
     Friend WithEvents Column5 As DataGridViewTextBoxColumn
     Friend WithEvents DataGridViewTextBoxColumn11 As DataGridViewTextBoxColumn
-    Friend WithEvents Column4 As DataGridViewTextBoxColumn
     Friend WithEvents Column1 As DataGridViewTextBoxColumn
     Friend WithEvents DataGridViewTextBoxColumn12 As DataGridViewTextBoxColumn
     Friend WithEvents Column2 As DataGridViewTextBoxColumn

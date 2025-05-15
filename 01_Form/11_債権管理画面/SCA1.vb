@@ -2432,14 +2432,15 @@ Public Class SCA1
         mrcmn.HighlightRows(DGV_MR1, "キャンセル日", "", System.Drawing.Color.DarkGray)
         mrcmn.HighlightRows(DGV_MR1, "ステータス", "完了", System.Drawing.Color.GreenYellow)
         mrcmn.HighlightRows(DGV_MR1, "抹消発送日", "", System.Drawing.Color.GreenYellow)
-        mrcmn.HighlightRows(DGV_MR1, "ステータス", "取下げ", System.Drawing.Color.Salmon)
-        Select Case CB_MRLIST.SelectedIndex
-            Case SCcommon.MRITEMID.REPAY_F, SCcommon.MRITEMID.REPAY_A
-                ' 支払不可の文字を赤色に変更
-                cmn.SetCellFontDGV(DGV_MR1, "審査結果", "支払不可", fontColor:=System.Drawing.Color.Red)
-                mrcmn.HighlightRows(DGV_MR1, "審査結果", "支払不可", System.Drawing.Color.DarkGray)
-                mrcmn.HighlightRows(DGV_MR1, "審査結果", "取下げ", System.Drawing.Color.DarkGray)
-        End Select
+        mrcmn.HighlightRows(DGV_MR1, "ステータス", "取下げ", System.Drawing.Color.DarkGray)
+        mrcmn.HighlightRows(DGV_MR1, "審査結果", "支払不可", System.Drawing.Color.DarkGray)
+        mrcmn.HighlightRows(DGV_MR1, "審査結果", "取下げ", System.Drawing.Color.DarkGray)
+        cmn.SetCellFontDGV(DGV_MR1, "支払結果", "引落不能", fontColor:=System.Drawing.Color.Red)
+        cmn.SetCellFontDGV(DGV_MR1, "審査結果", "支払不可", fontColor:=System.Drawing.Color.Red)
+        'Select Case CB_MRLIST.SelectedIndex
+        '    Case SCcommon.MRITEMID.REPAY_F, SCcommon.MRITEMID.REPAY_A
+        '    Case SCcommon.MRITEMID.PARTIAL_REPAY_F, SCcommon.MRITEMID.PARTIAL_REPAY_A
+        'End Select
     End Sub
 
     ' 追加・編集ボタン

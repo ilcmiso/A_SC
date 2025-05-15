@@ -30,28 +30,35 @@ Public Class SCGA_OVIEW
             Dim item As String = sccmn.MRITEMLIST(index)
             Dim col4 As String = ""
             Dim col5 As String = ""
+            Dim col6 As String = ""
 
             Select Case index
                 Case SCcommon.MRITEMID.REPAY_F, SCcommon.MRITEMID.REPAY_A
-                    col4 = row("C08").ToString()
+                    col4 = row("C14").ToString()
                     col5 = row("C11").ToString()
+                    col6 = row("C13").ToString()
                 Case SCcommon.MRITEMID.PARTIAL_REPAY_F
+                    col4 = row("C09").ToString()
+                    col5 = row("C08").ToString()
+                    col6 = row("C14").ToString()
+                Case SCcommon.MRITEMID.PARTIAL_REPAY_A
+                    col4 = row("C10").ToString()
+                    col5 = row("C08").ToString()
+                    col6 = row("C16").ToString()
+                Case SCcommon.MRITEMID.FULL_REPAY
                     col4 = row("C11").ToString()
                     col5 = row("C12").ToString()
-                Case SCcommon.MRITEMID.PARTIAL_REPAY_A
-                    col4 = row("C12").ToString()
-                    col5 = row("C13").ToString()
-                Case SCcommon.MRITEMID.FULL_REPAY
-                    col4 = row("C08").ToString()
-                    col5 = row("C11").ToString()
+                    col6 = row("C14").ToString()
                 Case SCcommon.MRITEMID.CONTACT_CHANGE
-                    col4 = row("C08").ToString()
-                    col5 = row("C09").ToString()
+                    col4 = row("C11").ToString()
+                    col5 = row("C08").ToString()
+                    col6 = row("C09").ToString()
                 Case SCcommon.MRITEMID.ACCOUNT_CHANGE
-                    col4 = row("C08").ToString()
-                    col5 = row("C10").ToString()
+                    col4 = row("C14").ToString()
+                    col5 = row("C08").ToString()
+                    col6 = row("C13").ToString()
             End Select
-            DGV.Rows.Add(row("C01"), row("C04"), row("C03"), item, row("C05"), col4, col5)
+            DGV.Rows.Add(row("C01"), row("C04"), item, col4, col5, col6)
         Next
         log.TimerED("ShowOVIEW")
     End Sub
@@ -59,6 +66,6 @@ Public Class SCGA_OVIEW
     ' ジャンプボタン
     Private Sub BT_PI4FIX_Click(sender As Object, e As EventArgs) Handles BT_PI4FIX.Click
         If DGV.Rows.Count = 0 Then Exit Sub
-        SCA1.ShowSelectMR1(DGV.CurrentRow.Cells(0).Value, DGV.CurrentRow.Cells(3).Value)
+        SCA1.ShowSelectMR1(DGV.CurrentRow.Cells(0).Value, DGV.CurrentRow.Cells(2).Value)
     End Sub
 End Class
