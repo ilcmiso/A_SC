@@ -4,7 +4,7 @@ Imports System.Text
 Public Class SC
 
 #Region " Open Close "
-    Public Const SCVer As String = "25054"                         ' A_SC バージョン
+    Public Shared SCVer As String = "25054"                         ' A_SC バージョン
     ' 起動アプリパス
     Public ReadOnly CurrentAppPath As String = Path.GetDirectoryName(Reflection.Assembly.GetExecutingAssembly().Location) & "\"
     Private ReadOnly HISTORY As String = CurrentAppPath & "History.txt"
@@ -43,21 +43,6 @@ Public Class SC
         BT_APPUPDATE.Visible = AppUpdate.IsUpdateAvailable
     End Sub
 
-    Private Sub ME_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
-        If Button3.Enabled = False Then
-            Dim r = MessageBox.Show("電話接続中です。" & vbCrLf &
-                                    "アプリケーションを終了すると電話接続も終了しますがよろしいですか？",
-                                    "ご確認ください",
-                                    MessageBoxButtons.YesNo,
-                                    MessageBoxIcon.Question)
-            If r = vbNo Then
-                e.Cancel = True
-                Exit Sub
-            End If
-            SCC1.TaskDispose()
-        End If
-        Me.Dispose()
-    End Sub
 
     ' ボタンクリックで各フォーム起動
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click, Button2.Click, Button3.Click, Button4.Click
@@ -73,12 +58,8 @@ Public Class SC
                 fm = SCD1
                 fm.ShowInTaskbar = False
             Case Button3.Name   ' 設定画面
-                Button3.Enabled = False
-                Dim fmsub As Form = New SCC1
-                fmsub.ShowInTaskbar = False
-                AddHandler fmsub.FormClosed, AddressOf SCC1_closed           ' 電話接続画面のフォーム閉じたときのイベント関数登録
-                fmsub.Show()
-                Exit Sub
+                fm = SCC1
+                fm.ShowInTaskbar = False
             Case Else
                 fm.Dispose()
                 Exit Sub
@@ -89,21 +70,15 @@ Public Class SC
         fm.Dispose()
         If Not Me.IsDisposed Then Me.Visible = True     ' 非表示になっていたTOP画面を再表示 ただし、アプリ更新時は既に破棄されているから表示できない
     End Sub
-    ' 電話接続画面フォーム終了イベント受信
-    Private Sub SCC1_closed(sender As Object, e As FormClosedEventArgs)
-        Button3.Enabled = True
-    End Sub
 
     Public Sub RestartApl()
         Close()
         Application.Restart()
     End Sub
 
-    Private IlcND As New ILCNetDrive            ' ILCネットワークドライブ宣言
-
     ' ショートカット F1
+    Private debugcnt As Integer = 0
     Private Sub Button1_KeyDown(sender As Object, e As KeyEventArgs) Handles Button1.KeyDown
-        Static debugcnt As Integer
         Select Case e.KeyCode
             Case Keys.F1
                 Dim cmn As New Common
