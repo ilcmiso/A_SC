@@ -35,6 +35,7 @@ Public Class SCA1
     Private LockEventHandler_CLB As Boolean = False
     Private LockEventHandler_FP As Boolean = False
     Private LockEventHandler_MR As Boolean = False
+    Private LockEventHandler_DGV1CE As Boolean = False
     ' スレッド
     Private ReadOnly Thread_Entry As Thread = Nothing
     ' デリゲート
@@ -249,24 +250,26 @@ Public Class SCA1
 
 #Region " UIイベント"
     ' DGV選択時に融資情報を表示
+    Private lastCID As String = ""
     Private Sub DGV1_CellEnter(sender As Object, e As DataGridViewCellEventArgs) ' Handles DGV1.CellEnter
-        Static Dim lastIdx As Integer = -1
-        ' DGV範囲外クリックの場合はイベント不要
+        If LockEventHandler_DGV1CE Then Exit Sub
         If e.RowIndex < 0 Then Exit Sub
-        If e.RowIndex = lastIdx Then Exit Sub
-        lastIdx = e.RowIndex        ' 最後に選択した位置を保存
-        CurrentCID = DGV1.CurrentRow.Cells(0).Value
+        Dim cid As String = TryCast(DGV1.CurrentRow?.Cells(0)?.Value, String)
+        If cid = lastCID Then Exit Sub        ' DGV1外からDGV1セルクリック時に2回CellEnterが発生する事象用に2度コール防止
+        lastCID = cid
+
         DGV1_ClickShow()
-        If xml.GetDiv = Common.DIV.GA Then oview.ShowOVIEW(CurrentCID)
     End Sub
     ' DGV選択時の表示
     Private Sub DGV1_ClickShow()
+        CurrentCID = DGV1.CurrentRow.Cells(0).Value
         ShowDGVList(DGV2)                               ' 交渉記録
         ShowDGV_FPLIST()                                ' 物件情報
         ShowDGVList(DGV9)                               ' 顧客詳細情報
 
         ShowAssignee()                                  ' 物件情報の受任者マークの表示設定
         ShowSendNGLabel()
+        If xml.GetDiv = Common.DIV.GA Then oview.ShowOVIEW(CurrentCID)
     End Sub
     ' DGV2選択時に記録情報を表示
     Private Sub DGV2_CellEnter(sender As Object, e As DataGridViewCellEventArgs) Handles DGV2.CellEnter
@@ -709,7 +712,6 @@ Public Class SCA1
         Cursor.Current = Cursors.WaitCursor             ' マウスカーソルを砂時計に
         cmn.StartPBar(4)
         ShowDGVList(DGV1, TB_SearchInput.Text)
-        DGV1_ClickShow()
         cmn.EndPBar()
         log.cLog($"検索完了 : {(Date.Now - STtime).ToString("ss\.fff")}")
     End Sub
@@ -785,6 +787,7 @@ Public Class SCA1
     ' キャッシュテーブルからフィルタしてDGV1に表示する処理
     Private Sub FilterWordsDGV1(ByVal FilterWord As String)
         If db.gDGV1SearchCache Is Nothing Then Exit Sub
+        LockEventHandler_DGV1CE = True
         If FilterWord <> "" Then
             ' DataView を用いて検索キャッシュテーブルからフィルタする
             Dim dv As New DataView(db.gDGV1SearchCache)
@@ -800,6 +803,7 @@ Public Class SCA1
             ' 検索ワードがなければフィルタせず全表示
             DGV1.DataSource = db.OrgDataTablePlusAssist
         End If
+        LockEventHandler_DGV1CE = False
     End Sub
 
     ' DGV1用DataTableの結合
