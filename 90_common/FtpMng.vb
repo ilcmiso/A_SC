@@ -7,7 +7,8 @@ Public Class FtpMng
     Private ReadOnly cmn As New Common
     Private ReadOnly log As New Log
     Private ReadOnly FtpLocal As String = cmn.CurrentPath & "FTP"
-    Private ReadOnly FtpUrl As String = FtpMngConfig.FtpUrl
+    Private ReadOnly FtpDLUrl As String = FtpMngConfig.FtpDLUrl
+    Private ReadOnly FtpULUrl As String = FtpMngConfig.FtpUPUrl
     Private ReadOnly UserID As String = FtpMngConfig.FtpUser
     Private ReadOnly UserPW As String = FtpMngConfig.FtpPass
 
@@ -19,7 +20,7 @@ Public Class FtpMng
     ''' FTP上の5桁数字のzipファイル一覧から最大のファイル名を返す
     ''' </summary>
     Public Function GetLatestFileName() As String
-        Dim request = CType(WebRequest.Create(FtpUrl), FtpWebRequest)
+        Dim request = CType(WebRequest.Create(FtpDLUrl), FtpWebRequest)
         request.Method = WebRequestMethods.Ftp.ListDirectory
         request.Credentials = New NetworkCredential(UserID, UserPW)
 
@@ -68,7 +69,7 @@ Public Class FtpMng
         If File.Exists(localFullPath) Then Return ""
 
         ' FTP上にファイルがあるか確認
-        Dim existsRequest = CType(WebRequest.Create(FtpUrl & fileName), FtpWebRequest)
+        Dim existsRequest = CType(WebRequest.Create(FtpDLUrl & fileName), FtpWebRequest)
         existsRequest.Method = WebRequestMethods.Ftp.GetFileSize
         existsRequest.Credentials = New NetworkCredential(UserID, UserPW)
 
@@ -85,7 +86,7 @@ Public Class FtpMng
         End Try
 
         ' ダウンロード処理
-        Dim request = CType(WebRequest.Create(FtpUrl & fileName), FtpWebRequest)
+        Dim request = CType(WebRequest.Create(FtpDLUrl & fileName), FtpWebRequest)
         request.Method = WebRequestMethods.Ftp.DownloadFile
         request.Credentials = New NetworkCredential(UserID, UserPW)
 
@@ -101,14 +102,39 @@ Public Class FtpMng
     End Function
 
     ''' <summary>
-    ''' ローカルのファイルをFTPサーバーへアップロード
+    ''' ローカルのファイルをFTPサーバーへ「日時フォルダを作成して」アップロード
     ''' </summary>
-    Public Sub UploadFile(ftpUrl As String, username As String, password As String)
-        Dim request = CType(WebRequest.Create(ftpUrl), FtpWebRequest)
-        request.Method = WebRequestMethods.Ftp.UploadFile
-        request.Credentials = New NetworkCredential(username, password)
+    ''' <param name="fileName">ローカルのファイルフルパス（例：C:\AAA\aaa.zip）</param>
+    Public Sub UploadFile(fileName As String)
+        If Not File.Exists(fileName) Then
+            Throw New FileNotFoundException("指定されたファイルが存在しません: " & fileName)
+        End If
 
-        Dim fileContents() As Byte = File.ReadAllBytes(FtpLocal)
+        ' アップロード先の日時フォルダ名（yyyyMMdd-HHmm）
+        Dim timestamp As String = DateTime.Now.ToString("yyyyMMdd-HHmm")
+        Dim folderUrl As String = FtpULUrl.TrimEnd("/"c) & "/" & timestamp & "/"
+
+        ' FTPにフォルダを作成（既に存在していた場合のエラーは無視）
+        Try
+            Dim mkRequest = CType(WebRequest.Create(folderUrl), FtpWebRequest)
+            mkRequest.Method = WebRequestMethods.Ftp.MakeDirectory
+            mkRequest.Credentials = New NetworkCredential(UserID, UserPW)
+            Using mkResponse = mkRequest.GetResponse()
+            End Using
+        Catch ex As WebException
+            ' 例外内容が "550 Directory already exists." 等なら無視して続行
+        End Try
+
+        ' アップロード先ファイルのURL
+        Dim justFileName As String = Path.GetFileName(fileName)
+        Dim uploadUrl As String = folderUrl & justFileName
+
+        ' FTPアップロード処理
+        Dim request = CType(WebRequest.Create(uploadUrl), FtpWebRequest)
+        request.Method = WebRequestMethods.Ftp.UploadFile
+        request.Credentials = New NetworkCredential(UserID, UserPW)
+
+        Dim fileContents() As Byte = File.ReadAllBytes(fileName)
         request.ContentLength = fileContents.Length
 
         Using requestStream = request.GetRequestStream()

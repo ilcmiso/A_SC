@@ -4,7 +4,7 @@ Imports System.Text
 Public Class SC
 
 #Region " Open Close "
-    Public Shared SCVer As String = "25054"                         ' A_SC バージョン
+    Public Shared SCVer As String = "25055"                         ' A_SC バージョン
     ' 起動アプリパス
     Public ReadOnly CurrentAppPath As String = Path.GetDirectoryName(Reflection.Assembly.GetExecutingAssembly().Location) & "\"
     Private ReadOnly HISTORY As String = CurrentAppPath & "History.txt"

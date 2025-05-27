@@ -35,12 +35,14 @@ Partial Class SCC1
         Me.TB_SQLAddr = New System.Windows.Forms.TextBox()
         Me.Button4 = New System.Windows.Forms.Button()
         Me.Label1 = New System.Windows.Forms.Label()
+        Me.PictureBox1 = New System.Windows.Forms.PictureBox()
+        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'TextBox1
         '
         Me.TextBox1.Font = New System.Drawing.Font("MS UI Gothic", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.TextBox1.Location = New System.Drawing.Point(44, 87)
+        Me.TextBox1.Location = New System.Drawing.Point(44, 94)
         Me.TextBox1.Name = "TextBox1"
         Me.TextBox1.Size = New System.Drawing.Size(344, 19)
         Me.TextBox1.TabIndex = 16
@@ -50,7 +52,7 @@ Partial Class SCC1
         Me.Label3.AutoSize = True
         Me.Label3.Font = New System.Drawing.Font("メイリオ", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.Label3.ForeColor = System.Drawing.Color.Blue
-        Me.Label3.Location = New System.Drawing.Point(12, 65)
+        Me.Label3.Location = New System.Drawing.Point(12, 72)
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(148, 18)
         Me.Label3.TabIndex = 18
@@ -59,7 +61,7 @@ Partial Class SCC1
         'Button2
         '
         Me.Button2.Font = New System.Drawing.Font("MS UI Gothic", 9.0!)
-        Me.Button2.Location = New System.Drawing.Point(387, 86)
+        Me.Button2.Location = New System.Drawing.Point(387, 93)
         Me.Button2.Name = "Button2"
         Me.Button2.Size = New System.Drawing.Size(47, 21)
         Me.Button2.TabIndex = 19
@@ -69,7 +71,7 @@ Partial Class SCC1
         'TextBox2
         '
         Me.TextBox2.Font = New System.Drawing.Font("MS UI Gothic", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.TextBox2.Location = New System.Drawing.Point(44, 113)
+        Me.TextBox2.Location = New System.Drawing.Point(44, 120)
         Me.TextBox2.Name = "TextBox2"
         Me.TextBox2.Size = New System.Drawing.Size(344, 19)
         Me.TextBox2.TabIndex = 20
@@ -77,7 +79,7 @@ Partial Class SCC1
         'Button3
         '
         Me.Button3.Font = New System.Drawing.Font("MS UI Gothic", 9.0!)
-        Me.Button3.Location = New System.Drawing.Point(387, 112)
+        Me.Button3.Location = New System.Drawing.Point(387, 119)
         Me.Button3.Name = "Button3"
         Me.Button3.Size = New System.Drawing.Size(47, 21)
         Me.Button3.TabIndex = 21
@@ -88,7 +90,7 @@ Partial Class SCC1
         '
         Me.RadioButton1.AutoSize = True
         Me.RadioButton1.Checked = True
-        Me.RadioButton1.Location = New System.Drawing.Point(27, 90)
+        Me.RadioButton1.Location = New System.Drawing.Point(27, 97)
         Me.RadioButton1.Name = "RadioButton1"
         Me.RadioButton1.Size = New System.Drawing.Size(14, 13)
         Me.RadioButton1.TabIndex = 22
@@ -98,7 +100,7 @@ Partial Class SCC1
         'RadioButton2
         '
         Me.RadioButton2.AutoSize = True
-        Me.RadioButton2.Location = New System.Drawing.Point(27, 115)
+        Me.RadioButton2.Location = New System.Drawing.Point(27, 122)
         Me.RadioButton2.Name = "RadioButton2"
         Me.RadioButton2.Size = New System.Drawing.Size(14, 13)
         Me.RadioButton2.TabIndex = 23
@@ -107,7 +109,7 @@ Partial Class SCC1
         'CB_DBSW
         '
         Me.CB_DBSW.AutoSize = True
-        Me.CB_DBSW.Location = New System.Drawing.Point(27, 171)
+        Me.CB_DBSW.Location = New System.Drawing.Point(27, 178)
         Me.CB_DBSW.Name = "CB_DBSW"
         Me.CB_DBSW.Size = New System.Drawing.Size(64, 16)
         Me.CB_DBSW.TabIndex = 24
@@ -119,7 +121,7 @@ Partial Class SCC1
         Me.Label4.AutoSize = True
         Me.Label4.Font = New System.Drawing.Font("メイリオ", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.Label4.ForeColor = System.Drawing.Color.Blue
-        Me.Label4.Location = New System.Drawing.Point(12, 150)
+        Me.Label4.Location = New System.Drawing.Point(12, 157)
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(148, 18)
         Me.Label4.TabIndex = 25
@@ -128,7 +130,7 @@ Partial Class SCC1
         'TB_SQLAddr
         '
         Me.TB_SQLAddr.Font = New System.Drawing.Font("MS UI Gothic", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.TB_SQLAddr.Location = New System.Drawing.Point(97, 168)
+        Me.TB_SQLAddr.Location = New System.Drawing.Point(97, 175)
         Me.TB_SQLAddr.Name = "TB_SQLAddr"
         Me.TB_SQLAddr.Size = New System.Drawing.Size(291, 19)
         Me.TB_SQLAddr.TabIndex = 26
@@ -155,11 +157,22 @@ Partial Class SCC1
         Me.Label1.TabIndex = 28
         Me.Label1.Text = "[ 最新アプリ取得 ]"
         '
+        'PictureBox1
+        '
+        Me.PictureBox1.Image = Global.A_SC.My.Resources.Resources.dandd
+        Me.PictureBox1.Location = New System.Drawing.Point(378, 12)
+        Me.PictureBox1.Name = "PictureBox1"
+        Me.PictureBox1.Size = New System.Drawing.Size(63, 51)
+        Me.PictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
+        Me.PictureBox1.TabIndex = 29
+        Me.PictureBox1.TabStop = False
+        '
         'SCC1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 12.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(453, 200)
+        Me.Controls.Add(Me.PictureBox1)
         Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.Button4)
         Me.Controls.Add(Me.TB_SQLAddr)
@@ -178,6 +191,7 @@ Partial Class SCC1
         Me.Name = "SCC1"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "設定画面"
+        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -194,4 +208,5 @@ Partial Class SCC1
     Friend WithEvents TB_SQLAddr As TextBox
     Friend WithEvents Button4 As Button
     Friend WithEvents Label1 As Label
+    Friend WithEvents PictureBox1 As PictureBox
 End Class

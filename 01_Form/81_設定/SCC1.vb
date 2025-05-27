@@ -1,4 +1,7 @@
-﻿Public Class SCC1
+﻿Imports System.IO
+Imports System.Net.WebRequestMethods
+
+Public Class SCC1
 
 #Region "定義"
 
@@ -8,6 +11,7 @@
 #Region "イベント"
     Private Sub Form1_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
         Me.KeyPreview = True
+        PictureBox1.AllowDrop = True
         CB_DBSW.Checked = xml.GetDBSwitch
 
         ' データ格納パスを読み込み
@@ -87,6 +91,29 @@
         End Using
         Return dir
     End Function
+
+    Private Sub PictureBox1_DragEnter(sender As Object, e As DragEventArgs) Handles PictureBox1.DragEnter
+        If e.Data.GetDataPresent(DataFormats.FileDrop) Then
+            e.Effect = DragDropEffects.Copy
+        End If
+    End Sub
+
+    Private Sub PictureBox1_DragDrop(sender As Object, e As DragEventArgs) Handles PictureBox1.DragDrop
+        Dim ftp As New FtpMng
+        Dim files() As String = CType(e.Data.GetData(DataFormats.FileDrop), String())
+
+        ' 1つ目のファイルだけ使う
+        If files.Length > 0 Then
+            Dim filePath As String = files(0)
+
+            Try
+                ftp.UploadFile(filePath)
+                MessageBox.Show($"ILCのサーバーに配置できました。 {vbCrLf}{Path.GetFileName(filePath)}", "成功", MessageBoxButtons.OK, MessageBoxIcon.Information)
+            Catch ex As Exception
+                MessageBox.Show($"ILCのサーバーに配置できませんでした。{vbCrLf}{ex.Message}", "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            End Try
+        End If
+    End Sub
 
     ' ショートカット F1
     Private Sub Form1_KeyDown(ByVal sender As Object, ByVal e As KeyEventArgs) Handles Me.KeyDown
