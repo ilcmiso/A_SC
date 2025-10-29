@@ -347,7 +347,11 @@ Public Class SCB1
                     If birth3Idx > -1 AndAlso addStr(birth3Idx).Length = 8 Then
                         addStr(birth3Idx) = cmn.ToDate(addStr(birth3Idx))
                     End If
-
+                    ' アシストデータの生年月日が、1900/1/1(-2日)からの経過日数になっているのでyyyy/mm/dd形式に変換する
+                    Dim birth4Idx As Integer = Array.IndexOf(headerNames, AssistHeaderTbl(27))
+                    If birth4Idx > -1 AndAlso addStr(birth4Idx).Length = 5 Then
+                        addStr(birth4Idx) = CDate("1899/12/30").AddDays(addStr(birth4Idx)).ToShortDateString
+                    End If
                     costomInfo.Add(addStr)
                 End While
                 If costomInfo.Count = 0 Then Exit Try
