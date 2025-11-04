@@ -581,6 +581,9 @@ Public Class Sqldb
                 dt.Rows.Add(newRow)
             End If
         Next
+        ' OrgDataTablePlusAssistをFK02でユニーク化する
+        dt = GetUniqueByColumnLINQ(dt, "FK02")
+
         OrgDataTablePlusAssist = dt
 
         ' 主キーを設定
@@ -748,6 +751,24 @@ Public Class Sqldb
         End If
         SCA1.xml.SetUserName(uName)
     End Sub
+
+    ''' <summary>
+    ''' 指定されたDataTableを、特定の列の値で重複を除去したものに変換する。
+    ''' </summary>
+    ''' <param name="source">元のDataTable</param>
+    ''' <param name="columnName">重複判定に使う列名</param>
+    ''' <returns>columnName列でユニーク化されたDataTable</returns>
+    Public Function GetUniqueByColumnLINQ(source As DataTable, columnName As String) As DataTable
+        Dim uniqueDt As DataTable = source.Clone()
+        Dim firstRows = source.AsEnumerable() _
+        .GroupBy(Function(r) r.Field(Of Object)(columnName)) _
+        .Select(Function(g) g.First())
+
+        For Each r In firstRows
+            uniqueDt.ImportRow(r)
+        Next
+        Return uniqueDt
+    End Function
 
     '#### SQL Server関連 #################################################
 
