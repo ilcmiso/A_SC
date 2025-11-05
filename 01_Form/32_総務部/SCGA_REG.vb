@@ -110,10 +110,13 @@
                     Dim comboBox As ComboBox = CType(control, ComboBox)
                     ' セルの値をStringに変換し、ComboBoxのSelectedItemに設定
                     Dim cellValue As String = DGV_REG1(1, n).Value.ToString()
-                    If comboBox.Items.Contains(cellValue) Then
-                        comboBox.SelectedItem = cellValue
+                    If Not comboBox.Items.Contains(cellValue) Then
+                        ' 入力された項目がDB入力候補にない自由枠であれば、項目に追加しておく
+                        comboBox.Items.Add(cellValue)
                     End If
 
+                    ' 入力値の読み込み
+                    comboBox.SelectedItem = cellValue
                 End If
             Next
         Next
